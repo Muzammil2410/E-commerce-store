@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import { lazy, Suspense } from "react";
+// import { lazy, Suspense, ReactNode } from "react";
+import  { lazy, Suspense, type ReactNode } from "react";
+
 import PublicLayout from "@/app/(public)/layout";
 import AdminRoot from "@/app/admin/layout";
 import StoreRoot from "@/app/store/layout";
@@ -41,8 +43,8 @@ const StoreOrders = lazy(() => import("@/app/store/orders/page"));
 const StoreAddProduct = lazy(() => import("@/app/store/add-product/page"));
 const StoreManageProduct = lazy(() => import("@/app/store/manage-product/page"));
 
-// Wrapper component for Suspense
-const LazyWrapper = ({ children }) => (
+// ✅ Fixed only this line — added `: { children: ReactNode }`
+const LazyWrapper = ({ children }: { children: ReactNode }) => (
   <Suspense fallback={<Loading />}>
     {children}
   </Suspense>
@@ -75,6 +77,7 @@ export const router = createBrowserRouter([
   { path: "/profile", element: <PublicLayout><LazyWrapper><Profile /></LazyWrapper></PublicLayout> },
   { path: "/orders", element: <PublicLayout><LazyWrapper><Orders /></LazyWrapper></PublicLayout> },
   { path: "/checkout", element: <PublicLayout><LazyWrapper><Checkout /></LazyWrapper></PublicLayout> },
+
   // Admin and Store sections (render their own layouts)
   { path: "/admin", element: <AdminRoot><LazyWrapper><AdminPage /></LazyWrapper></AdminRoot> },
   { path: "/admin/stores", element: <AdminRoot><LazyWrapper><AdminStores /></LazyWrapper></AdminRoot> },
@@ -85,5 +88,3 @@ export const router = createBrowserRouter([
   { path: "/store/add-product", element: <StoreRoot><LazyWrapper><StoreAddProduct /></LazyWrapper></StoreRoot> },
   { path: "/store/manage-product", element: <StoreRoot><LazyWrapper><StoreManageProduct /></LazyWrapper></StoreRoot> },
 ]);
-
-

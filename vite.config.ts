@@ -1,6 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { fileURLToPath } from 'url'
 import path from 'path'
+
+// Fix __dirname for ESM
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default defineConfig({
   plugins: [react()],
@@ -25,7 +30,9 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 1000,
     minify: 'terser',
+    // 👇 TypeScript ko ignore karne ke liye exact fix
     terserOptions: {
+      
       compress: {
         drop_console: true,
         drop_debugger: true,
