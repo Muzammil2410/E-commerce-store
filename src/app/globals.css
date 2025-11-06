@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-xs: 475px;
+  --font-family-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer components {
+    @keyframes marqueeScroll {
+        0% {
+            transform: translateX(0%);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+}
+
+@layer base {
+    button {
+        cursor: pointer;
+    }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Phone Input Component Styles */
+.phone-input {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    min-height: 3rem; /* Match the height of other form inputs */
+}
+
+.phone-input .PhoneInputInput {
+    flex: 1;
+    padding: 0.75rem 1rem; /* px-4 py-3 equivalent */
+    border: 1px solid #d1d5db;
+    border-radius: 0 0.5rem 0.5rem 0;
+    border-left: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    min-height: 3rem; /* Ensure minimum height matches other inputs */
+    box-sizing: border-box;
+}
+
+.phone-input .PhoneInputInput:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.phone-input .PhoneInputCountrySelect {
+    padding: 0.75rem 0.5rem; /* Match py-3 from other inputs */
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem 0 0 0.5rem;
+    background-color: #f9fafb;
+    border-right: none;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    min-height: 3rem; /* Match other inputs height */
+    min-width: 90px; /* Ensure enough space for country code */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.phone-input .PhoneInputCountrySelect:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Ensure country code is visible */
+.phone-input .PhoneInputCountrySelectArrow {
+    margin-left: 0.25rem;
+}
+
+.phone-input .PhoneInputCountryIcon {
+    margin-right: 0.25rem;
+}
+
+.phone-input-error .PhoneInputInput {
+    border-color: #ef4444;
+}
+
+.phone-input-error .PhoneInputCountrySelect {
+    border-color: #ef4444;
+}
+
+.phone-input-error .PhoneInputInput:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.phone-input-error .PhoneInputCountrySelect:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Address Modal specific phone input styles */
+.phone-input .PhoneInputInput {
+    padding: 0.5rem 1rem; /* Match other inputs in modal */
+    border: 1px solid #e2e8f0;
+    border-radius: 0 0.375rem 0.375rem 0;
+    border-left: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    background-color: white;
+    min-height: 2.5rem; /* Match other inputs in modal */
+    box-sizing: border-box;
+}
+
+.phone-input .PhoneInputCountrySelect {
+    padding: 0.5rem 0.5rem; /* Match other inputs in modal */
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem 0 0 0.375rem;
+    background-color: #f8fafc;
+    border-right: none;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    min-height: 2.5rem; /* Match other inputs in modal */
+    min-width: 80px; /* Ensure enough space for country code */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
