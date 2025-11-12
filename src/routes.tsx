@@ -6,6 +6,8 @@ import PublicLayout from "@/app/(public)/layout";
 import AdminRoot from "@/app/admin/layout";
 import StoreRoot from "@/app/store/layout";
 import Loading from "@/components/Loading";
+// Import AuthLogin directly instead of lazy loading to avoid Router context issues
+import AuthLogin from "@/app/(public)/auth/login/page";
 
 // Lazy load pages for code splitting and better performance
 const Home = lazy(() => import("@/app/(public)/page"));
@@ -19,7 +21,6 @@ const Register = lazy(() => import("@/app/(public)/register/page"));
 const Profile = lazy(() => import("@/app/(public)/profile/page"));
 const Orders = lazy(() => import("@/app/(public)/orders/page"));
 const Checkout = lazy(() => import("@/app/(public)/checkout/page"));
-const AuthLogin = lazy(() => import("@/app/(public)/auth/login/page"));
 const AuthRegister = lazy(() => import("@/app/(public)/auth/register/page"));
 const AuthForgot = lazy(() => import("@/app/(public)/auth/forgot-password/page"));
 const ForgotPassword = lazy(() => import("@/app/(public)/forgot-password/page"));
@@ -34,6 +35,8 @@ const SellerProductsEdit = lazy(() => import("@/app/(public)/seller/dashboard/pr
 const SellerProductsView = lazy(() => import("@/app/(public)/seller/dashboard/products/view/[id]/page"));
 const SellerSales = lazy(() => import("@/app/(public)/seller/dashboard/sales/page"));
 const SellerOrders = lazy(() => import("@/app/(public)/seller/dashboard/orders/page"));
+const SellerDelivery = lazy(() => import("@/app/(public)/seller/dashboard/delivery/page"));
+const SellerDeliverySchedule = lazy(() => import("@/app/(public)/seller/dashboard/delivery/schedule/page"));
 const AdminPage = lazy(() => import("@/app/admin/page"));
 const AdminStores = lazy(() => import("@/app/admin/stores/page"));
 const AdminCoupons = lazy(() => import("@/app/admin/coupons/page"));
@@ -59,7 +62,28 @@ export const router = createBrowserRouter([
   { path: "/product/:productId", element: <PublicLayout><LazyWrapper><Product /></LazyWrapper></PublicLayout> },
   { path: "/login", element: <PublicLayout><LazyWrapper><Login /></LazyWrapper></PublicLayout> },
   { path: "/register", element: <PublicLayout><LazyWrapper><Register /></LazyWrapper></PublicLayout> },
-  { path: "/auth/login", element: <PublicLayout><LazyWrapper><AuthLogin /></LazyWrapper></PublicLayout> },
+  { 
+    path: "/auth/login", 
+    element: (
+      <PublicLayout>
+        <AuthLogin />
+      </PublicLayout>
+    ),
+    errorElement: (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Error loading page</h1>
+          <p className="text-gray-600 mb-6">Please try refreshing the page</p>
+          <button
+            onClick={() => window.location.href = '/'}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Go Home
+          </button>
+        </div>
+      </div>
+    )
+  },
   { path: "/auth/register", element: <PublicLayout><LazyWrapper><AuthRegister /></LazyWrapper></PublicLayout> },
   { path: "/auth/forgot-password", element: <PublicLayout><LazyWrapper><AuthForgot /></LazyWrapper></PublicLayout> },
   { path: "/forgot-password", element: <PublicLayout><LazyWrapper><ForgotPassword /></LazyWrapper></PublicLayout> },
@@ -74,6 +98,8 @@ export const router = createBrowserRouter([
   { path: "/seller/dashboard/products/view/:id", element: <PublicLayout><LazyWrapper><SellerProductsView /></LazyWrapper></PublicLayout> },
   { path: "/seller/dashboard/sales", element: <PublicLayout><LazyWrapper><SellerSales /></LazyWrapper></PublicLayout> },
   { path: "/seller/dashboard/orders", element: <PublicLayout><LazyWrapper><SellerOrders /></LazyWrapper></PublicLayout> },
+  { path: "/seller/dashboard/delivery", element: <PublicLayout><LazyWrapper><SellerDelivery /></LazyWrapper></PublicLayout> },
+  { path: "/seller/dashboard/delivery/schedule", element: <PublicLayout><LazyWrapper><SellerDeliverySchedule /></LazyWrapper></PublicLayout> },
   { path: "/profile", element: <PublicLayout><LazyWrapper><Profile /></LazyWrapper></PublicLayout> },
   { path: "/orders", element: <PublicLayout><LazyWrapper><Orders /></LazyWrapper></PublicLayout> },
   { path: "/checkout", element: <PublicLayout><LazyWrapper><Checkout /></LazyWrapper></PublicLayout> },

@@ -3,12 +3,16 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { User, MapPin, ShoppingBag, Heart, Settings, LogOut, Edit, Plus, Trash2, Eye } from 'lucide-react'
+import { User, MapPin, ShoppingBag, Heart, Settings, LogOut, Edit, Plus, Trash2, Eye, Truck, Package, RotateCcw, Bell } from 'lucide-react'
 import Image from '@/components/Image'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { orderDummyData, addressDummyData } from '@/assets/assets'
 import WishlistButton from '@/components/WishlistButton'
+import ActiveOrdersTab from '@/components/ActiveOrdersTab'
+import DeliveryTrackingTab from '@/components/DeliveryTrackingTab'
+import OrderHistoryTab from '@/components/OrderHistoryTab'
+import ReturnsRefundsTab from '@/components/ReturnsRefundsTab'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
@@ -165,7 +169,10 @@ export default function ProfilePage() {
 
     const tabs = [
         { id: 'profile', label: 'Profile', icon: User },
-        { id: 'orders', label: 'Orders', icon: ShoppingBag },
+        { id: 'active-orders', label: 'Active Orders', icon: Package },
+        { id: 'tracking', label: 'Delivery Tracking', icon: Truck },
+        { id: 'orders', label: 'Order History', icon: ShoppingBag },
+        { id: 'returns', label: 'Returns & Refunds', icon: RotateCcw },
         { id: 'addresses', label: 'Addresses', icon: MapPin },
         { id: 'wishlist', label: 'Wishlist', icon: Heart },
         { id: 'settings', label: 'Settings', icon: Settings }
@@ -267,65 +274,24 @@ export default function ProfilePage() {
                             </div>
                         )}
 
+                        {/* Active Orders Tab */}
+                        {activeTab === 'active-orders' && (
+                            <ActiveOrdersTab orders={orders} setOrders={setOrders} />
+                        )}
+
+                        {/* Delivery Tracking Tab */}
+                        {activeTab === 'tracking' && (
+                            <DeliveryTrackingTab orders={orders} />
+                        )}
+
                         {/* Orders Tab */}
                         {activeTab === 'orders' && (
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Order History</h2>
-                                
-                                {orders.length > 0 ? (
-                                    <div className="space-y-4">
-                                        {orders.map((order) => (
-                                            <div key={order.id} className="border border-gray-200 rounded-lg p-4">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <div>
-                                                        <h3 className="font-medium text-gray-900">
-                                                            Order #{order.id.slice(-8).toUpperCase()}
-                                                        </h3>
-                                                        <p className="text-sm text-gray-600">
-                                                            {new Date(order.createdAt).toLocaleDateString()}
-                                                        </p>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <p className="font-semibold text-gray-900">
-                                                            ${order.total.toFixed(2)}
-                                                        </p>
-                                                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                                                            order.status === 'DELIVERED' 
-                                                                ? 'bg-green-100 text-green-800'
-                                                                : 'bg-yellow-100 text-yellow-800'
-                                                        }`}>
-                                                            {order.status}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-sm text-gray-600">
-                                                            {order.orderItems.length} item(s)
-                                                        </span>
-                                                    </div>
-                                                    <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                                        View Details
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-12">
-                                        <ShoppingBag className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                        <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
-                                        <p className="text-gray-600 mb-4">You haven't placed any orders yet.</p>
-                                        <Link
-                                            to="/shop"
-                                            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                                        >
-                                            Start Shopping
-                                        </Link>
-                                    </div>
-                                )}
-                            </div>
+                            <OrderHistoryTab orders={orders} />
+                        )}
+
+                        {/* Returns & Refunds Tab */}
+                        {activeTab === 'returns' && (
+                            <ReturnsRefundsTab orders={orders} />
                         )}
 
                         {/* Addresses Tab */}

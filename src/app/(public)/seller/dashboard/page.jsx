@@ -243,6 +243,16 @@ export default function SellerDashboard() {
                 </div>
                 <span className="text-gray-400">→</span>
               </button>
+              <button 
+                onClick={() => navigate('/seller/dashboard/delivery', { replace: false })}
+                className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex items-center space-x-3">
+                  <Package className="w-5 h-5 text-orange-600" />
+                  <span className="font-medium text-gray-900">Delivery Management</span>
+                </div>
+                <span className="text-gray-400">→</span>
+              </button>
             </div>
           </div>
         </div>
