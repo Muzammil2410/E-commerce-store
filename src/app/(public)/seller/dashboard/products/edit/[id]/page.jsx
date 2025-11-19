@@ -525,7 +525,7 @@ export default function EditProduct() {
                           height={150}
                           className="w-full h-32 object-cover"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+                        <div className="absolute inset-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 flex space-x-2">
                             <button
                               type="button"
