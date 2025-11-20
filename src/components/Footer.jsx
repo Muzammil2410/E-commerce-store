@@ -32,7 +32,6 @@ const Footer = () => {
             links: [
                 { text: "Home", path: '/', icon: null },
                 { text: "Privacy Policy", path: '/privacy-policy', icon: null },
-                { text: "Become a Seller", path: '/seller', icon: null },
             ]
         },
         {

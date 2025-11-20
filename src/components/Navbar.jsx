@@ -1,5 +1,5 @@
 'use client'
-import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Menu } from "lucide-react";
+import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Menu, Store } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Image from "@/components/Image";
 import { assets } from '@/assets/assets';
@@ -129,7 +129,7 @@ const Navbar = () => {
 
                     {/* Desktop Menu */}
                     <div className="hidden sm:flex items-center gap-2 md:gap-4 lg:gap-8 text-gray-600 flex-1">
-                        <form onSubmit={handleSearch} className="hidden md:flex items-center flex-1 max-w-[600px] text-sm bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 hover:border-gray-300 transition-all duration-200 focus-within:bg-white focus-within:border-blue-300 focus-within:shadow-md relative">
+                        <form onSubmit={handleSearch} className="hidden md:flex items-center flex-1 max-w-[500px] lg:max-w-[600px] text-sm bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 hover:border-gray-300 transition-all duration-200 focus-within:bg-white focus-within:shadow-md relative">
                             {/* Category Dropdown */}
                             <div className="relative flex-shrink-0" ref={dropdownRef}>
                                 <button
@@ -138,19 +138,19 @@ const Navbar = () => {
                                     aria-label={`Select category, currently: ${selectedCategory}`}
                                     aria-expanded={isDropdownOpen}
                                     aria-haspopup="listbox"
-                                    className={`flex items-center gap-2 py-3 text-gray-600 hover:text-gray-800 transition-all duration-200 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                    className={`flex items-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 md:py-3 text-gray-600 hover:text-gray-800 transition-all duration-200 border-r border-gray-200 focus:outline-none ${
                                         selectedCategory.length > 15 
-                                            ? 'min-w-[120px] px-4' 
-                                            : 'px-3'
+                                            ? 'min-w-[100px] sm:min-w-[120px] px-2 sm:px-3 md:px-4' 
+                                            : 'px-2 sm:px-3'
                                     }`}
                                 >
-                                    <span className="text-sm font-medium truncate">
+                                    <span className="text-xs sm:text-sm font-medium truncate">
                                         {selectedCategory.length > 15 
                                             ? selectedCategory.substring(0, 15) + '...' 
                                             : selectedCategory
                                         }
                                     </span>
-                                    <ChevronDown size={16} className={`transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+                                    <ChevronDown size={14} className={`sm:w-4 sm:h-4 transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                                 </button>
                                 
                                 {/* Dropdown Menu */}
@@ -181,10 +181,10 @@ const Navbar = () => {
                             </div>
                             
                             {/* Search Input */}
-                            <div className="flex items-center gap-2 px-4 py-3 flex-1 min-w-0">
-                                <Search size={18} className="text-gray-600 flex-shrink-0" />
+                            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 flex-1 min-w-0">
+                                <Search size={16} className="sm:w-[18px] sm:h-[18px] text-gray-600 flex-shrink-0" />
                                 <input 
-                                    className="w-full bg-transparent outline-none placeholder-gray-600 focus:placeholder-gray-400 transition-colors duration-200 min-w-0 focus:ring-2 focus:ring-blue-500 rounded" 
+                                    className="w-full bg-transparent outline-none placeholder-gray-600 focus:placeholder-gray-400 transition-colors duration-200 min-w-0 rounded text-xs sm:text-sm" 
                                     type="search" 
                                     placeholder="Search..." 
                                     value={search} 
@@ -213,11 +213,20 @@ const Navbar = () => {
                             )}
                         </form>
 
-                        <Link to="/shop" className="hover:text-blue-800 hover:bg-blue-50 hover:px-3 hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-sm lg:text-base">Shop</Link>
+                        <Link to="/shop" className="hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm md:text-base">Shop</Link>
 
-                        <Link to="/cart" className="relative flex items-center gap-1 lg:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-3 hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium">
-                            <ShoppingCart size={16} className="lg:w-[18px] lg:h-[18px] hover:scale-110 transition-transform duration-200" />
-                            <span className="hidden lg:inline text-sm lg:text-base">Cart</span>
+                        <Link to="/seller" className="group relative inline-flex items-center gap-1 sm:gap-1.5 md:gap-2 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-semibold rounded-full shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden text-[10px] sm:text-xs md:text-sm">
+                            <span className="relative z-10 flex items-center gap-1 sm:gap-1.5 md:gap-2">
+                                <Store size={12} className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 group-hover:rotate-12 transition-transform duration-300" />
+                                <span className="hidden md:inline">Become a Seller</span>
+                                <span className="md:hidden">Seller</span>
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                        </Link>
+
+                        <Link to="/cart" className="relative flex items-center gap-1 sm:gap-1.5 md:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium">
+                            <ShoppingCart size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] hover:scale-110 transition-transform duration-200" />
+                            <span className="hidden md:inline text-xs sm:text-sm md:text-base">Cart</span>
                             {cartCount > 0 && (
                                 <span className="absolute -top-1 left-3 text-[8px] text-white bg-blue-600 size-3.5 rounded-full hover:bg-blue-800 hover:scale-110 transition-all duration-200 flex items-center justify-center">{cartCount}</span>
                             )}
@@ -226,9 +235,9 @@ const Navbar = () => {
                         {user ? (
                             <div className="flex items-center gap-3">
                                 {/* Wishlist */}
-                                <Link to="/profile?tab=wishlist" className="relative flex items-center gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-3 hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium">
-                                    <Heart size={18} className="hover:scale-110 transition-transform duration-200" />
-                                    Wishlist
+                                <Link to="/profile?tab=wishlist" className="relative flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm">
+                                    <Heart size={16} className="sm:w-[18px] sm:h-[18px] hover:scale-110 transition-transform duration-200" />
+                                    <span className="hidden sm:inline">Wishlist</span>
                                     {wishlistCount > 0 && (
                                         <button className="absolute -top-1 left-3 text-[8px] text-white bg-red-500 size-3.5 rounded-full hover:bg-red-600 hover:scale-110 transition-all duration-200">{wishlistCount}</button>
                                     )}
@@ -293,13 +302,13 @@ const Navbar = () => {
                                 </div>
                             </div>
                         ) : (
-                            <Link to="/auth/login" className="relative px-4 lg:px-8 py-2 lg:py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-sm lg:text-base">
-                                <span className="relative z-10 flex items-center gap-1 lg:gap-2">
-                                    <svg className="w-3.5 lg:w-4 h-3.5 lg:h-4 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <Link to="/auth/login" className="relative px-3 sm:px-4 md:px-6 lg:px-8 py-1.5 sm:py-2 md:py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-xs sm:text-sm md:text-base">
+                                <span className="relative z-10 flex items-center gap-1 sm:gap-1.5 md:gap-2">
+                                    <svg className="w-3 sm:w-3.5 md:w-4 h-3 sm:h-3.5 md:h-4 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                                     </svg>
-                                    <span className="hidden sm:inline">Login / Register</span>
-                                    <span className="sm:hidden">Login</span>
+                                    <span className="hidden md:inline">Login / Register</span>
+                                    <span className="md:hidden">Login</span>
                                 </span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
                             </Link>
@@ -319,11 +328,11 @@ const Navbar = () => {
                             <Search size={18} className="xs:w-5 xs:h-5" aria-hidden="true" />
                         </button>
                         {showMobileSearch && (
-                            <div className="absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-[85vw] max-w-sm p-2">
-                                <form onSubmit={handleSearch} className="flex items-center gap-2">
-                                    <Search size={16} className="text-gray-600" />
+                            <div className="absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-[85vw] max-w-sm p-2 sm:p-3">
+                                <form onSubmit={handleSearch} className="flex items-center gap-1.5 sm:gap-2">
+                                    <Search size={14} className="sm:w-4 sm:h-4 text-gray-600 flex-shrink-0" />
                                     <input 
-                                        className="flex-1 bg-transparent outline-none text-sm placeholder-gray-500 focus:ring-2 focus:ring-blue-500 rounded px-2"
+                                        className="flex-1 bg-transparent outline-none text-xs sm:text-sm placeholder-gray-500 rounded px-1.5 sm:px-2"
                                         type="search"
                                         placeholder="Search products..."
                                         value={search}
@@ -334,7 +343,7 @@ const Navbar = () => {
                                     <button 
                                         type="submit" 
                                         aria-label="Submit search"
-                                        className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                        className="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-600 text-white text-[10px] sm:text-xs rounded-md hover:bg-blue-700 focus:outline-none transition-colors"
                                     >
                                         Go
                                     </button>
@@ -363,6 +372,13 @@ const Navbar = () => {
                         
                         {user ? (
                             <div className="flex items-center gap-0.5 xs:gap-1">
+                                <Link to="/seller" className="group relative inline-flex items-center gap-1 px-2 xs:px-2.5 py-1.5 xs:py-2 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-semibold rounded-full shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden text-[10px] xs:text-xs">
+                                    <span className="relative z-10 flex items-center gap-1">
+                                        <Store size={12} className="xs:w-3.5 xs:h-3.5 group-hover:rotate-12 transition-transform duration-300" />
+                                        <span className="hidden xs:inline">Seller</span>
+                                    </span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                                </Link>
                                 <Link to="/cart" className="relative p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
                                     <ShoppingCart size={18} className="xs:w-5 xs:h-5" />
                                     {cartCount > 0 && (
@@ -383,6 +399,13 @@ const Navbar = () => {
                             // On home page, show a three-lines (hamburger) menu with Login and Register
                             pathname === '/' ? (
                                 <>
+                                    <Link to="/seller" className="group relative inline-flex items-center gap-1 px-2 xs:px-2.5 py-1.5 xs:py-2 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-semibold rounded-full shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden text-[10px] xs:text-xs mr-1">
+                                        <span className="relative z-10 flex items-center gap-1">
+                                            <Store size={12} className="xs:w-3.5 xs:h-3.5 group-hover:rotate-12 transition-transform duration-300" />
+                                            <span className="hidden xs:inline">Seller</span>
+                                        </span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                                    </Link>
                                     <button
                                         aria-label="Open auth menu"
                                         onClick={() => setShowMobileAuth(!showMobileAuth)}
@@ -410,15 +433,24 @@ const Navbar = () => {
                                     )}
                                 </>
                             ) : (
-                                <Link to="/auth/login" className="relative px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-xs xs:text-sm">
-                                    <span className="relative z-10 flex items-center gap-1 xs:gap-1.5">
-                                        <svg className="w-3 xs:w-3.5 h-3 xs:h-3.5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                                        </svg>
-                                        <span className="hidden xs:inline">Login</span>
-                                    </span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
-                                </Link>
+                                <>
+                                    <Link to="/seller" className="group relative inline-flex items-center gap-1 px-2 xs:px-2.5 py-1.5 xs:py-2 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-semibold rounded-full shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden text-[10px] xs:text-xs mr-1">
+                                        <span className="relative z-10 flex items-center gap-1">
+                                            <Store size={12} className="xs:w-3.5 xs:h-3.5 group-hover:rotate-12 transition-transform duration-300" />
+                                            <span className="hidden xs:inline">Seller</span>
+                                        </span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                                    </Link>
+                                    <Link to="/auth/login" className="relative px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-xs xs:text-sm">
+                                        <span className="relative z-10 flex items-center gap-1 xs:gap-1.5">
+                                            <svg className="w-3 xs:w-3.5 h-3 xs:h-3.5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                            </svg>
+                                            <span className="hidden xs:inline">Login</span>
+                                        </span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                                    </Link>
+                                </>
                             )
                         )}
                     </div>
