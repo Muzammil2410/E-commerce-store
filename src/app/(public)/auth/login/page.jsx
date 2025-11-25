@@ -184,6 +184,20 @@ export default function LoginPage() {
                             </button>
                         </p>
                     </div>
+
+                    {/* Login as Seller Link */}
+                    <div className="mt-4 text-center">
+                        <p className="text-gray-600">
+                            Are you a seller?{' '}
+                            <button 
+                                type="button"
+                                onClick={() => navigate('/seller')}
+                                className="text-green-600 hover:text-green-800 font-medium transition-colors"
+                            >
+                                Login as a seller
+                            </button>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
