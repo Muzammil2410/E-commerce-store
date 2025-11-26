@@ -585,7 +585,7 @@ export default function AddProduct() {
                                   onClick={() => removeImage(index)}
                                   className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                                 >
-                                  <X size={16} />
+                                  <X size={17} />
                                 </button>
                                 <div className="p-2 bg-gray-500 text-white rounded-full cursor-move">
                                   <GripVertical size={16} />
