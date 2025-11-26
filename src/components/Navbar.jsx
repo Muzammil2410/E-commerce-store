@@ -1,3 +1,4 @@
+'use client'
 import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Image from "@/components/Image";
@@ -213,31 +214,30 @@ const Navbar = () => {
                         </form>
                     </div>
 
-                    {/* Right Navigation (Desktop) */}
+                    {/* Right Navigation */}
                     <div className="hidden sm:flex items-center gap-4 md:gap-5 lg:gap-6 text-gray-600 flex-shrink-0">
                         <Link to="/shop" className="hover:text-blue-800 hover:bg-blue-50 hover:px-3 hover:py-2 hover:rounded-full transition-all duration-200 font-medium text-base whitespace-nowrap">Shop</Link>
 
-                        {/* Cart Icon (Desktop) */}
-                        <Link to="/cart" className="relative flex items-center gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 rounded-full transition-all duration-200 font-medium whitespace-nowrap">
-                            <ShoppingCart size={18} className="transition-transform duration-200" />
-                            <span className="text-base hidden md:inline">Cart</span> {/* Show Cart text on md and up */}
+                        <Link to="/cart" className="relative flex items-center gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-3 hover:py-2 hover:rounded-full transition-all duration-200 font-medium whitespace-nowrap">
+                            <ShoppingCart size={18} className="hover:scale-110 transition-transform duration-200" />
+                            <span className="text-base">Cart</span>
                             {cartCount > 0 && (
-                                <span className="absolute -top-0.5 right-1.5 text-[10px] text-white bg-blue-600 size-4 rounded-full flex items-center justify-center font-bold">{cartCount}</span>
+                                <span className="absolute -top-1 left-3 text-[8px] text-white bg-blue-600 size-3.5 rounded-full hover:bg-blue-800 hover:scale-110 transition-all duration-200 flex items-center justify-center">{cartCount}</span>
                             )}
                         </Link>
 
                         {user ? (
                             <div className="flex items-center gap-3">
-                                {/* Wishlist Icon (Desktop) */}
-                                <Link to="/profile?tab=wishlist" className="relative flex items-center gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 rounded-full hover:scale-105 transition-all duration-200 font-medium text-base">
-                                    <Heart size={18} className="transition-transform duration-200" />
-                                    <span className="hidden lg:inline">Wishlist</span> {/* Show Wishlist text on large screens */}
+                                {/* Wishlist */}
+                                <Link to="/profile?tab=wishlist" className="relative flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm">
+                                    <Heart size={16} className="sm:w-[18px] sm:h-[18px] hover:scale-110 transition-transform duration-200" />
+                                    <span className="hidden sm:inline">Wishlist</span>
                                     {wishlistCount > 0 && (
-                                        <span className="absolute -top-0.5 right-1.5 text-[10px] text-white bg-red-500 size-4 rounded-full flex items-center justify-center font-bold">{wishlistCount}</span>
+                                        <button className="absolute -top-1 left-3 text-[8px] text-white bg-red-500 size-3.5 rounded-full hover:bg-red-600 hover:scale-110 transition-all duration-200">{wishlistCount}</button>
                                     )}
                                 </Link>
 
-                                {/* User Menu (Desktop) */}
+                                {/* User Menu */}
                                 <div className="relative" ref={userMenuRef}>
                                     <button
                                         onClick={() => setShowUserMenu(!showUserMenu)}
@@ -246,7 +246,7 @@ const Navbar = () => {
                                         <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                                             <User size={16} className="text-blue-600" />
                                         </div>
-                                        <span className="hidden md:block font-medium">{user.name}</span>
+                                        <span className="hidden sm:block font-medium">{user.name}</span>
                                         <ChevronDown size={16} className={`transition-transform duration-200 ${showUserMenu ? 'rotate-180' : ''}`} />
                                     </button>
 
@@ -304,26 +304,22 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Menu */}
-                    <div className="sm:hidden flex items-center gap-1 xs:gap-2 relative ml-auto" ref={mobileMenuRef}> {/* Added ml-auto to push mobile items to the right */}
-                        
-                        {/* Mobile Search Button & Dropdown */}
+                    <div className="sm:hidden flex items-center gap-1 xs:gap-2 relative" ref={mobileMenuRef}>
+                        {/* Mobile Search Button */}
                         <button 
-                            onClick={() => {
-                                setShowMobileSearch(!showMobileSearch);
-                                setShowMobileAuth(false); // Close auth menu if search is opened
-                            }} 
+                            onClick={() => setShowMobileSearch(!showMobileSearch)} 
                             aria-label="Open search"
                             aria-expanded={showMobileSearch}
                             className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
-                            <Search size={20} aria-hidden="true" />
+                            <Search size={18} className="xs:w-5 xs:h-5" aria-hidden="true" />
                         </button>
                         {showMobileSearch && (
-                            <div className="absolute right-0 top-12 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-[85vw] max-w-sm p-3"> {/* Adjusted top position for better flow */}
-                                <form onSubmit={handleSearch} className="flex items-center gap-2">
-                                    <Search size={16} className="text-gray-600 flex-shrink-0" />
+                            <div className="absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-[85vw] max-w-sm p-2 sm:p-3">
+                                <form onSubmit={handleSearch} className="flex items-center gap-1.5 sm:gap-2">
+                                    <Search size={14} className="sm:w-4 sm:h-4 text-gray-600 flex-shrink-0" />
                                     <input 
-                                        className="flex-1 bg-transparent outline-none text-sm placeholder-gray-500 rounded px-1"
+                                        className="flex-1 bg-transparent outline-none text-xs sm:text-sm placeholder-gray-500 rounded px-1.5 sm:px-2"
                                         type="search"
                                         placeholder="Search products..."
                                         value={search}
@@ -334,7 +330,7 @@ const Navbar = () => {
                                     <button 
                                         type="submit" 
                                         aria-label="Submit search"
-                                        className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 focus:outline-none transition-colors"
+                                        className="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-600 text-white text-[10px] sm:text-xs rounded-md hover:bg-blue-700 focus:outline-none transition-colors"
                                     >
                                         Go
                                     </button>
@@ -362,42 +358,36 @@ const Navbar = () => {
                         )}
                         
                         {user ? (
-                            <div className="flex items-center gap-1 xs:gap-2">
-                                {/* Cart Icon (Mobile - Logged In) */}
+                            <div className="flex items-center gap-0.5 xs:gap-1">
                                 <Link to="/cart" className="relative p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <ShoppingCart size={20} />
+                                    <ShoppingCart size={18} className="xs:w-5 xs:h-5" />
                                     {cartCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 text-[10px] text-white bg-blue-600 size-4 rounded-full flex items-center justify-center font-bold">{cartCount}</span>
+                                        <span className="absolute -top-1 -right-1 text-[8px] text-white bg-blue-600 size-3.5 xs:size-4 rounded-full flex items-center justify-center font-medium">{cartCount}</span>
                                     )}
                                 </Link>
-                                {/* Wishlist Icon (Mobile - Logged In) */}
                                 <Link to="/profile?tab=wishlist" className="relative p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <Heart size={20} />
+                                    <Heart size={18} className="xs:w-5 xs:h-5" />
                                     {wishlistCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 text-[10px] text-white bg-red-500 size-4 rounded-full flex items-center justify-center font-bold">{wishlistCount}</span>
+                                        <span className="absolute -top-1 -right-1 text-[8px] text-white bg-red-500 size-3.5 xs:size-4 rounded-full flex items-center justify-center font-medium">{wishlistCount}</span>
                                     )}
                                 </Link>
-                                {/* User Icon (Mobile - Logged In) */}
                                 <Link to="/profile" className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <User size={20} />
+                                    <User size={18} className="xs:w-5 xs:h-5" />
                                 </Link>
                             </div>
                         ) : (
-                            // Mobile Auth/Login buttons
+                            // On home page, show a three-lines (hamburger) menu with Login and Register
                             pathname === '/' ? (
                                 <>
                                     <button
                                         aria-label="Open auth menu"
-                                        onClick={() => {
-                                            setShowMobileAuth(!showMobileAuth)
-                                            setShowMobileSearch(false) // Close search menu if auth is opened
-                                        }}
+                                        onClick={() => setShowMobileAuth(!showMobileAuth)}
                                         className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors"
                                     >
-                                        <Menu size={24} /> {/* Slightly larger icon for hamburger menu */}
+                                        <Menu size={20} className="xs:w-5 xs:h-5" />
                                     </button>
                                     {showMobileAuth && (
-                                        <div className="absolute right-0 top-12 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-40 py-2"> {/* Adjusted top position */}
+                                        <div className="absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-40 py-2">
                                             <Link
                                                 to="/auth/login"
                                                 className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -416,9 +406,9 @@ const Navbar = () => {
                                     )}
                                 </>
                             ) : (
-                                <Link to="/auth/login" className="relative p-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md group overflow-hidden text-sm flex items-center gap-1.5">
-                                    <User size={20} />
-                                    <span className="inline">Login</span>
+                                <Link to="/auth/login" className="relative px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-xs xs:text-sm flex items-center gap-1.5">
+                                    <User size={16} className="xs:w-4 xs:h-4" />
+                                    <span className="hidden xs:inline">Login</span>
                                 </Link>
                             )
                         )}
