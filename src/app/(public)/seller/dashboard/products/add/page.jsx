@@ -575,7 +575,7 @@ export default function AddProduct() {
                               src={image.preview}
                               alt={`Product ${index + 1}`}
                               width={150}
-                              height={140}
+                              height={150}
                               className="w-full h-32 object-cover"
                             />
                             <div className="absolute inset-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
