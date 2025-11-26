@@ -10,7 +10,6 @@ import { clearCart } from "@/lib/features/cart/cartSlice";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -30,23 +29,9 @@ const Navbar = () => {
     const [suggestions, setSuggestions] = useState([])
 
     const categories = [
-        'All',
-        'Appliances',
-        'Automotive parts and accessories',
-        'Baby',
-        'Beauty and personal care',
-        'Books',
-        'Fashion',
-        'Girls/women\'s clothing',
-        'Groceries',
-        'Health',
-        'Housewares',
-        'Men\'s/boys\' clothing',
-        'Pet supplies',
-        'Sports',
-        'Technology',
-        'Toys & games',
-        'Travel'
+        'All', 'Appliances', 'Automotive parts and accessories', 'Baby', 'Beauty and personal care', 'Books', 'Fashion',
+        'Girls/women\'s clothing', 'Groceries', 'Health', 'Housewares', 'Men\'s/boys\' clothing', 'Pet supplies', 'Sports',
+        'Technology', 'Toys & games', 'Travel'
     ]
 
     const handleSearch = (e) => {
@@ -356,68 +341,11 @@ const Navbar = () => {
                                 )}
                             </div>
                         )}
-                        
-                        {user ? (
-                            <div className="flex items-center gap-0.5 xs:gap-1">
-                                <Link to="/cart" className="relative p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <ShoppingCart size={18} className="xs:w-5 xs:h-5" />
-                                    {cartCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 text-[8px] text-white bg-blue-600 size-3.5 xs:size-4 rounded-full flex items-center justify-center font-medium">{cartCount}</span>
-                                    )}
-                                </Link>
-                                <Link to="/profile?tab=wishlist" className="relative p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <Heart size={18} className="xs:w-5 xs:h-5" />
-                                    {wishlistCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 text-[8px] text-white bg-red-500 size-3.5 xs:size-4 rounded-full flex items-center justify-center font-medium">{wishlistCount}</span>
-                                    )}
-                                </Link>
-                                <Link to="/profile" className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <User size={18} className="xs:w-5 xs:h-5" />
-                                </Link>
-                            </div>
-                        ) : (
-                            // On home page, show a three-lines (hamburger) menu with Login and Register
-                            pathname === '/' ? (
-                                <>
-                                    <button
-                                        aria-label="Open auth menu"
-                                        onClick={() => setShowMobileAuth(!showMobileAuth)}
-                                        className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors"
-                                    >
-                                        <Menu size={20} className="xs:w-5 xs:h-5" />
-                                    </button>
-                                    {showMobileAuth && (
-                                        <div className="absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-40 py-2">
-                                            <Link
-                                                to="/auth/login"
-                                                className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                                                onClick={() => setShowMobileAuth(false)}
-                                            >
-                                                Login
-                                            </Link>
-                                            <Link
-                                                to="/auth/register"
-                                                className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                                                onClick={() => setShowMobileAuth(false)}
-                                            >
-                                                Register
-                                            </Link>
-                                        </div>
-                                    )}
-                                </>
-                            ) : (
-                                <Link to="/auth/login" className="relative px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-xs xs:text-sm flex items-center gap-1.5">
-                                    <User size={16} className="xs:w-4 xs:h-4" />
-                                    <span className="hidden xs:inline">Login</span>
-                                </Link>
-                            )
-                        )}
                     </div>
                 </div>
             </div>
-            <hr className="border-gray-300" />
         </nav>
     )
 }
 
-export default Navbar
+export default Navbar;
