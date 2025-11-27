@@ -43,7 +43,7 @@ const Hero = () => {
                                 <span className='sm:hidden font-medium text-xs'>Free Shipping Above $150!</span>
                                 <ChevronRightIcon className='group-hover:ml-2 transition-all flex-shrink-0' size={14} />
                             </div>
-                            <h2 className='text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 drop-shadow-sm'>
+                            <h2 className='hidden sm:block text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 drop-shadow-sm'>
                                 <span className="text-blue-600 hover:text-blue-700 transition-colors duration-200">Ziz</span>la you'll love. Prices you'll trust.
                             </h2>
                             <div className='text-gray-800 text-sm sm:text-base font-semibold mb-3 sm:mb-4 drop-shadow-sm'>
