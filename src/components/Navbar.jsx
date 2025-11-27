@@ -120,7 +120,7 @@ const Navbar = () => {
                             alt="Zizla Logo" 
                             width={350} 
                             height={140} 
-                            className="h-14 w-auto"
+                            className="h-16 w-auto"
                             style={{ 
                                 backgroundColor: 'transparent',
                                 filter: 'contrast(1.2) brightness(1.1)'
