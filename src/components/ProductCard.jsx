@@ -16,7 +16,7 @@ const ProductCard = memo(({ product }) => {
     }, [product.rating]);
 
     return (
-        <article className='group w-full max-w-[280px] mx-auto transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 relative'>
+        <article className='group w-full max-w-[280px] mx-auto transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 relative overflow-hidden'>
             <Link to={`/product/${product.id}`} aria-label={`View details for ${product.name}`}>
                 <div className='bg-[#F5F5F5] h-32 sm:h-40 md:h-48 rounded-lg flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-lg transition-all duration-300'>
                     <Image 

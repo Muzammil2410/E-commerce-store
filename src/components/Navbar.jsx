@@ -109,17 +109,18 @@ const Navbar = () => {
     }, [search, products])
 
     return (
-        <nav className="relative bg-white">
-            <div className="px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center gap-4 md:gap-6 lg:gap-8 max-w-7xl mx-auto py-3 sm:py-4 transition-all">
+        <nav className="relative bg-white border-b border-gray-100 w-full overflow-hidden">
+            <div className="px-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8 max-w-7xl mx-auto py-2.5 sm:py-3 md:py-4 transition-all">
 
-                    <Link to="/" className="hover:scale-105 transition-transform duration-200 flex-shrink-0">
+                    {/* Mobile: Logo on left */}
+                    <Link to="/" className="sm:hidden hover:scale-105 transition-transform duration-200 flex-shrink-0">
                         <Image 
                             src={assets.zizla_logo} 
                             alt="Zizla Logo" 
                             width={350} 
                             height={140} 
-                            className="h-14 sm:h-16 md:h-20 lg:h-24 w-auto"
+                            className="h-10 w-auto"
                             style={{ 
                                 backgroundColor: 'transparent',
                                 filter: 'contrast(1.2) brightness(1.1)'
@@ -127,9 +128,24 @@ const Navbar = () => {
                         />
                     </Link>
 
-                    {/* Desktop Menu */}
-                    <div className="hidden sm:flex items-center flex-1 justify-center">
-                        <form onSubmit={handleSearch} className="hidden md:flex items-center w-full max-w-[500px] lg:max-w-[600px] text-sm bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 hover:border-gray-300 transition-all duration-200 focus-within:bg-white focus-within:shadow-md relative">
+                    {/* Desktop: Logo */}
+                    <Link to="/" className="hidden sm:block hover:scale-105 transition-transform duration-200 flex-shrink-0">
+                        <Image 
+                            src={assets.zizla_logo} 
+                            alt="Zizla Logo" 
+                            width={350} 
+                            height={140} 
+                            className="h-12 md:h-14 lg:h-16 w-auto"
+                            style={{ 
+                                backgroundColor: 'transparent',
+                                filter: 'contrast(1.2) brightness(1.1)'
+                            }}
+                        />
+                    </Link>
+
+                    {/* Desktop Search Bar - Centered */}
+                    <div className="hidden sm:flex items-center flex-1 justify-center mx-4 md:mx-6 lg:mx-8">
+                        <form onSubmit={handleSearch} className="hidden md:flex items-center w-full max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] h-11 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 hover:border-gray-300 transition-all duration-200 focus-within:bg-white focus-within:border-blue-300 focus-within:shadow-sm relative">
                             {/* Category Dropdown */}
                             <div className="relative flex-shrink-0" ref={dropdownRef}>
                                 <button
@@ -138,10 +154,10 @@ const Navbar = () => {
                                     aria-label={`Select category, currently: ${selectedCategory}`}
                                     aria-expanded={isDropdownOpen}
                                     aria-haspopup="listbox"
-                                    className={`flex items-center gap-1.5 py-2.5 text-gray-600 hover:text-gray-800 transition-all duration-200 border-r border-gray-200 focus:outline-none ${
+                                    className={`flex items-center gap-1.5 h-full px-4 text-gray-700 hover:text-gray-900 transition-all duration-200 border-r border-gray-200 focus:outline-none rounded-l-full ${
                                         selectedCategory.length > 15 
-                                            ? 'min-w-[100px] px-3' 
-                                            : 'px-3'
+                                            ? 'min-w-[100px]' 
+                                            : ''
                                     }`}
                                 >
                                     <span className="text-sm font-medium truncate">
@@ -181,10 +197,10 @@ const Navbar = () => {
                             </div>
                             
                             {/* Search Input */}
-                            <div className="flex items-center gap-2 px-3 py-2.5 flex-1 min-w-0">
-                                <Search size={18} className="text-gray-600 flex-shrink-0" />
+                            <div className="flex items-center gap-2 px-4 flex-1 min-w-0">
+                                <Search size={18} className="text-gray-500 flex-shrink-0" />
                                 <input 
-                                    className="w-full bg-transparent outline-none placeholder-gray-600 focus:placeholder-gray-400 transition-colors duration-200 min-w-0 rounded text-sm" 
+                                    className="w-full bg-transparent outline-none placeholder-gray-500 focus:placeholder-gray-400 transition-colors duration-200 min-w-0 rounded text-sm" 
                                     type="search" 
                                     placeholder="Search..." 
                                     value={search} 
@@ -215,14 +231,14 @@ const Navbar = () => {
                     </div>
 
                     {/* Right Navigation */}
-                    <div className="hidden sm:flex items-center gap-4 md:gap-5 lg:gap-6 text-gray-600 flex-shrink-0">
-                        <Link to="/shop" className="hover:text-blue-800 hover:bg-blue-50 hover:px-3 hover:py-2 hover:rounded-full transition-all duration-200 font-medium text-base whitespace-nowrap">Shop</Link>
+                    <div className="hidden sm:flex items-center gap-5 md:gap-6 lg:gap-7 text-gray-700 flex-shrink-0">
+                        <Link to="/shop" className="hover:text-blue-800 transition-colors duration-200 font-medium text-base whitespace-nowrap">Shop</Link>
 
-                        <Link to="/cart" className="relative flex items-center gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-3 hover:py-2 hover:rounded-full transition-all duration-200 font-medium whitespace-nowrap">
-                            <ShoppingCart size={18} className="hover:scale-110 transition-transform duration-200" />
+                        <Link to="/cart" className="relative flex items-center gap-2 text-gray-700 hover:text-blue-800 transition-colors duration-200 font-medium whitespace-nowrap">
+                            <ShoppingCart size={20} className="hover:scale-110 transition-transform duration-200" />
                             <span className="text-base">Cart</span>
                             {cartCount > 0 && (
-                                <span className="absolute -top-1 left-3 text-[8px] text-white bg-blue-600 size-3.5 rounded-full hover:bg-blue-800 hover:scale-110 transition-all duration-200 flex items-center justify-center">{cartCount}</span>
+                                <span className="absolute -top-1 left-3 text-[8px] text-white bg-blue-600 size-3.5 rounded-full hover:bg-blue-800 hover:scale-110 transition-all duration-200 flex items-center justify-center font-medium">{cartCount}</span>
                             )}
                         </Link>
 
@@ -296,123 +312,115 @@ const Navbar = () => {
                                 </div>
                             </div>
                         ) : (
-                            <Link to="/auth/login" className="relative px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-base flex items-center gap-2 whitespace-nowrap">
-                                <User size={18} className="group-hover:scale-110 transition-transform duration-300" />
+                            <Link to="/auth/login" className="relative px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap">
+                                <User size={18} className="md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
                                 <span>Login / Register</span>
                             </Link>
                         )}
                     </div>
 
-                    {/* Mobile Menu */}
-                    <div className="sm:hidden flex items-center gap-1 xs:gap-2 relative" ref={mobileMenuRef}>
+                    {/* Mobile: Search and Menu on right */}
+                    <div className="flex sm:hidden items-center gap-3 flex-shrink-0">
                         {/* Mobile Search Button */}
                         <button 
                             onClick={() => setShowMobileSearch(!showMobileSearch)} 
                             aria-label="Open search"
                             aria-expanded={showMobileSearch}
-                            className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                            className="p-2 text-gray-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation"
                         >
-                            <Search size={18} className="xs:w-5 xs:h-5" aria-hidden="true" />
+                            <Search size={20} aria-hidden="true" />
                         </button>
-                        {showMobileSearch && (
-                            <div className="absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-[85vw] max-w-sm p-2 sm:p-3">
-                                <form onSubmit={handleSearch} className="flex items-center gap-1.5 sm:gap-2">
-                                    <Search size={14} className="sm:w-4 sm:h-4 text-gray-600 flex-shrink-0" />
-                                    <input 
-                                        className="flex-1 bg-transparent outline-none text-xs sm:text-sm placeholder-gray-500 rounded px-1.5 sm:px-2"
-                                        type="search"
-                                        placeholder="Search products..."
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        aria-label="Search products"
-                                        required
-                                    />
-                                    <button 
-                                        type="submit" 
-                                        aria-label="Submit search"
-                                        className="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-600 text-white text-[10px] sm:text-xs rounded-md hover:bg-blue-700 focus:outline-none transition-colors"
-                                    >
-                                        Go
-                                    </button>
-                                </form>
-                                {suggestions.length > 0 && (
-                                    <div className="mt-2 border-t border-gray-100 pt-2 max-h-56 overflow-y-auto">
-                                        {suggestions.map(s => (
-                                            <button
-                                                key={s.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    setSearch(s.name)
-                                                    navigate(`/shop?search=${encodeURIComponent(s.name)}&category=${encodeURIComponent('All')}`)
-                                                    setShowMobileSearch(false)
-                                                }}
-                                                className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-50 rounded"
-                                            >
-                                                <span className="block font-medium text-gray-800 truncate">{s.name}</span>
-                                                <span className="block text-xs text-gray-500">{s.category}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
                         
+                        {/* Mobile Menu Button */}
                         {user ? (
-                            <div className="flex items-center gap-0.5 xs:gap-1">
-                                <Link to="/cart" className="relative p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <ShoppingCart size={18} className="xs:w-5 xs:h-5" />
-                                    {cartCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 text-[8px] text-white bg-blue-600 size-3.5 xs:size-4 rounded-full flex items-center justify-center font-medium">{cartCount}</span>
-                                    )}
-                                </Link>
-                                <Link to="/profile?tab=wishlist" className="relative p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <Heart size={18} className="xs:w-5 xs:h-5" />
-                                    {wishlistCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 text-[8px] text-white bg-red-500 size-3.5 xs:size-4 rounded-full flex items-center justify-center font-medium">{wishlistCount}</span>
-                                    )}
-                                </Link>
-                                <Link to="/profile" className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors">
-                                    <User size={18} className="xs:w-5 xs:h-5" />
-                                </Link>
-                            </div>
+                            <Link to="/profile" className="p-2 text-gray-600 hover:text-blue-800 transition-colors touch-manipulation">
+                                <User size={20} />
+                            </Link>
                         ) : (
-                            // On home page, show a three-lines (hamburger) menu with Login and Register
-                            pathname === '/' ? (
-                                <>
-                                    <button
-                                        aria-label="Open auth menu"
-                                        onClick={() => setShowMobileAuth(!showMobileAuth)}
-                                        className="p-1.5 xs:p-2 text-gray-600 hover:text-blue-800 transition-colors"
-                                    >
-                                        <Menu size={20} className="xs:w-5 xs:h-5" />
-                                    </button>
-                                    {showMobileAuth && (
-                                        <div className="absolute right-0 top-9 z-50 bg-white border border-gray-200 rounded-lg shadow-md w-40 py-2">
-                                            <Link
-                                                to="/auth/login"
-                                                className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                                                onClick={() => setShowMobileAuth(false)}
-                                            >
-                                                Login
-                                            </Link>
-                                            <Link
-                                                to="/auth/register"
-                                                className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                                                onClick={() => setShowMobileAuth(false)}
-                                            >
-                                                Register
-                                            </Link>
-                                        </div>
-                                    )}
-                                </>
-                            ) : (
-                                <Link to="/auth/login" className="relative px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 hover:shadow-xl active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-md hover:shadow-blue-500/25 group overflow-hidden text-xs xs:text-sm flex items-center gap-1.5">
-                                    <User size={16} className="xs:w-4 xs:h-4" />
-                                    <span className="hidden xs:inline">Login</span>
-                                </Link>
-                            )
+                            <button
+                                aria-label="Open menu"
+                                onClick={() => setShowMobileAuth(!showMobileAuth)}
+                                className="p-2 text-gray-600 hover:text-blue-800 transition-colors touch-manipulation"
+                            >
+                                <Menu size={20} />
+                            </button>
                         )}
                     </div>
+
+                    {/* Mobile Backdrop */}
+                    {(showMobileSearch || showMobileAuth) && (
+                        <div 
+                            className="sm:hidden fixed inset-0 bg-black/20 z-[100]" 
+                            onClick={() => {
+                                setShowMobileSearch(false)
+                                setShowMobileAuth(false)
+                            }}
+                        />
+                    )}
+
+                    {/* Mobile Search Dropdown */}
+                    {showMobileSearch && (
+                        <div className="sm:hidden fixed left-4 right-4 top-20 z-[101] bg-white border border-gray-200 rounded-lg shadow-lg p-3" ref={mobileMenuRef}>
+                            <form onSubmit={handleSearch} className="flex items-center gap-2 mb-2">
+                                <Search size={18} className="text-gray-600 flex-shrink-0" />
+                                <input 
+                                    className="flex-1 bg-gray-50 border border-gray-200 rounded-lg outline-none text-sm placeholder-gray-500 px-3 py-2"
+                                    type="search"
+                                    placeholder="Search products..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    aria-label="Search products"
+                                    required
+                                />
+                                <button 
+                                    type="submit" 
+                                    aria-label="Submit search"
+                                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 focus:outline-none transition-colors"
+                                >
+                                    Go
+                                </button>
+                            </form>
+                            {suggestions.length > 0 && (
+                                <div className="border-t border-gray-100 pt-2 max-h-56 overflow-y-auto">
+                                    {suggestions.map(s => (
+                                        <button
+                                            key={s.id}
+                                            type="button"
+                                            onClick={() => {
+                                                setSearch(s.name)
+                                                navigate(`/shop?search=${encodeURIComponent(s.name)}&category=${encodeURIComponent('All')}`)
+                                                setShowMobileSearch(false)
+                                            }}
+                                            className="w-full text-left px-2 py-2 text-sm hover:bg-gray-50 rounded"
+                                        >
+                                            <span className="block font-medium text-gray-800 truncate">{s.name}</span>
+                                            <span className="block text-xs text-gray-500">{s.category}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Mobile Auth Menu Dropdown */}
+                    {showMobileAuth && !user && (
+                        <div className="sm:hidden fixed right-4 top-16 z-[101] bg-white border border-gray-200 rounded-lg shadow-lg w-40 py-2" ref={mobileMenuRef}>
+                            <Link
+                                to="/auth/login"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                onClick={() => setShowMobileAuth(false)}
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                to="/auth/register"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                onClick={() => setShowMobileAuth(false)}
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
             <hr className="border-gray-300" />
