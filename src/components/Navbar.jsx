@@ -109,9 +109,9 @@ const Navbar = () => {
     }, [search, products])
 
     return (
-        <nav className="relative bg-white border-b border-gray-100 w-full overflow-hidden">
-            <div className="px-3 sm:px-4 md:px-6 lg:px-8">
-                <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8 max-w-7xl mx-auto py-2.5 sm:py-3 md:py-4 transition-all">
+        <nav className="relative bg-white border-b border-gray-100 w-full" style={{ overflow: 'visible', zIndex: 100 }}>
+            <div className="px-3 sm:px-4 md:px-6 lg:px-8" style={{ overflow: 'visible' }}>
+                <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8 max-w-7xl mx-auto py-2.5 sm:py-3 md:py-4 transition-all relative" style={{ overflow: 'visible' }}>
 
                     {/* Mobile: Logo on left */}
                     <Link to="/" className="sm:hidden hover:scale-105 transition-transform duration-200 flex-shrink-0">
@@ -144,10 +144,10 @@ const Navbar = () => {
                     </Link>
 
                     {/* Desktop Search Bar - Centered */}
-                    <div className="hidden sm:flex items-center flex-1 justify-center mx-4 md:mx-6 lg:mx-8">
-                        <form onSubmit={handleSearch} className="hidden md:flex items-center w-full max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] h-11 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 hover:border-gray-300 transition-all duration-200 focus-within:bg-white focus-within:border-blue-300 focus-within:shadow-sm relative">
+                    <div className="hidden sm:flex items-center flex-1 justify-center mx-4 md:mx-6 lg:mx-8 relative" style={{ zIndex: 50 }}>
+                        <form onSubmit={handleSearch} className="hidden md:flex items-center w-full max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] h-11 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 hover:border-gray-300 transition-all duration-200 focus-within:bg-white focus-within:border-blue-300 focus-within:shadow-sm relative" style={{ overflow: 'visible' }}>
                             {/* Category Dropdown */}
-                            <div className="relative flex-shrink-0" ref={dropdownRef}>
+                            <div className="relative flex-shrink-0" ref={dropdownRef} style={{ zIndex: 100 }}>
                                 <button
                                     type="button"
                                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -173,8 +173,15 @@ const Navbar = () => {
                                 {isDropdownOpen && (
                                     <div 
                                         role="listbox" 
-                                        className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"
+                                        className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-2xl max-h-80 overflow-y-auto"
                                         aria-label="Category selection"
+                                        style={{ 
+                                            position: 'absolute',
+                                            zIndex: 9999,
+                                            top: '100%',
+                                            left: 0,
+                                            marginTop: '0.5rem'
+                                        }}
                                     >
                                         {categories.map((category, index) => (
                                             <button
@@ -183,10 +190,10 @@ const Navbar = () => {
                                                 role="option"
                                                 aria-selected={category === selectedCategory}
                                                 onClick={() => handleCategorySelect(category)}
-                                                className={`w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                                className={`w-full text-left px-4 py-2.5 text-sm transition-colors duration-200 focus:outline-none ${
                                                     category === selectedCategory 
-                                                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                                                        : 'text-gray-700'
+                                                        ? 'bg-blue-600 text-white hover:bg-blue-700 font-medium' 
+                                                        : 'text-gray-700 hover:bg-gray-50'
                                                 }`}
                                             >
                                                 {category}
