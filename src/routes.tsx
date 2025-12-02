@@ -25,6 +25,7 @@ const AuthRegister = lazy(() => import("@/app/(public)/auth/register/page"));
 const AuthForgot = lazy(() => import("@/app/(public)/auth/forgot-password/page"));
 const ForgotPassword = lazy(() => import("@/app/(public)/forgot-password/page"));
 const PrivacyPolicy = lazy(() => import("@/app/(public)/privacy-policy/page"));
+const Support = lazy(() => import("@/app/(public)/support/page"));
 const Seller = lazy(() => import("@/app/(public)/seller/page"));
 const SellerLogin = lazy(() => import("@/app/(public)/seller/login/page"));
 const SellerRegister = lazy(() => import("@/app/(public)/seller/register/page"));
@@ -88,6 +89,7 @@ export const router = createBrowserRouter([
   { path: "/auth/forgot-password", element: <PublicLayout><LazyWrapper><AuthForgot /></LazyWrapper></PublicLayout> },
   { path: "/forgot-password", element: <PublicLayout><LazyWrapper><ForgotPassword /></LazyWrapper></PublicLayout> },
   { path: "/privacy-policy", element: <PublicLayout><LazyWrapper><PrivacyPolicy /></LazyWrapper></PublicLayout> },
+  { path: "/support", element: <PublicLayout><LazyWrapper><Support /></LazyWrapper></PublicLayout> },
   { path: "/seller", element: <PublicLayout><LazyWrapper><Seller /></LazyWrapper></PublicLayout> },
   { path: "/seller/login", element: <PublicLayout><LazyWrapper><SellerLogin /></LazyWrapper></PublicLayout> },
   { path: "/seller/register", element: <PublicLayout><LazyWrapper><SellerRegister /></LazyWrapper></PublicLayout> },

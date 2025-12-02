@@ -16,9 +16,11 @@ import {
   Receipt
 } from 'lucide-react'
 import { orderDummyData } from '@/assets/assets'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function SalesDashboard() {
   const navigate = useNavigate()
+  const { t, formatCurrency } = useLanguageCurrency()
   const [salesData, setSalesData] = useState({
     totalRevenue: 0,
     totalOrders: 0,
@@ -157,12 +159,7 @@ export default function SalesDashboard() {
     setLoading(false)
   }
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
+  // formatCurrency is now from context
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -182,7 +179,7 @@ export default function SalesDashboard() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading sales data...</p>
+          <p className="text-gray-600">{t('loadingSalesData')}</p>
         </div>
       </div>
     )
@@ -202,8 +199,8 @@ export default function SalesDashboard() {
                 <ArrowLeft size={20} />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Sales Dashboard</h1>
-                <p className="text-gray-600">Track your sales performance and earnings</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('salesDashboard')}</h1>
+                <p className="text-gray-600">{t('trackSalesPerformance')}</p>
               </div>
             </div>
             
@@ -213,10 +210,10 @@ export default function SalesDashboard() {
                 onChange={(e) => setTimeRange(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="7d">Last 7 days</option>
-                <option value="30d">Last 30 days</option>
-                <option value="90d">Last 90 days</option>
-                <option value="all">All time</option>
+                <option value="7d">{t('last7Days')}</option>
+                <option value="30d">{t('last30Days')}</option>
+                <option value="90d">{t('last90Days')}</option>
+                <option value="all">{t('allTime')}</option>
               </select>
             </div>
           </div>
@@ -230,9 +227,9 @@ export default function SalesDashboard() {
             <div className="flex items-center space-x-3">
               <BarChart3 className="w-8 h-8 text-blue-600" />
               <div>
-                <h3 className="text-lg font-semibold text-blue-900">Welcome to your Sales Dashboard!</h3>
+                <h3 className="text-lg font-semibold text-blue-900">{t('welcomeToSalesDashboard')}</h3>
                 <p className="text-blue-700">
-                  Once you start receiving orders, you'll see your sales performance, revenue, and fee breakdown here.
+                  {t('onceYouStartReceivingOrders')}
                 </p>
               </div>
             </div>
@@ -244,11 +241,11 @@ export default function SalesDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                <p className="text-sm font-medium text-gray-600">{t('totalRevenue')}</p>
                 <p className="text-2xl font-bold text-gray-900">{formatCurrency(salesData.totalRevenue)}</p>
                 <p className="text-sm text-gray-500 flex items-center mt-1">
                   <TrendingUp size={14} className="mr-1" />
-                  No data available
+                  {t('noDataAvailable')}
                 </p>
               </div>
               <div className="p-3 rounded-full bg-green-100">
@@ -260,11 +257,11 @@ export default function SalesDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Orders</p>
+                <p className="text-sm font-medium text-gray-600">{t('totalOrders')}</p>
                 <p className="text-2xl font-bold text-gray-900">{salesData.totalOrders}</p>
                 <p className="text-sm text-gray-500 flex items-center mt-1">
                   <TrendingUp size={14} className="mr-1" />
-                  No data available
+                  {t('noDataAvailable')}
                 </p>
               </div>
               <div className="p-3 rounded-full bg-blue-100">
@@ -276,11 +273,11 @@ export default function SalesDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Products Sold</p>
+                <p className="text-sm font-medium text-gray-600">{t('productsSold')}</p>
                 <p className="text-2xl font-bold text-gray-900">{salesData.totalProductsSold}</p>
                 <p className="text-sm text-gray-500 flex items-center mt-1">
                   <TrendingUp size={14} className="mr-1" />
-                  No data available
+                  {t('noDataAvailable')}
                 </p>
               </div>
               <div className="p-3 rounded-full bg-purple-100">
@@ -292,11 +289,11 @@ export default function SalesDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Net Profit</p>
+                <p className="text-sm font-medium text-gray-600">{t('netProfit')}</p>
                 <p className="text-2xl font-bold text-gray-900">{formatCurrency(salesData.totalProfit)}</p>
                 <p className="text-sm text-gray-500 flex items-center mt-1">
                   <TrendingUp size={14} className="mr-1" />
-                  No data available
+                  {t('noDataAvailable')}
                 </p>
               </div>
               <div className="p-3 rounded-full bg-orange-100">
@@ -312,7 +309,7 @@ export default function SalesDashboard() {
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
                 <PieChart className="w-5 h-5 mr-2 text-blue-600" />
-                Fee Breakdown
+                {t('feeBreakdown')}
               </h3>
               
               <div className="space-y-4">
@@ -334,14 +331,14 @@ export default function SalesDashboard() {
                       ></div>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      {fee.percentage.toFixed(1)}% of total revenue
+                      {fee.percentage.toFixed(1)}% {t('ofTotalRevenue')}
                     </p>
                   </div>
                 ))}
                 
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex justify-between items-center">
-                    <span className="font-semibold text-gray-900">Total Fees</span>
+                    <span className="font-semibold text-gray-900">{t('totalFees')}</span>
                     <span className="text-lg font-bold text-red-600">
                       -{formatCurrency(salesData.totalFees)}
                     </span>
@@ -357,7 +354,7 @@ export default function SalesDashboard() {
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
                 <BarChart3 className="w-5 h-5 mr-2 text-green-600" />
-                Top Selling Products
+                {t('topSellingProducts')}
               </h3>
               
               {salesData.topSellingProducts.length > 0 ? (
@@ -374,7 +371,7 @@ export default function SalesDashboard() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">{product.quantity} sold</p>
+                        <p className="font-semibold text-gray-900">{product.quantity} {t('sold')}</p>
                         <p className="text-sm text-gray-600">{formatCurrency(product.revenue)}</p>
                       </div>
                     </div>
@@ -383,7 +380,7 @@ export default function SalesDashboard() {
               ) : (
                 <div className="text-center py-8">
                   <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">No sales data available for this period</p>
+                  <p className="text-gray-600">{t('noSalesDataAvailable')}</p>
                 </div>
               )}
             </div>
@@ -392,7 +389,7 @@ export default function SalesDashboard() {
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
                 <Receipt className="w-5 h-5 mr-2 text-purple-600" />
-                Recent Orders
+                {t('recentOrders')}
               </h3>
               
               {salesData.recentOrders.length > 0 ? (
@@ -404,12 +401,12 @@ export default function SalesDashboard() {
                           <Receipt className="w-6 h-6 text-gray-400" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-gray-900">Order #{order.id.slice(-8)}</h4>
+                          <h4 className="font-medium text-gray-900">{t('order')} #{order.id.slice(-8)}</h4>
                           <p className="text-sm text-gray-600">
                             {new Date(order.createdAt).toLocaleDateString()}
                           </p>
                           <p className="text-sm text-gray-600">
-                            {order.orderItems.length} item(s)
+                            {order.orderItems.length} {order.orderItems.length === 1 ? t('item') : t('items')}
                           </p>
                         </div>
                       </div>
@@ -425,7 +422,7 @@ export default function SalesDashboard() {
               ) : (
                 <div className="text-center py-8">
                   <Receipt className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">No orders found for this period</p>
+                  <p className="text-gray-600">{t('noOrdersFoundForPeriod')}</p>
                 </div>
               )}
             </div>
@@ -435,22 +432,22 @@ export default function SalesDashboard() {
         {/* Additional Stats */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Average Order Value</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('averageOrderValue')}</h3>
             <p className="text-3xl font-bold text-blue-600">{formatCurrency(salesData.averageOrderValue)}</p>
-            <p className="text-sm text-gray-600 mt-2">Per order</p>
+            <p className="text-sm text-gray-600 mt-2">{t('perOrder')}</p>
           </div>
           
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Platform Fees</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('platformFees')}</h3>
             <p className="text-3xl font-bold text-red-600">-{formatCurrency(salesData.platformFees)}</p>
-            <p className="text-sm text-gray-600 mt-2">{PLATFORM_FEE_PERCENTAGE}% of sales</p>
+            <p className="text-sm text-gray-600 mt-2">{PLATFORM_FEE_PERCENTAGE}% {t('ofTotalSales')}</p>
           </div>
           
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Delivery Fees</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('deliveryFees')}</h3>
             <p className="text-3xl font-bold text-orange-600">-{formatCurrency(salesData.deliveryFees)}</p>
             <p className="text-sm text-gray-600 mt-2">
-              {salesData.deliveryFees > 0 ? `$${DELIVERY_FEE_FIXED} per order` : 'Self-delivery'}
+              {salesData.deliveryFees > 0 ? `$${DELIVERY_FEE_FIXED} ${t('perOrder')}` : t('selfDeliveryNoFees')}
             </p>
           </div>
         </div>

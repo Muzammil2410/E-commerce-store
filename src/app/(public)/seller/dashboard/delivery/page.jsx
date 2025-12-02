@@ -17,9 +17,11 @@ import {
 } from 'lucide-react'
 import { orderDummyData } from '@/assets/assets'
 import toast from 'react-hot-toast'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function DeliveryManagement() {
   const navigate = useNavigate()
+  const { t } = useLanguageCurrency()
   const [activeTab, setActiveTab] = useState('orders')
   const [orders, setOrders] = useState([])
   const [selectedOrder, setSelectedOrder] = useState(null)
@@ -93,7 +95,7 @@ export default function DeliveryManagement() {
       }
       setUploadedImages(newImages)
       localStorage.setItem('deliveryProofImages', JSON.stringify(newImages))
-      toast.success('Proof of delivery uploaded successfully')
+      toast.success(t('proofOfDeliveryUploadedSuccessfully'))
     }
     reader.readAsDataURL(file)
   }
@@ -109,7 +111,7 @@ export default function DeliveryManagement() {
     const newScans = [mockScan, ...scannedParcels]
     setScannedParcels(newScans)
     localStorage.setItem('scannedParcels', JSON.stringify(newScans))
-    toast.success('Parcel scanned successfully')
+    toast.success(t('parcelScannedSuccessfully'))
   }
 
   const getGoogleMapsUrl = (order) => {
@@ -120,10 +122,10 @@ export default function DeliveryManagement() {
   }
 
   const tabs = [
-    { id: 'orders', label: 'Delivery Orders', icon: Truck },
-    { id: 'proof', label: 'Proof of Delivery', icon: Camera },
-    { id: 'scanner', label: 'Parcel Scanner', icon: QrCode },
-    { id: 'schedule', label: 'Delivery Schedule', icon: Calendar }
+    { id: 'orders', label: t('deliveryOrders'), icon: Truck },
+    { id: 'proof', label: t('proofOfDelivery'), icon: Camera },
+    { id: 'scanner', label: t('parcelScanner'), icon: QrCode },
+    { id: 'schedule', label: t('deliverySchedule'), icon: Calendar }
   ]
 
   return (
@@ -140,8 +142,8 @@ export default function DeliveryManagement() {
                 <ArrowLeft size={20} />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Delivery Management</h1>
-                <p className="text-gray-600">Manage deliveries and track orders</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('deliveryManagement')}</h1>
+                <p className="text-gray-600">{t('manageDeliveriesAndTrackOrders')}</p>
               </div>
             </div>
           </div>
@@ -187,12 +189,12 @@ export default function DeliveryManagement() {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery Address</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distance</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('orderId')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('customerName')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('deliveryAddress')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('distance')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -248,7 +250,7 @@ export default function DeliveryManagement() {
                           className="text-blue-600 hover:text-blue-900 flex items-center space-x-1"
                         >
                           <MapPin size={16} />
-                          <span>View Route</span>
+                          <span>{t('viewRoute')}</span>
                         </button>
                       </td>
                     </tr>
@@ -263,7 +265,7 @@ export default function DeliveryManagement() {
         {activeTab === 'proof' && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Proof of Delivery</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('uploadProofOfDelivery')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {orders.map((order) => {
                   const proof = uploadedImages[order.id]
@@ -271,13 +273,13 @@ export default function DeliveryManagement() {
                     <div key={order.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h4 className="font-medium text-gray-900">Order #{order.id.slice(-8)}</h4>
-                          <p className="text-sm text-gray-600">{order.user?.name || 'Customer'}</p>
+                          <h4 className="font-medium text-gray-900">{t('order')} #{order.id.slice(-8)}</h4>
+                          <p className="text-sm text-gray-600">{order.user?.name || t('customer') || 'Customer'}</p>
                         </div>
                         {proof && (
                           <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full flex items-center space-x-1">
                             <CheckCircle size={12} />
-                            <span>Uploaded</span>
+                            <span>{t('uploaded')}</span>
                           </span>
                         )}
                       </div>
@@ -286,13 +288,13 @@ export default function DeliveryManagement() {
                         <div className="space-y-3">
                           <img src={proof.image} alt="Proof" className="w-full h-48 object-cover rounded-lg" />
                           <div className="text-sm text-gray-600">
-                            <p>Uploaded: {new Date(proof.timestamp).toLocaleString()}</p>
+                            <p>{t('uploaded')}: {new Date(proof.timestamp).toLocaleString()}</p>
                           </div>
                         </div>
                       ) : (
                         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                           <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                          <p className="text-sm text-gray-600 mb-2">No proof uploaded</p>
+                          <p className="text-sm text-gray-600 mb-2">{t('noProofUploaded')}</p>
                           <label className="inline-block">
                             <input
                               type="file"
@@ -301,7 +303,7 @@ export default function DeliveryManagement() {
                               className="hidden"
                             />
                             <span className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer text-sm">
-                              Upload Photo
+                              {t('uploadPhoto')}
                             </span>
                           </label>
                         </div>
@@ -314,22 +316,22 @@ export default function DeliveryManagement() {
 
             {/* Delivery List */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Delivery Status</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('deliveryStatus')}</h3>
               <div className="space-y-3">
                 {orders.map((order) => {
                   const proof = uploadedImages[order.id]
                   return (
                     <div key={order.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Order #{order.id.slice(-8)}</p>
-                        <p className="text-sm text-gray-600">{order.user?.name || 'Customer'}</p>
+                        <p className="font-medium text-gray-900">{t('order')} #{order.id.slice(-8)}</p>
+                        <p className="text-sm text-gray-600">{order.user?.name || t('customer') || 'Customer'}</p>
                       </div>
                       <div className="flex items-center space-x-4">
                         {proof ? (
                           <>
                             <span className="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 rounded-full flex items-center space-x-1">
                               <CheckCircle size={14} />
-                              <span>Uploaded</span>
+                              <span>{t('uploaded')}</span>
                             </span>
                             <span className="text-sm text-gray-600">
                               {new Date(proof.timestamp).toLocaleString()}
@@ -338,7 +340,7 @@ export default function DeliveryManagement() {
                         ) : (
                           <span className="px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800 rounded-full flex items-center space-x-1">
                             <Clock size={14} />
-                            <span>Pending</span>
+                            <span>{t('pending')}</span>
                           </span>
                         )}
                       </div>
@@ -354,13 +356,13 @@ export default function DeliveryManagement() {
         {activeTab === 'scanner' && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Scan Parcel</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('scanParcel')}</h3>
               <div className="bg-gray-900 rounded-lg p-8 mb-4 relative overflow-hidden">
                 <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center border-4 border-blue-500">
                   <div className="text-center">
                     <Scan className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-pulse" />
-                    <p className="text-white text-lg font-medium">Camera Frame</p>
-                    <p className="text-gray-400 text-sm mt-2">Position barcode/QR code within frame</p>
+                    <p className="text-white text-lg font-medium">{t('cameraFrame')}</p>
+                    <p className="text-gray-400 text-sm mt-2">{t('positionBarcodeWithinFrame')}</p>
                   </div>
                 </div>
                 <div className="absolute top-4 left-4 right-4 flex justify-between">
@@ -377,21 +379,21 @@ export default function DeliveryManagement() {
                 className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
               >
                 <QrCode size={20} />
-                <span>Scan Parcel</span>
+                <span>{t('scanParcel')}</span>
               </button>
             </div>
 
             {/* Recent Scans */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Scans</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('recentScans')}</h3>
               {scannedParcels.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timestamp</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('orderId')}</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('status')}</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('timestamp')}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -418,7 +420,7 @@ export default function DeliveryManagement() {
               ) : (
                 <div className="text-center py-8 text-gray-500">
                   <Package className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                  <p>No scans yet</p>
+                  <p>{t('noScansYet')}</p>
                 </div>
               )}
             </div>
@@ -432,7 +434,7 @@ export default function DeliveryManagement() {
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900">
-                Route to {selectedOrder.user?.name || 'Customer'}
+                {t('routeTo')} {selectedOrder.user?.name || t('customer') || 'Customer'}
               </h3>
               <button
                 onClick={() => setShowRouteModal(false)}
@@ -444,10 +446,10 @@ export default function DeliveryManagement() {
             <div className="p-6">
               <div className="mb-4">
                 <p className="text-sm text-gray-600 mb-1">
-                  <strong>From:</strong> Warehouse (New York)
+                  <strong>{t('from')}:</strong> {t('warehouse')} (New York)
                 </p>
                 <p className="text-sm text-gray-600">
-                  <strong>To:</strong> {selectedOrder.address?.street || 'N/A'}, {selectedOrder.address?.city || 'N/A'}
+                  <strong>{t('to')}:</strong> {selectedOrder.address?.street || 'N/A'}, {selectedOrder.address?.city || 'N/A'}
                 </p>
               </div>
               <div className="w-full h-96 rounded-lg overflow-hidden border border-gray-200">

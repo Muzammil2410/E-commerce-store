@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import Image from '@/components/Image'
 import FeeBreakdown from '@/components/FeeBreakdown'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 const categories = ['Clothing', 'Electronics', 'Books', 'Cosmetics', 'Accessories']
 
@@ -25,6 +26,7 @@ export default function EditProduct() {
   const navigate = useNavigate()
   const params = useParams()
   const productId = params.id
+  const { t } = useLanguageCurrency()
   
   const [formData, setFormData] = useState({
     // Basic Details
@@ -215,12 +217,12 @@ export default function EditProduct() {
 
   const handleSaveDraft = () => {
     localStorage.setItem('draftProduct', JSON.stringify(formData))
-    toast.success('Draft saved successfully!')
+      toast.success(t('productSavedSuccessfully'))
   }
 
   const handleUpdate = async () => {
     if (!validateForm()) {
-      toast.error('Please fix the errors before updating')
+      toast.error(t('pleaseFixErrorsBeforePublishing'))
       return
     }
     
@@ -245,7 +247,7 @@ export default function EditProduct() {
       // Save updated products
       localStorage.setItem('products', JSON.stringify(updatedProducts))
       
-      toast.success('Product updated successfully!')
+      toast.success(t('productUpdated'))
       
       // Redirect to products page
       setTimeout(() => {
@@ -253,7 +255,7 @@ export default function EditProduct() {
       }, 1000)
       
     } catch (error) {
-      toast.error('Failed to update product. Please try again.')
+      toast.error(t('failedToUpdateProduct') || 'Failed to update product. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -667,8 +669,8 @@ export default function EditProduct() {
                 <span>Back to Products</span>
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Edit Product</h1>
-                <p className="text-gray-600">Update your product information</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('editProduct')}</h1>
+                <p className="text-gray-600">{t('updateYourProductInformation') || 'Update your product information'}</p>
               </div>
             </div>
           </div>
@@ -758,7 +760,7 @@ export default function EditProduct() {
               className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <Save size={20} />
-              <span>Save Draft</span>
+              <span>{t('saveAsDraft')}</span>
             </button>
             <button
               onClick={handleUpdate}
@@ -768,12 +770,12 @@ export default function EditProduct() {
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Updating...</span>
+                  <span>{t('updating') || 'Updating...'}</span>
                 </>
               ) : (
                 <>
                   <Send size={20} />
-                  <span>Update Product</span>
+                  <span>{t('updateProduct')}</span>
                 </>
               )}
             </button>

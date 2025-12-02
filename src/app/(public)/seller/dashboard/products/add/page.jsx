@@ -18,11 +18,13 @@ import {
 } from 'lucide-react'
 import Image from '@/components/Image'
 import FeeBreakdown from '@/components/FeeBreakdown'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 const categories = ['Clothing', 'Electronics', 'Books', 'Cosmetics', 'Accessories']
 
 export default function AddProduct() {
   const navigate = useNavigate()
+  const { t } = useLanguageCurrency()
   const [formData, setFormData] = useState({
     // Basic Details
     title: '',
@@ -178,7 +180,7 @@ export default function AddProduct() {
     // Also save as draftProduct for editing
     localStorage.setItem('draftProduct', JSON.stringify(formData))
     
-    toast.success('Draft saved successfully!')
+    toast.success(t('productSavedSuccessfully'))
     
     // Clear the flag and redirect to products page after 1 second
     setTimeout(() => {
@@ -189,7 +191,7 @@ export default function AddProduct() {
 
   const handlePublish = async () => {
     if (!validateForm()) {
-      toast.error('Please fix the errors before publishing')
+      toast.error(t('pleaseFixErrorsBeforePublishing') || 'Please fix the errors before publishing')
       return
     }
     
@@ -214,7 +216,7 @@ export default function AddProduct() {
       // Clear draft
       localStorage.removeItem('draftProduct')
       
-      toast.success('Product published successfully!')
+      toast.success(t('productPublishedSuccessfully'))
       
       // Redirect to products page
       setTimeout(() => {
@@ -222,7 +224,7 @@ export default function AddProduct() {
       }, 1000)
       
     } catch (error) {
-      toast.error('Failed to publish product. Please try again.')
+      toast.error(t('failedToPublishProduct'))
     } finally {
       setIsSubmitting(false)
     }
@@ -293,8 +295,8 @@ export default function AddProduct() {
               </button>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Add New Product</h1>
-              <p className="text-sm text-gray-600">Create a new product for your store</p>
+              <h1 className="text-xl font-bold text-gray-900">{t('addNewProductTitle')}</h1>
+              <p className="text-sm text-gray-600">{t('createNewProductForStore') || 'Create a new product for your store'}</p>
             </div>
           </div>
 
@@ -307,8 +309,8 @@ export default function AddProduct() {
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
-              <p className="text-gray-600">Create a new product for your store</p>
+              <h1 className="text-2xl font-bold text-gray-900">{t('addNewProductTitle')}</h1>
+              <p className="text-gray-600">{t('createNewProductForStore') || 'Create a new product for your store'}</p>
             </div>
           </div>
         </div>
@@ -322,12 +324,12 @@ export default function AddProduct() {
             <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
                 <Package className="w-5 h-5 mr-2 text-blue-600" />
-                Basic Details
+                {t('basicDetails')}
               </h2>
               
               <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Product Title *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('productTitleRequired')}</label>
                   <input
                     type="text"
                     value={formData.title}
@@ -335,25 +337,25 @@ export default function AddProduct() {
                     className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                       errors.title ? 'border-red-500' : 'border-gray-300'
                     }`}
-                    placeholder="Enter product title"
+                    placeholder={t('enterProductTitle')}
                   />
                   {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">SKU</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('sku')}</label>
                   <input
                     type="text"
                     value={formData.sku}
                     onChange={(e) => handleInputChange('sku', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Enter SKU manually (e.g., ABC-12345)"
+                    placeholder={t('enterSku')}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('categoryRequired')}</label>
                     <select
                       value={formData.category}
                       onChange={(e) => handleInputChange('category', e.target.value)}
@@ -361,7 +363,7 @@ export default function AddProduct() {
                         errors.category ? 'border-red-500' : 'border-gray-300'
                       }`}
                     >
-                      <option value="">Select category</option>
+                      <option value="">{t('selectCategory')}</option>
                       {categories.map(category => (
                         <option key={category} value={category}>{category}</option>
                       ))}
@@ -370,13 +372,13 @@ export default function AddProduct() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Brand (Optional)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('brand')} ({t('optional') || 'Optional'})</label>
                     <input
                       type="text"
                       value={formData.brand}
                       onChange={(e) => handleInputChange('brand', e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                      placeholder="Enter brand name"
+                      placeholder={t('enterBrand')}
                     />
                   </div>
                 </div>
@@ -387,12 +389,12 @@ export default function AddProduct() {
             <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
                 <DollarSign className="w-5 h-5 mr-2 text-green-600" />
-                Pricing & Inventory
+                {t('pricingInventory')}
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('priceRequired')}</label>
                   <input
                     type="number"
                     step="0.01"
@@ -408,7 +410,7 @@ export default function AddProduct() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Sale Price (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('salePriceOptional')}</label>
                   <input
                     type="number"
                     step="0.01"
@@ -421,7 +423,7 @@ export default function AddProduct() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('stockQuantityRequired')}</label>
                   <input
                     type="number"
                     min="0"
@@ -705,14 +707,14 @@ export default function AddProduct() {
                   className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowLeft size={20} />
-                  <span>Cancel</span>
+                  <span>{t('cancel') || 'Cancel'}</span>
                 </button>
                 <button
                   onClick={handleSaveDraft}
                   className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <Save size={20} />
-                  <span>Save Draft</span>
+                  <span>{t('saveAsDraft')}</span>
                 </button>
                 <button
                   onClick={handlePublish}
@@ -722,12 +724,12 @@ export default function AddProduct() {
                   {isSubmitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Publishing...</span>
+                      <span>{t('publishing') || 'Publishing...'}</span>
                     </>
                   ) : (
                     <>
                       <Send size={20} />
-                      <span>Publish Product</span>
+                      <span>{t('publishProduct')}</span>
                     </>
                   )}
                 </button>

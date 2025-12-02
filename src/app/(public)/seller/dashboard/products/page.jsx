@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Edit, Trash2, Eye, Package, Search, Filter, ArrowLeft } from 'lucide-react'
 import Image from '@/components/Image'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function SellerProducts() {
   const navigate = useNavigate()
+  const { t } = useLanguageCurrency()
   const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
@@ -26,7 +28,7 @@ export default function SellerProducts() {
   })
 
   const handleDeleteProduct = (productId) => {
-    if (confirm('Are you sure you want to delete this product?')) {
+    if (confirm(t('areYouSureDelete'))) {
       const updatedProducts = products.filter(p => p.id !== productId)
       setProducts(updatedProducts)
       localStorage.setItem('products', JSON.stringify(updatedProducts))
@@ -35,9 +37,9 @@ export default function SellerProducts() {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      published: { color: 'bg-green-100 text-green-800', text: 'Published' },
-      draft: { color: 'bg-yellow-100 text-yellow-800', text: 'Draft' },
-      pending: { color: 'bg-blue-100 text-blue-800', text: 'Pending' }
+      published: { color: 'bg-green-100 text-green-800', text: t('published') },
+      draft: { color: 'bg-yellow-100 text-yellow-800', text: t('draft') },
+      pending: { color: 'bg-blue-100 text-blue-800', text: t('pending') }
     }
     
     const productStatus = status || 'draft' // Default to draft if no status
@@ -54,7 +56,7 @@ export default function SellerProducts() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading products...</p>
+          <p className="text-gray-600">{t('loadingProducts')}</p>
         </div>
       </div>
     )
@@ -73,19 +75,19 @@ export default function SellerProducts() {
                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
               >
                 <ArrowLeft size={20} />
-                <span className="text-sm">Back</span>
+                <span className="text-sm">{t('back')}</span>
               </button>
             </div>
             <div className="mb-4">
-              <h1 className="text-xl font-bold text-gray-900">My Products</h1>
-              <p className="text-sm text-gray-600">Manage your product inventory</p>
+              <h1 className="text-xl font-bold text-gray-900">{t('myProducts')}</h1>
+              <p className="text-sm text-gray-600">{t('manageYourProductInventory')}</p>
             </div>
             <button
               onClick={() => navigate('/seller/dashboard/products/add')}
               className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Plus size={20} />
-              <span>Add Product</span>
+              <span>{t('addProduct')}</span>
             </button>
           </div>
 
@@ -99,8 +101,8 @@ export default function SellerProducts() {
                 <ArrowLeft size={20} />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">My Products</h1>
-                <p className="text-gray-600">Manage your product inventory</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('myProducts')}</h1>
+                <p className="text-gray-600">{t('manageYourProductInventory')}</p>
               </div>
             </div>
         <button
@@ -108,7 +110,7 @@ export default function SellerProducts() {
           className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           <Plus size={20} />
-          <span>Add Product</span>
+          <span>{t('addProduct')}</span>
         </button>
           </div>
         </div>
@@ -124,7 +126,7 @@ export default function SellerProducts() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder={t('searchProducts')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -139,10 +141,10 @@ export default function SellerProducts() {
                 onChange={(e) => setFilterStatus(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="all">All Status</option>
-                <option value="published">Published</option>
-                <option value="draft">Draft</option>
-                <option value="pending">Pending</option>
+                <option value="all">{t('all')} {t('status')}</option>
+                <option value="published">{t('published')}</option>
+                <option value="draft">{t('draft')}</option>
+                <option value="pending">{t('pending')}</option>
               </select>
             </div>
           </div>
@@ -198,7 +200,7 @@ export default function SellerProducts() {
                       )}
                     </div>
                     <span className="text-sm text-blue-600 font-medium">
-                      Stock: {product.stockQuantity}
+                      {t('stock')}: {product.stockQuantity}
                     </span>
                   </div>
 
@@ -214,7 +216,7 @@ export default function SellerProducts() {
                       className="flex-1 flex items-center justify-center space-x-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <Eye size={16} />
-                      <span>View</span>
+                      <span>{t('view')}</span>
                     </button>
                     {(product.status || 'draft') === 'draft' ? (
                       <button
@@ -226,7 +228,7 @@ export default function SellerProducts() {
                         className="flex-1 flex items-center justify-center space-x-1 px-3 py-2 border border-yellow-300 text-yellow-700 rounded-lg hover:bg-yellow-50 transition-colors"
                       >
                         <Edit size={16} />
-                        <span>Continue</span>
+                        <span>{t('continue') || 'Continue'}</span>
                       </button>
                     ) : (
                       <button
@@ -234,7 +236,7 @@ export default function SellerProducts() {
                         className="flex-1 flex items-center justify-center space-x-1 px-3 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors"
                       >
                         <Edit size={16} />
-                        <span>Edit</span>
+                        <span>{t('edit')}</span>
                       </button>
                     )}
                     <button
@@ -252,12 +254,12 @@ export default function SellerProducts() {
           <div className="text-center py-12">
             <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {searchTerm || filterStatus !== 'all' ? 'No products found' : 'No products yet'}
+              {searchTerm || filterStatus !== 'all' ? t('noProductsFound') : t('noProductsYet') || 'No products yet'}
             </h3>
             <p className="text-gray-600 mb-6">
               {searchTerm || filterStatus !== 'all' 
-                ? 'Try adjusting your search or filter criteria'
-                : 'Get started by adding your first product'
+                ? t('tryAdjustingSearch') || 'Try adjusting your search or filter criteria'
+                : t('getStartedByAdding') || 'Get started by adding your first product'
               }
             </p>
             {!searchTerm && filterStatus === 'all' && (
@@ -266,7 +268,7 @@ export default function SellerProducts() {
                 className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mx-auto"
               >
                 <Plus size={20} />
-                <span>Add Your First Product</span>
+                <span>{t('addYourFirstProduct')}</span>
               </button>
             )}
           </div>
@@ -278,7 +280,7 @@ export default function SellerProducts() {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Products</p>
+                  <p className="text-sm font-medium text-gray-600">{t('totalProducts')}</p>
                   <p className="text-2xl font-bold text-gray-900">{products.length}</p>
                 </div>
                 <Package className="w-8 h-8 text-blue-600" />
@@ -288,7 +290,7 @@ export default function SellerProducts() {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Published</p>
+                  <p className="text-sm font-medium text-gray-600">{t('published')}</p>
                   <p className="text-2xl font-bold text-green-600">
                     {products.filter(p => (p.status || 'draft') === 'published').length}
                   </p>
@@ -302,7 +304,7 @@ export default function SellerProducts() {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Drafts</p>
+                  <p className="text-sm font-medium text-gray-600">{t('draft')}</p>
                   <p className="text-2xl font-bold text-yellow-600">
                     {products.filter(p => (p.status || 'draft') === 'draft').length}
                   </p>
@@ -316,7 +318,7 @@ export default function SellerProducts() {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Stock</p>
+                  <p className="text-sm font-medium text-gray-600">{t('totalStock') || 'Total Stock'}</p>
                   <p className="text-2xl font-bold text-purple-600">
                     {products.reduce((sum, p) => sum + (parseInt(p.stockQuantity) || 0), 0)}
                   </p>

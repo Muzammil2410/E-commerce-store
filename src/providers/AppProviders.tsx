@@ -3,6 +3,7 @@ import StoreProvider from "@/app/StoreProvider.jsx";
 import { Toaster } from "react-hot-toast";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LanguageCurrencyProvider } from "@/contexts/LanguageCurrencyContext";
 
 const queryClient = new QueryClient();
 
@@ -11,8 +12,10 @@ export default function AppProviders({ children }: { children: React.ReactNode }
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <StoreProvider>
-          {children}
-          <Toaster />
+          <LanguageCurrencyProvider>
+            {children}
+            <Toaster />
+          </LanguageCurrencyProvider>
         </StoreProvider>
       </QueryClientProvider>
     </HelmetProvider>

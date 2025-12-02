@@ -1,9 +1,11 @@
 'use client'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Store, UserPlus, LogIn } from 'lucide-react'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function SellerChoicePage() {
     const navigate = useNavigate()
+    const { t } = useLanguageCurrency()
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center px-4">
@@ -14,7 +16,7 @@ export default function SellerChoicePage() {
                     className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-8 transition-colors"
                 >
                     <ArrowLeft size={20} />
-                    Back to Home
+                    {t('backToHome')}
                 </button>
 
                 {/* Main Card */}
@@ -24,10 +26,10 @@ export default function SellerChoicePage() {
                             <Store className="w-10 h-10 text-green-600" />
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                            Become a Seller
+                            {t('becomeASeller')}
                         </h1>
                         <p className="text-gray-600">
-                            Join Zizla and start selling your products to thousands of customers
+                            {t('joinZizlaAndStartSelling')}
                         </p>
                     </div>
 
@@ -43,13 +45,13 @@ export default function SellerChoicePage() {
                                     <LogIn className="w-8 h-8 text-green-600" />
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                    Already have an account?
+                                    {t('alreadyHaveAccount')}
                                 </h3>
                                 <p className="text-gray-600 mb-4">
-                                    Sign in to your existing seller account and access your dashboard
+                                    {t('signInToExistingSeller')}
                                 </p>
                                 <button className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 transition-colors">
-                                    Sign In
+                                    {t('signIn')}
                                 </button>
                             </div>
                         </div>
@@ -64,13 +66,13 @@ export default function SellerChoicePage() {
                                     <UserPlus className="w-8 h-8 text-blue-600" />
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                    New to selling?
+                                    {t('newToSelling')}
                                 </h3>
                                 <p className="text-gray-600 mb-4">
-                                    Create your seller account in just 5 simple steps and start selling today
+                                    {t('createSellerAccount')}
                                 </p>
                                 <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                                    Get Started
+                                    {t('getStarted')}
                                 </button>
                             </div>
                         </div>
@@ -79,7 +81,7 @@ export default function SellerChoicePage() {
                     {/* Additional Info */}
                     <div className="mt-8 pt-6 border-t border-gray-200">
                         <div className="text-center">
-                            <h4 className="text-lg font-semibold text-gray-800 mb-4">Why choose Zizla for selling?</h4>
+                            <h4 className="text-lg font-semibold text-gray-800 mb-4">{t('whyChooseZizla')}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 <div className="text-center">
                                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -87,8 +89,8 @@ export default function SellerChoicePage() {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                         </svg>
                                     </div>
-                                    <h5 className="font-semibold text-gray-800 mb-1">Quick Setup</h5>
-                                    <p className="text-sm text-gray-600">Get started in minutes with our simple registration process</p>
+                                    <h5 className="font-semibold text-gray-800 mb-1">{t('quickSetup')}</h5>
+                                    <p className="text-sm text-gray-600">{t('getStartedInMinutes')}</p>
                                 </div>
                                 <div className="text-center">
                                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -96,8 +98,8 @@ export default function SellerChoicePage() {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                                         </svg>
                                     </div>
-                                    <h5 className="font-semibold text-gray-800 mb-1">Low Fees</h5>
-                                    <p className="text-sm text-gray-600">Competitive commission rates to maximize your profits</p>
+                                    <h5 className="font-semibold text-gray-800 mb-1">{t('lowFees')}</h5>
+                                    <p className="text-sm text-gray-600">{t('competitiveCommissionRates')}</p>
                                 </div>
                                 <div className="text-center">
                                     <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -105,8 +107,8 @@ export default function SellerChoicePage() {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z" />
                                         </svg>
                                     </div>
-                                    <h5 className="font-semibold text-gray-800 mb-1">24/7 Support</h5>
-                                    <p className="text-sm text-gray-600">Round-the-clock assistance for all your selling needs</p>
+                                    <h5 className="font-semibold text-gray-800 mb-1">{t('support247')}</h5>
+                                    <p className="text-sm text-gray-600">{t('roundTheClockAssistance')}</p>
                                 </div>
                                 <div className="text-center">
                                     <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -114,8 +116,8 @@ export default function SellerChoicePage() {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
                                     </div>
-                                    <h5 className="font-semibold text-gray-800 mb-1">Analytics</h5>
-                                    <p className="text-sm text-gray-600">Detailed insights to grow your business</p>
+                                    <h5 className="font-semibold text-gray-800 mb-1">{t('analytics')}</h5>
+                                    <p className="text-sm text-gray-600">{t('detailedInsights')}</p>
                                 </div>
                             </div>
                         </div>

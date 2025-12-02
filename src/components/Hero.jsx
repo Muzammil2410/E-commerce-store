@@ -3,10 +3,10 @@ import { assets } from '@/assets/assets'
 import { ArrowRightIcon, ChevronRightIcon } from 'lucide-react'
 import Image from '@/components/Image'
 import React, { useState, useEffect } from 'react'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 const Hero = () => {
-
-    const currency = import.meta.env.VITE_CURRENCY_SYMBOL || '$'
+    const { t, formatCurrency, getCurrencySymbol } = useLanguageCurrency()
     
     // Slider state
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -38,18 +38,18 @@ const Hero = () => {
                     <div className='relative z-10 p-4 sm:p-8 xl:p-16 flex flex-col justify-center h-full'>
                         <div className='relative z-20 max-w-full sm:max-w-md lg:max-w-lg'>
                             <div className='hidden sm:inline-flex items-center gap-2 sm:gap-3 bg-white/95 backdrop-blur-sm border border-gray-200 text-gray-700 pr-3 sm:pr-4 p-1.5 sm:p-1 rounded-full text-xs sm:text-sm hover:bg-blue-50 hover:border-blue-200 hover:text-blue-800 transition-all duration-200 mb-3 sm:mb-4 shadow-sm'>
-                                <span className='bg-blue-600 px-2.5 sm:px-3 py-1 rounded-full text-white text-xs font-semibold whitespace-nowrap'>NEWS</span> 
-                                <span className='hidden sm:inline'>Free Shipping on Orders Above $150!</span>
+                                <span className='bg-blue-600 px-2.5 sm:px-3 py-1 rounded-full text-white text-xs font-semibold whitespace-nowrap'>{t('news')}</span> 
+                                <span className='hidden sm:inline'>{t('freeShipping')}</span>
                                 <ChevronRightIcon className='group-hover:ml-2 transition-all flex-shrink-0' size={14} />
                             </div>
                             <h2 className='hidden sm:block text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 drop-shadow-sm'>
-                                <span className="text-blue-600 hover:text-blue-700 transition-colors duration-200">Ziz</span>la you'll love. Prices you'll trust.
+                                <span className="text-blue-600 hover:text-blue-700 transition-colors duration-200">Ziz</span>{t('zizlaYoullLove')}
                             </h2>
                             <div className='hidden sm:block text-gray-800 text-sm sm:text-base font-semibold mb-3 sm:mb-4 drop-shadow-sm'>
-                                <p className='text-gray-700 text-xs sm:text-sm'>Starts from</p>
-                                <p className='text-2xl sm:text-3xl font-bold text-blue-600'>{currency}4.90</p>
+                                <p className='text-gray-700 text-xs sm:text-sm'>{t('startsFrom')}</p>
+                                <p className='text-2xl sm:text-3xl font-bold text-blue-600'>{formatCurrency(4.90)}</p>
                             </div>
-                            <button className='hidden sm:block bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs sm:text-sm font-semibold py-2.5 px-6 sm:py-3 sm:px-8 xl:py-5 xl:px-12 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200 w-fit shadow-xl hover:shadow-2xl border border-blue-500/20 touch-manipulation'>LEARN MORE</button>
+                            <button className='hidden sm:block bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs sm:text-sm font-semibold py-2.5 px-6 sm:py-3 sm:px-8 xl:py-5 xl:px-12 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200 w-fit shadow-xl hover:shadow-2xl border border-blue-500/20 touch-manipulation'>{t('learnMore')}</button>
                         </div>
                     </div>
                     {/* Slider indicators */}

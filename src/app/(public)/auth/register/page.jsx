@@ -3,9 +3,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function RegisterPage() {
     const navigate = useNavigate()
+    const { t } = useLanguageCurrency()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -67,21 +69,21 @@ export default function RegisterPage() {
                     className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
                 >
                     <ArrowLeft size={20} />
-                    Back to Home
+                    {t('backToHome')}
                 </button>
 
                 {/* Register Card */}
                 <div className="bg-white rounded-2xl shadow-xl p-8">
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-                        <p className="text-gray-600">Join Zizla and start shopping</p>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('createAccount')}</h1>
+                        <p className="text-gray-600">{t('joinZizla')}</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Name Field */}
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                                Full Name
+                                {t('fullName')}
                             </label>
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -92,7 +94,7 @@ export default function RegisterPage() {
                                     value={formData.name}
                                     onChange={handleInputChange}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                                    placeholder="Enter your full name"
+                                    placeholder={t('enterYourFullName')}
                                     required
                                 />
                             </div>
@@ -101,7 +103,7 @@ export default function RegisterPage() {
                         {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                                Email Address
+                                {t('emailAddress')}
                             </label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -112,7 +114,7 @@ export default function RegisterPage() {
                                     value={formData.email}
                                     onChange={handleInputChange}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                                    placeholder="Enter your email"
+                                    placeholder={t('enterYourEmail')}
                                     required
                                 />
                             </div>
@@ -121,7 +123,7 @@ export default function RegisterPage() {
                         {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                                Password
+                                {t('password')}
                             </label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -132,7 +134,7 @@ export default function RegisterPage() {
                                     value={formData.password}
                                     onChange={handleInputChange}
                                     className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                                    placeholder="Create a password"
+                                    placeholder={t('createAPassword')}
                                     required
                                 />
                                 <button
@@ -148,7 +150,7 @@ export default function RegisterPage() {
                         {/* Confirm Password Field */}
                         <div>
                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                                Confirm Password
+                                {t('confirmPassword')}
                             </label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -159,7 +161,7 @@ export default function RegisterPage() {
                                     value={formData.confirmPassword}
                                     onChange={handleInputChange}
                                     className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                                    placeholder="Confirm your password"
+                                    placeholder={t('confirmYourPassword')}
                                     required
                                 />
                                 <button
@@ -176,13 +178,13 @@ export default function RegisterPage() {
                         <div className="flex items-start">
                             <input type="checkbox" className="mt-1 rounded border-gray-300 text-green-600 focus:ring-green-500" required />
                             <label className="ml-2 text-sm text-gray-600">
-                                I agree to the{' '}
+                                {t('iAgreeTo')}{' '}
                                 <button type="button" className="text-green-600 hover:text-green-800">
-                                    Terms of Service
+                                    {t('termsOfService')}
                                 </button>{' '}
                                 and{' '}
                                 <button type="button" className="text-green-600 hover:text-green-800">
-                                    Privacy Policy
+                                    {t('privacyPolicy')}
                                 </button>
                             </label>
                         </div>
@@ -193,20 +195,20 @@ export default function RegisterPage() {
                             disabled={loading}
                             className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
                         >
-                            {loading ? 'Creating Account...' : 'Create Account'}
+                            {loading ? t('creatingAccount') : t('createAccountButton')}
                         </button>
                     </form>
 
                     {/* Sign In Link */}
                     <div className="mt-6 text-center">
                         <p className="text-gray-600">
-                            Already have an account?{' '}
+                            {t('alreadyHaveAccount')}{' '}
                             <button 
                                 type="button"
                                 onClick={() => navigate('/auth/login')}
                                 className="text-green-600 hover:text-green-800 font-medium transition-colors"
                             >
-                                Sign in
+                                {t('signIn')}
                             </button>
                         </p>
                     </div>

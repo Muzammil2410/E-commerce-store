@@ -18,9 +18,11 @@ import {
 import { orderDummyData } from '@/assets/assets'
 import SellerReviewModal from '@/components/SellerReviewModal'
 import ChatModal from '@/components/ChatModal'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function SellerOrders() {
   const navigate = useNavigate()
+  const { t, formatCurrency } = useLanguageCurrency()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -81,19 +83,14 @@ export default function SellerOrders() {
     }
   }
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
+  // formatCurrency is now from context
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading orders...</p>
+          <p className="text-gray-600">{t('loadingOrders')}</p>
         </div>
       </div>
     )
@@ -164,7 +161,7 @@ export default function SellerOrders() {
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900">
-                            Order #{order.id.slice(-8)}
+                            {t('order')} #{order.id.slice(-8)}
                           </h3>
                           <p className="text-sm text-gray-600">
                             {new Date(order.createdAt).toLocaleDateString('en-US', {
@@ -197,7 +194,7 @@ export default function SellerOrders() {
                             <MapPin className="w-5 h-5 text-gray-600" />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">Delivery Address</p>
+                            <p className="font-medium text-gray-900">{t('deliveryAddress')}</p>
                             <p className="text-sm text-gray-600">
                               {order.address.street}, {order.address.city}
                             </p>
@@ -207,7 +204,7 @@ export default function SellerOrders() {
 
                       {/* Order Items */}
                       <div className="mb-4">
-                        <h4 className="font-medium text-gray-900 mb-2">Order Items ({order.orderItems.length})</h4>
+                        <h4 className="font-medium text-gray-900 mb-2">{t('orderItems')} ({order.orderItems.length})</h4>
                         <div className="space-y-2">
                           {order.orderItems.map((item, index) => (
                             <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -217,7 +214,7 @@ export default function SellerOrders() {
                                 </div>
                                 <div>
                                   <p className="font-medium text-gray-900">{item.product.name}</p>
-                                  <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                                  <p className="text-sm text-gray-600">{t('qty')}: {item.quantity}</p>
                                 </div>
                               </div>
                               <p className="font-semibold text-gray-900">
@@ -236,12 +233,12 @@ export default function SellerOrders() {
                         </div>
                         <div className="flex items-center space-x-2">
                           <Truck className="w-4 h-4" />
-                          <span>Delivery</span>
+                          <span>{t('delivery')}</span>
                         </div>
                         {order.isCouponUsed && (
                           <div className="flex items-center space-x-2">
                             <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                              Coupon Used
+                              {t('couponUsed')}
                             </span>
                           </div>
                         )}
@@ -254,7 +251,7 @@ export default function SellerOrders() {
                         <p className="text-2xl font-bold text-gray-900">
                           {formatCurrency(order.total)}
                         </p>
-                        <p className="text-sm text-gray-600">Total Amount</p>
+                        <p className="text-sm text-gray-600">{t('totalAmount')}</p>
                       </div>
                       
                       {/* Delay Warning */}
@@ -262,10 +259,10 @@ export default function SellerOrders() {
                         <div className="w-full bg-red-50 border border-red-200 rounded-lg p-3 mb-2">
                           <div className="flex items-center gap-2 text-red-700">
                             <AlertCircle size={16} />
-                            <p className="text-xs font-medium">Order Delayed</p>
+                            <p className="text-xs font-medium">{t('orderDelayed')}</p>
                           </div>
                           <p className="text-xs text-red-600 mt-1">
-                            Expected: {order.expectedDeliveryDate ? new Date(order.expectedDeliveryDate).toLocaleDateString() : 'N/A'}
+                            {t('expected')}: {order.expectedDeliveryDate ? new Date(order.expectedDeliveryDate).toLocaleDateString() : 'N/A'}
                           </p>
                         </div>
                       )}
@@ -285,7 +282,7 @@ export default function SellerOrders() {
                           aria-label="Open chat with buyer"
                         >
                           <MessageCircle size={16} />
-                          <span>Chat with Buyer</span>
+                          <span>{t('chatWithBuyer')}</span>
                         </button>
 
                         {/* Review Buyer Button */}
@@ -309,13 +306,13 @@ export default function SellerOrders() {
                             aria-label={hasReviewedBuyer(order.id, order.user?.id || order.userId) ? 'View or edit review' : 'Review this buyer'}
                           >
                             <Star size={16} className={hasReviewedBuyer(order.id, order.user?.id || order.userId) ? 'fill-current' : ''} />
-                            <span>{hasReviewedBuyer(order.id, order.user?.id || order.userId) ? 'View Review' : 'Review Buyer'}</span>
+                            <span>{hasReviewedBuyer(order.id, order.user?.id || order.userId) ? t('viewReview') : t('reviewBuyer')}</span>
                           </button>
                         )}
 
                         <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                           <Eye size={16} />
-                          <span>View Details</span>
+                          <span>{t('viewDetails')}</span>
                         </button>
                       </div>
                     </div>
@@ -326,11 +323,11 @@ export default function SellerOrders() {
           ) : (
             <div className="text-center py-12">
               <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No orders found</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noOrdersFound')}</h3>
               <p className="text-gray-600">
                 {searchTerm || statusFilter !== 'all' 
-                  ? 'Try adjusting your search or filter criteria'
-                  : 'You haven\'t received any orders yet'
+                  ? t('tryAdjustingSearchOrFilter')
+                  : t('youHaventReceivedAnyOrdersYet')
                 }
               </p>
             </div>

@@ -8,11 +8,13 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "@/lib/features/cart/cartSlice";
 import toast from "react-hot-toast";
+import { useLanguageCurrency } from "@/contexts/LanguageCurrencyContext";
 
 const Navbar = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { t, language, currency, updateLanguage, updateCurrency } = useLanguageCurrency();
 
     const [search, setSearch] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('All')
@@ -28,6 +30,16 @@ const Navbar = () => {
     const [showMobileAuth, setShowMobileAuth] = useState(false)
     const [showMobileSearch, setShowMobileSearch] = useState(false)
     const [suggestions, setSuggestions] = useState([])
+    const [showLanguageModal, setShowLanguageModal] = useState(false)
+    const [selectedLanguage, setSelectedLanguage] = useState(language)
+    const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
+    const languageModalRef = useRef(null)
+    const languageDropdownRef = useRef(null)
+
+    // Update local state when context changes
+    useEffect(() => {
+        setSelectedLanguage(language)
+    }, [language])
 
     const categories = [
         'All',
@@ -48,6 +60,22 @@ const Navbar = () => {
         'Toys & games',
         'Travel'
     ]
+
+    const languages = [
+        'English',
+        'Spanish',
+        'French',
+        'German',
+        'Italian',
+        'Portuguese',
+        'Chinese',
+        'Japanese',
+        'Korean',
+        'Arabic',
+        'Hindi',
+        'Urdu'
+    ]
+
 
     const handleSearch = (e) => {
         e.preventDefault()
@@ -75,6 +103,7 @@ const Navbar = () => {
         }
     }, [])
 
+
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -88,6 +117,12 @@ const Navbar = () => {
                 setShowMobileAuth(false)
                 setShowMobileSearch(false)
             }
+            if (languageModalRef.current && !languageModalRef.current.contains(event.target)) {
+                // Don't close if clicking on language dropdown inside modal
+                if (!languageDropdownRef.current?.contains(event.target)) {
+                    setIsLanguageDropdownOpen(false)
+                }
+            }
         }
 
         document.addEventListener('mousedown', handleClickOutside)
@@ -95,6 +130,14 @@ const Navbar = () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [])
+
+    const handleSaveLanguage = () => {
+        // Update context which will update the whole website
+        updateLanguage(selectedLanguage)
+        setShowLanguageModal(false)
+        setIsLanguageDropdownOpen(false)
+        toast.success('Language updated')
+    }
 
     // Live suggestions as user types
     const products = useSelector(state => state.product.list)
@@ -209,7 +252,7 @@ const Navbar = () => {
                                 <input 
                                     className="w-full bg-transparent outline-none placeholder-gray-500 focus:placeholder-gray-400 transition-colors duration-200 min-w-0 rounded text-sm" 
                                     type="search" 
-                                    placeholder="Search..." 
+                                    placeholder={t('search')} 
                                     value={search} 
                                     onChange={(e) => setSearch(e.target.value)} 
                                     aria-label="Search products" 
@@ -239,11 +282,20 @@ const Navbar = () => {
 
                     {/* Right Navigation */}
                     <div className="hidden sm:flex items-center gap-5 md:gap-6 lg:gap-7 text-gray-700 flex-shrink-0">
-                        <Link to="/shop" className="hover:text-blue-800 transition-colors duration-200 font-medium text-base whitespace-nowrap">Shop</Link>
+                        {/* Language/Currency Dropdown */}
+                        <button
+                            onClick={() => setShowLanguageModal(true)}
+                            className="flex items-center gap-1.5 text-gray-700 hover:text-blue-800 transition-colors duration-200 font-medium text-base whitespace-nowrap"
+                        >
+                            <span>{language.substring(0, 2).toUpperCase()}</span>
+                            <ChevronDown size={16} />
+                        </button>
+
+                        <Link to="/shop" className="hover:text-blue-800 transition-colors duration-200 font-medium text-base whitespace-nowrap">{t('shop')}</Link>
 
                         <Link to="/cart" className="relative flex items-center gap-2 text-gray-700 hover:text-blue-800 transition-colors duration-200 font-medium whitespace-nowrap">
                             <ShoppingCart size={20} className="hover:scale-110 transition-transform duration-200" />
-                            <span className="text-base">Cart</span>
+                            <span className="text-base">{t('cart')}</span>
                             {cartCount > 0 && (
                                 <span className="absolute -top-1 left-3 text-[8px] text-white bg-blue-600 size-3.5 rounded-full hover:bg-blue-800 hover:scale-110 transition-all duration-200 flex items-center justify-center font-medium">{cartCount}</span>
                             )}
@@ -254,7 +306,7 @@ const Navbar = () => {
                                 {/* Wishlist */}
                                 <Link to="/profile?tab=wishlist" className="relative flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm">
                                     <Heart size={16} className="sm:w-[18px] sm:h-[18px] hover:scale-110 transition-transform duration-200" />
-                                    <span className="hidden sm:inline">Wishlist</span>
+                                    <span className="hidden sm:inline">{t('wishlist')}</span>
                                     {wishlistCount > 0 && (
                                         <button className="absolute -top-1 left-3 text-[8px] text-white bg-red-500 size-3.5 rounded-full hover:bg-red-600 hover:scale-110 transition-all duration-200">{wishlistCount}</button>
                                     )}
@@ -287,7 +339,7 @@ const Navbar = () => {
                                                     onClick={() => setShowUserMenu(false)}
                                                 >
                                                     <User size={16} />
-                                                    My Profile
+                                                    {t('profile')}
                                                 </Link>
                                                 <Link
                                                     to="/orders"
@@ -295,7 +347,7 @@ const Navbar = () => {
                                                     onClick={() => setShowUserMenu(false)}
                                                 >
                                                     <ShoppingCart size={16} />
-                                                    My Orders
+                                                    {t('orders')}
                                                 </Link>
                                                 <Link
                                                     to="/profile?tab=wishlist"
@@ -303,7 +355,7 @@ const Navbar = () => {
                                                     onClick={() => setShowUserMenu(false)}
                                                 >
                                                     <Heart size={16} />
-                                                    Wishlist
+                                                    {t('wishlist')}
                                                 </Link>
                                                 <hr className="my-2" />
                                                 <button
@@ -311,7 +363,7 @@ const Navbar = () => {
                                                     className="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
                                                 >
                                                     <LogOut size={16} />
-                                                    Logout
+                                                    {t('logout')}
                                                 </button>
                                             </div>
                                         </div>
@@ -321,7 +373,7 @@ const Navbar = () => {
                         ) : (
                             <Link to="/auth/login" className="relative px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap">
                                 <User size={18} className="md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
-                                <span>Login / Register</span>
+                                <span>{t('loginRegister')}</span>
                             </Link>
                         )}
                     </div>
@@ -373,7 +425,7 @@ const Navbar = () => {
                                 <input 
                                     className="flex-1 bg-gray-50 border border-gray-200 rounded-lg outline-none text-sm placeholder-gray-500 px-3 py-2"
                                     type="search"
-                                    placeholder="Search products..."
+                                    placeholder={t('search')}
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     aria-label="Search products"
@@ -431,6 +483,78 @@ const Navbar = () => {
                 </div>
             </div>
             <hr className="border-gray-300" />
+
+            {/* Language and Currency Modal */}
+            {showLanguageModal && (
+                <>
+                    {/* Backdrop */}
+                    <div 
+                        className="fixed inset-0 bg-black/50 z-[9998]"
+                        onClick={() => setShowLanguageModal(false)}
+                    />
+                    
+                    {/* Modal */}
+                    <div 
+                        ref={languageModalRef}
+                        className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 sm:p-8">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('setLanguageCurrency')}</h2>
+                            <p className="text-gray-600 mb-6 text-sm">
+                                {t('selectPreferred')}
+                            </p>
+
+                            {/* Language Selection */}
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">{t('language')}</label>
+                                <div className="relative" ref={languageDropdownRef}>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
+                                        }}
+                                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    >
+                                        <span className="text-gray-900">{selectedLanguage}</span>
+                                        <ChevronDown 
+                                            size={20} 
+                                            className={`text-gray-500 transition-transform duration-200 ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} 
+                                        />
+                                    </button>
+                                    {isLanguageDropdownOpen && (
+                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                                            {languages.map((lang) => (
+                                                <button
+                                                    key={lang}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSelectedLanguage(lang)
+                                                        setIsLanguageDropdownOpen(false)
+                                                    }}
+                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
+                                                        selectedLanguage === lang ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700'
+                                                    }`}
+                                                >
+                                                    {lang}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Save Button */}
+                            <button
+                                onClick={handleSaveLanguage}
+                                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                            >
+                                {t('save')}
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
         </nav>
     )
 }
