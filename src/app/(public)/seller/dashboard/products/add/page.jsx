@@ -14,7 +14,9 @@ import {
   DollarSign,
   Truck,
   FileText,
-  Search
+  Search,
+  Sparkles,
+  Camera
 } from 'lucide-react'
 import Image from '@/components/Image'
 import FeeBreakdown from '@/components/FeeBreakdown'
@@ -64,6 +66,9 @@ export default function AddProduct() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [draggedIndex, setDraggedIndex] = useState(null)
   const [sellerDeliveryOption, setSellerDeliveryOption] = useState('self-delivery')
+  const [deepSearchEnabled, setDeepSearchEnabled] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showImageSearch, setShowImageSearch] = useState(false)
 
   // SKU must be entered manually; no auto-generation
 
@@ -534,6 +539,96 @@ export default function AddProduct() {
               </h2>
               
               <div className="space-y-4 sm:space-y-6">
+                {/* Search Bar */}
+                <div className="mb-4">
+                  <div className="relative flex items-center gap-2 bg-white border border-gray-300 rounded-lg overflow-hidden focus-within:border-blue-500 focus-within:shadow-sm transition-all">
+                    {/* AI Icon and Deep Search Toggle - Inside search bar on left */}
+                    <div className="flex items-center gap-2 px-3 py-2 border-r border-gray-200 bg-transparent">
+                      <Sparkles className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                      <span className="text-xs text-gray-700 whitespace-nowrap font-medium">Deep Search Free</span>
+                      <button
+                        type="button"
+                        onClick={() => setDeepSearchEnabled(!deepSearchEnabled)}
+                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
+                          deepSearchEnabled ? 'bg-blue-600' : 'bg-gray-300'
+                        }`}
+                        role="switch"
+                        aria-checked={deepSearchEnabled}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                            deepSearchEnabled ? 'translate-x-5' : 'translate-x-1'
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Search Input */}
+                    <div className="flex items-center flex-1 min-w-0">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search products..."
+                        className="w-full bg-transparent outline-none placeholder-gray-400 text-sm px-3 py-2 min-w-0"
+                      />
+                    </div>
+
+                    {/* Image Search Button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowImageSearch(!showImageSearch)}
+                      className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors border-r border-gray-200"
+                    >
+                      <Camera className="w-4 h-4" />
+                      <span className="hidden sm:inline whitespace-nowrap">Image Search</span>
+                    </button>
+
+                    {/* Search Button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (searchQuery.trim()) {
+                          toast.success('Search functionality will be implemented')
+                        }
+                      }}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors"
+                    >
+                      <Search className="w-4 h-4" />
+                      <span className="hidden sm:inline">Search</span>
+                    </button>
+                  </div>
+
+                  {/* Image Search Panel */}
+                  {showImageSearch && (
+                    <div className="mt-3 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-sm font-medium text-gray-900">Find product inspiration with Image Search</h3>
+                        <button
+                          type="button"
+                          onClick={() => setShowImageSearch(false)}
+                          className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors bg-gray-50">
+                        <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+                        <p className="text-xs text-gray-600 mb-1">
+                          Paste an image you copied with <span className="bg-gray-200 px-1.5 py-0.5 rounded text-gray-700 font-medium">Ctrl V</span>
+                        </p>
+                        <p className="text-xs text-gray-500 mb-4">Drag and drop an image here or upload a file</p>
+                        <button
+                          type="button"
+                          className="px-6 py-2.5 bg-orange-500 text-white text-sm font-medium rounded-md hover:bg-orange-600 transition-colors"
+                        >
+                          Upload
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Product Images * (Max 8)</label>
