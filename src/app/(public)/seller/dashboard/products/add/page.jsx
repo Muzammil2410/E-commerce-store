@@ -541,9 +541,9 @@ export default function AddProduct() {
               <div className="space-y-4 sm:space-y-6">
                 {/* Search Bar */}
                 <div className="mb-4">
-                  <div className="relative flex items-center gap-2 bg-white border border-gray-300 rounded-lg overflow-hidden focus-within:border-blue-500 focus-within:shadow-sm transition-all">
+                  <div className="relative flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden focus-within:border-blue-500 focus-within:shadow-sm transition-all h-11">
                     {/* AI Icon and Deep Search Toggle - Inside search bar on left */}
-                    <div className="flex items-center gap-2 px-3 py-2 border-r border-gray-200 bg-transparent">
+                    <div className="flex items-center gap-2 px-3 py-2 border-r border-gray-200 bg-transparent flex-shrink-0">
                       <Sparkles className="w-4 h-4 text-blue-600 flex-shrink-0" />
                       <span className="text-xs text-gray-700 whitespace-nowrap font-medium">Deep Search Free</span>
                       <button
@@ -564,13 +564,13 @@ export default function AddProduct() {
                     </div>
 
                     {/* Search Input */}
-                    <div className="flex items-center flex-1 min-w-0">
+                    <div className="flex items-center flex-1 min-w-0 h-full">
                       <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search products..."
-                        className="w-full bg-transparent outline-none placeholder-gray-400 text-sm px-3 py-2 min-w-0"
+                        className="w-full h-full bg-transparent outline-none placeholder-gray-400 text-sm px-3 min-w-0"
                       />
                     </div>
 
@@ -578,7 +578,7 @@ export default function AddProduct() {
                     <button
                       type="button"
                       onClick={() => setShowImageSearch(!showImageSearch)}
-                      className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors border-r border-gray-200"
+                      className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors border-r border-gray-200 h-full flex-shrink-0"
                     >
                       <Camera className="w-4 h-4" />
                       <span className="hidden sm:inline whitespace-nowrap">Image Search</span>
@@ -592,7 +592,7 @@ export default function AddProduct() {
                           toast.success('Search functionality will be implemented')
                         }
                       }}
-                      className="flex items-center justify-center gap-2 px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors"
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors h-full flex-shrink-0"
                     >
                       <Search className="w-4 h-4" />
                       <span className="hidden sm:inline">Search</span>
@@ -623,6 +623,25 @@ export default function AddProduct() {
                           className="px-6 py-2.5 bg-orange-500 text-white text-sm font-medium rounded-md hover:bg-orange-600 transition-colors"
                         >
                           Upload
+                        </button>
+                      </div>
+                      
+                      {/* Alibaba Lens Section */}
+                      <div className="mt-4 pt-4 border-t border-gray-200 flex items-start justify-between">
+                        <div className="flex items-start gap-3 flex-1">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-blue-600" />
+                            <span className="text-sm font-medium text-gray-900">Alibaba Lens</span>
+                          </div>
+                          <p className="text-xs text-gray-600 flex-1">
+                            Screenshot an image to search for similar items with lower prices and flexible customization
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          className="px-4 py-2 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors whitespace-nowrap ml-4"
+                        >
+                          Add to Chrome
                         </button>
                       </div>
                     </div>
