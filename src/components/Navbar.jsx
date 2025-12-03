@@ -1,5 +1,5 @@
 'use client'
-import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Menu } from "lucide-react";
+import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Menu, X } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Image from "@/components/Image";
 import { assets } from '@/assets/assets';
@@ -32,14 +32,18 @@ const Navbar = () => {
     const [suggestions, setSuggestions] = useState([])
     const [showLanguageModal, setShowLanguageModal] = useState(false)
     const [selectedLanguage, setSelectedLanguage] = useState(language)
+    const [selectedCurrency, setSelectedCurrency] = useState(currency)
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
+    const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false)
     const languageModalRef = useRef(null)
     const languageDropdownRef = useRef(null)
+    const currencyDropdownRef = useRef(null)
 
     // Update local state when context changes
     useEffect(() => {
         setSelectedLanguage(language)
-    }, [language])
+        setSelectedCurrency(currency)
+    }, [language, currency])
 
     const categories = [
         'All',
@@ -74,6 +78,21 @@ const Navbar = () => {
         'Arabic',
         'Hindi',
         'Urdu'
+    ]
+
+    const currencies = [
+        'USD - US Dollar',
+        'PKR - Pakistani Rupee',
+        'EUR - Euro',
+        'GBP - British Pound',
+        'INR - Indian Rupee',
+        'CNY - Chinese Yuan',
+        'JPY - Japanese Yen',
+        'AED - UAE Dirham',
+        'SAR - Saudi Riyal',
+        'BHD - Bahraini Dinar',
+        'KWD - Kuwaiti Dinar',
+        'QAR - Qatari Riyal'
     ]
 
 
@@ -118,9 +137,10 @@ const Navbar = () => {
                 setShowMobileSearch(false)
             }
             if (languageModalRef.current && !languageModalRef.current.contains(event.target)) {
-                // Don't close if clicking on language dropdown inside modal
-                if (!languageDropdownRef.current?.contains(event.target)) {
+                // Don't close if clicking on language or currency dropdown inside modal
+                if (!languageDropdownRef.current?.contains(event.target) && !currencyDropdownRef.current?.contains(event.target)) {
                     setIsLanguageDropdownOpen(false)
+                    setIsCurrencyDropdownOpen(false)
                 }
             }
         }
@@ -134,9 +154,11 @@ const Navbar = () => {
     const handleSaveLanguage = () => {
         // Update context which will update the whole website
         updateLanguage(selectedLanguage)
+        updateCurrency(selectedCurrency)
         setShowLanguageModal(false)
         setIsLanguageDropdownOpen(false)
-        toast.success('Language updated')
+        setIsCurrencyDropdownOpen(false)
+        toast.success('Language and currency updated')
     }
 
     // Live suggestions as user types
@@ -499,8 +521,18 @@ const Navbar = () => {
                         className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 sm:p-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('setLanguageCurrency')}</h2>
+                        <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 sm:p-8 relative">
+                            {/* Close Button */}
+                            <button
+                                type="button"
+                                onClick={() => setShowLanguageModal(false)}
+                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                                aria-label="Close modal"
+                            >
+                                <X size={24} />
+                            </button>
+                            
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2 pr-8">{t('setLanguageCurrency')}</h2>
                             <p className="text-gray-600 mb-6 text-sm">
                                 {t('selectPreferred')}
                             </p>
@@ -513,6 +545,7 @@ const Navbar = () => {
                                         type="button"
                                         onClick={() => {
                                             setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
+                                            setIsCurrencyDropdownOpen(false)
                                         }}
                                         className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     >
@@ -544,10 +577,50 @@ const Navbar = () => {
                                 </div>
                             </div>
 
+                            {/* Currency Selection */}
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">{t('currency')}</label>
+                                <div className="relative" ref={currencyDropdownRef}>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)
+                                            setIsLanguageDropdownOpen(false)
+                                        }}
+                                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    >
+                                        <span className="text-gray-900">{selectedCurrency}</span>
+                                        <ChevronDown 
+                                            size={20} 
+                                            className={`text-gray-500 transition-transform duration-200 ${isCurrencyDropdownOpen ? 'rotate-180' : ''}`} 
+                                        />
+                                    </button>
+                                    {isCurrencyDropdownOpen && (
+                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                                            {currencies.map((curr) => (
+                                                <button
+                                                    key={curr}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSelectedCurrency(curr)
+                                                        setIsCurrencyDropdownOpen(false)
+                                                    }}
+                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
+                                                        selectedCurrency === curr ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700'
+                                                    }`}
+                                                >
+                                                    {curr}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
                             {/* Save Button */}
                             <button
                                 onClick={handleSaveLanguage}
-                                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
                             >
                                 {t('save')}
                             </button>

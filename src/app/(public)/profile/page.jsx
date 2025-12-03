@@ -15,10 +15,12 @@ import OrderHistoryTab from '@/components/OrderHistoryTab'
 import ReturnsRefundsTab from '@/components/ReturnsRefundsTab'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function ProfilePage() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const { formatCurrency } = useLanguageCurrency()
     const [activeTab, setActiveTab] = useState('profile')
     const [user, setUser] = useState(null)
     const [orders, setOrders] = useState([])
@@ -387,7 +389,7 @@ export default function ProfilePage() {
                                                 <div className="space-y-2">
                                                     <h3 className="font-medium text-gray-900 line-clamp-2">{item.product.name}</h3>
                                                     <p className="text-sm text-gray-600">{item.product.category}</p>
-                                                    <p className="font-semibold text-gray-900">${item.product.price}</p>
+                                                    <p className="font-semibold text-gray-900">{formatCurrency(item.product.price)}</p>
                                                     
                                                     <div className="flex items-center gap-2 pt-2">
                                                         <Link

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown } from 'lucide-react'
+import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import toast from 'react-hot-toast'
 
@@ -357,8 +357,18 @@ export default function SellerDashboard() {
             className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 sm:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('setLanguage') || 'Set language'}</h2>
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 sm:p-8 relative">
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setShowLanguageModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                aria-label="Close modal"
+              >
+                <X size={24} />
+              </button>
+              
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 pr-8">{t('setLanguage') || 'Set language'}</h2>
               <p className="text-gray-600 mb-6 text-sm">
                 {t('selectLanguagePreferred') || 'Select your preferred language. You can update the settings at any time.'}
               </p>
@@ -405,7 +415,7 @@ export default function SellerDashboard() {
               {/* Save Button */}
               <button
                 onClick={handleSaveLanguage}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
               >
                 {t('save')}
               </button>

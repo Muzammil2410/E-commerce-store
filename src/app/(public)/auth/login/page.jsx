@@ -81,24 +81,24 @@ export default function LoginPage() {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8">
             <div className="max-w-md w-full">
                 {/* Back to Home */}
                 <button 
                     onClick={() => navigate('/')}
-                    className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
+                    className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
                 >
-                    <ArrowLeft size={20} />
+                    <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
                     {t('backToHome')}
                 </button>
 
                 {/* Login Card */}
-                <div className="bg-white rounded-2xl shadow-xl p-8">
-                    <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-6 sm:p-8">
+                    <div className="text-center mb-6 sm:mb-8">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                             {t('welcomeBack')}
                         </h1>
-                        <p className="text-gray-600">
+                        <p className="text-sm sm:text-base text-gray-600">
                             {t('signInToAccount')}
                         </p>
                     </div>

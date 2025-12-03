@@ -2,8 +2,10 @@
 import { useEffect, useState } from "react"
 import Loading from "@/components/Loading"
 import { orderDummyData } from "@/assets/assets"
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function StoreOrders() {
+    const { formatCurrency } = useLanguageCurrency()
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedOrder, setSelectedOrder] = useState(null)
@@ -127,7 +129,7 @@ export default function StoreOrders() {
                                         <div className="flex-1">
                                             <p className="text-slate-800">{item.product?.name}</p>
                                             <p>Qty: {item.quantity}</p>
-                                            <p>Price: ${item.price}</p>
+                                            <p>Price: {formatCurrency(item.price)}</p>
                                         </div>
                                     </div>
                                 ))}

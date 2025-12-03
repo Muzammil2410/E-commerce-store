@@ -6,10 +6,11 @@ import Rating from "./Rating";
 import { useState } from "react";
 import RatingModal from "./RatingModal";
 import ChatModal from "./ChatModal";
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext';
 
 const OrderItem = ({ order }) => {
 
-    const currency = import.meta.env.VITE_CURRENCY_SYMBOL || '$';
+    const { formatCurrency } = useLanguageCurrency();
     const [ratingModal, setRatingModal] = useState(null);
     const [chatModal, setChatModal] = useState(null);
 
@@ -52,7 +53,7 @@ const OrderItem = ({ order }) => {
                                 </div>
                                 <div className="flex flex-col justify-center text-sm">
                                     <p className="font-medium text-slate-600 text-base">{item.product.name}</p>
-                                    <p>{currency}{item.price} Qty : {item.quantity} </p>
+                                    <p>{formatCurrency(item.price)} Qty : {item.quantity} </p>
                                     <p className="mb-1">{new Date(order.createdAt).toDateString()}</p>
                                     <div>
                                         {ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId)
@@ -66,7 +67,7 @@ const OrderItem = ({ order }) => {
                     </div>
                 </td>
 
-                <td className="text-center max-md:hidden">{currency}{order.total}</td>
+                <td className="text-center max-md:hidden">{formatCurrency(order.total)}</td>
 
                 <td className="text-left max-md:hidden">
                     <p>{order.address.name}, {order.address.street},</p>

@@ -4,10 +4,11 @@ import Image from '@/components/Image'
 import { Link } from 'react-router-dom'
 import React, { memo, useMemo } from 'react'
 import WishlistButton from './WishlistButton'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 const ProductCard = memo(({ product }) => {
 
-    const currency = import.meta.env.VITE_CURRENCY_SYMBOL || '$'
+    const { formatCurrency } = useLanguageCurrency()
 
     // calculate the average rating of the product - memoized for performance
     const rating = useMemo(() => {
@@ -44,8 +45,8 @@ const ProductCard = memo(({ product }) => {
                             ))}
                         </div>
                     </div>
-                    <p className='group-hover:text-blue-600 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-medium flex-shrink-0' aria-label={`Price: ${currency}${product.price}`}>
-                        {currency}{product.price}
+                    <p className='group-hover:text-blue-600 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-medium flex-shrink-0' aria-label={`Price: ${formatCurrency(product.price)}`}>
+                        {formatCurrency(product.price)}
                     </p>
                 </div>
             </Link>

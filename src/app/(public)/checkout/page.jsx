@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import { clearCart } from '@/lib/features/cart/cartSlice'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function CheckoutPage() {
     const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function CheckoutPage() {
     const dispatch = useDispatch()
     const { cartItems } = useSelector(state => state.cart)
     const products = useSelector(state => state.product.list)
+    const { formatCurrency } = useLanguageCurrency()
 
     const [loading, setLoading] = useState(false)
     const [orderPlaced, setOrderPlaced] = useState(false)
@@ -27,7 +29,6 @@ export default function CheckoutPage() {
         cardNumber: '', expiryDate: '', cvv: '', cardName: ''
     })
 
-    const currency = import.meta.env.VITE_CURRENCY_SYMBOL || '$'
     const taxRate = 0.1 // 10% tax
 
     // Check if Buy It Now product exists
@@ -124,19 +125,19 @@ export default function CheckoutPage() {
     const isBuyNow = !!buyNowProduct
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="max-w-5xl mx-auto px-4">
-                <Link to={isBuyNow ? "/" : "/cart"} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">
-                    <ArrowLeft size={20} aria-hidden="true" /> 
+        <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8">
+            <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6">
+                <Link to={isBuyNow ? "/" : "/cart"} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4 sm:mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded text-sm sm:text-base">
+                    <ArrowLeft size={18} className="sm:w-5 sm:h-5" aria-hidden="true" /> 
                     <span>{isBuyNow ? "Back to Home" : "Back to Cart"}</span>
                 </Link>
-                <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Checkout</h1>
 
-                <div className={`grid ${isBuyNow ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'} gap-8`}>
+                <div className={`grid ${isBuyNow ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'} gap-4 sm:gap-6 lg:gap-8`}>
                     {/* Checkout Form */}
-                    <div className="bg-white rounded-lg shadow-sm p-6">
-                        <h2 className="text-xl font-semibold mb-4">Shipping & Payment</h2>
-                        <form onSubmit={handleSubmit} className="space-y-6" aria-label="Checkout form">
+                    <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+                        <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Shipping & Payment</h2>
+                        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" aria-label="Checkout form">
                             {/* Shipping Fields */}
                             <fieldset>
                                 <legend className="sr-only">Shipping Information</legend>
@@ -332,17 +333,17 @@ export default function CheckoutPage() {
                             <button 
                                 type="submit" 
                                 disabled={loading} 
-                                aria-label={`Place order for ${currency}${finalTotal.toFixed(2)}`}
+                                aria-label={`Place order for ${formatCurrency(finalTotal)}`}
                                 className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {loading ? 'Processing...' : `Place Order - ${currency}${finalTotal.toFixed(2)}`}
+                                {loading ? 'Processing...' : `Place Order - ${formatCurrency(finalTotal)}`}
                             </button>
                         </form>
                     </div>
 
                     {/* Order Summary */}
-                    <div className="bg-white rounded-lg shadow-sm p-6">
-                        <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                    <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+                        <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Order Summary</h2>
                         <ul className="space-y-4" aria-label="Order items">
                         {cartArray.map(item => (
                                 <li key={item.id} className="flex items-center gap-4">
@@ -353,28 +354,28 @@ export default function CheckoutPage() {
                                         <p className="font-medium truncate">{item.name}</p>
                                     <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
                                 </div>
-                                    <p className="font-medium flex-shrink-0" aria-label={`Price: ${currency}${(item.price * item.quantity).toFixed(2)}`}>
-                                        {currency}{(item.price * item.quantity).toFixed(2)}
+                                    <p className="font-medium flex-shrink-0" aria-label={`Price: ${formatCurrency(item.price * item.quantity)}`}>
+                                        {formatCurrency(item.price * item.quantity)}
                                     </p>
                                 </li>
                             ))}
                         </ul>
                         <div className="border-t pt-4 space-y-2" role="group" aria-label="Order summary totals">
-                            <div className="flex justify-between text-gray-600" aria-label={`Subtotal: ${currency}${totalPrice.toFixed(2)}`}>
+                            <div className="flex justify-between text-gray-600" aria-label={`Subtotal: ${formatCurrency(totalPrice)}`}>
                                 <span>Subtotal</span>
-                                <span>{currency}{totalPrice.toFixed(2)}</span>
+                                <span>{formatCurrency(totalPrice)}</span>
                             </div>
                             <div className="flex justify-between text-gray-600" aria-label="Shipping: Free">
                                 <span>Shipping</span>
                                 <span>Free</span>
                             </div>
-                            <div className="flex justify-between text-gray-600" aria-label={`Tax: ${currency}${taxAmount.toFixed(2)}`}>
+                            <div className="flex justify-between text-gray-600" aria-label={`Tax: ${formatCurrency(taxAmount)}`}>
                                 <span>Tax</span>
-                                <span>{currency}{taxAmount.toFixed(2)}</span>
+                                <span>{formatCurrency(taxAmount)}</span>
                             </div>
-                            <div className="flex justify-between font-semibold text-gray-900 border-t pt-2" aria-label={`Total: ${currency}${finalTotal.toFixed(2)}`}>
+                            <div className="flex justify-between font-semibold text-gray-900 border-t pt-2" aria-label={`Total: ${formatCurrency(finalTotal)}`}>
                                 <span>Total</span>
-                                <span>{currency}{finalTotal.toFixed(2)}</span>
+                                <span>{formatCurrency(finalTotal)}</span>
                             </div>
                         </div>
                     </div>
