@@ -4,12 +4,15 @@ import ProductDetails from "@/components/ProductDetails";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useContext } from "react";
+import { LanguageCurrencyContext } from "@/contexts/LanguageCurrencyContext";
 
 export default function Product() {
-
     const { productId } = useParams();
     const [product, setProduct] = useState();
     const products = useSelector(state => state.product.list);
+    const context = useContext(LanguageCurrencyContext);
+    const t = context?.t || ((key) => key);
 
     const fetchProduct = async () => {
         const product = products.find((product) => product.id === productId);
@@ -29,7 +32,7 @@ export default function Product() {
 
                 {/* Breadcrums */}
                 <div className="text-gray-600 text-xs sm:text-sm mt-6 sm:mt-8 mb-4 sm:mb-5">
-                    Home / Products / {product?.category}
+                    {t('home')} / {t('products')} / {product?.category}
                 </div>
 
                 {/* Product Details */}

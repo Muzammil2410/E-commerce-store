@@ -3,16 +3,21 @@ import React from 'react'
 import Image from '@/components/Image'
 import { Star } from 'lucide-react'
 import { dummyRatingsData } from '@/assets/assets'
+import { useContext } from 'react'
+import { LanguageCurrencyContext } from '@/contexts/LanguageCurrencyContext'
 
 const Testimonials = () => {
+    const context = useContext(LanguageCurrencyContext)
+    const t = context?.t || ((key) => key)
+    const translateProductName = context?.translateProductName || ((name) => name)
     // Get first 3 testimonials for display
     const testimonials = dummyRatingsData.slice(0, 3)
 
     return (
         <div className='px-4 sm:px-6 my-16 sm:my-20 lg:my-30 max-w-6xl mx-auto'>
             <div className='text-center mb-12'>
-                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4'>What Our Customers Say</h2>
-                <p className='text-gray-600 max-w-2xl mx-auto'>Don't just take our word for it. Here's what our satisfied customers have to say about their shopping experience with Zizla.</p>
+                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4'>{t('whatOurCustomersSay')}</h2>
+                <p className='text-gray-600 max-w-2xl mx-auto'>{t('dontJustTakeOurWord')}</p>
             </div>
             
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
@@ -45,7 +50,7 @@ const Testimonials = () => {
                             />
                             <div>
                                 <p className='font-medium text-gray-800'>{testimonial.user.name}</p>
-                                <p className='text-sm text-gray-500'>{testimonial.product.name}</p>
+                                <p className='text-sm text-gray-500'>{translateProductName(testimonial.product.name)}</p>
                             </div>
                         </div>
                     </div>
@@ -55,7 +60,7 @@ const Testimonials = () => {
             {/* View All Reviews Button */}
             <div className='text-center mt-12'>
                 <button className='bg-blue-600 text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md'>
-                    View All Reviews
+                    {t('viewAllReviews')}
                 </button>
             </div>
         </div>

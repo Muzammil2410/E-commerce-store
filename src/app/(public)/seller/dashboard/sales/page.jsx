@@ -20,7 +20,7 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function SalesDashboard() {
   const navigate = useNavigate()
-  const { t, formatCurrency } = useLanguageCurrency()
+  const { t, formatCurrency, translateProductName } = useLanguageCurrency()
   const [salesData, setSalesData] = useState({
     totalRevenue: 0,
     totalOrders: 0,
@@ -366,7 +366,7 @@ export default function SalesDashboard() {
                           <Package className="w-6 h-6 text-gray-400" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-gray-900">{product.product.name}</h4>
+                          <h4 className="font-medium text-gray-900">{translateProductName(product.product.name)}</h4>
                           <p className="text-sm text-gray-600">{product.product.category}</p>
                         </div>
                       </div>

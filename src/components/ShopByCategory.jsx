@@ -3,57 +3,61 @@ import React, { useState } from 'react'
 import Image from '@/components/Image'
 import { assets } from '@/assets/assets'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useContext } from 'react'
+import { LanguageCurrencyContext } from '@/contexts/LanguageCurrencyContext'
 
 const ShopByCategory = () => {
     const [currentSlide, setCurrentSlide] = useState(0)
+    const context = useContext(LanguageCurrencyContext)
+    const t = context?.t || ((key) => key)
     
     const categories = [
         {
-            name: "TECHNOLOGY",
+            name: t('categoryTechnology'),
             image: assets.tech_image,
-            description: "Latest gadgets and electronics",
+            description: t('categoryLatestGadgets'),
             href: "/shop?category=technology"
         },
         {
-            name: "APPLIANCES", 
+            name: t('categoryAppliances'), 
             image: assets.appliances_image,
-            description: "Home and kitchen appliances",
+            description: t('categoryHomeKitchen'),
             href: "/shop?category=appliances"
         },
         {
-            name: "AUTOMOTIVE PARTS AND ACCESSORIES",
+            name: t('categoryAutomotiveParts'),
             image: assets.automotive_image,
-            description: "Car parts and accessories",
+            description: t('categoryCarParts'),
             href: "/shop?category=automotive"
         },
         {
-            name: "BABY",
+            name: t('categoryBaby'),
             image: assets.baby_image,
-            description: "Baby care and products",
+            description: t('categoryBabyCare'),
             href: "/shop?category=baby"
         },
         {
-            name: "BOOK",
+            name: t('categoryBook'),
             image: assets.book_image,
-            description: "Books and educational materials",
+            description: t('categoryBooksEducational'),
             href: "/shop?category=books"
         },
         {
-            name: "FASHION",
+            name: t('categoryFashion'),
             image: assets.fashion_image,
-            description: "Clothing and fashion accessories",
+            description: t('categoryClothingFashion'),
             href: "/shop?category=fashion"
         },
         {
-            name: "BEAUTY",
+            name: t('categoryBeauty'),
             image: assets.beauty_image,
-            description: "Beauty and skincare products",
+            description: t('categoryBeautySkincare'),
             href: "/shop?category=beauty"
         },
         {
-            name: "PERSONAL CARE",
+            name: t('categoryPersonalCare'),
             image: assets.personal_care_image,
-            description: "Personal hygiene and care items",
+            description: t('categoryPersonalHygiene'),
             href: "/shop?category=personal-care"
         }
     ]
@@ -72,8 +76,8 @@ const ShopByCategory = () => {
     return (
         <div className='px-4 sm:px-6 my-16 sm:my-20 max-w-7xl mx-auto'>
             <div className='text-center mb-12 sm:mb-16'>
-                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4'>SHOP BY CATEGORY</h2>
-                <p className='text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4'>Discover our wide range of products organized by category for easy browsing</p>
+                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4'>{t('shopByCategory')}</h2>
+                <p className='text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4'>{t('discoverWideRange')}</p>
             </div>
             
             {/* Slider Container */}
@@ -154,7 +158,7 @@ const ShopByCategory = () => {
             {/* View All Categories Button */}
             <div className='text-center mt-8 sm:mt-12'>
                 <button className='bg-blue-600 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:bg-blue-700 hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md'>
-                    View All Categories
+                    {t('viewAllCategories')}
                 </button>
             </div>
         </div>

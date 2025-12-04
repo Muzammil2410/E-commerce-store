@@ -70,8 +70,8 @@ const Hero = () => {
                 <div className='flex flex-col sm:flex-row xl:flex-col gap-4 sm:gap-5 w-full xl:max-w-sm text-sm text-gray-600'>
                     <div className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm'>
                         <div className='flex-1'>
-                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 mb-2 sm:mb-4'>Best products</p>
-                            <p className='flex items-center gap-1 text-blue-600 font-medium text-sm'>View more <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
+                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 mb-2 sm:mb-4'>{t('bestProducts')}</p>
+                            <p className='flex items-center gap-1 text-blue-600 font-medium text-sm'>{t('viewMore')} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
                         </div>
                         <div className='flex-shrink-0 ml-3'>
                             <Image className='w-20 h-20 sm:w-24 sm:h-24 xl:w-32 xl:h-32 object-contain' src={assets.hero_product_img1} alt="Best Products" />
@@ -79,8 +79,8 @@ const Hero = () => {
                     </div>
                     <div className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm'>
                         <div className='flex-1'>
-                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 mb-2 sm:mb-4'>20% discounts</p>
-                            <p className='flex items-center gap-1 text-blue-600 font-medium text-sm'>View more <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
+                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 mb-2 sm:mb-4'>{t('discounts')}</p>
+                            <p className='flex items-center gap-1 text-blue-600 font-medium text-sm'>{t('viewMore')} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
                         </div>
                         <div className='flex-shrink-0 ml-3'>
                             <Image className='w-20 h-20 sm:w-24 sm:h-24 xl:w-32 xl:h-32 object-contain' src={assets.hero_product_img2} alt="Discounts" />

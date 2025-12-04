@@ -22,7 +22,7 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function SellerOrders() {
   const navigate = useNavigate()
-  const { t, formatCurrency } = useLanguageCurrency()
+  const { t, formatCurrency, translateProductName } = useLanguageCurrency()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -213,7 +213,7 @@ export default function SellerOrders() {
                                   <Package className="w-6 h-6 text-gray-400" />
                                 </div>
                                 <div>
-                                  <p className="font-medium text-gray-900">{item.product.name}</p>
+                                  <p className="font-medium text-gray-900">{translateProductName(item.product.name)}</p>
                                   <p className="text-sm text-gray-600">{t('qty')}: {item.quantity}</p>
                                 </div>
                               </div>

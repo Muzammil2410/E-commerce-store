@@ -10,7 +10,7 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext';
 
 const OrderItem = ({ order }) => {
 
-    const { formatCurrency } = useLanguageCurrency();
+    const { formatCurrency, translateProductName } = useLanguageCurrency();
     const [ratingModal, setRatingModal] = useState(null);
     const [chatModal, setChatModal] = useState(null);
 
@@ -52,7 +52,7 @@ const OrderItem = ({ order }) => {
                                     />
                                 </div>
                                 <div className="flex flex-col justify-center text-sm">
-                                    <p className="font-medium text-slate-600 text-base">{item.product.name}</p>
+                                    <p className="font-medium text-slate-600 text-base">{translateProductName(item.product.name)}</p>
                                     <p>{formatCurrency(item.price)} Qty : {item.quantity} </p>
                                     <p className="mb-1">{new Date(order.createdAt).toDateString()}</p>
                                     <div>

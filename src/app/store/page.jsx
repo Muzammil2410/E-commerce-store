@@ -5,10 +5,12 @@ import { CircleDollarSignIcon, ShoppingBasketIcon, StarIcon, TagsIcon } from "lu
 import Image from "@/components/Image"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { useLanguageCurrency } from "@/contexts/LanguageCurrencyContext"
 
 export default function Dashboard() {
 
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || '$'
+    const { t } = useLanguageCurrency()
 
     const navigate = useNavigate()
 
@@ -82,7 +84,7 @@ export default function Dashboard() {
                                         ))}
                                     </div>
                                 </div>
-                                <button onClick={() => navigate(`/product/${review.product.id}`)} className="bg-slate-100 px-5 py-2 hover:bg-slate-200 rounded transition-all">View Product</button>
+                                <button onClick={() => navigate(`/product/${review.product.id}`)} className="bg-slate-100 px-5 py-2 hover:bg-slate-200 rounded transition-all">{t('viewProduct')}</button>
                             </div>
                         </div>
                     ))

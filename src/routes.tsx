@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 // import { lazy, Suspense, ReactNode } from "react";
-import  { lazy, Suspense, type ReactNode } from "react";
+import React, { lazy, Suspense, type ReactNode } from "react";
 
 import PublicLayout from "@/app/(public)/layout";
 import AdminRoot from "@/app/admin/layout";
@@ -54,15 +54,20 @@ const LazyWrapper = ({ children }: { children: ReactNode }) => (
   </Suspense>
 );
 
+// Helper function to create route elements - ensures they're created when route is matched, not at module load
+const createPublicRoute = (Component: React.ComponentType) => (
+  <PublicLayout><LazyWrapper><Component /></LazyWrapper></PublicLayout>
+);
+
 export const router = createBrowserRouter([
-  { path: "/", element: <PublicLayout><LazyWrapper><Home /></LazyWrapper></PublicLayout> },
-  { path: "/pricing", element: <PublicLayout><LazyWrapper><Pricing /></LazyWrapper></PublicLayout> },
-  { path: "/cart", element: <PublicLayout><LazyWrapper><Cart /></LazyWrapper></PublicLayout> },
-  { path: "/shop", element: <PublicLayout><LazyWrapper><Shop /></LazyWrapper></PublicLayout> },
-  { path: "/shop/:username", element: <PublicLayout><LazyWrapper><ShopUser /></LazyWrapper></PublicLayout> },
-  { path: "/product/:productId", element: <PublicLayout><LazyWrapper><Product /></LazyWrapper></PublicLayout> },
-  { path: "/login", element: <PublicLayout><LazyWrapper><Login /></LazyWrapper></PublicLayout> },
-  { path: "/register", element: <PublicLayout><LazyWrapper><Register /></LazyWrapper></PublicLayout> },
+  { path: "/", element: createPublicRoute(Home) },
+  { path: "/pricing", element: createPublicRoute(Pricing) },
+  { path: "/cart", element: createPublicRoute(Cart) },
+  { path: "/shop", element: createPublicRoute(Shop) },
+  { path: "/shop/:username", element: createPublicRoute(ShopUser) },
+  { path: "/product/:productId", element: createPublicRoute(Product) },
+  { path: "/login", element: createPublicRoute(Login) },
+  { path: "/register", element: createPublicRoute(Register) },
   { 
     path: "/auth/login", 
     element: (
@@ -85,26 +90,26 @@ export const router = createBrowserRouter([
       </div>
     )
   },
-  { path: "/auth/register", element: <PublicLayout><LazyWrapper><AuthRegister /></LazyWrapper></PublicLayout> },
-  { path: "/auth/forgot-password", element: <PublicLayout><LazyWrapper><AuthForgot /></LazyWrapper></PublicLayout> },
-  { path: "/forgot-password", element: <PublicLayout><LazyWrapper><ForgotPassword /></LazyWrapper></PublicLayout> },
-  { path: "/privacy-policy", element: <PublicLayout><LazyWrapper><PrivacyPolicy /></LazyWrapper></PublicLayout> },
-  { path: "/support", element: <PublicLayout><LazyWrapper><Support /></LazyWrapper></PublicLayout> },
-  { path: "/seller", element: <PublicLayout><LazyWrapper><Seller /></LazyWrapper></PublicLayout> },
-  { path: "/seller/login", element: <PublicLayout><LazyWrapper><SellerLogin /></LazyWrapper></PublicLayout> },
-  { path: "/seller/register", element: <PublicLayout><LazyWrapper><SellerRegister /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard", element: <PublicLayout><LazyWrapper><SellerDashboard /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/products", element: <PublicLayout><LazyWrapper><SellerProducts /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/products/add", element: <PublicLayout><LazyWrapper><SellerProductsAdd /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/products/edit/:id", element: <PublicLayout><LazyWrapper><SellerProductsEdit /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/products/view/:id", element: <PublicLayout><LazyWrapper><SellerProductsView /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/sales", element: <PublicLayout><LazyWrapper><SellerSales /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/orders", element: <PublicLayout><LazyWrapper><SellerOrders /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/delivery", element: <PublicLayout><LazyWrapper><SellerDelivery /></LazyWrapper></PublicLayout> },
-  { path: "/seller/dashboard/delivery/schedule", element: <PublicLayout><LazyWrapper><SellerDeliverySchedule /></LazyWrapper></PublicLayout> },
-  { path: "/profile", element: <PublicLayout><LazyWrapper><Profile /></LazyWrapper></PublicLayout> },
-  { path: "/orders", element: <PublicLayout><LazyWrapper><Orders /></LazyWrapper></PublicLayout> },
-  { path: "/checkout", element: <PublicLayout><LazyWrapper><Checkout /></LazyWrapper></PublicLayout> },
+  { path: "/auth/register", element: createPublicRoute(AuthRegister) },
+  { path: "/auth/forgot-password", element: createPublicRoute(AuthForgot) },
+  { path: "/forgot-password", element: createPublicRoute(ForgotPassword) },
+  { path: "/privacy-policy", element: createPublicRoute(PrivacyPolicy) },
+  { path: "/support", element: createPublicRoute(Support) },
+  { path: "/seller", element: createPublicRoute(Seller) },
+  { path: "/seller/login", element: createPublicRoute(SellerLogin) },
+  { path: "/seller/register", element: createPublicRoute(SellerRegister) },
+  { path: "/seller/dashboard", element: createPublicRoute(SellerDashboard) },
+  { path: "/seller/dashboard/products", element: createPublicRoute(SellerProducts) },
+  { path: "/seller/dashboard/products/add", element: createPublicRoute(SellerProductsAdd) },
+  { path: "/seller/dashboard/products/edit/:id", element: createPublicRoute(SellerProductsEdit) },
+  { path: "/seller/dashboard/products/view/:id", element: createPublicRoute(SellerProductsView) },
+  { path: "/seller/dashboard/sales", element: createPublicRoute(SellerSales) },
+  { path: "/seller/dashboard/orders", element: createPublicRoute(SellerOrders) },
+  { path: "/seller/dashboard/delivery", element: createPublicRoute(SellerDelivery) },
+  { path: "/seller/dashboard/delivery/schedule", element: createPublicRoute(SellerDeliverySchedule) },
+  { path: "/profile", element: createPublicRoute(Profile) },
+  { path: "/orders", element: createPublicRoute(Orders) },
+  { path: "/checkout", element: createPublicRoute(Checkout) },
 
   // Admin and Store sections (render their own layouts)
   { path: "/admin", element: <AdminRoot><LazyWrapper><AdminPage /></LazyWrapper></AdminRoot> },

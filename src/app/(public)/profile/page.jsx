@@ -20,7 +20,7 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 export default function ProfilePage() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { formatCurrency } = useLanguageCurrency()
+    const { formatCurrency, t, translateProductName } = useLanguageCurrency()
     const [activeTab, setActiveTab] = useState('profile')
     const [user, setUser] = useState(null)
     const [orders, setOrders] = useState([])
@@ -375,7 +375,7 @@ export default function ProfilePage() {
                                                     <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
                                                         <Image
                                                             src={item.product.images[0]}
-                                                            alt={item.product.name}
+                                                            alt={translateProductName(item.product.name)}
                                                             width={200}
                                                             height={200}
                                                             className="w-full h-full object-cover rounded-lg"
@@ -387,7 +387,7 @@ export default function ProfilePage() {
                                                 </div>
                                                 
                                                 <div className="space-y-2">
-                                                    <h3 className="font-medium text-gray-900 line-clamp-2">{item.product.name}</h3>
+                                                    <h3 className="font-medium text-gray-900 line-clamp-2">{translateProductName(item.product.name)}</h3>
                                                     <p className="text-sm text-gray-600">{item.product.category}</p>
                                                     <p className="font-semibold text-gray-900">{formatCurrency(item.product.price)}</p>
                                                     
@@ -396,7 +396,7 @@ export default function ProfilePage() {
                                                             to={`/product/${item.product.id}`}
                                                             className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm"
                                                         >
-                                                            View Product
+                                                            {t('viewProduct')}
                                                         </Link>
                                                     </div>
                                                 </div>

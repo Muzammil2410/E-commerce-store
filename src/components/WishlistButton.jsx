@@ -5,12 +5,14 @@ import { addToWishlist, removeFromWishlist } from '@/lib/features/wishlist/wishl
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { useState, useEffect } from 'react'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 const WishlistButton = ({ product, size = 20, className = '' }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const wishlistItems = useSelector(state => state.wishlist.items)
     const [user, setUser] = useState(null)
+    const { translateProductName } = useLanguageCurrency()
     
     const isInWishlist = wishlistItems[product.id] ? true : false
 
@@ -48,7 +50,7 @@ const WishlistButton = ({ product, size = 20, className = '' }) => {
     return (
         <button
             onClick={handleWishlistToggle}
-            aria-label={isInWishlist ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+            aria-label={isInWishlist ? `Remove ${translateProductName(product.name)} from wishlist` : `Add ${translateProductName(product.name)} to wishlist`}
             aria-pressed={isInWishlist}
             className={`p-2 rounded-full transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
                 isInWishlist 

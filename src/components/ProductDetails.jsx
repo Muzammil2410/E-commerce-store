@@ -13,7 +13,7 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext';
 const ProductDetails = ({ product }) => {
 
     const productId = product.id;
-    const { formatCurrency } = useLanguageCurrency();
+    const { formatCurrency, t, translateProductName } = useLanguageCurrency();
 
     const cart = useSelector(state => state.cart.cartItems);
     const dispatch = useDispatch();
@@ -70,7 +70,7 @@ const ProductDetails = ({ product }) => {
                                     setMainImage(product.images[index]);
                                 }
                             }}
-                            aria-label={`View product image ${index + 1} of ${product.images.length}: ${product.name}`}
+                            aria-label={`View product image ${index + 1} of ${product.images.length}: ${translateProductName(product.name)}`}
                             className="bg-slate-100 flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-lg group cursor-pointer flex-shrink-0 hover:ring-2 hover:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
                         >
                             <Image 
@@ -84,7 +84,7 @@ const ProductDetails = ({ product }) => {
                         </button>
                     ))}
                 </div>
-                <div className="flex justify-center items-center w-full h-64 sm:h-80 lg:h-96 bg-slate-100 rounded-lg order-1 sm:order-2" role="img" aria-label={`Main product image: ${product.name}`}>
+                <div className="flex justify-center items-center w-full h-64 sm:h-80 lg:h-96 bg-slate-100 rounded-lg order-1 sm:order-2" role="img" aria-label={`Main product image: ${translateProductName(product.name)}`}>
                     <Image 
                         src={mainImage} 
                         alt={product.name} 
@@ -97,12 +97,12 @@ const ProductDetails = ({ product }) => {
                 </div>
             </div>
             <div className="flex-1">
-                <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800">{product.name}</h1>
+                <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800">{translateProductName(product.name)}</h1>
                 <div className='flex items-center mt-2'>
                     {Array(5).fill('').map((_, index) => (
                         <StarIcon key={index} size={14} className='text-transparent mt-0.5' fill={averageRating >= index + 1 ? "#FCD34D" : "#D1D5DB"} />
                     ))}
-                    <p className="text-sm ml-3 text-slate-500">{product.rating.length} Reviews</p>
+                    <p className="text-sm ml-3 text-slate-500">{t('reviewsCount').replace('{count}', product.rating.length)}</p>
                 </div>
                 <div className="flex items-start my-6 gap-3 text-2xl font-semibold text-slate-800">
                     <p> {formatCurrency(product.price)} </p>
@@ -110,13 +110,13 @@ const ProductDetails = ({ product }) => {
                 </div>
                 <div className="flex items-center gap-2 text-slate-500">
                     <TagIcon size={14} />
-                    <p>Save {((product.mrp - product.price) / product.mrp * 100).toFixed(0)}% right now</p>
+                    <p>{t('savePercentage').replace('{percentage}', ((product.mrp - product.price) / product.mrp * 100).toFixed(0))}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-5 mt-8 sm:mt-10">
                     {
                         cart[productId] && (
                             <div className="flex flex-col gap-3">
-                                <p className="text-lg text-slate-800 font-semibold">Quantity</p>
+                                <p className="text-lg text-slate-800 font-semibold">{t('quantity')}</p>
                                 <Counter productId={productId} />
                             </div>
                         )
@@ -125,25 +125,25 @@ const ProductDetails = ({ product }) => {
                     {/* Add to Cart / View Cart Button */}
                     <button 
                         onClick={() => !cart[productId] ? addToCartHandler() : navigate('/cart')} 
-                        aria-label={!cart[productId] ? `Add ${product.name} to cart` : 'View cart'}
+                        aria-label={!cart[productId] ? `Add ${translateProductName(product.name)} to cart` : 'View cart'}
                         className="bg-slate-800 text-white px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-slate-900 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-slate-800 focus:ring-offset-2"
                     >
-                        {!cart[productId] ? 'Add to Cart' : 'View Cart'}
+                        {!cart[productId] ? t('addToCart') : t('viewCart')}
                     </button>
 
                     {/* Buy It Now Button */}
                     <button
                         onClick={buyItNowHandler}
-                        aria-label={`Buy ${product.name} now`}
+                        aria-label={`Buy ${translateProductName(product.name)} now`}
                         className="bg-yellow-500 text-slate-900 px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-yellow-400 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
                     >
-                        Buy It Now
+                        {t('buyItNow')}
                     </button>
                 </div>
                 <hr className="border-gray-300 my-5" />
                 <div className="flex flex-col gap-4 text-slate-500">
-                    <p className="flex gap-3"> <CreditCardIcon className="text-slate-400" /> 100% Secured Payment </p>
-                    <p className="flex gap-3"> <UserIcon className="text-slate-400" /> Trusted by top brands </p>
+                    <p className="flex gap-3"> <CreditCardIcon className="text-slate-400" /> {t('securedPayment')} </p>
+                    <p className="flex gap-3"> <UserIcon className="text-slate-400" /> {t('trustedByTopBrands')} </p>
                 </div>
 
             </div>
