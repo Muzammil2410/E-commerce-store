@@ -402,6 +402,16 @@ const Navbar = () => {
 
                     {/* Mobile: Search and Menu on right */}
                     <div className="flex sm:hidden items-center gap-3 flex-shrink-0">
+                        {/* Mobile Language/Currency Button */}
+                        <button
+                            onClick={() => setShowLanguageModal(true)}
+                            className="flex items-center gap-1 text-gray-600 hover:text-blue-800 transition-colors p-2 touch-manipulation"
+                            aria-label="Select language and currency"
+                        >
+                            <span className="text-sm font-medium">{language.substring(0, 2).toUpperCase()}</span>
+                            <ChevronDown size={16} />
+                        </button>
+                        
                         {/* Mobile Search Button */}
                         <button 
                             onClick={() => setShowMobileSearch(!showMobileSearch)} 
