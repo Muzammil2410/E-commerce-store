@@ -2309,7 +2309,7 @@ export const LanguageCurrencyProvider = ({ children }) => {
     
     // Format number based on currency
     if (currency === 'PKR - Pakistani Rupee' || currency === 'INR - Indian Rupee') {
-      return `${symbol}${convertedAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+      return `${symbol} ${convertedAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
     }
     return `${symbol}${convertedAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }

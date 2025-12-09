@@ -393,7 +393,7 @@ const Navbar = () => {
                                 </div>
                             </div>
                         ) : (
-                            <Link to="/auth/login" className="relative px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap">
+                            <Link to="/auth" className="relative px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap">
                                 <User size={18} className="md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
                                 <span>{t('loginRegister')}</span>
                             </Link>
@@ -497,18 +497,11 @@ const Navbar = () => {
                     {showMobileAuth && !user && (
                         <div className="sm:hidden fixed right-4 top-16 z-[101] bg-white border border-gray-200 rounded-lg shadow-lg w-40 py-2" ref={mobileMenuRef}>
                             <Link
-                                to="/auth/login"
+                                to="/auth"
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                                 onClick={() => setShowMobileAuth(false)}
                             >
-                                {t('login')}
-                            </Link>
-                            <Link
-                                to="/auth/register"
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                                onClick={() => setShowMobileAuth(false)}
-                            >
-                                {t('register')}
+                                {t('loginRegister')}
                             </Link>
                         </div>
                     )}

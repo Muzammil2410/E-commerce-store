@@ -1,9 +1,9 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { User, MapPin, ShoppingBag, Heart, Settings, LogOut, Edit, Plus, Trash2, Eye, Truck, Package, RotateCcw, Bell } from 'lucide-react'
+import { User, MapPin, ShoppingBag, Heart, LogOut, Edit, Plus, Trash2, Eye, Truck, Package, RotateCcw, Bell, Camera } from 'lucide-react'
 import Image from '@/components/Image'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -25,7 +25,13 @@ export default function ProfilePage() {
     const [user, setUser] = useState(null)
     const [orders, setOrders] = useState([])
     const [addresses, setAddresses] = useState([])
+    const [profilePicture, setProfilePicture] = useState(null)
     const [showAddressModal, setShowAddressModal] = useState(false)
+    const [isEditingProfile, setIsEditingProfile] = useState(false)
+    const [profileForm, setProfileForm] = useState({
+        name: '',
+        email: ''
+    })
     const [editingAddress, setEditingAddress] = useState(null)
     const [addressForm, setAddressForm] = useState({
         name: '',
@@ -40,6 +46,7 @@ export default function ProfilePage() {
     
     const wishlistItems = useSelector(state => state.wishlist.items)
     const wishlistArray = Object.values(wishlistItems)
+    const contentRef = useRef(null)
 
     useEffect(() => {
         // Check if user is logged in
@@ -49,8 +56,20 @@ export default function ProfilePage() {
             return
         }
 
-        setUser(JSON.parse(userData))
+        const parsedUser = JSON.parse(userData)
+        setUser(parsedUser)
         setOrders(orderDummyData)
+        
+        // Load profile picture from user data
+        if (parsedUser.profilePicture) {
+            setProfilePicture(parsedUser.profilePicture)
+        }
+        
+        // Initialize profile form with user data
+        setProfileForm({
+            name: parsedUser.name || '',
+            email: parsedUser.email || ''
+        })
         
         // Load addresses from localStorage or use default
         const savedAddresses = localStorage.getItem('userAddresses')
@@ -169,6 +188,110 @@ export default function ProfilePage() {
         toast.success('Address deleted successfully')
     }
 
+    const handleProfilePictureUpload = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please select a valid image file')
+            return
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error('Image size must be less than 5MB')
+            return
+        }
+
+        // Read file and convert to base64
+        const reader = new FileReader()
+        reader.onloadend = () => {
+            const base64String = reader.result
+            setProfilePicture(base64String)
+            
+            // Update user object with profile picture
+            const updatedUser = { ...user, profilePicture: base64String }
+            setUser(updatedUser)
+            
+            // Save to localStorage
+            localStorage.setItem('user', JSON.stringify(updatedUser))
+            toast.success('Profile picture updated successfully')
+        }
+        reader.onerror = () => {
+            toast.error('Error reading image file')
+        }
+        reader.readAsDataURL(file)
+    }
+
+    const handleEditProfile = () => {
+        setIsEditingProfile(true)
+        setProfileForm({
+            name: user.name || '',
+            email: user.email || ''
+        })
+    }
+
+    const handleCancelEdit = () => {
+        setIsEditingProfile(false)
+        setProfileForm({
+            name: user.name || '',
+            email: user.email || ''
+        })
+    }
+
+    const handleSaveProfile = () => {
+        // Validate form
+        if (!profileForm.name.trim()) {
+            toast.error('Name is required')
+            return
+        }
+        
+        if (!profileForm.email.trim()) {
+            toast.error('Email is required')
+            return
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(profileForm.email)) {
+            toast.error('Please enter a valid email address')
+            return
+        }
+
+        // Update user object
+        const updatedUser = {
+            ...user,
+            name: profileForm.name.trim(),
+            email: profileForm.email.trim()
+        }
+        setUser(updatedUser)
+        
+        // Save to localStorage
+        localStorage.setItem('user', JSON.stringify(updatedUser))
+        
+        setIsEditingProfile(false)
+        toast.success('Profile updated successfully')
+    }
+
+    // Handle tab change with scroll to content on mobile
+    const handleTabChange = (tabId) => {
+        setActiveTab(tabId)
+        // Scroll to content area on mobile devices
+        if (window.innerWidth < 1024) { // lg breakpoint
+            setTimeout(() => {
+                if (contentRef.current) {
+                    const elementPosition = contentRef.current.getBoundingClientRect().top
+                    const offsetPosition = elementPosition + window.pageYOffset - 20 // 20px offset from top
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    })
+                }
+            }, 150)
+        }
+    }
+
     const tabs = [
         { id: 'profile', label: 'Profile', icon: User },
         { id: 'active-orders', label: 'Active Orders', icon: Package },
@@ -176,8 +299,7 @@ export default function ProfilePage() {
         { id: 'orders', label: 'Order History', icon: ShoppingBag },
         { id: 'returns', label: 'Returns & Refunds', icon: RotateCcw },
         { id: 'addresses', label: 'Addresses', icon: MapPin },
-        { id: 'wishlist', label: 'Wishlist', icon: Heart },
-        { id: 'settings', label: 'Settings', icon: Settings }
+        { id: 'wishlist', label: 'Wishlist', icon: Heart }
     ]
 
     if (!user) {
@@ -200,8 +322,28 @@ export default function ProfilePage() {
                         <div className="bg-white rounded-lg shadow-sm p-6">
                             {/* User Info */}
                             <div className="text-center mb-6">
-                                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <User className="w-10 h-10 text-blue-600" />
+                                <div className="relative w-20 h-20 mx-auto mb-4">
+                                    {profilePicture ? (
+                                        <img 
+                                            src={profilePicture} 
+                                            alt="Profile" 
+                                            className="w-20 h-20 rounded-full object-cover border-2 border-blue-200"
+                                            style={{ objectPosition: 'center 25%' }}
+                                        />
+                                    ) : (
+                                        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+                                            <User className="w-10 h-10 text-blue-600" />
+                                        </div>
+                                    )}
+                                    <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1.5 cursor-pointer hover:bg-blue-700 transition-colors shadow-lg">
+                                        <Camera size={14} />
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleProfilePictureUpload}
+                                            className="hidden"
+                                        />
+                                    </label>
                                 </div>
                                 <h3 className="font-semibold text-gray-900">{user.name}</h3>
                                 <p className="text-sm text-gray-600">{user.email}</p>
@@ -212,7 +354,7 @@ export default function ProfilePage() {
                                 {tabs.map((tab) => (
                                     <button
                                         key={tab.id}
-                                        onClick={() => setActiveTab(tab.id)}
+                                        onClick={() => handleTabChange(tab.id)}
                                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
                                             activeTab === tab.id
                                                 ? 'bg-blue-50 text-blue-700 border border-blue-200'
@@ -237,11 +379,49 @@ export default function ProfilePage() {
                     </div>
 
                     {/* Main Content */}
-                    <div className="lg:col-span-3">
+                    <div ref={contentRef} className="lg:col-span-3">
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
                             <div className="bg-white rounded-lg shadow-sm p-6">
                                 <h2 className="text-xl font-semibold text-gray-900 mb-6">Profile Information</h2>
+                                
+                                {/* Profile Picture Section */}
+                                <div className="mb-6 pb-6 border-b border-gray-200">
+                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                        Profile Picture
+                                    </label>
+                                    <div className="flex items-center gap-6">
+                                        <div className="relative">
+                                            {profilePicture ? (
+                                                <img 
+                                                    src={profilePicture} 
+                                                    alt="Profile" 
+                                                    className="w-24 h-24 rounded-full object-cover border-2 border-blue-200"
+                                                    style={{ objectPosition: 'center 25%' }}
+                                                />
+                                            ) : (
+                                                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                                                    <User className="w-12 h-12 text-blue-600" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <label className="cursor-pointer">
+                                                <span className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                                    <Camera size={18} />
+                                                    {profilePicture ? 'Change Picture' : 'Upload Picture'}
+                                                </span>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={handleProfilePictureUpload}
+                                                    className="hidden"
+                                                />
+                                            </label>
+                                            <p className="text-xs text-gray-500 mt-2">JPG, PNG or GIF. Max size 5MB</p>
+                                        </div>
+                                    </div>
+                                </div>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
@@ -250,9 +430,12 @@ export default function ProfilePage() {
                                         </label>
                                         <input
                                             type="text"
-                                            value={user.name}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            readOnly
+                                            value={isEditingProfile ? profileForm.name : user.name}
+                                            onChange={(e) => isEditingProfile && setProfileForm({...profileForm, name: e.target.value})}
+                                            className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                                                isEditingProfile ? 'bg-white' : 'bg-gray-50'
+                                            }`}
+                                            readOnly={!isEditingProfile}
                                         />
                                     </div>
                                     <div>
@@ -261,17 +444,40 @@ export default function ProfilePage() {
                                         </label>
                                         <input
                                             type="email"
-                                            value={user.email}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            readOnly
+                                            value={isEditingProfile ? profileForm.email : user.email}
+                                            onChange={(e) => isEditingProfile && setProfileForm({...profileForm, email: e.target.value})}
+                                            className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                                                isEditingProfile ? 'bg-white' : 'bg-gray-50'
+                                            }`}
+                                            readOnly={!isEditingProfile}
                                         />
                                     </div>
                                 </div>
 
-                                <div className="mt-6">
-                                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                                        Edit Profile
-                                    </button>
+                                <div className="mt-6 flex items-center gap-3">
+                                    {isEditingProfile ? (
+                                        <>
+                                            <button 
+                                                onClick={handleSaveProfile}
+                                                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                            >
+                                                Save Changes
+                                            </button>
+                                            <button 
+                                                onClick={handleCancelEdit}
+                                                className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <button 
+                                            onClick={handleEditProfile}
+                                            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                        >
+                                            Edit Profile
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -335,8 +541,8 @@ export default function ProfilePage() {
                                                     <p className="font-medium">{address.street}</p>
                                                     <p>{address.city}, {address.state} {address.zip}</p>
                                                     <p>{inferCountryFromLocation(address.city, address.state) || ''}</p>
-                                                    <p className="text-blue-600">{address.phone}</p>
-                                                    {address.email && <p className="text-blue-600">{address.email}</p>}
+                                                    <p className="text-gray-600">{address.phone}</p>
+                                                    {address.email && <p className="text-gray-600">{address.email}</p>}
                                                     {address.updatedAt && (
                                                         <p className="text-xs text-gray-500 mt-2">
                                                             Updated: {new Date(address.updatedAt).toLocaleDateString()}
@@ -419,52 +625,6 @@ export default function ProfilePage() {
                             </div>
                         )}
 
-                        {/* Settings Tab */}
-                        {activeTab === 'settings' && (
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Account Settings</h2>
-                                
-                                <div className="space-y-6">
-                                    <div>
-                                        <h3 className="font-medium text-gray-900 mb-3">Notifications</h3>
-                                        <div className="space-y-3">
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" defaultChecked />
-                                                <span className="ml-3 text-gray-700">Email notifications</span>
-                                            </label>
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" defaultChecked />
-                                                <span className="ml-3 text-gray-700">SMS notifications</span>
-                                            </label>
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                                                <span className="ml-3 text-gray-700">Push notifications</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h3 className="font-medium text-gray-900 mb-3">Privacy</h3>
-                                        <div className="space-y-3">
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" defaultChecked />
-                                                <span className="ml-3 text-gray-700">Make profile public</span>
-                                            </label>
-                                            <label className="flex items-center">
-                                                <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                                                <span className="ml-3 text-gray-700">Allow marketing emails</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div className="pt-4">
-                                        <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                                            Save Settings
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

@@ -73,13 +73,13 @@ export default function SellerOrders() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'DELIVERED':
-        return 'bg-green-100 text-green-800'
+        return 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg'
       case 'PENDING':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg'
       case 'CANCELLED':
-        return 'bg-red-100 text-red-800'
+        return 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-lg'
     }
   }
 
@@ -97,73 +97,122 @@ export default function SellerOrders() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <div className="bg-white/80 backdrop-blur-xl shadow-lg border-b border-gray-200/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => window.history.back()}
-                className="flex items-center justify-center w-10 h-10 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                className="flex items-center justify-center w-11 h-11 text-gray-600 hover:text-gray-900 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
               >
                 <ArrowLeft size={20} />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
-                <p className="text-gray-600">Manage your customer orders</p>
+                <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  Orders Management
+                </h1>
+                <p className="text-gray-600 mt-1 text-sm sm:text-base">Track and manage all your customer orders</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium mb-1">Total Orders</p>
+                <p className="text-3xl font-bold">{filteredOrders.length}</p>
+              </div>
+              <div className="bg-white/20 rounded-xl p-3 backdrop-blur-sm">
+                <Package className="w-6 h-6" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium mb-1">Delivered</p>
+                <p className="text-3xl font-bold">{filteredOrders.filter(o => o.status === 'DELIVERED').length}</p>
+              </div>
+              <div className="bg-white/20 rounded-xl p-3 backdrop-blur-sm">
+                <Truck className="w-6 h-6" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-amber-100 text-sm font-medium mb-1">Pending</p>
+                <p className="text-3xl font-bold">{filteredOrders.filter(o => o.status === 'PENDING').length}</p>
+              </div>
+              <div className="bg-white/20 rounded-xl p-3 backdrop-blur-sm">
+                <Calendar className="w-6 h-6" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 p-6 mb-8">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
                   type="text"
-                  placeholder="Search orders..."
+                  placeholder="Search by order ID or customer name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-gray-50/50"
                 />
               </div>
             </div>
-            <div className="sm:w-48">
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">All Status</option>
-                <option value="PENDING">Pending</option>
-                <option value="DELIVERED">Delivered</option>
-                <option value="CANCELLED">Cancelled</option>
-              </select>
+            <div className="sm:w-56">
+              <div className="relative">
+                <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-gray-50/50 appearance-none cursor-pointer"
+                >
+                  <option value="all">All Status</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="DELIVERED">Delivered</option>
+                  <option value="CANCELLED">Cancelled</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Orders List */}
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="space-y-6">
           {filteredOrders.length > 0 ? (
-            <div className="divide-y divide-gray-200">
-              {filteredOrders.map((order) => (
-                <div key={order.id} className="p-6 hover:bg-gray-50 transition-colors">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    {/* Order Info */}
+            filteredOrders.map((order) => (
+              <div 
+                key={order.id} 
+                className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="p-6 sm:p-8">
+                  {/* Order Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-200">
                     <div className="flex-1">
-                      <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-2.5 shadow-lg">
+                          <Package className="w-5 h-5 text-white" />
+                        </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-900">
-                            {t('order')} #{order.id.slice(-8)}
+                          <h3 className="text-xl font-bold text-gray-900">
+                            {t('order')} <span className="text-blue-600">#{order.id.slice(-8)}</span>
                           </h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
+                            <Calendar size={14} />
                             {new Date(order.createdAt).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'long',
@@ -173,163 +222,166 @@ export default function SellerOrders() {
                             })}
                           </p>
                         </div>
-                        <span className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(order.status)}`}>
-                          {order.status}
-                        </span>
                       </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className={`px-4 py-2 text-sm font-semibold rounded-xl shadow-md ${getStatusColor(order.status)}`}>
+                        {order.status}
+                      </span>
+                      {isOrderDelayed(order) && (
+                        <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                          <AlertCircle size={16} className="text-red-600" />
+                          <span className="text-xs font-medium text-red-700">{t('delayed')}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Left Column - Customer & Items */}
+                    <div className="lg:col-span-2 space-y-6">
                       {/* Customer Info */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                            <Package className="w-5 h-5 text-gray-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-900">{order.user.name}</p>
-                            <p className="text-sm text-gray-600">{order.user.email}</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+                          <div className="flex items-center gap-3">
+                            <div className="bg-blue-500 rounded-xl p-2.5 shadow-md">
+                              <Package className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Customer</p>
+                              <p className="font-bold text-gray-900">{order.user.name}</p>
+                              <p className="text-sm text-gray-600">{order.user.email}</p>
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                            <MapPin className="w-5 h-5 text-gray-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-900">{t('deliveryAddress')}</p>
-                            <p className="text-sm text-gray-600">
-                              {order.address.street}, {order.address.city}
-                            </p>
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
+                          <div className="flex items-center gap-3">
+                            <div className="bg-green-500 rounded-xl p-2.5 shadow-md">
+                              <MapPin className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Delivery</p>
+                              <p className="font-bold text-gray-900">{order.address.city}</p>
+                              <p className="text-sm text-gray-600 truncate">{order.address.street}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
 
                       {/* Order Items */}
-                      <div className="mb-4">
-                        <h4 className="font-medium text-gray-900 mb-2">{t('orderItems')} ({order.orderItems.length})</h4>
-                        <div className="space-y-2">
+                      <div>
+                        <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-4 flex items-center gap-2">
+                          <span className="w-1 h-4 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full"></span>
+                          {t('orderItems')} ({order.orderItems.length})
+                        </h4>
+                        <div className="space-y-3">
                           {order.orderItems.map((item, index) => (
-                            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <div className="flex items-center space-x-3">
-                                <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                                  <Package className="w-6 h-6 text-gray-400" />
+                            <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200 hover:shadow-md transition-all duration-300">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                  <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg p-3 shadow-md">
+                                    <Package className="w-5 h-5 text-white" />
+                                  </div>
+                                  <div>
+                                    <p className="font-bold text-gray-900">{translateProductName(item.product.name)}</p>
+                                    <p className="text-sm text-gray-600 flex items-center gap-2 mt-1">
+                                      <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md text-xs font-semibold">
+                                        {t('qty')}: {item.quantity}
+                                      </span>
+                                    </p>
+                                  </div>
                                 </div>
-                                <div>
-                                  <p className="font-medium text-gray-900">{translateProductName(item.product.name)}</p>
-                                  <p className="text-sm text-gray-600">{t('qty')}: {item.quantity}</p>
-                                </div>
+                                <p className="font-bold text-lg text-gray-900">
+                                  {formatCurrency(item.price * item.quantity)}
+                                </p>
                               </div>
-                              <p className="font-semibold text-gray-900">
-                                {formatCurrency(item.price * item.quantity)}
-                              </p>
                             </div>
                           ))}
                         </div>
                       </div>
-
-                      {/* Payment Info */}
-                      <div className="flex items-center space-x-6 text-sm text-gray-600">
-                        <div className="flex items-center space-x-2">
-                          <CreditCard className="w-4 h-4" />
-                          <span>{order.paymentMethod}</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Truck className="w-4 h-4" />
-                          <span>{t('delivery')}</span>
-                        </div>
-                        {order.isCouponUsed && (
-                          <div className="flex items-center space-x-2">
-                            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                              {t('couponUsed')}
-                            </span>
-                          </div>
-                        )}
-                      </div>
                     </div>
 
-                    {/* Order Total & Actions */}
-                    <div className="lg:w-64 flex flex-col items-end space-y-3">
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-900">
-                          {formatCurrency(order.total)}
-                        </p>
-                        <p className="text-sm text-gray-600">{t('totalAmount')}</p>
-                      </div>
-                      
-                      {/* Delay Warning */}
-                      {isOrderDelayed(order) && (
-                        <div className="w-full bg-red-50 border border-red-200 rounded-lg p-3 mb-2">
-                          <div className="flex items-center gap-2 text-red-700">
-                            <AlertCircle size={16} />
-                            <p className="text-xs font-medium">{t('orderDelayed')}</p>
-                          </div>
-                          <p className="text-xs text-red-600 mt-1">
-                            {t('expected')}: {order.expectedDeliveryDate ? new Date(order.expectedDeliveryDate).toLocaleDateString() : 'N/A'}
+                    {/* Right Column - Total & Actions */}
+                    <div className="lg:col-span-1">
+                      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white shadow-2xl">
+                        <div className="text-center mb-6">
+                          <p className="text-blue-100 text-sm font-medium mb-2 uppercase tracking-wide">{t('totalAmount')}</p>
+                          <p className="text-4xl font-extrabold">
+                            {formatCurrency(order.total)}
                           </p>
                         </div>
-                      )}
-
-                      <div className="flex flex-col gap-2 w-full">
-                        {/* Chat Button */}
-                        <button 
-                          onClick={() => setChatModal({
-                            orderId: order.id,
-                            buyerId: order.user?.id || order.userId,
-                            buyerName: order.user?.name || 'Buyer',
-                            buyerEmail: order.user?.email || '',
-                            otherPartyName: order.user?.name || 'Buyer',
-                            senderName: 'Seller'
-                          })}
-                          className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                          aria-label="Open chat with buyer"
-                        >
-                          <MessageCircle size={16} />
-                          <span>{t('chatWithBuyer')}</span>
-                        </button>
-
-                        {/* Review Buyer Button */}
-                        {order.status === 'DELIVERED' && (
-                          <button 
-                            onClick={() => {
-                              const existingReview = getSellerReview(order.id, order.user?.id || order.userId);
-                              setReviewModal({
-                                orderId: order.id,
-                                buyerId: order.user?.id || order.userId,
-                                buyerName: order.user?.name || 'Buyer',
-                                buyerEmail: order.user?.email || '',
-                                ...(existingReview && { existingReview })
-                              });
-                            }}
-                            className={`flex items-center justify-center space-x-2 px-4 py-2 border rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                              hasReviewedBuyer(order.id, order.user?.id || order.userId)
-                                ? 'border-green-300 bg-green-50 text-green-700 hover:bg-green-100 focus:ring-green-500'
-                                : 'border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
-                            }`}
-                            aria-label={hasReviewedBuyer(order.id, order.user?.id || order.userId) ? 'View or edit review' : 'Review this buyer'}
-                          >
-                            <Star size={16} className={hasReviewedBuyer(order.id, order.user?.id || order.userId) ? 'fill-current' : ''} />
-                            <span>{hasReviewedBuyer(order.id, order.user?.id || order.userId) ? t('viewReview') : t('reviewBuyer')}</span>
-                          </button>
+                        
+                        {isOrderDelayed(order) && (
+                          <div className="bg-red-500/20 backdrop-blur-sm border border-red-300/50 rounded-xl p-3 mb-4">
+                            <div className="flex items-center gap-2 text-red-100 mb-1">
+                              <AlertCircle size={16} />
+                              <p className="text-xs font-bold">{t('orderDelayed')}</p>
+                            </div>
+                            <p className="text-xs text-red-100">
+                              {t('expected')}: {order.expectedDeliveryDate ? new Date(order.expectedDeliveryDate).toLocaleDateString() : 'N/A'}
+                            </p>
+                          </div>
                         )}
 
-                        <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                          <Eye size={16} />
-                          <span>{t('viewDetails')}</span>
-                        </button>
+                        <div className="space-y-3">
+                          <button 
+                            onClick={() => setChatModal({
+                              orderId: order.id,
+                              buyerId: order.user?.id || order.userId,
+                              buyerName: order.user?.name || 'Buyer',
+                              buyerEmail: order.user?.email || '',
+                              otherPartyName: order.user?.name || 'Buyer',
+                              senderName: 'Seller'
+                            })}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+                          >
+                            <MessageCircle size={18} />
+                            <span>{t('chatWithBuyer')}</span>
+                          </button>
+
+                          {order.status === 'DELIVERED' && (
+                            <button 
+                              onClick={() => {
+                                const existingReview = getSellerReview(order.id, order.user?.id || order.userId);
+                                setReviewModal({
+                                  orderId: order.id,
+                                  buyerId: order.user?.id || order.userId,
+                                  buyerName: order.user?.name || 'Buyer',
+                                  buyerEmail: order.user?.email || '',
+                                  ...(existingReview && { existingReview })
+                                });
+                              }}
+                              className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 ${
+                                hasReviewedBuyer(order.id, order.user?.id || order.userId)
+                                  ? 'bg-green-500 text-white hover:bg-green-600'
+                                  : 'bg-white/20 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/30'
+                              }`}
+                            >
+                              <Star size={18} className={hasReviewedBuyer(order.id, order.user?.id || order.userId) ? 'fill-current' : ''} />
+                              <span>{hasReviewedBuyer(order.id, order.user?.id || order.userId) ? t('viewReview') : t('reviewBuyer')}</span>
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))
           ) : (
-            <div className="text-center py-12">
-              <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noOrdersFound')}</h3>
-              <p className="text-gray-600">
-                {searchTerm || statusFilter !== 'all' 
-                  ? t('tryAdjustingSearchOrFilter')
-                  : t('youHaventReceivedAnyOrdersYet')
-                }
-              </p>
+            <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 p-12 text-center">
+              <div className="max-w-md mx-auto">
+                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                  <Package className="w-12 h-12 text-gray-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">{t('noOrdersFound')}</h3>
+                <p className="text-gray-600">
+                  {searchTerm || statusFilter !== 'all' 
+                    ? t('tryAdjustingSearchOrFilter')
+                    : t('youHaventReceivedAnyOrdersYet')
+                  }
+                </p>
+              </div>
             </div>
           )}
         </div>

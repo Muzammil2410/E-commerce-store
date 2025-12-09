@@ -8,7 +8,7 @@ const PictureBoxes = () => {
     const { t } = useLanguageCurrency()
     
     return (
-        <div className='px-4 sm:px-6 my-16 sm:my-20 lg:my-30 max-w-6xl mx-auto'>
+        <div className='px-4 sm:px-6 mt-16 sm:mt-20 lg:mt-30 mb-2 sm:mb-3 lg:mb-4 max-w-6xl mx-auto'>
             <div className='flex flex-col md:flex-row gap-4 sm:gap-6 justify-between'>
                 <div className="text-box banner-layer x50 md-x50 lg-x50 y50 md-y50 lg-y50 res-text flex-1">
                     <div className='bg-white border border-gray-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 h-48 sm:h-56 lg:h-64 flex items-center justify-between relative overflow-hidden shadow-sm'>

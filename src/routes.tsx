@@ -8,6 +8,7 @@ import StoreRoot from "@/app/store/layout";
 import Loading from "@/components/Loading";
 // Import AuthLogin directly instead of lazy loading to avoid Router context issues
 import AuthLogin from "@/app/(public)/auth/login/page";
+const AccountTypeSelection = lazy(() => import("@/app/(public)/auth/page"));
 
 // Lazy load pages for code splitting and better performance
 const Home = lazy(() => import("@/app/(public)/page"));
@@ -68,6 +69,7 @@ export const router = createBrowserRouter([
   { path: "/product/:productId", element: createPublicRoute(Product) },
   { path: "/login", element: createPublicRoute(Login) },
   { path: "/register", element: createPublicRoute(Register) },
+  { path: "/auth", element: createPublicRoute(AccountTypeSelection) },
   { 
     path: "/auth/login", 
     element: (

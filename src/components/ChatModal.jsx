@@ -48,7 +48,15 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
 
     const handleTakePhoto = () => {
         setShowAttachmentMenu(false);
-        cameraInputRef.current?.click();
+        // Ensure camera input has capture attribute set before clicking
+        if (cameraInputRef.current) {
+            cameraInputRef.current.setAttribute('capture', 'environment');
+            cameraInputRef.current.setAttribute('accept', 'image/*');
+            // Small delay to ensure attributes are set
+            setTimeout(() => {
+                cameraInputRef.current?.click();
+            }, 10);
+        }
     };
 
     const handleAttachPhoto = () => {
@@ -254,99 +262,108 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                 </div>
 
                 {/* Input Area */}
-                <div className='border-t border-gray-200 p-4 bg-white'>
+                <div className='border-t border-gray-200 bg-white'>
                     {/* Selected Image Preview */}
                     {selectedImage && (
-                        <div className="mb-3 relative inline-block">
-                            <img 
-                                src={selectedImage.preview} 
-                                alt="Preview" 
-                                className="max-w-xs h-32 object-cover rounded-lg border border-gray-300"
-                            />
-                            <button
-                                onClick={removeSelectedImage}
-                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
-                                aria-label="Remove image"
-                            >
-                                <X size={16} />
-                            </button>
+                        <div className="px-4 pt-4">
+                            <div className="relative inline-block">
+                                <img 
+                                    src={selectedImage.preview} 
+                                    alt="Preview" 
+                                    className="max-w-xs h-32 object-cover rounded-xl border-2 border-gray-200 shadow-md"
+                                />
+                                <button
+                                    onClick={removeSelectedImage}
+                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg"
+                                    aria-label="Remove image"
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
                         </div>
                     )}
                     
-                    <div className="flex items-end gap-2">
-                        {/* Attachment Button */}
-                        <div className="relative" ref={attachmentMenuRef}>
-                            <button
-                                onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                                className='bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-blue-500'
-                                aria-label="Attach file"
-                            >
-                                <Plus size={20} />
-                            </button>
-                            
-                            {/* Attachment Menu */}
-                            {showAttachmentMenu && (
-                                <div className="absolute bottom-full left-0 mb-2 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[180px] z-10">
-                                    <button
-                                        onClick={handleTakePhoto}
-                                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 transition-colors text-left"
-                                    >
-                                        <Camera size={18} className="text-gray-600" />
-                                        <span className="text-sm text-gray-700">Take a photo</span>
-                                    </button>
-                                    <button
-                                        onClick={handleAttachPhoto}
-                                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 transition-colors text-left"
-                                    >
-                                        <ImageIcon size={18} className="text-gray-600" />
-                                        <span className="text-sm text-gray-700">Attach a photo</span>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                    <div className="p-4">
+                        <div className="flex items-end gap-3">
+                            {/* Attachment Button */}
+                            <div className="relative flex-shrink-0" ref={attachmentMenuRef}>
+                                <button
+                                    onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
+                                    className='bg-gradient-to-br from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 p-3 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md'
+                                    aria-label="Attach file"
+                                >
+                                    <Plus size={20} />
+                                </button>
+                                
+                                {/* Attachment Menu */}
+                                {showAttachmentMenu && (
+                                    <div className="absolute bottom-full left-0 mb-3 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 min-w-[200px] z-10 overflow-hidden">
+                                        <button
+                                            onClick={handleTakePhoto}
+                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-left group"
+                                        >
+                                            <div className="bg-blue-100 rounded-lg p-2 group-hover:bg-blue-200 transition-colors">
+                                                <Camera size={18} className="text-blue-600" />
+                                            </div>
+                                            <span className="text-sm font-medium text-gray-700">Take a photo</span>
+                                        </button>
+                                        <button
+                                            onClick={handleAttachPhoto}
+                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-purple-50 transition-colors text-left group"
+                                        >
+                                            <div className="bg-purple-100 rounded-lg p-2 group-hover:bg-purple-200 transition-colors">
+                                                <ImageIcon size={18} className="text-purple-600" />
+                                            </div>
+                                            <span className="text-sm font-medium text-gray-700">Attach a photo</span>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
 
-                        {/* Hidden File Inputs */}
-                        <input
-                            ref={cameraInputRef}
-                            type="file"
-                            accept="image/*"
-                            capture="environment"
-                            onChange={(e) => handleFileSelect(e, true)}
-                            className="hidden"
-                            aria-label="Camera input"
-                        />
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleFileSelect(e, false)}
-                            className="hidden"
-                            aria-label="File input"
-                        />
-
-                        {/* Message Input - Centered */}
-                        <div className="flex-1">
-                            <textarea
-                                ref={inputRef}
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                placeholder='Type your message...'
-                                className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none'
-                                rows="2"
-                                aria-label="Message input"
+                            {/* Hidden File Inputs */}
+                            <input
+                                ref={cameraInputRef}
+                                type="file"
+                                accept="image/*"
+                                capture="environment"
+                                onChange={(e) => handleFileSelect(e, true)}
+                                className="hidden"
+                                aria-label="Camera input"
                             />
-                        </div>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleFileSelect(e, false)}
+                                className="hidden"
+                                aria-label="File input"
+                            />
 
-                        {/* Send Button */}
-                        <button
-                            onClick={handleSendMessage}
-                            className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center gap-2'
-                            aria-label="Send message"
-                        >
-                            <Send size={18} />
-                            <span className="hidden sm:inline">Send</span>
-                        </button>
+                            {/* Message Input */}
+                            <div className="flex-1 min-w-0">
+                                <textarea
+                                    ref={inputRef}
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    placeholder='Type your message...'
+                                    className='w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-gray-50 focus:bg-white transition-all duration-300 text-sm'
+                                    rows="1"
+                                    style={{ minHeight: '44px', maxHeight: '120px' }}
+                                    aria-label="Message input"
+                                />
+                            </div>
+
+                            {/* Send Button */}
+                            <button
+                                onClick={handleSendMessage}
+                                className='bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex-shrink-0'
+                                aria-label="Send message"
+                            >
+                                <Send size={18} />
+                                <span className="hidden sm:inline font-semibold">Send</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

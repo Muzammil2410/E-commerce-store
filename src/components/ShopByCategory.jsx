@@ -66,11 +66,21 @@ const ShopByCategory = () => {
     const totalSlides = Math.ceil(categories.length / itemsPerSlide)
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % totalSlides)
+        setCurrentSlide((prev) => {
+            if (prev < totalSlides - 1) {
+                return prev + 1
+            }
+            return prev // Stay on last slide
+        })
     }
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides)
+        setCurrentSlide((prev) => {
+            if (prev > 0) {
+                return prev - 1
+            }
+            return prev // Stay on first slide
+        })
     }
 
     return (

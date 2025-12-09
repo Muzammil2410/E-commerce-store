@@ -14,7 +14,7 @@ const Testimonials = () => {
     const testimonials = dummyRatingsData.slice(0, 3)
 
     return (
-        <div className='px-4 sm:px-6 my-16 sm:my-20 lg:my-30 max-w-6xl mx-auto'>
+        <div className='px-4 sm:px-6 mt-4 sm:mt-6 lg:mt-8 mb-16 sm:mb-20 lg:mb-30 max-w-6xl mx-auto'>
             <div className='text-center mb-12'>
                 <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4'>{t('whatOurCustomersSay')}</h2>
                 <p className='text-gray-600 max-w-2xl mx-auto'>{t('dontJustTakeOurWord')}</p>

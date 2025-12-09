@@ -39,7 +39,7 @@ export default function SalesDashboard() {
   const [loading, setLoading] = useState(true)
 
   // Fee configuration
-  const PLATFORM_FEE_PERCENTAGE = 8.5
+  const PLATFORM_FEE_PERCENTAGE = 10
   const DELIVERY_FEE_FIXED = 2.50
 
   useEffect(() => {
