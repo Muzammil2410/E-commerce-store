@@ -12,7 +12,22 @@ import ShopByCategory from "@/components/ShopByCategory";
 export default function Home() {
     // Scroll to top on page load/refresh
     useEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+        // Immediately scroll to top
+        window.scrollTo(0, 0);
+        // Also use scrollTo with options as fallback
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        
+        // Handle browser scroll restoration
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        
+        // Additional scroll after a small delay to ensure it works
+        const timer = setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 0);
+        
+        return () => clearTimeout(timer);
     }, [])
 
     return (

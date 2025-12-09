@@ -625,25 +625,6 @@ export default function AddProduct() {
                           Upload
                         </button>
                       </div>
-                      
-                      {/* Alibaba Lens Section */}
-                      <div className="mt-4 pt-4 border-t border-gray-200 flex items-start justify-between">
-                        <div className="flex items-start gap-3 flex-1">
-                          <div className="flex items-center gap-2">
-                            <Sparkles className="w-5 h-5 text-blue-600" />
-                            <span className="text-sm font-medium text-gray-900">Alibaba Lens</span>
-                          </div>
-                          <p className="text-xs text-gray-600 flex-1">
-                            Screenshot an image to search for similar items with lower prices and flexible customization
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          className="px-4 py-2 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors whitespace-nowrap ml-4"
-                        >
-                          Add to Chrome
-                        </button>
-                      </div>
                     </div>
                   )}
                 </div>
