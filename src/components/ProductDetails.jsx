@@ -2,8 +2,8 @@
 
 import { addToCart } from "@/lib/features/cart/cartSlice";
 import { StarIcon, TagIcon, CreditCardIcon, UserIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import Image from "@/components/Image";
 import Counter from "./Counter";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,8 +19,13 @@ const ProductDetails = ({ product }) => {
     const dispatch = useDispatch();
 
     const navigate = useNavigate()
+    const location = useLocation()
     const [user, setUser] = useState(null)
     const [mainImage, setMainImage] = useState(product.images[0]);
+    const [showZoom, setShowZoom] = useState(false);
+    const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
+    const imageRef = useRef(null);
+    const zoomRef = useRef(null);
 
     useEffect(() => {
         if (product?.images?.length) {
@@ -53,49 +58,106 @@ const ProductDetails = ({ product }) => {
         navigate('/checkout', { state: { buyNowProduct: { ...product, quantity: 1 } } });
     }
 
+    const handleImageClick = () => {
+        setShowZoom(true);
+        setZoomPosition({ x: 50, y: 50 });
+    }
+
+    const handleMouseMove = (e) => {
+        if (!imageRef.current || !showZoom) return;
+
+        const rect = imageRef.current.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+        setZoomPosition({
+            x: Math.max(0, Math.min(100, x)),
+            y: Math.max(0, Math.min(100, y))
+        });
+    }
+
+    const handleCloseZoom = () => setShowZoom(false);
+
     const averageRating = product.rating.reduce((acc, item) => acc + item.rating, 0) / product.rating.length;
     
     return (
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-4 lg:gap-3">
-                <div className="flex flex-row sm:flex-col gap-3 order-2 sm:order-1">
-                    {product.images.map((image, index) => (
-                        <button
-                            key={index}
-                            type="button"
-                            onClick={() => setMainImage(product.images[index])}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
+        <div className="flex flex-col gap-8 lg:gap-12">
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-6">
+                {/* Left Side - Images */}
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-4 lg:gap-3 lg:w-1/2">
+                    <div className="flex flex-row sm:flex-col gap-3 order-2 sm:order-1">
+                        {product.images.map((image, index) => (
+                            <button
+                                key={index}
+                                type="button"
+                                onClick={() => {
                                     setMainImage(product.images[index]);
-                                }
-                            }}
-                            aria-label={`View product image ${index + 1} of ${product.images.length}: ${translateProductName(product.name)}`}
-                            className="bg-slate-100 flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-lg group cursor-pointer flex-shrink-0 hover:ring-2 hover:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
-                        >
-                            <Image 
-                                src={image} 
-                                className="group-hover:scale-103 group-active:scale-95 transition w-10 h-10 sm:w-12 sm:h-12 object-contain" 
-                                alt={`Product thumbnail ${index + 1}`} 
-                                width={48} 
-                                height={48} 
-                                loading={index === 0 ? "eager" : "lazy"}
-                            />
-                        </button>
-                    ))}
+                                    setShowZoom(true);
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        setMainImage(product.images[index]);
+                                        setShowZoom(true);
+                                    }
+                                }}
+                                aria-label={`View product image ${index + 1} of ${product.images.length}: ${translateProductName(product.name)}`}
+                                className="bg-slate-100 flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-lg group cursor-pointer flex-shrink-0 hover:ring-2 hover:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+                            >
+                                <Image 
+                                    src={image} 
+                                    className="group-hover:scale-103 group-active:scale-95 transition w-10 h-10 sm:w-12 sm:h-12 object-contain" 
+                                    alt={`Product thumbnail ${index + 1}`} 
+                                    width={48} 
+                                    height={48} 
+                                    loading={index === 0 ? "eager" : "lazy"}
+                                />
+                            </button>
+                        ))}
+                    </div>
+                    <div 
+                        ref={imageRef}
+                        onClick={handleImageClick}
+                        onMouseMove={handleMouseMove}
+                        className="flex justify-center items-center w-full h-64 sm:h-80 lg:h-96 bg-slate-100 rounded-lg order-1 sm:order-2 cursor-zoom-in" 
+                        role="img" 
+                        aria-label={`Main product image: ${translateProductName(product.name)}`}
+                    >
+                        <Image 
+                            src={mainImage} 
+                            alt={product.name} 
+                            width={300} 
+                            height={300} 
+                            className="w-auto h-auto max-w-full max-h-full object-contain" 
+                            loading="eager"
+                            priority
+                        />
+                    </div>
                 </div>
-                <div className="flex justify-center items-center w-full h-64 sm:h-80 lg:h-96 bg-slate-100 rounded-lg order-1 sm:order-2" role="img" aria-label={`Main product image: ${translateProductName(product.name)}`}>
-                    <Image 
-                        src={mainImage} 
-                        alt={product.name} 
-                        width={300} 
-                        height={300} 
-                        className="w-auto h-auto max-w-full max-h-full object-contain" 
-                        loading="eager"
-                        priority
-                    />
+
+                {/* Right Side - Zoom View */}
+                <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-white border border-gray-200 rounded-lg h-64 sm:h-80 lg:h-96">
+                    {showZoom ? (
+                        <div 
+                            ref={zoomRef}
+                            className="relative w-full h-full flex items-center justify-center overflow-hidden"
+                        >
+                            <div 
+                                className="absolute inset-0 bg-contain bg-no-repeat bg-center transition-all"
+                                style={{
+                                    backgroundImage: `url(${mainImage})`,
+                                    backgroundSize: '250%',
+                                    backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 text-sm">Click the product image to zoom here</p>
+                    )}
                 </div>
             </div>
+
+            {/* Product Details */}
             <div className="flex-1">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800">{translateProductName(product.name)}</h1>
                 <div className='flex items-center mt-2'>
@@ -105,6 +167,14 @@ const ProductDetails = ({ product }) => {
                     <p className="text-sm ml-3 text-slate-500">{t('reviewsCount').replace('{count}', product.rating.length)}</p>
                 </div>
                 <div className="flex items-start my-6 gap-3 text-2xl font-semibold text-slate-800">
+                    <button
+                        type="button"
+                        onClick={() => navigate('/bargain', { state: { from: location.pathname } })}
+                        className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95 transition-all"
+                        aria-label="Bargain"
+                    >
+                        💬 Bargain
+                    </button>
                     <p> {formatCurrency(product.price)} </p>
                     <p className="text-xl text-slate-500 line-through">{formatCurrency(product.mrp)}</p>
                 </div>

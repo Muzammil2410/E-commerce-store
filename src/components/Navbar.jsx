@@ -173,6 +173,66 @@ const Navbar = () => {
         setSuggestions(list)
     }, [search, products])
 
+    const megaCategories = [
+        {
+            title: 'Top Categories',
+            items: [
+                'Mobiles & Tablets',
+                'Men\'s Fashion',
+                'Women Fashion',
+                'Appliances',
+                'TV & Video',
+                'Kidsmart',
+                'Home & Living',
+                'Computer & Gaming',
+                'Automotive',
+                'Health & Care',
+                'Camera',
+                'Home Audio & Theatre'
+            ]
+        },
+        {
+            title: 'Winter Wear',
+            items: ['Sweaters', 'Hoodies', 'Jackets & Coats', 'Shrugs & Blazer'],
+            viewMore: true
+        },
+        {
+            title: 'Eyewear',
+            items: ['Sunglasses', 'Frames', 'Contact Lenses'],
+            viewMore: true
+        },
+        {
+            title: 'Footwear',
+            items: ['Sandals & Slippers', 'Heels', 'Khussas & Kolhapuri', 'Pumps'],
+            viewMore: true
+        },
+        {
+            title: 'Accessories',
+            items: ['Bags', 'Clutches', 'Bags & Wallet', 'Caps'],
+            viewMore: true
+        },
+        {
+            title: 'Jewellery',
+            items: ['Earrings', 'Necklaces', 'Jewellery Sets', 'Bracelets'],
+            viewMore: true
+        },
+        {
+            title: 'Makeup',
+            items: ['Tools & Accessories', 'Lips', 'Face', 'Eyes'],
+            viewMore: true
+        },
+        {
+            title: 'Fragrances',
+            items: ['Attar', 'Pocket Perfumes', 'Colognes & Perfumes', 'Body Spray & Deo Sticks'],
+            viewMore: true
+        },
+        {
+            title: 'Watches',
+            items: ['Analog', 'Smart Watches', 'Digital', 'Chronograph'],
+            viewMore: true
+        },
+    ]
+
     return (
         <nav className="relative bg-white border-b border-gray-100 w-full" style={{ overflow: 'visible', zIndex: 100 }}>
             <div className="px-3 sm:px-4 md:px-6 lg:px-8" style={{ overflow: 'visible' }}>
@@ -237,33 +297,38 @@ const Navbar = () => {
                                 {/* Dropdown Menu */}
                                 {isDropdownOpen && (
                                     <div 
-                                        role="listbox" 
-                                        className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-2xl max-h-80 overflow-y-auto"
-                                        aria-label="Category selection"
-                                        style={{ 
-                                            position: 'absolute',
-                                            zIndex: 9999,
-                                            top: '100%',
-                                            left: 0,
-                                            marginTop: '0.5rem'
-                                        }}
+                                        className="absolute top-full left-0 mt-2 w-[720px] bg-white border border-gray-200 rounded-xl shadow-2xl p-4"
+                                        style={{ zIndex: 9999 }}
                                     >
-                                        {categories.map((category, index) => (
-                                            <button
-                                                key={index}
-                                                type="button"
-                                                role="option"
-                                                aria-selected={category === selectedCategory}
-                                                onClick={() => handleCategorySelect(category)}
-                                                className={`w-full text-left px-4 py-2.5 text-sm transition-colors duration-200 focus:outline-none ${
-                                                    category === selectedCategory 
-                                                        ? 'bg-blue-600 text-white hover:bg-blue-700 font-medium' 
-                                                        : 'text-gray-700 hover:bg-gray-50'
-                                                }`}
-                                            >
-                                                {category}
-                                            </button>
-                                        ))}
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                                            {megaCategories.map((section, idx) => (
+                                                <div key={idx}>
+                                                    <h4 className="font-semibold text-gray-800 mb-2">{section.title}</h4>
+                                                    <ul className="space-y-1.5">
+                                                        {section.items.map((item, i) => (
+                                                            <li key={i}>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleCategorySelect(item)}
+                                                                    className={`text-left w-full ${
+                                                                        item === selectedCategory
+                                                                            ? 'text-blue-600 font-semibold'
+                                                                            : 'text-gray-700 hover:text-blue-600'
+                                                                    }`}
+                                                                >
+                                                                    {item}
+                                                                </button>
+                                                            </li>
+                                                        ))}
+                                                        {section.viewMore && (
+                                                            <li>
+                                                                <span className="text-blue-600 text-xs font-semibold cursor-default">View more</span>
+                                                            </li>
+                                                        )}
+                                                    </ul>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
                             </div>

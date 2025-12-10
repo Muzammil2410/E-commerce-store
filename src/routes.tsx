@@ -17,6 +17,7 @@ const Cart = lazy(() => import("@/app/(public)/cart/page"));
 const Shop = lazy(() => import("@/app/(public)/shop/page"));
 const ShopUser = lazy(() => import("@/app/(public)/shop/[username]/page"));
 const Product = lazy(() => import("@/app/(public)/product/[productId]/page"));
+const Bargain = lazy(() => import("@/app/(public)/bargain/page"));
 const Login = lazy(() => import("@/app/(public)/login/page"));
 const Register = lazy(() => import("@/app/(public)/register/page"));
 const Profile = lazy(() => import("@/app/(public)/profile/page"));
@@ -67,6 +68,7 @@ export const router = createBrowserRouter([
   { path: "/shop", element: createPublicRoute(Shop) },
   { path: "/shop/:username", element: createPublicRoute(ShopUser) },
   { path: "/product/:productId", element: createPublicRoute(Product) },
+  { path: "/bargain", element: createPublicRoute(Bargain) },
   { path: "/login", element: createPublicRoute(Login) },
   { path: "/register", element: createPublicRoute(Register) },
   { path: "/auth", element: createPublicRoute(AccountTypeSelection) },
