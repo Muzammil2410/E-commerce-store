@@ -31,7 +31,7 @@ export default function Home() {
     }, [])
 
     return (
-        <div>
+        <div className="bg-white dark:bg-gray-900 transition-colors duration-200">
             <Hero />
             <LatestProducts />
             <PictureBoxes />

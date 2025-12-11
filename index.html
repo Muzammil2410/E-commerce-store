@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
     <meta name="description" content="Shop smarter with our online store. Browse thousands of products across multiple categories." />
     <meta name="theme-color" content="#3b82f6" />
+    <script>
+      // Apply dark mode before React loads to prevent flash
+      (function() {
+        const saved = localStorage.getItem('theme') || localStorage.getItem('darkMode');
+        if (saved === 'dark' || saved === 'true') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="2048x2048" href="/favicon-2048x2048.png" />

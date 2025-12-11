@@ -98,10 +98,10 @@ export default function SellerDashboard() {
 
   if (!sellerData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors duration-300">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('loadingDashboard')}</p>
+          <div className="w-8 h-8 border-4 border-blue-600 dark:border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4 transition-colors duration-300"></div>
+          <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('loadingDashboard')}</p>
         </div>
       </div>
     )
@@ -123,41 +123,41 @@ export default function SellerDashboard() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           {/* Mobile Layout */}
           <div className="block sm:hidden">
             <div className="mb-4">
-              <h1 className="text-xl font-bold text-gray-900">{t('sellerDashboard')}</h1>
-              <p className="text-sm text-gray-600">{t('welcomeBack')}, {sellerData.fullName}!</p>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('sellerDashboard')}</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('welcomeBack')}, {sellerData.fullName}!</p>
             </div>
             <div className="flex flex-col space-y-3">
             <button
               onClick={() => navigate('/seller/dashboard/products/add', { replace: false })}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               <Plus size={20} />
               <span>{t('addProduct')}</span>
             </button>
             <button 
               onClick={() => navigate('/seller/dashboard/products', { replace: false })}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <Eye size={20} />
               <span>{t('viewStore')}</span>
             </button>
             <button 
               onClick={() => navigate('/seller/dashboard/sales', { replace: false })}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <BarChart3 size={20} />
               <span>{t('salesDashboard')}</span>
             </button>
               <button 
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors"
+                className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               >
                 <LogOut size={20} />
                 <span>{t('logout')}</span>
@@ -168,14 +168,14 @@ export default function SellerDashboard() {
           {/* Desktop Layout */}
           <div className="hidden sm:flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{t('sellerDashboard')}</h1>
-              <p className="text-gray-600">{t('welcomeBack')}, {sellerData.fullName}!</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('sellerDashboard')}</h1>
+              <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('welcomeBack')}, {sellerData.fullName}!</p>
             </div>
             <div className="flex items-center space-x-3">
               {/* Language/Currency Dropdown */}
               <button
                 onClick={() => setShowLanguageModal(true)}
-                className="flex items-center gap-1.5 text-gray-700 hover:text-blue-800 transition-colors duration-200 font-medium text-base whitespace-nowrap"
+                className="flex items-center gap-1.5 text-gray-700 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors duration-200 font-medium text-base whitespace-nowrap"
               >
                 <span>{language.substring(0, 2).toUpperCase()}</span>
                 <ChevronDown size={16} />
@@ -183,21 +183,21 @@ export default function SellerDashboard() {
 
               <button 
                 onClick={() => navigate('/seller/dashboard/products/add')}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
               >
                 <Plus size={20} />
                 <span>{t('addProduct')}</span>
               </button>
               <button 
                 onClick={() => navigate('/seller/dashboard/products')}
-                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <Eye size={20} />
                 <span>{t('viewStore')}</span>
               </button>
               <button 
                 onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               >
                 <LogOut size={20} />
                 <span>{t('logout')}</span>
@@ -209,9 +209,9 @@ export default function SellerDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Welcome Message */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-4 sm:p-6 text-white mb-6 sm:mb-8">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 rounded-lg p-4 sm:p-6 text-white mb-6 sm:mb-8 transition-colors duration-300">
           <h2 className="text-lg sm:text-xl font-semibold mb-2">{t('welcomeToSellerCenter')}</h2>
-          <p className="text-sm sm:text-base text-blue-100">
+          <p className="text-sm sm:text-base text-blue-100 dark:text-blue-200 transition-colors duration-300">
             {t('accountCreatedSuccessfully')}
           </p>
         </div>
@@ -221,11 +221,11 @@ export default function SellerDashboard() {
           {stats.map((stat, index) => {
             const Icon = stat.icon
             return (
-              <div key={index} className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors duration-300">{stat.title}</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{stat.value}</p>
                   </div>
                   <div className={`p-3 rounded-full ${stat.color}`}>
                     <Icon className="w-6 h-6 text-white" />
@@ -239,100 +239,100 @@ export default function SellerDashboard() {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
           {/* Recent Activity */}
-          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3 sm:mb-4">{t('recentActivity')}</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">{t('recentActivity')}</h3>
             <div className="space-y-4">
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors duration-300">
+                <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full transition-colors duration-300"></div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{t('accountCreated')}</p>
-                  <p className="text-xs text-gray-500">{t('accountCreatedDesc')}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('accountCreated')}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">{t('accountCreatedDesc')}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors duration-300">
+                <div className="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full transition-colors duration-300"></div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{t('profileCompleted')}</p>
-                  <p className="text-xs text-gray-500">{t('profileCompletedDesc')}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('profileCompleted')}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">{t('profileCompletedDesc')}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3 sm:mb-4">{t('quickActions')}</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">{t('quickActions')}</h3>
             <div className="space-y-3">
               <button 
                 onClick={() => navigate('/seller/dashboard/products/add', { replace: false })}
-                className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <Plus className="w-5 h-5 text-blue-600" />
-                  <span className="font-medium text-gray-900">{t('addNewProduct')}</span>
+                  <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
+                  <span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('addNewProduct')}</span>
                 </div>
-                <span className="text-gray-400">→</span>
+                <span className="text-gray-400 dark:text-gray-500 transition-colors duration-300">→</span>
               </button>
               <button 
                 onClick={() => navigate('/seller/dashboard/products', { replace: false })}
-                className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <Package className="w-5 h-5 text-green-600" />
-                  <span className="font-medium text-gray-900">{t('manageProducts')}</span>
+                  <Package className="w-5 h-5 text-green-600 dark:text-green-400 transition-colors duration-300" />
+                  <span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('manageProducts')}</span>
                 </div>
-                <span className="text-gray-400">→</span>
+                <span className="text-gray-400 dark:text-gray-500 transition-colors duration-300">→</span>
               </button>
               <button 
                 onClick={() => navigate('/seller/dashboard/sales', { replace: false })}
-                className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <BarChart3 className="w-5 h-5 text-purple-600" />
-                  <span className="font-medium text-gray-900">{t('salesDashboard')}</span>
+                  <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400 transition-colors duration-300" />
+                  <span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('salesDashboard')}</span>
                 </div>
-                <span className="text-gray-400">→</span>
+                <span className="text-gray-400 dark:text-gray-500 transition-colors duration-300">→</span>
               </button>
               <button 
                 onClick={() => navigate('/seller/dashboard/orders', { replace: false })}
-                className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <Users className="w-5 h-5 text-purple-600" />
-                  <span className="font-medium text-gray-900">{t('viewOrders')}</span>
+                  <Users className="w-5 h-5 text-purple-600 dark:text-purple-400 transition-colors duration-300" />
+                  <span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('viewOrders')}</span>
                 </div>
-                <span className="text-gray-400">→</span>
+                <span className="text-gray-400 dark:text-gray-500 transition-colors duration-300">→</span>
               </button>
               <button 
                 onClick={() => navigate('/seller/dashboard/delivery', { replace: false })}
-                className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <Package className="w-5 h-5 text-orange-600" />
-                  <span className="font-medium text-gray-900">{t('deliveryManagement')}</span>
+                  <Package className="w-5 h-5 text-orange-600 dark:text-orange-400 transition-colors duration-300" />
+                  <span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('deliveryManagement')}</span>
                 </div>
-                <span className="text-gray-400">→</span>
+                <span className="text-gray-400 dark:text-gray-500 transition-colors duration-300">→</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Business Info */}
-        <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-sm p-4 sm:p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-3 sm:mb-4">{t('yourBusinessInformation')}</h3>
+        <div className="mt-6 sm:mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">{t('yourBusinessInformation')}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <h4 className="font-medium text-gray-700 mb-2">{t('businessDetails')}</h4>
-              <p className="text-sm text-gray-600">{t('name')}: {sellerData.businessName || t('notProvided')}</p>
-              <p className="text-sm text-gray-600">{t('type')}: {sellerData.businessType}</p>
-              <p className="text-sm text-gray-600">{t('email')}: {sellerData.email}</p>
-              <p className="text-sm text-gray-600">{t('phone')}: {sellerData.phone}</p>
+              <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('businessDetails')}</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('name')}: {sellerData.businessName || t('notProvided')}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('type')}: {sellerData.businessType}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('email')}: {sellerData.email}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('phone')}: {sellerData.phone}</p>
             </div>
             <div>
-              <h4 className="font-medium text-gray-700 mb-2">{t('categories')}</h4>
+              <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('categories')}</h4>
               <div className="flex flex-wrap gap-2">
                 {sellerData.selectedCategories.map((category, index) => (
-                  <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                  <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs rounded-full transition-colors duration-300">
                     {category}
                   </span>
                 ))}
@@ -347,7 +347,7 @@ export default function SellerDashboard() {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 z-[9998]"
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998] transition-colors duration-300"
             onClick={() => setShowLanguageModal(false)}
           />
           
@@ -357,41 +357,41 @@ export default function SellerDashboard() {
             className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 sm:p-8 relative">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl dark:shadow-gray-900/50 max-w-md w-full p-6 sm:p-8 relative transition-colors duration-300">
               {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setShowLanguageModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                className="absolute top-4 right-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
                 aria-label="Close modal"
               >
                 <X size={24} />
               </button>
               
-              <h2 className="text-2xl font-bold text-gray-900 mb-2 pr-8">{t('setLanguage') || 'Set language'}</h2>
-              <p className="text-gray-600 mb-6 text-sm">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 pr-8 transition-colors duration-300">{t('setLanguage') || 'Set language'}</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 text-sm transition-colors duration-300">
                 {t('selectLanguagePreferred') || 'Select your preferred language. You can update the settings at any time.'}
               </p>
 
               {/* Language Selection */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('language')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('language')}</label>
                 <div className="relative" ref={languageDropdownRef}>
                   <button
                     type="button"
                     onClick={() => {
                       setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
                     }}
-                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-left flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   >
-                    <span className="text-gray-900">{selectedLanguage}</span>
+                    <span className="text-gray-900 dark:text-white transition-colors duration-300">{selectedLanguage}</span>
                     <ChevronDown 
                       size={20} 
-                      className={`text-gray-500 transition-transform duration-200 ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} 
+                      className={`text-gray-500 dark:text-gray-400 transition-transform duration-200 ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} 
                     />
                   </button>
                   {isLanguageDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 z-50 max-h-60 overflow-y-auto transition-colors duration-300">
                       {languages.map((lang) => (
                         <button
                           key={lang}
@@ -400,8 +400,8 @@ export default function SellerDashboard() {
                             setSelectedLanguage(lang)
                             setIsLanguageDropdownOpen(false)
                           }}
-                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
-                            selectedLanguage === lang ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700'
+                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                            selectedLanguage === lang ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
                           }`}
                         >
                           {lang}
@@ -415,7 +415,7 @@ export default function SellerDashboard() {
               {/* Save Button */}
               <button
                 onClick={handleSaveLanguage}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                className="w-full bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md dark:shadow-gray-900/50 hover:shadow-lg"
               >
                 {t('save')}
               </button>

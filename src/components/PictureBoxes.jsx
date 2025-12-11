@@ -11,11 +11,11 @@ const PictureBoxes = () => {
         <div className='px-4 sm:px-6 mt-16 sm:mt-20 lg:mt-30 mb-2 sm:mb-3 lg:mb-4 max-w-6xl mx-auto'>
             <div className='flex flex-col md:flex-row gap-4 sm:gap-6 justify-between'>
                 <div className="text-box banner-layer x50 md-x50 lg-x50 y50 md-y50 lg-y50 res-text flex-1">
-                    <div className='bg-white border border-gray-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 h-48 sm:h-56 lg:h-64 flex items-center justify-between relative overflow-hidden shadow-sm'>
+                    <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 h-48 sm:h-56 lg:h-64 flex items-center justify-between relative overflow-hidden shadow-sm dark:shadow-gray-900/50 transition-colors duration-200'>
                         <div className='text-left z-10 flex-1'>
-                            <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2'>{t('newArrivals')}</h3>
-                            <p className='text-gray-600 mb-4'>{t('discoverLatestTrends')}</p>
-                            <button className='bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition'>
+                            <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('newArrivals')}</h3>
+                            <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('discoverLatestTrends')}</p>
+                            <button className='bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
                                 {t('shopNow')}
                             </button>
                         </div>
@@ -26,11 +26,11 @@ const PictureBoxes = () => {
                 </div>
                 
                 <div className="text-box banner-layer x50 md-x50 lg-x50 y50 md-y50 lg-y50 res-text flex-1">
-                    <div className='bg-white border border-gray-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 h-48 sm:h-56 lg:h-64 flex items-center justify-between relative overflow-hidden shadow-sm'>
+                    <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 h-48 sm:h-56 lg:h-64 flex items-center justify-between relative overflow-hidden shadow-sm dark:shadow-gray-900/50 transition-colors duration-200'>
                         <div className='text-left z-10 flex-1'>
-                            <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2'>{t('specialOffers')}</h3>
-                            <p className='text-gray-600 mb-4'>{t('limitedTimeDeals')}</p>
-                            <button className='bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition'>
+                            <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('specialOffers')}</h3>
+                            <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('limitedTimeDeals')}</p>
+                            <button className='bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
                                 {t('viewOffers')}
                             </button>
                         </div>

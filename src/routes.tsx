@@ -80,13 +80,13 @@ export const router = createBrowserRouter([
       </PublicLayout>
     ),
     errorElement: (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Error loading page</h1>
-          <p className="text-gray-600 mb-6">Please try refreshing the page</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4 transition-colors duration-300">
+        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 p-8 text-center transition-colors duration-300">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">Error loading page</h1>
+          <p className="text-gray-600 dark:text-gray-300 mb-6 transition-colors duration-300">Please try refreshing the page</p>
           <button
             onClick={() => window.location.href = '/'}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
           >
             Go Home
           </button>

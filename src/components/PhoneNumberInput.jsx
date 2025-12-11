@@ -261,28 +261,28 @@ const PhoneNumberInput = ({ value, onChange, onValidationChange, placeholder = "
           <button
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-l-lg bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="flex items-center space-x-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-300"
           >
             <span className="text-lg">{getSelectedCountry()?.flag}</span>
             <span className="text-sm font-medium">{getSelectedCountry()?.callingCode}</span>
-            <ChevronDown size={16} className="text-gray-400" />
+            <ChevronDown size={16} className="text-gray-400 dark:text-gray-400 transition-colors duration-300" />
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+            <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 z-50 max-h-60 overflow-y-auto transition-colors duration-300">
               {countries.map((country) => (
                 <button
                   key={country.code}
                   type="button"
                   onClick={() => handleCountryChange(country.code)}
-                  className={`w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 ${
-                    selectedCountry === country.code ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+                  className={`w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 ${
+                    selectedCountry === country.code ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-gray-700 dark:text-gray-300'
                   }`}
                 >
                   <span className="text-lg">{country.flag}</span>
                   <span className="flex-1 text-sm">{country.name}</span>
-                  <span className="text-sm text-gray-500">{country.callingCode}</span>
-                  {selectedCountry === country.code && <Check size={16} className="text-blue-600" />}
+                  <span className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{country.callingCode}</span>
+                  {selectedCountry === country.code && <Check size={16} className="text-blue-600 dark:text-blue-400 transition-colors duration-300" />}
                 </button>
               ))}
             </div>
@@ -295,24 +295,24 @@ const PhoneNumberInput = ({ value, onChange, onValidationChange, placeholder = "
           value={formatPhoneNumber(phoneNumber)}
           onChange={handlePhoneChange}
           placeholder={dynamicPlaceholder}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-r-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-300"
         />
       </div>
 
       {/* Example format helper */}
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
         Example: {getSelectedCountry()?.callingCode} {EXAMPLE_NUMBERS[selectedCountry] || '123 456 7890'}
       </p>
 
       {/* Validation Message */}
       {validationMessage && (
-        <div className={`flex items-center space-x-2 text-sm ${
-          isValid ? 'text-green-600' : 'text-red-600'
+        <div className={`flex items-center space-x-2 text-sm transition-colors duration-300 ${
+          isValid ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
         }`}>
           {isValid ? (
-            <Check size={16} className="text-green-600" />
+            <Check size={16} className="text-green-600 dark:text-green-400 transition-colors duration-300" />
           ) : (
-            <X size={16} className="text-red-600" />
+            <X size={16} className="text-red-600 dark:text-red-400 transition-colors duration-300" />
           )}
           <span>{validationMessage}</span>
         </div>

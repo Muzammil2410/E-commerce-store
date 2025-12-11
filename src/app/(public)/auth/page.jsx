@@ -8,35 +8,35 @@ export default function AccountTypeSelection() {
     const { t } = useLanguageCurrency()
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8 relative overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8 relative overflow-hidden transition-colors duration-300">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-                <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-                <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+                <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-20 dark:opacity-10 animate-blob transition-colors duration-300"></div>
+                <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-20 dark:opacity-10 animate-blob animation-delay-2000 transition-colors duration-300"></div>
+                <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-20 dark:opacity-10 animate-blob animation-delay-4000 transition-colors duration-300"></div>
             </div>
 
             <div className="max-w-lg w-full relative z-10">
                 {/* Back to Home */}
                 <button 
                     onClick={() => navigate('/')}
-                    className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900 mb-6 sm:mb-8 transition-all duration-300 text-sm sm:text-base group"
+                    className="inline-flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-6 sm:mb-8 transition-all duration-300 text-sm sm:text-base group"
                 >
                     <ArrowLeft size={18} className="sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
                     <span className="group-hover:underline">{t('backToHome')}</span>
                 </button>
 
                 {/* Selection Card */}
-                <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 sm:p-10 border border-white/20">
+                <div className="bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl dark:shadow-gray-900/50 p-8 sm:p-10 border border-white/20 dark:border-gray-700/50 transition-colors duration-300">
                     {/* Header Section */}
                     <div className="text-center mb-10">
-                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-lg">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-2xl mb-4 shadow-lg dark:shadow-gray-900/50 transition-colors duration-300">
                             <Sparkles className="w-8 h-8 text-white" />
                         </div>
-                        <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
+                        <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-3 transition-colors duration-300">
                             Create an account
                         </h1>
-                        <p className="text-gray-600 text-sm sm:text-base">
+                        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base transition-colors duration-300">
                             Choose your account type to get started
                         </p>
                     </div>
@@ -82,11 +82,11 @@ export default function AccountTypeSelection() {
 
                     {/* Footer Text */}
                     <div className="mt-8 text-center">
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
                             Already have an account?{' '}
                             <button 
                                 onClick={() => navigate('/auth/login')}
-                                className="text-blue-600 hover:text-blue-700 font-medium underline underline-offset-2 transition-colors"
+                                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium underline underline-offset-2 transition-colors"
                             >
                                 Sign in
                             </button>

@@ -72,43 +72,43 @@ export default function ReturnsRefundsTab({ orders }) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Returns & Refunds</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Returns & Refunds</h2>
 
       {/* Info Note */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-800">
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6 transition-colors duration-300">
+        <p className="text-sm text-blue-800 dark:text-blue-300 transition-colors duration-300">
           <strong>Note:</strong> Refund will be processed within 3–5 business days after return approval.
         </p>
       </div>
 
       {/* Eligible Orders */}
       <div className="mb-8">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Eligible for Return</h3>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">Eligible for Return</h3>
         {eligibleOrders.length > 0 ? (
           <div className="space-y-4">
             {eligibleOrders.map((order) => {
               const hasReturnRequest = returnRequests.some(r => r.orderId === order.id)
               return (
-                <div key={order.id} className="border border-gray-200 rounded-lg p-4">
+                <div key={order.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">
+                      <h4 className="font-medium text-gray-900 dark:text-white transition-colors duration-300">
                         Order #{order.id.slice(-8).toUpperCase()}
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                         Delivered on {new Date(order.updatedAt || order.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-gray-900">${order.total.toFixed(2)}</p>
-                      <p className="text-sm text-gray-600">{order.orderItems.length} item(s)</p>
+                      <p className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">${order.total.toFixed(2)}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{order.orderItems.length} item(s)</p>
                     </div>
                   </div>
                   
                   <div className="flex items-center space-x-3 mb-4">
                     {order.orderItems[0]?.product?.images?.[0] && (
-                      <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                      <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden transition-colors duration-300">
                         <Image
                           src={order.orderItems[0].product.images[0]}
                           alt={order.orderItems[0].product.name}
@@ -119,10 +119,10 @@ export default function ReturnsRefundsTab({ orders }) {
                       </div>
                     )}
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
                         {order.orderItems[0]?.product?.name || 'Product'}
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                         {order.orderItems.map(item => item.product?.name).filter(Boolean).join(', ')}
                       </p>
                     </div>
@@ -131,13 +131,13 @@ export default function ReturnsRefundsTab({ orders }) {
                   {!hasReturnRequest ? (
                     <button
                       onClick={() => setShowReturnModal(order)}
-                      className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                      className="w-full sm:w-auto px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
                     >
                       <RotateCcw size={16} />
                       <span>Request Return</span>
                     </button>
                   ) : (
-                    <div className="text-sm text-blue-600 font-medium">
+                    <div className="text-sm text-blue-600 dark:text-blue-400 font-medium transition-colors duration-300">
                       Return request already submitted
                     </div>
                   )}
@@ -146,8 +146,8 @@ export default function ReturnsRefundsTab({ orders }) {
             })}
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500">
-            <Package className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400 transition-colors duration-300">
+            <Package className="w-12 h-12 mx-auto mb-2 text-gray-400 dark:text-gray-500 transition-colors duration-300" />
             <p>No eligible orders for return</p>
           </div>
         )}
@@ -156,33 +156,33 @@ export default function ReturnsRefundsTab({ orders }) {
       {/* Return Requests */}
       {returnRequests.length > 0 && (
         <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Return Requests</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">Return Requests</h3>
           <div className="space-y-4">
             {returnRequests.map((request) => {
               const steps = getReturnStatusSteps(request)
               return (
-                <div key={request.id} className="border border-gray-200 rounded-lg p-6">
+                <div key={request.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 transition-colors duration-300">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">
+                      <h4 className="font-medium text-gray-900 dark:text-white transition-colors duration-300">
                         Return #{request.id.slice(-6).toUpperCase()}
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                         Order #{request.orderId.slice(-8).toUpperCase()}
                       </p>
                     </div>
                     <span className={`px-3 py-1 text-sm font-medium rounded-full ${
-                      request.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                      request.status === 'Approved' ? 'bg-blue-100 text-blue-800' :
-                      request.status === 'In Review' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                      request.status === 'Completed' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
+                      request.status === 'Approved' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300' :
+                      request.status === 'In Review' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300' :
+                      'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
+                    } transition-colors duration-300`}>
                       {request.status}
                     </span>
                   </div>
 
                   <div className="mb-4">
-                    <p className="text-sm text-gray-600 mb-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">
                       <strong>Reason:</strong> {request.reason}
                     </p>
                     {request.image && (
@@ -193,14 +193,14 @@ export default function ReturnsRefundsTab({ orders }) {
                   </div>
 
                   {/* Timeline */}
-                  <div className="border-t border-gray-200 pt-4">
-                    <h5 className="text-sm font-medium text-gray-900 mb-3">Return Status</h5>
+                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4 transition-colors duration-300">
+                    <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3 transition-colors duration-300">Return Status</h5>
                     <div className="space-y-3">
                       {steps.map((step, index) => (
                         <div key={index} className="flex items-center space-x-3">
                           <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                            step.completed ? 'bg-green-500' : step.active ? 'bg-blue-500' : 'bg-gray-300'
-                          }`}>
+                            step.completed ? 'bg-green-500 dark:bg-green-600' : step.active ? 'bg-blue-500 dark:bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                          } transition-colors duration-300`}>
                             {step.completed && (
                               <CheckCircle className="w-4 h-4 text-white" />
                             )}
@@ -209,9 +209,9 @@ export default function ReturnsRefundsTab({ orders }) {
                             )}
                           </div>
                           <span className={`text-sm ${
-                            step.active ? 'text-blue-600 font-medium' : 
-                            step.completed ? 'text-green-600' : 'text-gray-500'
-                          }`}>
+                            step.active ? 'text-blue-600 dark:text-blue-400 font-medium' : 
+                            step.completed ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
+                          } transition-colors duration-300`}>
                             {step.label}
                           </span>
                         </div>
@@ -227,17 +227,17 @@ export default function ReturnsRefundsTab({ orders }) {
 
       {/* Return Modal */}
       {showReturnModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-auto transition-colors duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Request Return</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Request Return</h3>
               <button
                 onClick={() => {
                   setShowReturnModal(null)
                   setReturnReason('')
                   setReturnImage(null)
                 }}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300"
               >
                 <X size={24} />
               </button>
@@ -245,13 +245,13 @@ export default function ReturnsRefundsTab({ orders }) {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                   Return Reason *
                 </label>
                 <select
                   value={returnReason}
                   onChange={(e) => setReturnReason(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 >
                   <option value="">Select a reason</option>
                   {returnReasons.map(reason => (
@@ -261,7 +261,7 @@ export default function ReturnsRefundsTab({ orders }) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                   Product Photo (Optional)
                 </label>
                 {returnImage ? (
@@ -269,17 +269,17 @@ export default function ReturnsRefundsTab({ orders }) {
                     <img src={returnImage} alt="Return" className="w-full h-48 object-cover rounded-lg" />
                     <button
                       onClick={() => setReturnImage(null)}
-                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+                      className="absolute top-2 right-2 bg-red-500 dark:bg-red-600 text-white rounded-full p-1 transition-colors duration-300"
                     >
                       <X size={16} />
                     </button>
                   </div>
                 ) : (
                   <label className="block">
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 transition-colors">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600">Click to upload or drag and drop</p>
-                      <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+                    <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-white dark:bg-gray-700">
+                      <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mx-auto mb-2 transition-colors duration-300" />
+                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">Click to upload or drag and drop</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-300">PNG, JPG up to 10MB</p>
                     </div>
                     <input
                       type="file"
@@ -294,7 +294,7 @@ export default function ReturnsRefundsTab({ orders }) {
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={() => handleRequestReturn(showReturnModal)}
-                  className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                 >
                   Submit Request
                 </button>
@@ -304,7 +304,7 @@ export default function ReturnsRefundsTab({ orders }) {
                     setReturnReason('')
                     setReturnImage(null)
                   }}
-                  className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   Cancel
                 </button>

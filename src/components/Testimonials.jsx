@@ -16,26 +16,26 @@ const Testimonials = () => {
     return (
         <div className='px-4 sm:px-6 mt-4 sm:mt-6 lg:mt-8 mb-16 sm:mb-20 lg:mb-30 max-w-6xl mx-auto'>
             <div className='text-center mb-12'>
-                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4'>{t('whatOurCustomersSay')}</h2>
-                <p className='text-gray-600 max-w-2xl mx-auto'>{t('dontJustTakeOurWord')}</p>
+                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-200'>{t('whatOurCustomersSay')}</h2>
+                <p className='text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-200'>{t('dontJustTakeOurWord')}</p>
             </div>
             
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
                 {testimonials.map((testimonial, index) => (
-                    <div key={index} className='bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 h-80 flex flex-col'>
+                    <div key={index} className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm dark:shadow-gray-900/50 hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow duration-300 h-80 flex flex-col'>
                         {/* Star Rating */}
                         <div className='flex items-center mb-4'>
                             {Array.from({ length: 5 }, (_, i) => (
                                 <Star
                                     key={i}
-                                    className={`size-4 fill-current ${testimonial.rating > i ? "text-yellow-400" : "text-gray-300"}`}
+                                    className={`size-4 fill-current ${testimonial.rating > i ? "text-yellow-400 dark:text-yellow-500" : "text-gray-300 dark:text-gray-600"}`}
                                 />
                             ))}
-                            <span className='ml-2 text-sm text-gray-600'>({testimonial.rating})</span>
+                            <span className='ml-2 text-sm text-gray-600 dark:text-gray-400 transition-colors duration-200'>({testimonial.rating})</span>
                         </div>
                         
                         {/* Review Text */}
-                        <p className='text-gray-700 mb-6 leading-relaxed flex-1 overflow-hidden'>
+                        <p className='text-gray-700 dark:text-gray-300 mb-6 leading-relaxed flex-1 overflow-hidden transition-colors duration-200'>
                             "{testimonial.review}"
                         </p>
                         
@@ -49,8 +49,8 @@ const Testimonials = () => {
                                 className='rounded-full'
                             />
                             <div>
-                                <p className='font-medium text-gray-800'>{testimonial.user.name}</p>
-                                <p className='text-sm text-gray-500'>{translateProductName(testimonial.product.name)}</p>
+                                <p className='font-medium text-gray-800 dark:text-gray-200 transition-colors duration-200'>{testimonial.user.name}</p>
+                                <p className='text-sm text-gray-500 dark:text-gray-400 transition-colors duration-200'>{translateProductName(testimonial.product.name)}</p>
                             </div>
                         </div>
                     </div>

@@ -37,19 +37,19 @@ const Hero = () => {
                     />
                     <div className='relative z-10 p-4 sm:p-8 xl:p-16 flex flex-col justify-center h-full'>
                         <div className='relative z-20 max-w-full sm:max-w-md lg:max-w-lg'>
-                            <div className='hidden sm:inline-flex items-center gap-2 sm:gap-3 bg-white/95 backdrop-blur-sm border border-gray-200 text-gray-700 pr-3 sm:pr-4 p-1.5 sm:p-1 rounded-full text-xs sm:text-sm hover:bg-blue-50 hover:border-blue-200 hover:text-blue-800 transition-all duration-200 mb-3 sm:mb-4 shadow-sm'>
-                                <span className='bg-blue-600 px-2.5 sm:px-3 py-1 rounded-full text-white text-xs font-semibold whitespace-nowrap'>{t('news')}</span> 
+                            <div className='hidden sm:inline-flex items-center gap-2 sm:gap-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 pr-3 sm:pr-4 p-1.5 sm:p-1 rounded-full text-xs sm:text-sm hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-gray-600 hover:text-blue-800 dark:hover:text-blue-400 transition-all duration-200 mb-3 sm:mb-4 shadow-sm dark:shadow-gray-900/50'>
+                                <span className='bg-blue-600 dark:bg-blue-500 px-2.5 sm:px-3 py-1 rounded-full text-white text-xs font-semibold whitespace-nowrap transition-colors duration-300'>{t('news')}</span> 
                                 <span className='hidden sm:inline'>{t('freeShipping')}</span>
                                 <ChevronRightIcon className='group-hover:ml-2 transition-all flex-shrink-0' size={14} />
                             </div>
-                            <h2 className='hidden sm:block text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 drop-shadow-sm'>
-                                <span className="text-blue-600 hover:text-blue-700 transition-colors duration-200">Ziz</span>{t('zizlaYoullLove')}
+                            <h2 className='hidden sm:block text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 dark:text-white drop-shadow-sm dark:drop-shadow-none transition-colors duration-300'>
+                                <span className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200">Ziz</span>{t('zizlaYoullLove')}
                             </h2>
-                            <div className='hidden sm:block text-gray-800 text-sm sm:text-base font-semibold mb-3 sm:mb-4 drop-shadow-sm'>
-                                <p className='text-gray-700 text-xs sm:text-sm'>{t('startsFrom')}</p>
-                                <p className='text-2xl sm:text-3xl font-bold text-blue-600'>{formatCurrency(4.90)}</p>
+                            <div className='hidden sm:block text-gray-800 dark:text-gray-200 text-sm sm:text-base font-semibold mb-3 sm:mb-4 drop-shadow-sm dark:drop-shadow-none transition-colors duration-300'>
+                                <p className='text-gray-700 dark:text-gray-300 text-xs sm:text-sm transition-colors duration-300'>{t('startsFrom')}</p>
+                                <p className='text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300'>{formatCurrency(4.90)}</p>
                             </div>
-                            <button className='hidden sm:block bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs sm:text-sm font-semibold py-2.5 px-6 sm:py-3 sm:px-8 xl:py-5 xl:px-12 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200 w-fit shadow-xl hover:shadow-2xl border border-blue-500/20 touch-manipulation'>{t('learnMore')}</button>
+                            <button className='hidden sm:block bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white text-xs sm:text-sm font-semibold py-2.5 px-6 sm:py-3 sm:px-8 xl:py-5 xl:px-12 rounded-xl hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 hover:scale-105 active:scale-95 transition-all duration-200 w-fit shadow-xl dark:shadow-gray-900/50 hover:shadow-2xl border border-blue-500/20 dark:border-blue-400/20 touch-manipulation'>{t('learnMore')}</button>
                         </div>
                     </div>
                     {/* Slider indicators */}
@@ -59,28 +59,28 @@ const Hero = () => {
                                 key={index}
                                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                                     index === currentImageIndex 
-                                        ? 'bg-blue-600 w-6' 
-                                        : 'bg-white/70 hover:bg-white'
+                                        ? 'bg-blue-600 dark:bg-blue-400 w-6' 
+                                        : 'bg-white/70 dark:bg-gray-600/70 hover:bg-white dark:hover:bg-gray-500'
                                 }`}
                                 onClick={() => setCurrentImageIndex(index)}
                             />
                         ))}
                     </div>
                 </div>
-                <div className='flex flex-col sm:flex-row xl:flex-col gap-4 sm:gap-5 w-full xl:max-w-sm text-sm text-gray-600'>
-                    <div className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm'>
+                <div className='flex flex-col sm:flex-row xl:flex-col gap-4 sm:gap-5 w-full xl:max-w-sm text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300'>
+                    <div className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 border border-blue-200 dark:border-blue-800 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm dark:shadow-gray-900/50 transition-all duration-300'>
                         <div className='flex-1'>
-                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 mb-2 sm:mb-4'>{t('bestProducts')}</p>
-                            <p className='flex items-center gap-1 text-blue-600 font-medium text-sm'>{t('viewMore')} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
+                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 dark:text-white mb-2 sm:mb-4 transition-colors duration-300'>{t('bestProducts')}</p>
+                            <p className='flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium text-sm transition-colors duration-300'>{t('viewMore')} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
                         </div>
                         <div className='flex-shrink-0 ml-3'>
                             <Image className='w-20 h-20 sm:w-24 sm:h-24 xl:w-32 xl:h-32 object-contain' src={assets.hero_product_img1} alt="Best Products" />
                         </div>
                     </div>
-                    <div className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm'>
+                    <div className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border border-green-200 dark:border-green-800 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm dark:shadow-gray-900/50 transition-all duration-300'>
                         <div className='flex-1'>
-                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 mb-2 sm:mb-4'>{t('discounts')}</p>
-                            <p className='flex items-center gap-1 text-blue-600 font-medium text-sm'>{t('viewMore')} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
+                            <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 dark:text-white mb-2 sm:mb-4 transition-colors duration-300'>{t('discounts')}</p>
+                            <p className='flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium text-sm transition-colors duration-300'>{t('viewMore')} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>
                         </div>
                         <div className='flex-shrink-0 ml-3'>
                             <Image className='w-20 h-20 sm:w-24 sm:h-24 xl:w-32 xl:h-32 object-contain' src={assets.hero_product_img2} alt="Discounts" />

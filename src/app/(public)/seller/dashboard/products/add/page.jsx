@@ -285,23 +285,23 @@ export default function AddProduct() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           {/* Mobile Layout */}
           <div className="block sm:hidden">
             <div className="flex items-center justify-between mb-4">
               <button
                 onClick={handleCancel}
-                className="flex items-center justify-center w-10 h-10 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                className="flex items-center justify-center w-10 h-10 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <ArrowLeft size={20} />
               </button>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">{t('addNewProductTitle')}</h1>
-              <p className="text-sm text-gray-600">{t('createNewProductForStore') || 'Create a new product for your store'}</p>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('addNewProductTitle')}</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('createNewProductForStore') || 'Create a new product for your store'}</p>
             </div>
           </div>
 
@@ -309,13 +309,13 @@ export default function AddProduct() {
           <div className="hidden sm:flex items-center space-x-4">
             <button
               onClick={handleCancel}
-              className="flex items-center justify-center w-10 h-10 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center justify-center w-10 h-10 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{t('addNewProductTitle')}</h1>
-              <p className="text-gray-600">{t('createNewProductForStore') || 'Create a new product for your store'}</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('addNewProductTitle')}</h1>
+              <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('createNewProductForStore') || 'Create a new product for your store'}</p>
             </div>
           </div>
         </div>
@@ -326,46 +326,46 @@ export default function AddProduct() {
           {/* Form Section */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-8">
             {/* Basic Details */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                <Package className="w-5 h-5 mr-2 text-blue-600" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center transition-colors duration-300">
+                <Package className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
                 {t('basicDetails')}
               </h2>
               
               <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('productTitleRequired')}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('productTitleRequired')}</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.title ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                      errors.title ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder={t('enterProductTitle')}
                   />
-                  {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+                  {errors.title && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.title}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('sku')}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('sku')}</label>
                   <input
                     type="text"
                     value={formData.sku}
                     onChange={(e) => handleInputChange('sku', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                     placeholder={t('enterSku')}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('categoryRequired')}</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('categoryRequired')}</label>
                     <select
                       value={formData.category}
                       onChange={(e) => handleInputChange('category', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                        errors.category ? 'border-red-500' : 'border-gray-300'
+                      className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                        errors.category ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                       }`}
                     >
                       <option value="">{t('selectCategory')}</option>
@@ -373,16 +373,16 @@ export default function AddProduct() {
                         <option key={category} value={category}>{category}</option>
                       ))}
                     </select>
-                    {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+                    {errors.category && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.category}</p>}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('brand')} ({t('optional') || 'Optional'})</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('brand')} ({t('optional') || 'Optional'})</label>
                     <input
                       type="text"
                       value={formData.brand}
                       onChange={(e) => handleInputChange('brand', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                       placeholder={t('enterBrand')}
                     />
                   </div>
@@ -391,64 +391,64 @@ export default function AddProduct() {
             </div>
 
             {/* Pricing & Inventory */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                <DollarSign className="w-5 h-5 mr-2 text-green-600" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center transition-colors duration-300">
+                <DollarSign className="w-5 h-5 mr-2 text-green-600 dark:text-green-400 transition-colors duration-300" />
                 {t('pricingInventory')}
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('priceRequired')}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('priceRequired')}</label>
                   <input
                     type="number"
                     step="0.01"
                     min="0"
                     value={formData.price}
                     onChange={(e) => handleInputChange('price', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.price ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                      errors.price ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="0.00"
                   />
-                  {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
+                  {errors.price && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.price}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('salePriceOptional')}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('salePriceOptional')}</label>
                   <input
                     type="number"
                     step="0.01"
                     min="0"
                     value={formData.salePrice}
                     onChange={(e) => handleInputChange('salePrice', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                     placeholder="0.00"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('stockQuantityRequired')}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('stockQuantityRequired')}</label>
                   <input
                     type="number"
                     min="0"
                     value={formData.stockQuantity}
                     onChange={(e) => handleInputChange('stockQuantity', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.stockQuantity ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                      errors.stockQuantity ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="0"
                   />
-                  {errors.stockQuantity && <p className="text-red-500 text-sm mt-1">{errors.stockQuantity}</p>}
+                  {errors.stockQuantity && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.stockQuantity}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">SKU/Barcode (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">SKU/Barcode (Optional)</label>
                   <input
                     type="text"
                     value={formData.skuBarcode}
                     onChange={(e) => handleInputChange('skuBarcode', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                     placeholder="Enter SKU or barcode"
                   />
                 </div>
@@ -464,65 +464,65 @@ export default function AddProduct() {
             </div>
 
             {/* Shipping Details */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                <Truck className="w-5 h-5 mr-2 text-orange-600" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center transition-colors duration-300">
+                <Truck className="w-5 h-5 mr-2 text-orange-600 dark:text-orange-400 transition-colors duration-300" />
                 Shipping Details
               </h2>
               
               <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Weight (kg) *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Weight (kg) *</label>
                   <input
                     type="number"
                     step="0.1"
                     min="0"
                     value={formData.weight}
                     onChange={(e) => handleInputChange('weight', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.weight ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                      errors.weight ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="0.0"
                   />
-                  {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+                  {errors.weight && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.weight}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Dimensions (cm)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Dimensions (cm)</label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Length</label>
+                      <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1 transition-colors duration-300">Length</label>
                       <input
                         type="number"
                         step="0.1"
                         min="0"
                         value={formData.dimensions.length}
                         onChange={(e) => handleInputChange('dimensions.length', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                         placeholder="0"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Width</label>
+                      <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1 transition-colors duration-300">Width</label>
                       <input
                         type="number"
                         step="0.1"
                         min="0"
                         value={formData.dimensions.width}
                         onChange={(e) => handleInputChange('dimensions.width', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                         placeholder="0"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Height</label>
+                      <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1 transition-colors duration-300">Height</label>
                       <input
                         type="number"
                         step="0.1"
                         min="0"
                         value={formData.dimensions.height}
                         onChange={(e) => handleInputChange('dimensions.height', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                         placeholder="0"
                       />
                     </div>
@@ -532,25 +532,25 @@ export default function AddProduct() {
             </div>
 
             {/* Media */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                <ImageIcon className="w-5 h-5 mr-2 text-purple-600" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center transition-colors duration-300">
+                <ImageIcon className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400 transition-colors duration-300" />
                 Media
               </h2>
               
               <div className="space-y-4 sm:space-y-6">
                 {/* Search Bar */}
                 <div className="mb-4">
-                  <div className="relative flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden focus-within:border-blue-500 focus-within:shadow-sm transition-all h-11">
+                  <div className="relative flex items-center bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden focus-within:border-blue-500 dark:focus-within:border-blue-400 focus-within:shadow-sm transition-all h-11">
                     {/* AI Icon and Deep Search Toggle - Inside search bar on left */}
-                    <div className="flex items-center gap-2 px-3 py-2 border-r border-gray-200 bg-transparent flex-shrink-0">
-                      <Sparkles className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                      <span className="text-xs text-gray-700 whitespace-nowrap font-medium">Deep Search Free</span>
+                    <div className="flex items-center gap-2 px-3 py-2 border-r border-gray-200 dark:border-gray-600 bg-transparent flex-shrink-0">
+                      <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 transition-colors duration-300" />
+                      <span className="text-xs text-gray-700 dark:text-gray-300 whitespace-nowrap font-medium transition-colors duration-300">Deep Search Free</span>
                       <button
                         type="button"
                         onClick={() => setDeepSearchEnabled(!deepSearchEnabled)}
-                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
-                          deepSearchEnabled ? 'bg-blue-600' : 'bg-gray-300'
+                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-1 ${
+                          deepSearchEnabled ? 'bg-blue-600 dark:bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'
                         }`}
                         role="switch"
                         aria-checked={deepSearchEnabled}
@@ -570,7 +570,7 @@ export default function AddProduct() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search products..."
-                        className="w-full h-full bg-transparent outline-none placeholder-gray-400 text-sm px-3 min-w-0"
+                        className="w-full h-full bg-transparent dark:bg-gray-700 outline-none placeholder-gray-400 dark:placeholder-gray-500 text-sm text-gray-900 dark:text-white px-3 min-w-0 transition-colors duration-300"
                       />
                     </div>
 
@@ -578,7 +578,7 @@ export default function AddProduct() {
                     <button
                       type="button"
                       onClick={() => setShowImageSearch(!showImageSearch)}
-                      className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors border-r border-gray-200 h-full flex-shrink-0"
+                      className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors border-r border-gray-200 dark:border-gray-600 h-full flex-shrink-0"
                     >
                       <Camera className="w-4 h-4" />
                       <span className="hidden sm:inline whitespace-nowrap">Image Search</span>
@@ -592,7 +592,7 @@ export default function AddProduct() {
                           toast.success('Search functionality will be implemented')
                         }
                       }}
-                      className="flex items-center justify-center gap-2 px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors h-full flex-shrink-0"
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-black dark:bg-gray-800 text-white hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors h-full flex-shrink-0"
                     >
                       <Search className="w-4 h-4" />
                       <span className="hidden sm:inline">Search</span>
@@ -601,26 +601,26 @@ export default function AddProduct() {
 
                   {/* Image Search Panel */}
                   {showImageSearch && (
-                    <div className="mt-3 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div className="mt-3 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm dark:shadow-gray-900/50 transition-colors duration-300">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-sm font-medium text-gray-900">Find product inspiration with Image Search</h3>
+                        <h3 className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">Find product inspiration with Image Search</h3>
                         <button
                           type="button"
                           onClick={() => setShowImageSearch(false)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+                          className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
                         >
                           <X className="w-4 h-4" />
                         </button>
                       </div>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors bg-gray-50">
-                        <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-                        <p className="text-xs text-gray-600 mb-1">
-                          Paste an image you copied with <span className="bg-gray-200 px-1.5 py-0.5 rounded text-gray-700 font-medium">Ctrl V</span>
+                      <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors bg-gray-50 dark:bg-gray-700">
+                        <Upload className="w-10 h-10 text-gray-400 dark:text-gray-500 mx-auto mb-3 transition-colors duration-300" />
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">
+                          Paste an image you copied with <span className="bg-gray-200 dark:bg-gray-600 px-1.5 py-0.5 rounded text-gray-700 dark:text-gray-300 font-medium">Ctrl V</span>
                         </p>
-                        <p className="text-xs text-gray-500 mb-4">Drag and drop an image here or upload a file</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 transition-colors duration-300">Drag and drop an image here or upload a file</p>
                         <button
                           type="button"
-                          className="px-6 py-2.5 bg-orange-500 text-white text-sm font-medium rounded-md hover:bg-orange-600 transition-colors"
+                          className="px-6 py-2.5 bg-orange-500 dark:bg-orange-600 text-white text-sm font-medium rounded-md hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors"
                         >
                           Upload
                         </button>
@@ -631,15 +631,15 @@ export default function AddProduct() {
 
                 {/* Image Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Product Images * (Max 8)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Product Images * (Max 8)</label>
                   
                   {/* Upload Area */}
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 transition-colors bg-gray-50 dark:bg-gray-700">
                     <label className="cursor-pointer">
                       <div className="text-center">
-                        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                        <p className="text-sm font-medium text-gray-700">Click to upload images</p>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                        <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2 transition-colors duration-300" />
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Click to upload images</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">PNG, JPG, GIF up to 10MB each</p>
                       </div>
                       <input
                         type="file"
@@ -652,12 +652,12 @@ export default function AddProduct() {
                     </label>
                   </div>
                   
-                  {errors.images && <p className="text-red-500 text-sm mt-1">{errors.images}</p>}
+                  {errors.images && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.images}</p>}
                   
                   {/* Image Previews */}
                   {formData.images.length > 0 && (
                     <div className="mt-4">
-                      <p className="text-sm font-medium text-gray-700 mb-3">Uploaded Images ({formData.images.length}/8)</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 transition-colors duration-300">Uploaded Images ({formData.images.length}/8)</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                         {formData.images.map((image, index) => (
                           <div
@@ -666,7 +666,7 @@ export default function AddProduct() {
                             onDragStart={(e) => handleDragStart(e, index)}
                             onDragOver={handleDragOver}
                             onDrop={(e) => handleDrop(e, index)}
-                            className="relative group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                            className="relative group border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow bg-white dark:bg-gray-800"
                           >
                             <Image
                               src={image.preview}
@@ -675,21 +675,21 @@ export default function AddProduct() {
                               height={150}
                               className="w-full h-32 object-cover"
                             />
-                            <div className="absolute inset-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+                            <div className="absolute inset-0 group-hover:bg-opacity-30 dark:group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center">
                               <div className="opacity-0 group-hover:opacity-100 flex space-x-2">
                                 <button
                                   type="button"
                                   onClick={() => removeImage(index)}
-                                  className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                                  className="p-2 bg-red-500 dark:bg-red-600 text-white rounded-full hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
                                 >
                                   <X size={16} />
                                 </button>
-                                <div className="p-2 bg-gray-500 text-white rounded-full cursor-move">
+                                <div className="p-2 bg-gray-500 dark:bg-gray-600 text-white rounded-full cursor-move">
                                   <GripVertical size={16} />
                                 </div>
                               </div>
                             </div>
-                            <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+                            <div className="absolute top-2 left-2 bg-black bg-opacity-50 dark:bg-opacity-70 text-white text-xs px-2 py-1 rounded">
                               {index + 1}
                             </div>
                           </div>
@@ -701,12 +701,12 @@ export default function AddProduct() {
 
                 {/* Video URL */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Product Video URL (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Product Video URL (Optional)</label>
                   <input
                     type="url"
                     value={formData.videoUrl}
                     onChange={(e) => handleInputChange('videoUrl', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                     placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
                   />
                 </div>
@@ -714,80 +714,80 @@ export default function AddProduct() {
             </div>
 
             {/* Description */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                <FileText className="w-5 h-5 mr-2 text-indigo-600" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center transition-colors duration-300">
+                <FileText className="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400 transition-colors duration-300" />
                 Description
               </h2>
               
               <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Short Description <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Short Description <span className="text-red-500 dark:text-red-400">*</span></label>
                   <input
                     type="text"
                     value={formData.shortDescription}
                     onChange={(e) => handleInputChange('shortDescription', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.shortDescription ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                      errors.shortDescription ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="Brief one-liner for product cards"
                   />
-                  {errors.shortDescription && <p className="text-red-500 text-sm mt-1">{errors.shortDescription}</p>}
+                  {errors.shortDescription && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.shortDescription}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Product Description <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Product Description <span className="text-red-500 dark:text-red-400">*</span></label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     rows={8}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
-                      errors.description ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none ${
+                      errors.description ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="Detailed product description..."
                   />
-                  {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+                  {errors.description && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.description}</p>}
                 </div>
               </div>
             </div>
 
             {/* Meta/SEO */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-                <Search className="w-5 h-5 mr-2 text-teal-600" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center transition-colors duration-300">
+                <Search className="w-5 h-5 mr-2 text-teal-600 dark:text-teal-400 transition-colors duration-300" />
                 Meta / SEO (Optional)
               </h2>
               
               <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Meta Title</label>
                   <input
                     type="text"
                     value={formData.metaTitle}
                     onChange={(e) => handleInputChange('metaTitle', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                     placeholder="SEO title for search engines"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Meta Description</label>
                   <textarea
                     value={formData.metaDescription}
                     onChange={(e) => handleInputChange('metaDescription', e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none"
                     placeholder="SEO description for search engines"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Keywords</label>
                   <input
                     type="text"
                     value={formData.keywords}
                     onChange={(e) => handleInputChange('keywords', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                     placeholder="keyword1, keyword2, keyword3"
                   />
                 </div>
@@ -795,18 +795,18 @@ export default function AddProduct() {
             </div>
 
             {/* Action Buttons */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={handleCancel}
-                  className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <ArrowLeft size={20} />
                   <span>{t('cancel') || 'Cancel'}</span>
                 </button>
                 <button
                   onClick={handleSaveDraft}
-                  className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <Save size={20} />
                   <span>{t('saveAsDraft')}</span>
@@ -814,7 +814,7 @@ export default function AddProduct() {
                 <button
                   onClick={handlePublish}
                   disabled={isSubmitting}
-                  className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
@@ -835,12 +835,12 @@ export default function AddProduct() {
           {/* Preview Section */}
           <div className="lg:col-span-1">
             <div className="sticky top-8">
-              <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Preview</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Product Preview</h3>
                 
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden transition-colors duration-300">
                   {/* Product Image */}
-                  <div className="aspect-square bg-gray-100 flex items-center justify-center">
+                  <div className="aspect-square bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition-colors duration-300">
                     {formData.images.length > 0 ? (
                       <Image
                         src={formData.images[0].preview}
@@ -850,7 +850,7 @@ export default function AddProduct() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="text-center text-gray-400">
+                      <div className="text-center text-gray-400 dark:text-gray-500 transition-colors duration-300">
                         <ImageIcon size={48} className="mx-auto mb-2" />
                         <p className="text-sm">No image uploaded</p>
                       </div>
@@ -859,11 +859,11 @@ export default function AddProduct() {
                   
                   {/* Product Info */}
                   <div className="p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
                       {formData.title || 'Product Title'}
                     </h4>
                     
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 transition-colors duration-300">
                       {formData.shortDescription || 'Short description will appear here'}
                     </p>
                     
@@ -871,27 +871,27 @@ export default function AddProduct() {
                       <div className="flex items-center space-x-2">
                         {formData.salePrice && formData.salePrice > 0 ? (
                           <>
-                            <span className="text-lg font-bold text-green-600">
+                            <span className="text-lg font-bold text-green-600 dark:text-green-400 transition-colors duration-300">
                               ${formData.salePrice}
                             </span>
-                            <span className="text-sm text-gray-500 line-through">
+                            <span className="text-sm text-gray-500 dark:text-gray-400 line-through transition-colors duration-300">
                               ${formData.price}
                             </span>
                           </>
                         ) : (
-                          <span className="text-lg font-bold text-gray-900">
+                          <span className="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-300">
                             ${formData.price || '0.00'}
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
                         {formData.category || 'Category'}
                       </span>
                     </div>
                     
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-blue-600 font-medium">Stock: {formData.stockQuantity || '0'}</span>
-                      <span className="text-orange-600 font-medium">Weight: {formData.weight || '0'}kg</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium transition-colors duration-300">Stock: {formData.stockQuantity || '0'}</span>
+                      <span className="text-orange-600 dark:text-orange-400 font-medium transition-colors duration-300">Weight: {formData.weight || '0'}kg</span>
                     </div>
                   </div>
                 </div>

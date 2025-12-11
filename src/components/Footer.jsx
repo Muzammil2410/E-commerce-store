@@ -74,9 +74,9 @@ const Footer = () => {
     ]
 
     return (
-        <footer className="bg-blue-900">
+        <footer className="bg-blue-900 dark:bg-gray-900 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-3 sm:px-6">
-                <div className="flex flex-col md:flex-row items-start justify-between gap-8 sm:gap-10 py-8 sm:py-10 border-b border-white/20 text-white">
+                <div className="flex flex-col md:flex-row items-start justify-between gap-8 sm:gap-10 py-8 sm:py-10 border-b border-white/20 dark:border-gray-700 text-white transition-colors duration-200">
                     <div>
                         <Link to="/" className="text-4xl font-semibold text-white">
                             <span className="text-blue-300">Ziz</span>la<span className="text-blue-300 text-5xl leading-0">.</span>

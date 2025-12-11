@@ -303,23 +303,23 @@ export default function ProfilePage() {
     ]
 
     if (!user) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+        return <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">Loading...</div>
     }
 
     return (
         <>
-        <div className="min-h-screen bg-gray-50 py-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">My Account</h1>
-                    <p className="text-gray-600 mt-2">Manage your account settings and preferences</p>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">My Account</h1>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2 transition-colors duration-300">Manage your account settings and preferences</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Sidebar */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white rounded-lg shadow-sm p-6">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
                             {/* User Info */}
                             <div className="text-center mb-6">
                                 <div className="relative w-20 h-20 mx-auto mb-4">
@@ -327,15 +327,15 @@ export default function ProfilePage() {
                                         <img 
                                             src={profilePicture} 
                                             alt="Profile" 
-                                            className="w-20 h-20 rounded-full object-cover border-2 border-blue-200"
+                                            className="w-20 h-20 rounded-full object-cover border-2 border-blue-200 dark:border-blue-700 transition-colors duration-300"
                                             style={{ objectPosition: 'center 25%' }}
                                         />
                                     ) : (
-                                        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <User className="w-10 h-10 text-blue-600" />
+                                        <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center transition-colors duration-300">
+                                            <User className="w-10 h-10 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
                                         </div>
                                     )}
-                                    <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1.5 cursor-pointer hover:bg-blue-700 transition-colors shadow-lg">
+                                    <label className="absolute bottom-0 right-0 bg-blue-600 dark:bg-blue-500 text-white rounded-full p-1.5 cursor-pointer hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-lg">
                                         <Camera size={14} />
                                         <input
                                             type="file"
@@ -345,8 +345,8 @@ export default function ProfilePage() {
                                         />
                                     </label>
                                 </div>
-                                <h3 className="font-semibold text-gray-900">{user.name}</h3>
-                                <p className="text-sm text-gray-600">{user.email}</p>
+                                <h3 className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">{user.name}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{user.email}</p>
                             </div>
 
                             {/* Navigation Tabs */}
@@ -357,8 +357,8 @@ export default function ProfilePage() {
                                         onClick={() => handleTabChange(tab.id)}
                                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
                                             activeTab === tab.id
-                                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                                : 'text-gray-600 hover:bg-gray-50'
+                                                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700'
+                                                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                         }`}
                                     >
                                         <tab.icon size={20} />
@@ -370,7 +370,7 @@ export default function ProfilePage() {
                             {/* Logout Button */}
                             <button
                                 onClick={handleLogout}
-                                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-red-600 hover:bg-red-50 transition-colors mt-4"
+                                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors mt-4"
                             >
                                 <LogOut size={20} />
                                 Logout
@@ -382,12 +382,12 @@ export default function ProfilePage() {
                     <div ref={contentRef} className="lg:col-span-3">
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Profile Information</h2>
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Profile Information</h2>
                                 
                                 {/* Profile Picture Section */}
-                                <div className="mb-6 pb-6 border-b border-gray-200">
-                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 transition-colors duration-300">
                                         Profile Picture
                                     </label>
                                     <div className="flex items-center gap-6">
@@ -396,18 +396,18 @@ export default function ProfilePage() {
                                                 <img 
                                                     src={profilePicture} 
                                                     alt="Profile" 
-                                                    className="w-24 h-24 rounded-full object-cover border-2 border-blue-200"
+                                                    className="w-24 h-24 rounded-full object-cover border-2 border-blue-200 dark:border-blue-700 transition-colors duration-300"
                                                     style={{ objectPosition: 'center 25%' }}
                                                 />
                                             ) : (
-                                                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
-                                                    <User className="w-12 h-12 text-blue-600" />
+                                                <div className="w-24 h-24 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center transition-colors duration-300">
+                                                    <User className="w-12 h-12 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
                                                 </div>
                                             )}
                                         </div>
                                         <div>
                                             <label className="cursor-pointer">
-                                                <span className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                                <span className="inline-flex items-center gap-2 bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
                                                     <Camera size={18} />
                                                     {profilePicture ? 'Change Picture' : 'Upload Picture'}
                                                 </span>
@@ -418,36 +418,36 @@ export default function ProfilePage() {
                                                     className="hidden"
                                                 />
                                             </label>
-                                            <p className="text-xs text-gray-500 mt-2">JPG, PNG or GIF. Max size 5MB</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 transition-colors duration-300">JPG, PNG or GIF. Max size 5MB</p>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                             Full Name
                                         </label>
                                         <input
                                             type="text"
                                             value={isEditingProfile ? profileForm.name : user.name}
                                             onChange={(e) => isEditingProfile && setProfileForm({...profileForm, name: e.target.value})}
-                                            className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                                                isEditingProfile ? 'bg-white' : 'bg-gray-50'
+                                            className={`w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                                                isEditingProfile ? '' : 'bg-gray-50 dark:bg-gray-700'
                                             }`}
                                             readOnly={!isEditingProfile}
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                             Email Address
                                         </label>
                                         <input
                                             type="email"
                                             value={isEditingProfile ? profileForm.email : user.email}
                                             onChange={(e) => isEditingProfile && setProfileForm({...profileForm, email: e.target.value})}
-                                            className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                                                isEditingProfile ? 'bg-white' : 'bg-gray-50'
+                                            className={`w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                                                isEditingProfile ? '' : 'bg-gray-50 dark:bg-gray-700'
                                             }`}
                                             readOnly={!isEditingProfile}
                                         />
@@ -459,13 +459,13 @@ export default function ProfilePage() {
                                         <>
                                             <button 
                                                 onClick={handleSaveProfile}
-                                                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                                className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                             >
                                                 Save Changes
                                             </button>
                                             <button 
                                                 onClick={handleCancelEdit}
-                                                className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+                                                className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                                             >
                                                 Cancel
                                             </button>
@@ -473,7 +473,7 @@ export default function ProfilePage() {
                                     ) : (
                                         <button 
                                             onClick={handleEditProfile}
-                                            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                            className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                         >
                                             Edit Profile
                                         </button>
@@ -504,12 +504,12 @@ export default function ProfilePage() {
 
                         {/* Addresses Tab */}
                         {activeTab === 'addresses' && (
-                            <div className="bg-white rounded-lg shadow-sm p-6">
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-xl font-semibold text-gray-900">Saved Addresses</h2>
+                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Saved Addresses</h2>
                                     <button
                                         onClick={() => setShowAddressModal(true)}
-                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                                        className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center gap-2"
                                     >
                                         <Plus size={20} />
                                         Add Address
@@ -519,32 +519,32 @@ export default function ProfilePage() {
                                 {addresses.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {addresses.map((address) => (
-                                            <div key={address.id} className="border border-gray-200 rounded-lg p-4">
+                                            <div key={address.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
                                                 <div className="flex items-start justify-between mb-3">
-                                                    <h3 className="font-medium text-gray-900">{address.name}</h3>
+                                                    <h3 className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{address.name}</h3>
                                                     <div className="flex items-center gap-2">
                                                         <button
                                                             onClick={() => handleEditAddress(address)}
-                                                            className="text-blue-600 hover:text-blue-800"
+                                                            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
                                                         >
                                                             <Edit size={16} />
                                                         </button>
                                                         <button
                                                             onClick={() => handleDeleteAddress(address.id)}
-                                                            className="text-red-600 hover:text-red-800"
+                                                            className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors duration-300"
                                                         >
                                                             <Trash2 size={16} />
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className="text-sm text-gray-600 space-y-1">
+                                                <div className="text-sm text-gray-600 dark:text-gray-300 space-y-1 transition-colors duration-300">
                                                     <p className="font-medium">{address.street}</p>
                                                     <p>{address.city}, {address.state} {address.zip}</p>
                                                     <p>{inferCountryFromLocation(address.city, address.state) || ''}</p>
-                                                    <p className="text-gray-600">{address.phone}</p>
-                                                    {address.email && <p className="text-gray-600">{address.email}</p>}
+                                                    <p>{address.phone}</p>
+                                                    {address.email && <p>{address.email}</p>}
                                                     {address.updatedAt && (
-                                                        <p className="text-xs text-gray-500 mt-2">
+                                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 transition-colors duration-300">
                                                             Updated: {new Date(address.updatedAt).toLocaleDateString()}
                                                         </p>
                                                     )}
@@ -554,12 +554,12 @@ export default function ProfilePage() {
                                     </div>
                                 ) : (
                                     <div className="text-center py-12">
-                                        <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                        <h3 className="text-lg font-medium text-gray-900 mb-2">No addresses saved</h3>
-                                        <p className="text-gray-600 mb-4">Add an address to make checkout faster.</p>
+                                        <MapPin className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4 transition-colors duration-300" />
+                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">No addresses saved</h3>
+                                        <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Add an address to make checkout faster.</p>
                                         <button
                                             onClick={() => setShowAddressModal(true)}
-                                            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                            className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                         >
                                             Add Address
                                         </button>
@@ -570,15 +570,15 @@ export default function ProfilePage() {
 
                         {/* Wishlist Tab */}
                         {activeTab === 'wishlist' && (
-                            <div className="bg-white rounded-lg shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Wishlist ({wishlistArray.length})</h2>
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Wishlist ({wishlistArray.length})</h2>
                                 
                                 {wishlistArray.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         {wishlistArray.map((item) => (
-                                            <div key={item.productId} className="border border-gray-200 rounded-lg p-4 group hover:shadow-md transition-shadow">
+                                            <div key={item.productId} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 group hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow">
                                                 <div className="relative">
-                                                    <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                                                    <div className="w-full h-48 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center mb-4 transition-colors duration-300">
                                                         <Image
                                                             src={item.product.images[0]}
                                                             alt={translateProductName(item.product.name)}
@@ -593,14 +593,14 @@ export default function ProfilePage() {
                                                 </div>
                                                 
                                                 <div className="space-y-2">
-                                                    <h3 className="font-medium text-gray-900 line-clamp-2">{translateProductName(item.product.name)}</h3>
-                                                    <p className="text-sm text-gray-600">{item.product.category}</p>
-                                                    <p className="font-semibold text-gray-900">{formatCurrency(item.product.price)}</p>
+                                                    <h3 className="font-medium text-gray-900 dark:text-white line-clamp-2 transition-colors duration-300">{translateProductName(item.product.name)}</h3>
+                                                    <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{item.product.category}</p>
+                                                    <p className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">{formatCurrency(item.product.price)}</p>
                                                     
                                                     <div className="flex items-center gap-2 pt-2">
                                                         <Link
                                                             to={`/product/${item.product.id}`}
-                                                            className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                                                            className="flex-1 bg-blue-600 dark:bg-blue-500 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-sm"
                                                         >
                                                             {t('viewProduct')}
                                                         </Link>
@@ -611,12 +611,12 @@ export default function ProfilePage() {
                                     </div>
                                 ) : (
                                     <div className="text-center py-12">
-                                        <Heart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                        <h3 className="text-lg font-medium text-gray-900 mb-2">Your wishlist is empty</h3>
-                                        <p className="text-gray-600 mb-4">Save items you love for later.</p>
+                                        <Heart className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4 transition-colors duration-300" />
+                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">Your wishlist is empty</h3>
+                                        <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Save items you love for later.</p>
                                         <Link
                                             to="/shop"
-                                            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                            className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                         >
                                             Start Shopping
                                         </Link>
@@ -631,41 +631,41 @@ export default function ProfilePage() {
 
             {/* Address Modal */}
             {showAddressModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-lg max-w-md w-full p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors duration-300">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 transition-colors duration-300">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
                             {editingAddress ? 'Edit Address' : 'Add New Address'}
                         </h3>
                         
                         <form onSubmit={handleAddressSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                     Full Name *
                                 </label>
                                 <input
                                     type="text"
                                     value={addressForm.name}
                                     onChange={(e) => setAddressForm({...addressForm, name: e.target.value})}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                                     required
                                 />
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                         Email *
                                     </label>
                                     <input
                                         type="email"
                                         value={addressForm.email}
                                         onChange={(e) => setAddressForm({...addressForm, email: e.target.value})}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                         Phone *
                                     </label>
                                     <PhoneInput
@@ -685,52 +685,52 @@ export default function ProfilePage() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                     Street Address *
                                 </label>
                                 <textarea
                                     value={addressForm.street}
                                     onChange={(e) => setAddressForm({...addressForm, street: e.target.value})}
                                     rows={3}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none transition-colors"
                                     required
                                 />
                             </div>
 
                             <div className="grid grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                         City *
                                     </label>
                                     <input
                                         type="text"
                                         value={addressForm.city}
                                         onChange={(e) => setAddressForm({...addressForm, city: e.target.value})}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                         State *
                                     </label>
                                     <input
                                         type="text"
                                         value={addressForm.state}
                                         onChange={(e) => setAddressForm({...addressForm, state: e.target.value})}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                         ZIP *
                                     </label>
                                     <input
                                         type="text"
                                         value={addressForm.zip}
                                         onChange={(e) => setAddressForm({...addressForm, zip: e.target.value})}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                                         required
                                     />
                                 </div>
@@ -739,7 +739,7 @@ export default function ProfilePage() {
                             <div className="flex items-center gap-3 pt-4">
                                 <button
                                     type="submit"
-                                    className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                    className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                 >
                                     {editingAddress ? 'Update Address' : 'Add Address'}
                                 </button>
@@ -759,7 +759,7 @@ export default function ProfilePage() {
                                             country: ''
                                         })
                                     }}
-                                    className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+                                    className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                                 >
                                     Cancel
                                 </button>

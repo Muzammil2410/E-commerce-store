@@ -86,8 +86,8 @@ const ShopByCategory = () => {
     return (
         <div className='px-4 sm:px-6 my-16 sm:my-20 max-w-7xl mx-auto'>
             <div className='text-center mb-12 sm:mb-16'>
-                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4'>{t('shopByCategory')}</h2>
-                <p className='text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4'>{t('discoverWideRange')}</p>
+                <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-200'>{t('shopByCategory')}</h2>
+                <p className='text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4 transition-colors duration-200'>{t('discoverWideRange')}</p>
             </div>
             
             {/* Slider Container */}
@@ -137,7 +137,7 @@ const ShopByCategory = () => {
                                             </div>
                                             
                                             <div className='text-center'>
-                                                <h3 className='text-sm sm:text-base lg:text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300'>
+                                                <h3 className='text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300'>
                                                     {category.name}
                                                 </h3>
                                             </div>

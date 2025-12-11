@@ -129,21 +129,21 @@ export default function DeliveryManagement() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/seller/dashboard')}
-                className="flex items-center justify-center w-10 h-10 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                className="flex items-center justify-center w-10 h-10 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <ArrowLeft size={20} />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{t('deliveryManagement')}</h1>
-                <p className="text-gray-600">{t('manageDeliveriesAndTrackOrders')}</p>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('deliveryManagement')}</h1>
+                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('manageDeliveriesAndTrackOrders')}</p>
               </div>
             </div>
           </div>
@@ -152,8 +152,8 @@ export default function DeliveryManagement() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow-sm mb-6">
-          <div className="border-b border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 mb-6 transition-colors duration-300">
+          <div className="border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
             <nav className="flex overflow-x-auto -mb-px">
               {tabs.map((tab) => {
                 const Icon = tab.icon
@@ -169,8 +169,8 @@ export default function DeliveryManagement() {
                     }}
                     className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                       activeTab === tab.id
-                        ? 'border-blue-600 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400'
+                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
                     <Icon size={18} />
@@ -184,46 +184,46 @@ export default function DeliveryManagement() {
 
         {/* Delivery Orders Tab */}
         {activeTab === 'orders' && (
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden transition-colors duration-300">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('orderId')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('customerName')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('deliveryAddress')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('distance')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('actions')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('orderId')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('customerName')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('deliveryAddress')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('distance')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('status')}</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('actions')}</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
                   {orders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50">
+                    <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">#{order.id.slice(-8)}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">#{order.id.slice(-8)}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{order.user?.name || 'Customer'}</div>
-                        <div className="text-sm text-gray-500">{order.user?.email || ''}</div>
+                        <div className="text-sm text-gray-900 dark:text-white transition-colors duration-300">{order.user?.name || 'Customer'}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{order.user?.email || ''}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-gray-900 dark:text-white transition-colors duration-300">
                           {order.address?.street || 'N/A'}, {order.address?.city || 'N/A'}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
                           {order.address?.state || ''} {order.address?.zip || ''}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{calculateDistance(order.address)}</div>
+                        <div className="text-sm text-gray-900 dark:text-white transition-colors duration-300">{calculateDistance(order.address)}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="mb-2">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            getDeliveryStatus(order) === 'Delivered' ? 'bg-green-100 text-green-800' :
-                            getDeliveryStatus(order) === 'Packed' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-blue-100 text-blue-800'
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full transition-colors duration-300 ${
+                            getDeliveryStatus(order) === 'Delivered' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
+                            getDeliveryStatus(order) === 'Packed' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300' :
+                            'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
                           }`}>
                             {getDeliveryStatus(order)}
                           </span>
@@ -232,12 +232,12 @@ export default function DeliveryManagement() {
                         <div className="flex items-center space-x-1">
                           {getDeliverySteps(order).map((step, idx) => (
                             <div key={idx} className="flex items-center">
-                              <div className={`w-2 h-2 rounded-full ${
-                                step.completed ? 'bg-green-500' : step.active ? 'bg-blue-500' : 'bg-gray-300'
+                              <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                                step.completed ? 'bg-green-500 dark:bg-green-400' : step.active ? 'bg-blue-500 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-600'
                               }`} />
                               {idx < getDeliverySteps(order).length - 1 && (
-                                <div className={`w-4 h-0.5 ${
-                                  step.completed ? 'bg-green-500' : 'bg-gray-300'
+                                <div className={`w-4 h-0.5 transition-colors duration-300 ${
+                                  step.completed ? 'bg-green-500 dark:bg-green-400' : 'bg-gray-300 dark:bg-gray-600'
                                 }`} />
                               )}
                             </div>
@@ -247,7 +247,7 @@ export default function DeliveryManagement() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button
                           onClick={() => handleViewRoute(order)}
-                          className="text-blue-600 hover:text-blue-900 flex items-center space-x-1"
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 flex items-center space-x-1 transition-colors duration-300"
                         >
                           <MapPin size={16} />
                           <span>{t('viewRoute')}</span>
@@ -264,20 +264,20 @@ export default function DeliveryManagement() {
         {/* Proof of Delivery Tab */}
         {activeTab === 'proof' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('uploadProofOfDelivery')}</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('uploadProofOfDelivery')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {orders.map((order) => {
                   const proof = uploadedImages[order.id]
                   return (
-                    <div key={order.id} className="border border-gray-200 rounded-lg p-4">
+                    <div key={order.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h4 className="font-medium text-gray-900">{t('order')} #{order.id.slice(-8)}</h4>
-                          <p className="text-sm text-gray-600">{order.user?.name || t('customer') || 'Customer'}</p>
+                          <h4 className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('order')} #{order.id.slice(-8)}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{order.user?.name || t('customer') || 'Customer'}</p>
                         </div>
                         {proof && (
-                          <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full flex items-center space-x-1">
+                          <span className="px-2 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full flex items-center space-x-1 transition-colors duration-300">
                             <CheckCircle size={12} />
                             <span>{t('uploaded')}</span>
                           </span>
@@ -287,14 +287,14 @@ export default function DeliveryManagement() {
                       {proof ? (
                         <div className="space-y-3">
                           <img src={proof.image} alt="Proof" className="w-full h-48 object-cover rounded-lg" />
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                             <p>{t('uploaded')}: {new Date(proof.timestamp).toLocaleString()}</p>
                           </div>
                         </div>
                       ) : (
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                          <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                          <p className="text-sm text-gray-600 mb-2">{t('noProofUploaded')}</p>
+                        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+                          <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mx-auto mb-2 transition-colors duration-300" />
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">{t('noProofUploaded')}</p>
                           <label className="inline-block">
                             <input
                               type="file"
@@ -302,7 +302,7 @@ export default function DeliveryManagement() {
                               onChange={(e) => handleImageUpload(order.id, e.target.files[0])}
                               className="hidden"
                             />
-                            <span className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer text-sm">
+                            <span className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 cursor-pointer text-sm transition-colors">
                               {t('uploadPhoto')}
                             </span>
                           </label>
@@ -315,30 +315,30 @@ export default function DeliveryManagement() {
             </div>
 
             {/* Delivery List */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('deliveryStatus')}</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('deliveryStatus')}</h3>
               <div className="space-y-3">
                 {orders.map((order) => {
                   const proof = uploadedImages[order.id]
                   return (
-                    <div key={order.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div key={order.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 transition-colors duration-300">
                       <div>
-                        <p className="font-medium text-gray-900">{t('order')} #{order.id.slice(-8)}</p>
-                        <p className="text-sm text-gray-600">{order.user?.name || t('customer') || 'Customer'}</p>
+                        <p className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('order')} #{order.id.slice(-8)}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{order.user?.name || t('customer') || 'Customer'}</p>
                       </div>
                       <div className="flex items-center space-x-4">
                         {proof ? (
                           <>
-                            <span className="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 rounded-full flex items-center space-x-1">
+                            <span className="px-3 py-1 text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full flex items-center space-x-1 transition-colors duration-300">
                               <CheckCircle size={14} />
                               <span>{t('uploaded')}</span>
                             </span>
-                            <span className="text-sm text-gray-600">
+                            <span className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                               {new Date(proof.timestamp).toLocaleString()}
                             </span>
                           </>
                         ) : (
-                          <span className="px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-800 rounded-full flex items-center space-x-1">
+                          <span className="px-3 py-1 text-sm font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded-full flex items-center space-x-1 transition-colors duration-300">
                             <Clock size={14} />
                             <span>{t('pending')}</span>
                           </span>
@@ -355,28 +355,28 @@ export default function DeliveryManagement() {
         {/* Parcel Scanner Tab */}
         {activeTab === 'scanner' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('scanParcel')}</h3>
-              <div className="bg-gray-900 rounded-lg p-8 mb-4 relative overflow-hidden">
-                <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center border-4 border-blue-500">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('scanParcel')}</h3>
+              <div className="bg-gray-900 dark:bg-black rounded-lg p-8 mb-4 relative overflow-hidden transition-colors duration-300">
+                <div className="aspect-video bg-gray-800 dark:bg-gray-900 rounded-lg flex items-center justify-center border-4 border-blue-500 dark:border-blue-400 transition-colors duration-300">
                   <div className="text-center">
-                    <Scan className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-pulse" />
-                    <p className="text-white text-lg font-medium">{t('cameraFrame')}</p>
-                    <p className="text-gray-400 text-sm mt-2">{t('positionBarcodeWithinFrame')}</p>
+                    <Scan className="w-16 h-16 text-blue-500 dark:text-blue-400 mx-auto mb-4 animate-pulse transition-colors duration-300" />
+                    <p className="text-white dark:text-gray-200 text-lg font-medium transition-colors duration-300">{t('cameraFrame')}</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm mt-2 transition-colors duration-300">{t('positionBarcodeWithinFrame')}</p>
                   </div>
                 </div>
                 <div className="absolute top-4 left-4 right-4 flex justify-between">
-                  <div className="w-8 h-8 border-2 border-white rounded"></div>
-                  <div className="w-8 h-8 border-2 border-white rounded"></div>
+                  <div className="w-8 h-8 border-2 border-white dark:border-gray-300 rounded transition-colors duration-300"></div>
+                  <div className="w-8 h-8 border-2 border-white dark:border-gray-300 rounded transition-colors duration-300"></div>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4 flex justify-between">
-                  <div className="w-8 h-8 border-2 border-white rounded"></div>
-                  <div className="w-8 h-8 border-2 border-white rounded"></div>
+                  <div className="w-8 h-8 border-2 border-white dark:border-gray-300 rounded transition-colors duration-300"></div>
+                  <div className="w-8 h-8 border-2 border-white dark:border-gray-300 rounded transition-colors duration-300"></div>
                 </div>
               </div>
               <button
                 onClick={handleScanParcel}
-                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                className="w-full py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
               >
                 <QrCode size={20} />
                 <span>{t('scanParcel')}</span>
@@ -384,32 +384,32 @@ export default function DeliveryManagement() {
             </div>
 
             {/* Recent Scans */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('recentScans')}</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('recentScans')}</h3>
               {scannedParcels.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
                       <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('orderId')}</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('status')}</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('timestamp')}</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('orderId')}</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('status')}</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('timestamp')}</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300">
                       {scannedParcels.map((scan) => (
-                        <tr key={scan.id}>
-                          <td className="px-4 py-3 text-sm font-medium text-gray-900">{scan.orderId}</td>
+                        <tr key={scan.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">{scan.orderId}</td>
                           <td className="px-4 py-3">
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                              scan.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                              scan.status === 'Packed' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-blue-100 text-blue-800'
+                            <span className={`px-2 py-1 text-xs font-medium rounded-full transition-colors duration-300 ${
+                              scan.status === 'Delivered' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
+                              scan.status === 'Packed' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300' :
+                              'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
                             }`}>
                               {scan.status}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-600">
+                          <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                             {new Date(scan.timestamp).toLocaleString()}
                           </td>
                         </tr>
@@ -418,8 +418,8 @@ export default function DeliveryManagement() {
                   </table>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <Package className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                  <Package className="w-12 h-12 mx-auto mb-2 text-gray-400 dark:text-gray-500 transition-colors duration-300" />
                   <p>{t('noScansYet')}</p>
                 </div>
               )}
@@ -430,29 +430,29 @@ export default function DeliveryManagement() {
 
       {/* Route Modal */}
       {showRouteModal && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">
+        <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto transition-colors duration-300">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between transition-colors duration-300">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">
                 {t('routeTo')} {selectedOrder.user?.name || t('customer') || 'Customer'}
               </h3>
               <button
                 onClick={() => setShowRouteModal(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300"
               >
                 <X size={24} />
               </button>
             </div>
             <div className="p-6">
               <div className="mb-4">
-                <p className="text-sm text-gray-600 mb-1">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">
                   <strong>{t('from')}:</strong> {t('warehouse')} (New York)
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                   <strong>{t('to')}:</strong> {selectedOrder.address?.street || 'N/A'}, {selectedOrder.address?.city || 'N/A'}
                 </p>
               </div>
-              <div className="w-full h-96 rounded-lg overflow-hidden border border-gray-200">
+              <div className="w-full h-96 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition-colors duration-300">
                 <iframe
                   width="100%"
                   height="100%"

@@ -24,17 +24,17 @@ export default function AuthLayout({ children }) {
     // Show loading while checking authentication
     if (user) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 transition-colors duration-300">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Redirecting...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto mb-4"></div>
+                    <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Redirecting...</p>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
             {children}
         </div>
     )
