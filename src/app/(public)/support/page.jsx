@@ -62,29 +62,29 @@ export default function Support() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => window.history.back()}
-              className="flex items-center justify-center w-10 h-10 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center justify-center w-10 h-10 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{t('getSupport')}</h1>
-              <p className="text-gray-600">We're here to help you</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-200">{t('getSupport')}</h1>
+              <p className="text-gray-600 dark:text-gray-400 transition-colors duration-200">We're here to help you</p>
             </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 sm:p-8 transition-colors duration-200">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('tellYourQuery')}</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6 transition-colors duration-200">{t('tellYourQuery')}</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
@@ -92,7 +92,7 @@ export default function Support() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={t('describeIssue')}
-                  className="w-full px-4 py-3 pr-12 pb-16 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 pr-12 pb-16 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-colors duration-200"
                   rows="6"
                 />
                 <button
@@ -121,7 +121,7 @@ export default function Support() {
                       <img
                         src={image.preview}
                         alt="Attached"
-                        className="w-24 h-24 object-cover rounded-lg border border-gray-300"
+                        className="w-24 h-24 object-cover rounded-lg border border-gray-300 dark:border-gray-600 transition-colors duration-200"
                       />
                       <button
                         type="button"
@@ -153,7 +153,7 @@ export default function Support() {
                 </button>
               </div>
 
-              <p className="text-sm text-gray-500 text-center mt-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-4 transition-colors duration-200">
                 {t('submitQuery')}
               </p>
             </form>

@@ -81,11 +81,11 @@ const ProductDetails = ({ product }) => {
     const averageRating = product.rating.reduce((acc, item) => acc + item.rating, 0) / product.rating.length;
     
     return (
-        <div className="flex flex-col gap-8 lg:gap-12">
-            <div className="flex flex-col lg:flex-row gap-8 lg:gap-6">
+        <div className="flex flex-col gap-6 lg:gap-8">
+            <div className="flex flex-col lg:flex-row gap-3 lg:gap-3">
                 {/* Left Side - Images */}
-                <div className="flex flex-col sm:flex-row lg:flex-col gap-4 lg:gap-3 lg:w-1/2">
-                    <div className="flex flex-row sm:flex-col gap-3 order-2 sm:order-1">
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-3 lg:gap-2 lg:w-1/2">
+                    <div className="flex flex-row sm:flex-col gap-2 order-2 sm:order-1">
                         {product.images.map((image, index) => (
                             <button
                                 key={index}
@@ -102,11 +102,11 @@ const ProductDetails = ({ product }) => {
                                     }
                                 }}
                                 aria-label={`View product image ${index + 1} of ${product.images.length}: ${translateProductName(product.name)}`}
-                                className="bg-slate-100 flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-lg group cursor-pointer flex-shrink-0 hover:ring-2 hover:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+                                className="bg-slate-100 flex items-center justify-center w-14 h-14 sm:w-18 sm:h-18 rounded-lg group cursor-pointer flex-shrink-0 hover:ring-2 hover:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
                             >
                                 <Image 
                                     src={image} 
-                                    className="group-hover:scale-103 group-active:scale-95 transition w-10 h-10 sm:w-12 sm:h-12 object-contain" 
+                                    className="group-hover:scale-103 group-active:scale-95 transition w-9 h-9 sm:w-11 sm:h-11 object-contain" 
                                     alt={`Product thumbnail ${index + 1}`} 
                                     width={48} 
                                     height={48} 
@@ -119,7 +119,7 @@ const ProductDetails = ({ product }) => {
                         ref={imageRef}
                         onClick={handleImageClick}
                         onMouseMove={handleMouseMove}
-                        className="flex justify-center items-center w-full h-64 sm:h-80 lg:h-96 bg-slate-100 rounded-lg order-1 sm:order-2 cursor-zoom-in" 
+                        className="flex justify-center items-center w-full h-64 sm:h-80 lg:h-96 bg-slate-100 rounded-lg order-1 sm:order-2 cursor-zoom-in overflow-hidden" 
                         role="img" 
                         aria-label={`Main product image: ${translateProductName(product.name)}`}
                     >
@@ -128,7 +128,7 @@ const ProductDetails = ({ product }) => {
                             alt={product.name} 
                             width={300} 
                             height={300} 
-                            className="w-auto h-auto max-w-full max-h-full object-contain" 
+                            className="w-full h-full object-contain" 
                             loading="eager"
                             priority
                         />
@@ -136,23 +136,25 @@ const ProductDetails = ({ product }) => {
                 </div>
 
                 {/* Right Side - Zoom View */}
-                <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-white border border-gray-200 rounded-lg h-64 sm:h-80 lg:h-96">
+                <div className="hidden lg:flex lg:w-1/2 bg-white border border-gray-200 rounded-lg h-64 sm:h-80 lg:h-96 overflow-hidden">
                     {showZoom ? (
                         <div 
                             ref={zoomRef}
-                            className="relative w-full h-full flex items-center justify-center overflow-hidden"
+                            className="relative w-full h-full"
                         >
                             <div 
-                                className="absolute inset-0 bg-contain bg-no-repeat bg-center transition-all"
+                                className="absolute inset-0 bg-cover bg-no-repeat transition-all duration-200"
                                 style={{
                                     backgroundImage: `url(${mainImage})`,
-                                    backgroundSize: '250%',
+                                    backgroundSize: '400%',
                                     backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
                                 }}
                             />
                         </div>
                     ) : (
-                        <p className="text-gray-500 text-sm">Click the product image to zoom here</p>
+                        <div className="w-full h-full flex items-center justify-center p-4">
+                            <p className="text-gray-500 text-sm text-center">Click the product image to zoom here</p>
+                        </div>
                     )}
                 </div>
             </div>

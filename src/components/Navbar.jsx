@@ -677,10 +677,10 @@ const Navbar = () => {
                                 <div className="relative" ref={userMenuRef}>
                                     <button
                                         onClick={() => setShowUserMenu(!showUserMenu)}
-                                        className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:rounded-full transition-all duration-200"
+                                        className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 hover:rounded-full transition-all duration-200"
                                     >
-                                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <User size={16} className="text-blue-600" />
+                                        <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center transition-colors duration-200">
+                                            <User size={16} className="text-blue-600 dark:text-blue-400 transition-colors duration-200" />
                                         </div>
                                         <span className="hidden sm:block font-medium">{user.name}</span>
                                         <ChevronDown size={16} className={`transition-transform duration-200 ${showUserMenu ? 'rotate-180' : ''}`} />
@@ -688,15 +688,15 @@ const Navbar = () => {
 
                                     {/* User Dropdown Menu */}
                                     {showUserMenu && (
-                                        <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                                            <div className="p-3 border-b border-gray-100">
-                                                <p className="font-medium text-gray-900">{user.name}</p>
-                                                <p className="text-sm text-gray-600">{user.email}</p>
+                                        <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 z-50 transition-colors duration-200">
+                                            <div className="p-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-200">
+                                                <p className="font-medium text-gray-900 dark:text-gray-100 transition-colors duration-200">{user.name}</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-200">{user.email}</p>
                                             </div>
                                             <div className="py-2">
                                                 <Link
                                                     to="/profile"
-                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                                     onClick={() => setShowUserMenu(false)}
                                                 >
                                                     <User size={16} />
@@ -704,7 +704,7 @@ const Navbar = () => {
                                                 </Link>
                                                 <Link
                                                     to="/orders"
-                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                                     onClick={() => setShowUserMenu(false)}
                                                 >
                                                     <ShoppingCart size={16} />
@@ -712,16 +712,16 @@ const Navbar = () => {
                                                 </Link>
                                                 <Link
                                                     to="/profile?tab=wishlist"
-                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                                     onClick={() => setShowUserMenu(false)}
                                                 >
                                                     <Heart size={16} />
                                                     {t('wishlist')}
                                                 </Link>
-                                                <hr className="my-2" />
+                                                <hr className="my-2 border-gray-200 dark:border-gray-700 transition-colors duration-200" />
                                                 <button
                                                     onClick={handleLogout}
-                                                    className="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+                                                    className="flex items-center gap-3 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full text-left"
                                                 >
                                                     <LogOut size={16} />
                                                     {t('logout')}
@@ -884,25 +884,25 @@ const Navbar = () => {
                         className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 sm:p-8 relative">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl dark:shadow-gray-900/50 max-w-md w-full p-6 sm:p-8 relative transition-colors duration-200">
                             {/* Close Button */}
                             <button
                                 type="button"
                                 onClick={() => setShowLanguageModal(false)}
-                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                                className="absolute top-4 right-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
                                 aria-label="Close modal"
                             >
                                 <X size={24} />
                             </button>
                             
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2 pr-8">{t('setLanguageCurrency')}</h2>
-                            <p className="text-gray-600 mb-6 text-sm">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 pr-8 transition-colors duration-200">{t('setLanguageCurrency')}</h2>
+                            <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm transition-colors duration-200">
                                 {t('selectPreferred')}
                             </p>
 
                             {/* Language Selection */}
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">{t('language')}</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">{t('language')}</label>
                                 <div className="relative" ref={languageDropdownRef}>
                                     <button
                                         type="button"
@@ -910,16 +910,16 @@ const Navbar = () => {
                                             setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
                                             setIsCurrencyDropdownOpen(false)
                                         }}
-                                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-left flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                                     >
-                                        <span className="text-gray-900">{selectedLanguage}</span>
+                                        <span className="text-gray-900 dark:text-white transition-colors duration-200">{selectedLanguage}</span>
                                         <ChevronDown 
                                             size={20} 
-                                            className={`text-gray-500 transition-transform duration-200 ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} 
+                                            className={`text-gray-500 dark:text-gray-400 transition-all duration-200 ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} 
                                         />
                                     </button>
                                     {isLanguageDropdownOpen && (
-                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 z-50 max-h-60 overflow-y-auto transition-colors duration-200">
                                             {languages.map((lang) => (
                                                 <button
                                                     key={lang}
@@ -928,8 +928,8 @@ const Navbar = () => {
                                                         setSelectedLanguage(lang)
                                                         setIsLanguageDropdownOpen(false)
                                                     }}
-                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
-                                                        selectedLanguage === lang ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700'
+                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                                                        selectedLanguage === lang ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
                                                     }`}
                                                 >
                                                     {lang}
@@ -942,7 +942,7 @@ const Navbar = () => {
 
                             {/* Currency Selection */}
                             <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">{t('currency')}</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">{t('currency')}</label>
                                 <div className="relative" ref={currencyDropdownRef}>
                                     <button
                                         type="button"
@@ -950,16 +950,16 @@ const Navbar = () => {
                                             setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)
                                             setIsLanguageDropdownOpen(false)
                                         }}
-                                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-left flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                                     >
-                                        <span className="text-gray-900">{selectedCurrency}</span>
+                                        <span className="text-gray-900 dark:text-white transition-colors duration-200">{selectedCurrency}</span>
                                         <ChevronDown 
                                             size={20} 
-                                            className={`text-gray-500 transition-transform duration-200 ${isCurrencyDropdownOpen ? 'rotate-180' : ''}`} 
+                                            className={`text-gray-500 dark:text-gray-400 transition-all duration-200 ${isCurrencyDropdownOpen ? 'rotate-180' : ''}`} 
                                         />
                                     </button>
                                     {isCurrencyDropdownOpen && (
-                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 z-50 max-h-60 overflow-y-auto transition-colors duration-200">
                                             {currencies.map((curr) => (
                                                 <button
                                                     key={curr}
@@ -968,8 +968,8 @@ const Navbar = () => {
                                                         setSelectedCurrency(curr)
                                                         setIsCurrencyDropdownOpen(false)
                                                     }}
-                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
-                                                        selectedCurrency === curr ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700'
+                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                                                        selectedCurrency === curr ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
                                                     }`}
                                                 >
                                                     {curr}

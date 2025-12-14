@@ -58,25 +58,25 @@ const SellerReviewModal = ({ reviewModal, setReviewModal }) => {
 
     return (
         <div 
-            className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'
+            className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 p-4 transition-colors duration-200'
             onClick={(e) => e.target === e.currentTarget && setReviewModal(null)}
             role="dialog"
             aria-modal="true"
             aria-labelledby="seller-review-title"
         >
-            <div className='bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md relative'>
+            <div className='bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl dark:shadow-gray-900/50 w-full max-w-md relative transition-colors duration-200'>
                 <button 
                     onClick={() => setReviewModal(null)} 
-                    className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded'
+                    className='absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded transition-colors duration-200'
                     aria-label="Close review modal"
                 >
                     <X size={20} />
                 </button>
-                <h2 id="seller-review-title" className='text-xl font-semibold text-slate-800 mb-2'>
+                <h2 id="seller-review-title" className='text-xl font-semibold text-slate-800 dark:text-gray-100 mb-2 transition-colors duration-200'>
                     Review Buyer
                 </h2>
-                <p className='text-sm text-gray-600 mb-4'>
-                    Review for: <span className="font-medium">{reviewModal?.buyerName || 'Buyer'}</span>
+                <p className='text-sm text-gray-600 dark:text-gray-400 mb-4 transition-colors duration-200'>
+                    Review for: <span className="font-medium text-gray-900 dark:text-gray-200">{reviewModal?.buyerName || 'Buyer'}</span>
                 </p>
                 <div className='flex items-center justify-center mb-4' role="group" aria-label="Rating">
                     {Array.from({ length: 5 }, (_, i) => (
@@ -91,20 +91,20 @@ const SellerReviewModal = ({ reviewModal, setReviewModal }) => {
                                 }
                             }}
                             aria-label={`Rate ${i + 1} out of 5 stars`}
-                            className={`focus:outline-none focus:ring-2 focus:ring-blue-500 rounded ${
-                                rating > i ? "text-yellow-400 fill-current" : "text-gray-300"
+                            className={`focus:outline-none focus:ring-2 focus:ring-blue-500 rounded transition-colors duration-200 ${
+                                rating > i ? "text-yellow-400 dark:text-yellow-500 fill-current" : "text-gray-300 dark:text-gray-600"
                             }`}
                         >
                             <Star size={32} className="cursor-pointer hover:scale-110 transition-transform" />
                         </button>
                     ))}
                 </div>
-                <label htmlFor="seller-review-text" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-review-text" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">
                     Your Review
                 </label>
                 <textarea
                     id="seller-review-text"
-                    className='w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none'
+                    className='w-full p-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors duration-200'
                     placeholder='Write your review about this buyer (e.g., "Very respectful and patient buyer. Great communication throughout the order process.")'
                     rows='4'
                     value={review}
@@ -114,13 +114,13 @@ const SellerReviewModal = ({ reviewModal, setReviewModal }) => {
                 <div className="flex gap-3">
                     <button 
                         onClick={() => setReviewModal(null)} 
-                        className='flex-1 bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300 transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
+                        className='flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800'
                     >
                         Cancel
                     </button>
                     <button 
                         onClick={handleSubmit} 
-                        className='flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                        className='flex-1 bg-blue-600 dark:bg-blue-500 text-white py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800'
                         aria-label="Submit review"
                     >
                         Submit Review

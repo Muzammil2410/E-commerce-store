@@ -27,7 +27,7 @@ export default function AccountTypeSelection() {
                 </button>
 
                 {/* Selection Card */}
-                <div className="bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl dark:shadow-gray-900/50 p-8 sm:p-10 border border-white/20 dark:border-gray-700/50 transition-colors duration-300">
+                <div className="bg-white/80 dark:bg-gray-800 backdrop-blur-xl rounded-3xl shadow-2xl dark:shadow-gray-900/50 p-8 sm:p-10 border border-white/20 dark:border-gray-700 transition-colors duration-300">
                     {/* Header Section */}
                     <div className="text-center mb-10">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-2xl mb-4 shadow-lg dark:shadow-gray-900/50 transition-colors duration-300">

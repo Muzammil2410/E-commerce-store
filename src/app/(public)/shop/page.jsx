@@ -79,12 +79,12 @@ function ShopContent() {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between my-6 gap-4">
-                    <h1 className="text-xl sm:text-2xl text-slate-500 flex items-center gap-2">
+                    <h1 className="text-xl sm:text-2xl text-slate-500 dark:text-gray-400 flex items-center gap-2 transition-colors duration-200">
                         <span className="truncate">
                             {search ? `Search Results for "${search}"` : 'All'} 
-                            <span className="text-slate-700 font-medium"> Products</span>
+                            <span className="text-slate-700 dark:text-gray-200 font-medium transition-colors duration-200"> Products</span>
                         </span>
-                        <span className="text-sm text-gray-500 whitespace-nowrap">({filteredProducts.length} items)</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-200">({filteredProducts.length} items)</span>
                     </h1>
                     
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
@@ -92,18 +92,18 @@ function ShopContent() {
                         <select
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                            className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm transition-colors duration-200"
                         >
-                            <option value="name">Sort by Name</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="rating">Highest Rated</option>
+                            <option value="name" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Sort by Name</option>
+                            <option value="price-low" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Price: Low to High</option>
+                            <option value="price-high" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Price: High to Low</option>
+                            <option value="rating" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Highest Rated</option>
                         </select>
 
                         {/* Filter Toggle */}
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors text-sm"
                         >
                             <SlidersHorizontal size={18} />
                             <span className="hidden sm:inline">Filters</span>
@@ -114,12 +114,12 @@ function ShopContent() {
                 <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
                     {/* Filters Sidebar */}
                     {showFilters && (
-                        <div className="w-full lg:w-64 bg-white border border-gray-200 rounded-lg p-4 lg:p-6 h-fit order-2 lg:order-1">
+                        <div className="w-full lg:w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 lg:p-6 h-fit order-2 lg:order-1 transition-colors duration-200">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="font-semibold text-gray-900">Filters</h3>
+                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-200">Filters</h3>
                                 <button
                                     onClick={clearFilters}
-                                    className="text-sm text-blue-600 hover:text-blue-800"
+                                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200"
                                 >
                                     Clear All
                                 </button>
@@ -127,7 +127,7 @@ function ShopContent() {
 
                             {/* Categories */}
                             <div className="mb-6">
-                                <h4 className="font-medium text-gray-900 mb-3">Categories</h4>
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3 transition-colors duration-200">Categories</h4>
                                 <div className="space-y-2">
                                     {categories.map((cat) => (
                                         <label key={cat} className="flex items-center">
@@ -139,9 +139,9 @@ function ShopContent() {
                                                         : selectedCategories.includes(cat)
                                                 }
                                                 onChange={() => handleCategoryToggle(cat)}
-                                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 transition-colors duration-200"
                                             />
-                                            <span className="ml-2 text-sm text-gray-700">{cat}</span>
+                                            <span className="ml-2 text-sm text-gray-700 dark:text-gray-300 transition-colors duration-200">{cat}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -149,7 +149,7 @@ function ShopContent() {
 
                             {/* Price Range */}
                             <div>
-                                <h4 className="font-medium text-gray-900 mb-3">Price Range</h4>
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3 transition-colors duration-200">Price Range</h4>
                                 <div className="space-y-3">
                                     <div className="flex gap-2">
                                         <input
@@ -157,17 +157,17 @@ function ShopContent() {
                                             placeholder="Min"
                                             value={priceRange.min}
                                             onChange={(e) => setPriceRange(prev => ({ ...prev, min: Number(e.target.value) }))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                            className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors duration-200"
                                         />
                                         <input
                                             type="number"
                                             placeholder="Max"
                                             value={priceRange.max}
                                             onChange={(e) => setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                            className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors duration-200"
                                         />
                                     </div>
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-200">
                                         ${priceRange.min} - ${priceRange.max}
                                     </div>
                                 </div>
@@ -185,13 +185,13 @@ function ShopContent() {
                             </div>
                         ) : (
                             <div className="text-center py-12">
-                                <div className="text-gray-400 mb-4">
+                                <div className="text-gray-400 dark:text-gray-600 mb-4 transition-colors duration-200">
                                     <Filter size={48} className="mx-auto" />
                                 </div>
-                                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-200">
                                     {category ? `No products found in "${category}" category` : 'No products found'}
                                 </h3>
-                                <p className="text-gray-600 mb-4">
+                                <p className="text-gray-600 dark:text-gray-400 mb-4 transition-colors duration-200">
                                     {category 
                                         ? `We don't have any products in the "${category}" category yet. Try browsing other categories.`
                                         : 'Try adjusting your search or filter criteria.'
@@ -200,13 +200,13 @@ function ShopContent() {
                                 <div className="flex gap-3 justify-center">
                                     <button
                                         onClick={clearFilters}
-                                        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                                        className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
                                     >
                                         Clear Filters
                                     </button>
                                     <button
                                         onClick={() => navigate('/shop')}
-                                        className="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+                                        className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-6 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
                                     >
                                         View All Products
                                     </button>

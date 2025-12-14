@@ -161,29 +161,29 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
 
     return (
         <div 
-            className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'
+            className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 p-4 transition-colors duration-200'
             onClick={(e) => e.target === e.currentTarget && setChatModal(null)}
             role="dialog"
             aria-modal="true"
             aria-labelledby="chat-title"
         >
-            <div className='bg-white rounded-lg shadow-xl w-full max-w-2xl h-[600px] flex flex-col relative'>
+            <div className='bg-white dark:bg-gray-800 rounded-lg shadow-xl dark:shadow-gray-900/50 w-full max-w-2xl h-[600px] flex flex-col relative transition-colors duration-200'>
                 {/* Header */}
-                <div className='bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between'>
+                <div className='bg-blue-600 dark:bg-blue-700 text-white p-4 rounded-t-lg flex items-center justify-between transition-colors duration-200'>
                     <div className="flex items-center gap-3">
                         <MessageCircle size={24} aria-hidden="true" />
                         <div>
                             <h2 id="chat-title" className='text-lg font-semibold'>
                                 Order Chat
                             </h2>
-                            <p className='text-sm text-blue-100'>
+                            <p className='text-sm text-blue-100 dark:text-blue-200'>
                                 Order #{chatModal?.orderId?.slice(-8) || ''} • {chatModal?.otherPartyName || 'Chat'}
                             </p>
                         </div>
                     </div>
                     <button 
                         onClick={() => setChatModal(null)} 
-                        className='text-white hover:bg-blue-700 p-1 rounded focus:outline-none focus:ring-2 focus:ring-white rounded'
+                        className='text-white hover:bg-blue-700 dark:hover:bg-blue-600 p-1 rounded focus:outline-none focus:ring-2 focus:ring-white rounded transition-colors duration-200'
                         aria-label="Close chat"
                     >
                         <X size={20} />
@@ -191,12 +191,12 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                 </div>
 
                 {/* Messages Area */}
-                <div className='flex-1 overflow-y-auto p-4 bg-gray-50'>
+                <div className='flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-200'>
                     {Object.keys(groupedMessages).length === 0 ? (
-                        <div className="flex items-center justify-center h-full text-gray-500">
+                        <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                             <div className="text-center">
-                                <MessageCircle size={48} className="mx-auto mb-2 text-gray-300" />
-                                <p>No messages yet. Start the conversation!</p>
+                                <MessageCircle size={48} className="mx-auto mb-2 text-gray-300 dark:text-gray-600" />
+                                <p className="transition-colors duration-200">No messages yet. Start the conversation!</p>
                             </div>
                         </div>
                     ) : (
@@ -204,7 +204,7 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                             {Object.entries(groupedMessages).map(([date, dateMessages]) => (
                                 <div key={date}>
                                     <div className="text-center my-4">
-                                        <span className="bg-gray-200 text-gray-600 text-xs px-3 py-1 rounded-full">
+                                        <span className="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs px-3 py-1 rounded-full transition-colors duration-200">
                                             {formatDate(dateMessages[0].timestamp)}
                                         </span>
                                     </div>
@@ -214,14 +214,14 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                                             className={`flex ${msg.sender === userType ? 'justify-end' : 'justify-start'} mb-2`}
                                         >
                                             <div
-                                                className={`max-w-[75%] rounded-lg p-3 ${
+                                                className={`max-w-[75%] rounded-lg p-3 transition-colors duration-200 ${
                                                     msg.sender === userType
-                                                        ? 'bg-blue-600 text-white'
-                                                        : 'bg-white text-gray-800 border border-gray-200'
+                                                        ? 'bg-blue-600 dark:bg-blue-700 text-white'
+                                                        : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600'
                                                 }`}
                                             >
                                                 {msg.sender !== userType && (
-                                                    <p className="text-xs font-semibold mb-1 opacity-75">
+                                                    <p className="text-xs font-semibold mb-1 opacity-75 dark:opacity-90">
                                                         {msg.senderName}
                                                     </p>
                                                 )}
@@ -245,8 +245,8 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                                                     <p className="text-sm whitespace-pre-wrap break-words">{msg.message}</p>
                                                 )}
                                                 <p
-                                                    className={`text-xs mt-1 ${
-                                                        msg.sender === userType ? 'text-blue-100' : 'text-gray-500'
+                                                    className={`text-xs mt-1 transition-colors duration-200 ${
+                                                        msg.sender === userType ? 'text-blue-100 dark:text-blue-200' : 'text-gray-500 dark:text-gray-400'
                                                     }`}
                                                 >
                                                     {formatTime(msg.timestamp)}
@@ -262,7 +262,7 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                 </div>
 
                 {/* Input Area */}
-                <div className='border-t border-gray-200 bg-white'>
+                <div className='border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-200'>
                     {/* Selected Image Preview */}
                     {selectedImage && (
                         <div className="px-4 pt-4">
@@ -270,7 +270,7 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                                 <img 
                                     src={selectedImage.preview} 
                                     alt="Preview" 
-                                    className="max-w-xs h-32 object-cover rounded-xl border-2 border-gray-200 shadow-md"
+                                    className="max-w-xs h-32 object-cover rounded-xl border-2 border-gray-200 dark:border-gray-600 shadow-md transition-colors duration-200"
                                 />
                                 <button
                                     onClick={removeSelectedImage}
@@ -289,7 +289,7 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                             <div className="relative flex-shrink-0" ref={attachmentMenuRef}>
                                 <button
                                     onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                                    className='bg-gradient-to-br from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 p-3 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md'
+                                    className='bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500 text-gray-700 dark:text-gray-200 p-3 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md'
                                     aria-label="Attach file"
                                 >
                                     <Plus size={20} />
@@ -297,24 +297,24 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                                 
                                 {/* Attachment Menu */}
                                 {showAttachmentMenu && (
-                                    <div className="absolute bottom-full left-0 mb-3 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 min-w-[200px] z-10 overflow-hidden">
+                                    <div className="absolute bottom-full left-0 mb-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 py-2 min-w-[200px] z-10 overflow-hidden transition-colors duration-200">
                                         <button
                                             onClick={handleTakePhoto}
-                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-left group"
+                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors text-left group"
                                         >
-                                            <div className="bg-blue-100 rounded-lg p-2 group-hover:bg-blue-200 transition-colors">
-                                                <Camera size={18} className="text-blue-600" />
+                                            <div className="bg-blue-100 dark:bg-blue-900/50 rounded-lg p-2 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition-colors">
+                                                <Camera size={18} className="text-blue-600 dark:text-blue-400" />
                                             </div>
-                                            <span className="text-sm font-medium text-gray-700">Take a photo</span>
+                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Take a photo</span>
                                         </button>
                                         <button
                                             onClick={handleAttachPhoto}
-                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-purple-50 transition-colors text-left group"
+                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-purple-50 dark:hover:bg-gray-700 transition-colors text-left group"
                                         >
-                                            <div className="bg-purple-100 rounded-lg p-2 group-hover:bg-purple-200 transition-colors">
-                                                <ImageIcon size={18} className="text-purple-600" />
+                                            <div className="bg-purple-100 dark:bg-purple-900/50 rounded-lg p-2 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/50 transition-colors">
+                                                <ImageIcon size={18} className="text-purple-600 dark:text-purple-400" />
                                             </div>
-                                            <span className="text-sm font-medium text-gray-700">Attach a photo</span>
+                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Attach a photo</span>
                                         </button>
                                     </div>
                                 )}
@@ -347,7 +347,7 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                                     onChange={(e) => setMessage(e.target.value)}
                                     onKeyPress={handleKeyPress}
                                     placeholder='Type your message...'
-                                    className='w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-gray-50 focus:bg-white transition-all duration-300 text-sm'
+                                    className='w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none focus:bg-white dark:focus:bg-gray-700 transition-all duration-300 text-sm'
                                     rows="1"
                                     style={{ minHeight: '44px', maxHeight: '120px' }}
                                     aria-label="Message input"
@@ -357,7 +357,7 @@ const ChatModal = ({ chatModal, setChatModal, userType = 'buyer' }) => {
                             {/* Send Button */}
                             <button
                                 onClick={handleSendMessage}
-                                className='bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex-shrink-0'
+                                className='bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-5 py-2.5 rounded-xl hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex-shrink-0'
                                 aria-label="Send message"
                             >
                                 <Send size={18} />
