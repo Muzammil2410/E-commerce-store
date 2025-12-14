@@ -42,7 +42,7 @@ const OrderItem = ({ order }) => {
                     <div className="flex flex-col gap-6">
                         {order.orderItems.map((item, index) => (
                             <div key={index} className="flex items-center gap-4">
-                                <div className="w-20 aspect-square bg-slate-100 flex items-center justify-center rounded-md">
+                                <div className="w-20 aspect-square bg-slate-100 dark:bg-gray-700 flex items-center justify-center rounded-md transition-colors duration-200">
                                     <Image
                                         className="h-14 w-auto"
                                         src={item.product.images[0]}
@@ -52,13 +52,13 @@ const OrderItem = ({ order }) => {
                                     />
                                 </div>
                                 <div className="flex flex-col justify-center text-sm">
-                                    <p className="font-medium text-slate-600 text-base">{translateProductName(item.product.name)}</p>
-                                    <p>{formatCurrency(item.price)} Qty : {item.quantity} </p>
-                                    <p className="mb-1">{new Date(order.createdAt).toDateString()}</p>
+                                    <p className="font-medium text-slate-600 dark:text-gray-200 text-base transition-colors duration-200">{translateProductName(item.product.name)}</p>
+                                    <p className="dark:text-gray-300 transition-colors duration-200">{formatCurrency(item.price)} Qty : {item.quantity} </p>
+                                    <p className="mb-1 dark:text-gray-400 transition-colors duration-200">{new Date(order.createdAt).toDateString()}</p>
                                     <div>
                                         {ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId)
                                             ? <Rating value={ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId).rating} />
-                                            : <button onClick={() => setRatingModal({ orderId: order.id, productId: item.product.id })} className={`text-green-500 hover:bg-green-50 transition ${order.status !== "DELIVERED" && 'hidden'}`}>Rate Product</button>
+                                            : <button onClick={() => setRatingModal({ orderId: order.id, productId: item.product.id })} className={`text-green-500 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 transition ${order.status !== "DELIVERED" && 'hidden'}`}>Rate Product</button>
                                         }</div>
                                     {ratingModal && <RatingModal ratingModal={ratingModal} setRatingModal={setRatingModal} />}
                                 </div>
@@ -67,9 +67,9 @@ const OrderItem = ({ order }) => {
                     </div>
                 </td>
 
-                <td className="text-center max-md:hidden">{formatCurrency(order.total)}</td>
+                <td className="text-center max-md:hidden dark:text-gray-200 transition-colors duration-200">{formatCurrency(order.total)}</td>
 
-                <td className="text-left max-md:hidden">
+                <td className="text-left max-md:hidden dark:text-gray-300 transition-colors duration-200">
                     <p>{order.address.name}, {order.address.street},</p>
                     <p>{order.address.city}, {order.address.state}, {order.address.zip}, {order.address.country},</p>
                     <p>{order.address.phone}</p>
@@ -78,11 +78,11 @@ const OrderItem = ({ order }) => {
                 <td className="text-left space-y-2 text-sm max-md:hidden">
                     <div className="flex flex-col gap-2">
                         <div
-                            className={`flex items-center justify-center gap-1 rounded-full p-1 ${order.status === 'confirmed'
-                                ? 'text-yellow-500 bg-yellow-100'
+                            className={`flex items-center justify-center gap-1 rounded-full p-1 transition-colors duration-200 ${order.status === 'confirmed'
+                                ? 'text-yellow-500 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30'
                                 : order.status === 'delivered'
-                                    ? 'text-green-500 bg-green-100'
-                                    : 'text-slate-500 bg-slate-100'
+                                    ? 'text-green-500 dark:text-green-400 bg-green-100 dark:bg-green-900/30'
+                                    : 'text-slate-500 dark:text-gray-400 bg-slate-100 dark:bg-gray-700'
                                 }`}
                         >
                             <DotIcon size={10} className="scale-250" />
@@ -103,7 +103,7 @@ const OrderItem = ({ order }) => {
                                         senderName: 'Buyer'
                                     });
                                 }}
-                                className="flex items-center justify-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                className="flex items-center justify-center gap-2 px-3 py-1.5 bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 aria-label="Chat with seller about delayed order"
                             >
                                 <MessageCircle size={14} />
@@ -113,7 +113,7 @@ const OrderItem = ({ order }) => {
 
                         {/* Delay Warning */}
                         {isOrderDelayed() && (
-                            <div className="flex items-center gap-1 text-red-600 text-xs bg-red-50 px-2 py-1 rounded">
+                            <div className="flex items-center gap-1 text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded transition-colors duration-200">
                                 <AlertCircle size={12} />
                                 <span>Delayed</span>
                             </div>
@@ -124,13 +124,13 @@ const OrderItem = ({ order }) => {
             {/* Mobile */}
             <tr className="md:hidden">
                 <td colSpan={5}>
-                    <p>{order.address.name}, {order.address.street}</p>
-                    <p>{order.address.city}, {order.address.state}, {order.address.zip}, {order.address.country}</p>
-                    <p>{order.address.phone}</p>
+                    <p className="dark:text-gray-300 transition-colors duration-200">{order.address.name}, {order.address.street}</p>
+                    <p className="dark:text-gray-300 transition-colors duration-200">{order.address.city}, {order.address.state}, {order.address.zip}, {order.address.country}</p>
+                    <p className="dark:text-gray-300 transition-colors duration-200">{order.address.phone}</p>
                     <br />
                     <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-center">
-                            <span className='text-center px-6 py-1.5 rounded bg-green-100 text-green-700' >
+                            <span className='text-center px-6 py-1.5 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 transition-colors duration-200' >
                                 {order.status.replace(/_/g, ' ').toLowerCase()}
                             </span>
                         </div>
@@ -150,13 +150,13 @@ const OrderItem = ({ order }) => {
                                             senderName: 'Buyer'
                                         });
                                     }}
-                                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     aria-label="Chat with seller about delayed order"
                                 >
                                     <MessageCircle size={16} />
                                     <span>Chat with Seller</span>
                                 </button>
-                                <div className="flex items-center justify-center gap-1 text-red-600 text-xs bg-red-50 px-3 py-1.5 rounded">
+                                <div className="flex items-center justify-center gap-1 text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded transition-colors duration-200">
                                     <AlertCircle size={14} />
                                     <span>Order is delayed</span>
                                 </div>
@@ -165,12 +165,6 @@ const OrderItem = ({ order }) => {
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td colSpan={4}>
-                    <div className="border-b border-slate-300 w-6/7 mx-auto" />
-                </td>
-            </tr>
-            
             {/* Chat Modal */}
             {chatModal && (
                 <ChatModal 

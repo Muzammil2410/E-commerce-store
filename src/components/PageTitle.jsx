@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 const PageTitle = ({ heading, text, path = "/", linkText }) => {
     return (
         <div className="my-6">
-            <h2 className="text-2xl font-semibold">{heading}</h2>
+            <h2 className="text-2xl font-semibold dark:text-gray-100 transition-colors duration-200">{heading}</h2>
             <div className="flex items-center gap-3">
-                <p className="text-slate-600">{text}</p>
-                <Link to={path} className="flex items-center gap-1 text-green-500 text-sm">
+                <p className="text-slate-600 dark:text-gray-400 transition-colors duration-200">{text}</p>
+                <Link to={path} className="flex items-center gap-1 text-green-500 dark:text-green-400 text-sm transition-colors duration-200">
                     {linkText} <ArrowRightIcon size={14} />
                 </Link>
             </div>
