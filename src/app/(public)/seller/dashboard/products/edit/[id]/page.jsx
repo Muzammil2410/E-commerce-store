@@ -269,46 +269,46 @@ export default function EditProduct() {
     return (
       <div className="space-y-8">
         {/* Basic Details */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <Package className="w-5 h-5 mr-2 text-blue-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center transition-colors duration-200">
+            <Package className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
             Basic Details
           </h2>
           
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Title *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Product Title *</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => handleInputChange('title', e.target.value)}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.title ? 'border-red-500' : 'border-gray-300'
+                className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400 ${
+                  errors.title ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
                 placeholder="Enter product title"
               />
-              {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+              {errors.title && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-200">{errors.title}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">SKU</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">SKU</label>
               <input
                 type="text"
                 value={formData.sku}
                 onChange={(e) => handleInputChange('sku', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Enter SKU"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Category *</label>
                 <select
                   value={formData.category}
                   onChange={(e) => handleInputChange('category', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.category ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
+                    errors.category ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                   }`}
                 >
                   <option value="">Select category</option>
@@ -316,16 +316,16 @@ export default function EditProduct() {
                     <option key={category} value={category}>{category}</option>
                   ))}
                 </select>
-                {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+                {errors.category && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-200">{errors.category}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Brand (Optional)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Brand (Optional)</label>
                 <input
                   type="text"
                   value={formData.brand}
                   onChange={(e) => handleInputChange('brand', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                   placeholder="Enter brand name"
                 />
               </div>
@@ -334,64 +334,64 @@ export default function EditProduct() {
         </div>
 
         {/* Pricing & Inventory */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <DollarSign className="w-5 h-5 mr-2 text-green-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center transition-colors duration-200">
+            <DollarSign className="w-5 h-5 mr-2 text-green-600 dark:text-green-400" />
             Pricing & Inventory
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Price *</label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
                 value={formData.price}
                 onChange={(e) => handleInputChange('price', e.target.value)}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.price ? 'border-red-500' : 'border-gray-300'
+                className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400 ${
+                  errors.price ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
                 placeholder="0.00"
               />
-              {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
+              {errors.price && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-200">{errors.price}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Sale Price (Optional)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Sale Price (Optional)</label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
                 value={formData.salePrice}
                 onChange={(e) => handleInputChange('salePrice', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="0.00"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Stock Quantity *</label>
               <input
                 type="number"
                 min="0"
                 value={formData.stockQuantity}
                 onChange={(e) => handleInputChange('stockQuantity', e.target.value)}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.stockQuantity ? 'border-red-500' : 'border-gray-300'
+                className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400 ${
+                  errors.stockQuantity ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
                 placeholder="0"
               />
-              {errors.stockQuantity && <p className="text-red-500 text-sm mt-1">{errors.stockQuantity}</p>}
+              {errors.stockQuantity && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-200">{errors.stockQuantity}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">SKU/Barcode (Optional)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">SKU/Barcode (Optional)</label>
               <input
                 type="text"
                 value={formData.skuBarcode}
                 onChange={(e) => handleInputChange('skuBarcode', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Enter SKU or barcode"
               />
             </div>
@@ -407,65 +407,65 @@ export default function EditProduct() {
         </div>
 
         {/* Shipping Details */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <Truck className="w-5 h-5 mr-2 text-orange-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center transition-colors duration-200">
+            <Truck className="w-5 h-5 mr-2 text-orange-600 dark:text-orange-400" />
             Shipping Details
           </h2>
           
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Weight (kg) *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Weight (kg) *</label>
               <input
                 type="number"
                 step="0.1"
                 min="0"
                 value={formData.weight}
                 onChange={(e) => handleInputChange('weight', e.target.value)}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.weight ? 'border-red-500' : 'border-gray-300'
+                className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400 ${
+                  errors.weight ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
                 placeholder="0.0"
               />
-              {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+              {errors.weight && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-200">{errors.weight}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Dimensions (cm)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Dimensions (cm)</label>
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Length</label>
+                  <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1 transition-colors duration-200">Length</label>
                   <input
                     type="number"
                     step="0.1"
                     min="0"
                     value={formData.dimensions.length}
                     onChange={(e) => handleInputChange('dimensions.length', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Width</label>
+                  <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1 transition-colors duration-200">Width</label>
                   <input
                     type="number"
                     step="0.1"
                     min="0"
                     value={formData.dimensions.width}
                     onChange={(e) => handleInputChange('dimensions.width', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Height</label>
+                  <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1 transition-colors duration-200">Height</label>
                   <input
                     type="number"
                     step="0.1"
                     min="0"
                     value={formData.dimensions.height}
                     onChange={(e) => handleInputChange('dimensions.height', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                     placeholder="0"
                   />
                 </div>
@@ -475,24 +475,24 @@ export default function EditProduct() {
         </div>
 
         {/* Media */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <ImageIcon className="w-5 h-5 mr-2 text-purple-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center transition-colors duration-200">
+            <ImageIcon className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" />
             Media
           </h2>
           
           <div className="space-y-6">
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Images * (Max 8)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Product Images * (Max 8)</label>
               
               {/* Upload Area */}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 transition-colors bg-gray-50 dark:bg-gray-700/50">
                 <label className="cursor-pointer">
                   <div className="text-center">
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm font-medium text-gray-700">Click to upload more images</p>
-                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                    <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2 transition-colors duration-200" />
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200">Click to upload more images</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-200">PNG, JPG, GIF up to 10MB each</p>
                   </div>
                   <input
                     type="file"
@@ -504,12 +504,12 @@ export default function EditProduct() {
                 </label>
               </div>
               
-              {errors.images && <p className="text-red-500 text-sm mt-1">{errors.images}</p>}
+              {errors.images && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-200">{errors.images}</p>}
               
               {/* Image Previews */}
               {formData.images.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-sm font-medium text-gray-700 mb-3">Uploaded Images ({formData.images.length}/8)</p>
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 transition-colors duration-200">Uploaded Images ({formData.images.length}/8)</p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {formData.images.map((image, index) => (
                       <div
@@ -518,7 +518,7 @@ export default function EditProduct() {
                         onDragStart={(e) => handleDragStart(e, index)}
                         onDragOver={handleDragOver}
                         onDrop={(e) => handleDrop(e, index)}
-                        className="relative group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                        className="relative group border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                       >
                         <Image
                           src={image.preview}
@@ -553,12 +553,12 @@ export default function EditProduct() {
 
             {/* Video URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Video URL (Optional)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Product Video URL (Optional)</label>
               <input
                 type="url"
                 value={formData.videoUrl}
                 onChange={(e) => handleInputChange('videoUrl', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
               />
             </div>
@@ -566,31 +566,31 @@ export default function EditProduct() {
         </div>
 
         {/* Description */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <FileText className="w-5 h-5 mr-2 text-indigo-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center transition-colors duration-200">
+            <FileText className="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400" />
             Description
           </h2>
           
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Short Description</label>
               <input
                 type="text"
                 value={formData.shortDescription}
                 onChange={(e) => handleInputChange('shortDescription', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Brief one-liner for product cards"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Description</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Product Description</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 rows={8}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Detailed product description..."
               />
             </div>
@@ -598,42 +598,42 @@ export default function EditProduct() {
         </div>
 
         {/* Meta/SEO */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <Search className="w-5 h-5 mr-2 text-teal-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6 flex items-center transition-colors duration-200">
+            <Search className="w-5 h-5 mr-2 text-teal-600 dark:text-teal-400" />
             Meta / SEO (Optional)
           </h2>
           
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Meta Title</label>
               <input
                 type="text"
                 value={formData.metaTitle}
                 onChange={(e) => handleInputChange('metaTitle', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="SEO title for search engines"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Meta Description</label>
               <textarea
                 value={formData.metaDescription}
                 onChange={(e) => handleInputChange('metaDescription', e.target.value)}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="SEO description for search engines"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200">Keywords</label>
               <input
                 type="text"
                 value={formData.keywords}
                 onChange={(e) => handleInputChange('keywords', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="keyword1, keyword2, keyword3"
               />
             </div>
@@ -645,32 +645,32 @@ export default function EditProduct() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors duration-200">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading product...</p>
+          <div className="w-8 h-8 border-4 border-blue-600 dark:border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 transition-colors duration-200">Loading product...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={handleCancel}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+                className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
               >
                 <ArrowLeft size={20} />
                 <span>Back to Products</span>
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{t('editProduct')}</h1>
-                <p className="text-gray-600">{t('updateYourProductInformation') || 'Update your product information'}</p>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-200">{t('editProduct')}</h1>
+                <p className="text-gray-600 dark:text-gray-400 transition-colors duration-200">{t('updateYourProductInformation') || 'Update your product information'}</p>
               </div>
             </div>
           </div>
@@ -687,12 +687,12 @@ export default function EditProduct() {
           {/* Preview Section */}
           <div className="lg:col-span-1">
             <div className="sticky top-8">
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Preview</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 transition-colors duration-200">Product Preview</h3>
                 
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden transition-colors duration-200">
                   {/* Product Image */}
-                  <div className="aspect-square bg-gray-100 flex items-center justify-center">
+                  <div className="aspect-square bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition-colors duration-200">
                     {formData.images.length > 0 ? (
                       <Image
                         src={formData.images[0].preview}
@@ -702,7 +702,7 @@ export default function EditProduct() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="text-center text-gray-400">
+                      <div className="text-center text-gray-400 dark:text-gray-500 transition-colors duration-200">
                         <ImageIcon size={48} className="mx-auto mb-2" />
                         <p className="text-sm">No image uploaded</p>
                       </div>
@@ -711,11 +711,11 @@ export default function EditProduct() {
                   
                   {/* Product Info */}
                   <div className="p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-200">
                       {formData.title || 'Product Title'}
                     </h4>
                     
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 transition-colors duration-200">
                       {formData.shortDescription || 'Short description will appear here'}
                     </p>
                     
@@ -723,25 +723,25 @@ export default function EditProduct() {
                       <div className="flex items-center space-x-2">
                         {formData.salePrice && formData.salePrice > 0 ? (
                           <>
-                            <span className="text-lg font-bold text-green-600">
+                            <span className="text-lg font-bold text-green-600 dark:text-green-400 transition-colors duration-200">
                               ${formData.salePrice}
                             </span>
-                            <span className="text-sm text-gray-500 line-through">
+                            <span className="text-sm text-gray-500 dark:text-gray-400 line-through transition-colors duration-200">
                               ${formData.price}
                             </span>
                           </>
                         ) : (
-                          <span className="text-lg font-bold text-gray-900">
+                          <span className="text-lg font-bold text-gray-900 dark:text-gray-100 transition-colors duration-200">
                             ${formData.price || '0.00'}
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-200">
                         {formData.category || 'Category'}
                       </span>
                     </div>
                     
-                    <div className="flex items-center justify-between text-sm text-gray-500">
+                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 transition-colors duration-200">
                       <span>Stock: {formData.stockQuantity || '0'}</span>
                       <span>Weight: {formData.weight || '0'}kg</span>
                     </div>
@@ -753,11 +753,11 @@ export default function EditProduct() {
         </div>
 
         {/* Bottom Action Buttons */}
-        <div className="mt-6 bg-white rounded-lg shadow-sm p-6">
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-200">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               onClick={handleSaveDraft}
-              className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
             >
               <Save size={20} />
               <span>{t('saveAsDraft')}</span>
@@ -765,7 +765,7 @@ export default function EditProduct() {
             <button
               onClick={handleUpdate}
               disabled={isSubmitting}
-              className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>

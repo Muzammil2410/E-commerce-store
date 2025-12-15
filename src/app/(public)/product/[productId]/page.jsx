@@ -31,7 +31,7 @@ export default function Product() {
             <div className="max-w-7xl mx-auto">
 
                 {/* Breadcrums */}
-                <div className="text-gray-600 text-xs sm:text-sm mt-6 sm:mt-8 mb-4 sm:mb-5">
+                <div className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mt-4 sm:mt-5 mb-3 sm:mb-4 transition-colors duration-200">
                     {t('home')} / {t('products')} / {product?.category}
                 </div>
 

@@ -42,12 +42,12 @@ const Hero = () => {
                                 <span className='hidden sm:inline'>{t('freeShipping')}</span>
                                 <ChevronRightIcon className='group-hover:ml-2 transition-all flex-shrink-0' size={14} />
                             </div>
-                            <h2 className='hidden sm:block text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 dark:text-white drop-shadow-sm dark:drop-shadow-none transition-colors duration-300'>
-                                <span className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200">Ziz</span>{t('zizlaYoullLove')}
+                            <h2 className='hidden sm:block text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 dark:text-gray-100 drop-shadow-lg dark:drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] transition-colors duration-300'>
+                                <span className="text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 transition-colors duration-200">Ziz</span>{t('zizlaYoullLove')}
                             </h2>
-                            <div className='hidden sm:block text-gray-800 dark:text-gray-200 text-sm sm:text-base font-semibold mb-3 sm:mb-4 drop-shadow-sm dark:drop-shadow-none transition-colors duration-300'>
-                                <p className='text-gray-700 dark:text-gray-300 text-xs sm:text-sm transition-colors duration-300'>{t('startsFrom')}</p>
-                                <p className='text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300'>{formatCurrency(4.90)}</p>
+                            <div className='hidden sm:block text-gray-800 dark:text-gray-100 text-sm sm:text-base font-semibold mb-3 sm:mb-4 drop-shadow-lg dark:drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] transition-colors duration-300'>
+                                <p className='text-gray-700 dark:text-gray-200 text-xs sm:text-sm transition-colors duration-300'>{t('startsFrom')}</p>
+                                <p className='text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-300 transition-colors duration-300'>{formatCurrency(4.90)}</p>
                             </div>
                             <button className='hidden sm:block bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white text-xs sm:text-sm font-semibold py-2.5 px-6 sm:py-3 sm:px-8 xl:py-5 xl:px-12 rounded-xl hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 hover:scale-105 active:scale-95 transition-all duration-200 w-fit shadow-xl dark:shadow-gray-900/50 hover:shadow-2xl border border-blue-500/20 dark:border-blue-400/20 touch-manipulation'>{t('learnMore')}</button>
                         </div>

@@ -187,11 +187,29 @@ img {
     outline: none;
     min-height: 3rem; /* Ensure minimum height matches other inputs */
     box-sizing: border-box;
+    background-color: white;
+    color: #111827;
 }
 
 .phone-input .PhoneInputInput:focus {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Dark mode styles for PhoneInputInput */
+.dark .phone-input .PhoneInputInput {
+    border-color: #4b5563;
+    background-color: #374151;
+    color: white;
+}
+
+.dark .phone-input .PhoneInputInput:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.dark .phone-input .PhoneInputInput::placeholder {
+    color: #9ca3af;
 }
 
 .phone-input .PhoneInputCountrySelect {
@@ -208,11 +226,24 @@ img {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    color: #111827;
 }
 
 .phone-input .PhoneInputCountrySelect:focus {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Dark mode styles for PhoneInputCountrySelect */
+.dark .phone-input .PhoneInputCountrySelect {
+    border-color: #4b5563;
+    background-color: #374151;
+    color: white;
+}
+
+.dark .phone-input .PhoneInputCountrySelect:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
 }
 
 /* Ensure country code is visible */
@@ -255,6 +286,7 @@ img {
     background-color: white;
     min-height: 2.5rem; /* Match other inputs in modal */
     box-sizing: border-box;
+    color: #111827;
 }
 
 .phone-input .PhoneInputCountrySelect {
@@ -271,4 +303,254 @@ img {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    color: #111827;
+}
+
+/* Dark mode styles for modal phone input */
+.dark .phone-input .PhoneInputInput {
+    border-color: #4b5563;
+    background-color: #374151;
+    color: white;
+}
+
+.dark .phone-input .PhoneInputCountrySelect {
+    border-color: #4b5563;
+    background-color: #374151;
+    color: white;
+}
+
+/* PhoneInput dropdown menu dark mode */
+.dark .PhoneInputCountryIcon {
+    filter: brightness(0) invert(1);
+}
+
+/* PhoneInput dropdown menu styles */
+.PhoneInputCountrySelect {
+    cursor: pointer;
+}
+
+/* Dark mode for PhoneInput dropdown menu */
+.dark .PhoneInputCountrySelect {
+    color: white;
+}
+
+/* PhoneInput dropdown options */
+.PhoneInputCountrySelect option {
+    background-color: white;
+    color: #111827;
+}
+
+.dark .PhoneInputCountrySelect option {
+    background-color: #374151;
+    color: white;
+}
+
+/* PhoneInput dropdown menu (the actual dropdown that appears) */
+.PhoneInputCountryIcon {
+    opacity: 0.8;
+}
+
+.dark .PhoneInputCountryIcon {
+    opacity: 1;
+    filter: brightness(0) invert(1);
+}
+
+/* Style the dropdown menu container */
+.PhoneInputCountrySelect {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Style for the react-phone-number-input dropdown menu */
+.PhoneInputCountrySelect:focus {
+    outline: none;
+}
+
+/* Additional dark mode styles for PhoneInput components */
+.dark .PhoneInput {
+    color: white;
+}
+
+.dark .PhoneInputCountrySelectArrow {
+    color: white;
+    opacity: 0.7;
+}
+
+/* Style the dropdown menu that appears when clicking country select */
+.PhoneInputCountrySelect:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.dark .PhoneInputCountrySelect:focus-visible {
+    outline-color: #60a5fa;
+}
+
+/* Style the dropdown menu container for react-phone-number-input */
+.PhoneInputCountrySelect {
+    background-color: white;
+}
+
+.dark .PhoneInputCountrySelect {
+    background-color: #374151;
+    color: white;
+}
+
+/* Style the dropdown options list */
+.PhoneInputCountrySelect option {
+    background-color: white;
+    color: #111827;
+    padding: 0.5rem;
+}
+
+.dark .PhoneInputCountrySelect option {
+    background-color: #374151;
+    color: white;
+}
+
+/* Target the actual dropdown menu (if it's a custom dropdown) */
+.PhoneInputCountrySelect:not([multiple]) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+.dark .PhoneInputCountrySelect:not([multiple]) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%9ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+
+/* Additional styling for the phone input wrapper */
+.phone-input {
+    position: relative;
+}
+
+/* Style any custom dropdown menu that might be rendered */
+.PhoneInputCountrySelect + *,
+.PhoneInputCountrySelect ~ * {
+    color: inherit;
+}
+
+/* Ensure the select element itself has proper dark mode styling */
+select.PhoneInputCountrySelect {
+    background-color: white;
+    color: #111827;
+}
+
+.dark select.PhoneInputCountrySelect {
+    background-color: #374151;
+    color: white;
+}
+
+/* Style for the dropdown menu options when opened */
+.PhoneInputCountrySelect optgroup,
+.PhoneInputCountrySelect optgroup option {
+    background-color: white;
+    color: #111827;
+}
+
+.dark .PhoneInputCountrySelect optgroup,
+.dark .PhoneInputCountrySelect optgroup option {
+    background-color: #374151;
+    color: white;
+}
+
+/* Force dark mode styling for select dropdown (browser-specific) */
+.dark select.PhoneInputCountrySelect {
+    background-color: #374151 !important;
+    color: white !important;
+    border-color: #4b5563 !important;
+}
+
+.dark select.PhoneInputCountrySelect option {
+    background-color: #374151 !important;
+    color: white !important;
+}
+
+.dark select.PhoneInputCountrySelect option:checked,
+.dark select.PhoneInputCountrySelect option:hover,
+.dark select.PhoneInputCountrySelect option:focus {
+    background-color: #4b5563 !important;
+    color: white !important;
+}
+
+/* Target any custom dropdown menu container */
+.PhoneInputCountrySelectMenu,
+.PhoneInputCountrySelectDropdown,
+[class*="PhoneInputCountrySelect"] {
+    background-color: white;
+}
+
+.dark .PhoneInputCountrySelectMenu,
+.dark .PhoneInputCountrySelectDropdown,
+.dark [class*="PhoneInputCountrySelect"] {
+    background-color: #374151;
+    color: white;
+}
+
+/* Style for react-phone-number-input custom dropdown items */
+.PhoneInputCountryOption,
+[class*="PhoneInputCountry"] {
+    background-color: white;
+    color: #111827;
+}
+
+.dark .PhoneInputCountryOption,
+.dark [class*="PhoneInputCountry"] {
+    background-color: #374151;
+    color: white;
+}
+
+.dark .PhoneInputCountryOption:hover,
+.dark .PhoneInputCountryOption:focus,
+.dark [class*="PhoneInputCountry"]:hover,
+.dark [class*="PhoneInputCountry"]:focus {
+    background-color: #4b5563;
+    color: white;
+}
+
+/* Use color-scheme to help browsers style native select dropdowns */
+.dark select.PhoneInputCountrySelect {
+    color-scheme: dark;
+}
+
+/* Apply color-scheme to html element when dark mode is active */
+.dark {
+    color-scheme: dark;
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
+/* Additional aggressive styling for select dropdown */
+.dark .phone-input select.PhoneInputCountrySelect,
+.dark select.PhoneInputCountrySelect {
+    background-color: #374151 !important;
+    color: white !important;
+    border-color: #4b5563 !important;
+}
+
+.dark .phone-input select.PhoneInputCountrySelect option,
+.dark select.PhoneInputCountrySelect option {
+    background-color: #374151 !important;
+    color: white !important;
+}
+
+/* Target the select element when it's focused or open */
+.dark .phone-input select.PhoneInputCountrySelect:focus,
+.dark select.PhoneInputCountrySelect:focus,
+.dark .phone-input select.PhoneInputCountrySelect:active,
+.dark select.PhoneInputCountrySelect:active {
+    background-color: #374151 !important;
+    color: white !important;
+}
+
+/* Style for when dropdown is open (some browsers) */
+.dark .phone-input select.PhoneInputCountrySelect[open],
+.dark select.PhoneInputCountrySelect[open] {
+    background-color: #374151 !important;
+    color: white !important;
 }

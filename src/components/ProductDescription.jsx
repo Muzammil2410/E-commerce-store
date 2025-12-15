@@ -13,13 +13,13 @@ const ProductDescription = ({ product }) => {
     const [selectedTab, setSelectedTab] = useState('productDescriptionTab')
 
     return (
-        <div className="my-18 text-sm text-slate-600">
+        <div className="my-18 text-sm text-slate-600 dark:text-gray-300 transition-colors duration-200">
 
             {/* Tabs */}
-            <div className="flex border-b border-slate-200 mb-6 max-w-2xl">
+            <div className="flex border-b border-slate-200 dark:border-gray-700 mb-6 max-w-2xl transition-colors duration-200">
                 {['productDescriptionTab', 'reviews'].map((tabKey) => (
                     <button 
-                        className={`${tabKey === selectedTab ? 'border-b-[1.5px] font-semibold' : 'text-slate-400'} px-3 py-2 font-medium`} 
+                        className={`${tabKey === selectedTab ? 'border-b-[1.5px] font-semibold text-slate-600 dark:text-gray-200' : 'text-slate-400 dark:text-gray-500'} px-3 py-2 font-medium transition-colors duration-200`} 
                         key={tabKey} 
                         onClick={() => setSelectedTab(tabKey)}
                     >
@@ -30,7 +30,7 @@ const ProductDescription = ({ product }) => {
 
             {/* Description */}
             {selectedTab === 'productDescriptionTab' && (
-                <p className="max-w-xl">{product.description}</p>
+                <p className="max-w-xl dark:text-gray-300 transition-colors duration-200">{product.description}</p>
             )}
 
             {/* Reviews */}
@@ -45,9 +45,9 @@ const ProductDescription = ({ product }) => {
                                         <StarIcon key={index} size={18} className='text-transparent mt-0.5' fill={item.rating >= index + 1 ? "#FCD34D" : "#D1D5DB"} />
                                     ))}
                                 </div>
-                                <p className="text-sm max-w-lg my-4">{item.review}</p>
-                                <p className="font-medium text-slate-800">{item.user.name}</p>
-                                <p className="mt-3 font-light">{new Date(item.createdAt).toDateString()}</p>
+                                <p className="text-sm max-w-lg my-4 dark:text-gray-300 transition-colors duration-200">{item.review}</p>
+                                <p className="font-medium text-slate-800 dark:text-gray-200 transition-colors duration-200">{item.user.name}</p>
+                                <p className="mt-3 font-light dark:text-gray-400 transition-colors duration-200">{new Date(item.createdAt).toDateString()}</p>
                             </div>
                         </div>
                     ))}
@@ -58,8 +58,8 @@ const ProductDescription = ({ product }) => {
             <div className="flex gap-3 mt-14">
                 <Image src={product.store.logo} alt="" className="size-11 rounded-full ring ring-slate-400" width={100} height={100} />
                 <div>
-                    <p className="font-medium text-slate-600">{t('productBy')} {product.store.name}</p>
-                    <Link to={`/shop/${product.store.username}`} className="flex items-center gap-1.5 text-blue-600 hover:text-blue-700 transition-colors duration-200"> {t('viewStoreLink')} <ArrowRight size={14} /></Link>
+                    <p className="font-medium text-slate-600 dark:text-gray-300 transition-colors duration-200">{t('productBy')} {product.store.name}</p>
+                    <Link to={`/shop/${product.store.username}`} className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200"> {t('viewStoreLink')} <ArrowRight size={14} /></Link>
                 </div>
             </div>
         </div>

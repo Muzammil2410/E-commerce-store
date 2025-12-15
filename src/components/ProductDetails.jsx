@@ -81,7 +81,7 @@ const ProductDetails = ({ product }) => {
     const averageRating = product.rating.reduce((acc, item) => acc + item.rating, 0) / product.rating.length;
     
     return (
-        <div className="flex flex-col gap-6 lg:gap-8">
+        <div className="flex flex-col gap-4 lg:gap-5">
             <div className="flex flex-col lg:flex-row gap-3 lg:gap-3">
                 {/* Left Side - Images */}
                 <div className="flex flex-col sm:flex-row lg:flex-col gap-3 lg:gap-2 lg:w-1/2">
@@ -102,7 +102,7 @@ const ProductDetails = ({ product }) => {
                                     }
                                 }}
                                 aria-label={`View product image ${index + 1} of ${product.images.length}: ${translateProductName(product.name)}`}
-                                className="bg-slate-100 flex items-center justify-center w-14 h-14 sm:w-18 sm:h-18 rounded-lg group cursor-pointer flex-shrink-0 hover:ring-2 hover:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+                                className="bg-slate-100 dark:bg-gray-700 flex items-center justify-center w-14 h-14 sm:w-18 sm:h-18 rounded-lg group cursor-pointer flex-shrink-0 hover:ring-2 hover:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
                             >
                                 <Image 
                                     src={image} 
@@ -119,7 +119,7 @@ const ProductDetails = ({ product }) => {
                         ref={imageRef}
                         onClick={handleImageClick}
                         onMouseMove={handleMouseMove}
-                        className="flex justify-center items-center w-full h-64 sm:h-80 lg:h-96 bg-slate-100 rounded-lg order-1 sm:order-2 cursor-zoom-in overflow-hidden" 
+                        className="flex justify-center items-center w-full h-56 sm:h-72 lg:h-80 bg-slate-100 dark:bg-gray-700 rounded-lg order-1 sm:order-2 cursor-zoom-in overflow-hidden transition-colors duration-200" 
                         role="img" 
                         aria-label={`Main product image: ${translateProductName(product.name)}`}
                     >
@@ -136,7 +136,7 @@ const ProductDetails = ({ product }) => {
                 </div>
 
                 {/* Right Side - Zoom View */}
-                <div className="hidden lg:flex lg:w-1/2 bg-white border border-gray-200 rounded-lg h-64 sm:h-80 lg:h-96 overflow-hidden">
+                <div className="hidden lg:flex lg:w-1/2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg h-56 sm:h-72 lg:h-80 overflow-hidden transition-colors duration-200">
                     {showZoom ? (
                         <div 
                             ref={zoomRef}
@@ -153,22 +153,22 @@ const ProductDetails = ({ product }) => {
                         </div>
                     ) : (
                         <div className="w-full h-full flex items-center justify-center p-4">
-                            <p className="text-gray-500 text-sm text-center">Click the product image to zoom here</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm text-center transition-colors duration-200">Click the product image to zoom here</p>
                         </div>
                     )}
                 </div>
             </div>
 
             {/* Product Details */}
-            <div className="flex-1">
-                <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800">{translateProductName(product.name)}</h1>
+            <div className="flex-1 mt-4 lg:mt-0">
+                <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800 dark:text-gray-100 transition-colors duration-200">{translateProductName(product.name)}</h1>
                 <div className='flex items-center mt-2'>
                     {Array(5).fill('').map((_, index) => (
                         <StarIcon key={index} size={14} className='text-transparent mt-0.5' fill={averageRating >= index + 1 ? "#FCD34D" : "#D1D5DB"} />
                     ))}
-                    <p className="text-sm ml-3 text-slate-500">{t('reviewsCount').replace('{count}', product.rating.length)}</p>
+                    <p className="text-sm ml-3 text-slate-500 dark:text-gray-400 transition-colors duration-200">{t('reviewsCount').replace('{count}', product.rating.length)}</p>
                 </div>
-                <div className="flex items-start my-6 gap-3 text-2xl font-semibold text-slate-800">
+                <div className="flex items-start my-6 gap-3 text-2xl font-semibold text-slate-800 dark:text-gray-100 transition-colors duration-200">
                     <button
                         type="button"
                         onClick={() => navigate('/bargain', { state: { from: location.pathname } })}
@@ -178,17 +178,17 @@ const ProductDetails = ({ product }) => {
                         💬 Bargain
                     </button>
                     <p> {formatCurrency(product.price)} </p>
-                    <p className="text-xl text-slate-500 line-through">{formatCurrency(product.mrp)}</p>
+                    <p className="text-xl text-slate-500 dark:text-gray-400 line-through transition-colors duration-200">{formatCurrency(product.mrp)}</p>
                 </div>
-                <div className="flex items-center gap-2 text-slate-500">
-                    <TagIcon size={14} />
+                <div className="flex items-center gap-2 text-slate-500 dark:text-gray-400 transition-colors duration-200">
+                    <TagIcon size={14} className="dark:text-gray-400" />
                     <p>{t('savePercentage').replace('{percentage}', ((product.mrp - product.price) / product.mrp * 100).toFixed(0))}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-5 mt-8 sm:mt-10">
                     {
                         cart[productId] && (
                             <div className="flex flex-col gap-3">
-                                <p className="text-lg text-slate-800 font-semibold">{t('quantity')}</p>
+                                <p className="text-lg text-slate-800 dark:text-gray-100 font-semibold transition-colors duration-200">{t('quantity')}</p>
                                 <Counter productId={productId} />
                             </div>
                         )
@@ -198,7 +198,7 @@ const ProductDetails = ({ product }) => {
                     <button 
                         onClick={() => !cart[productId] ? addToCartHandler() : navigate('/cart')} 
                         aria-label={!cart[productId] ? `Add ${translateProductName(product.name)} to cart` : 'View cart'}
-                        className="bg-slate-800 text-white px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-slate-900 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-slate-800 focus:ring-offset-2"
+                        className="bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-slate-900 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-gray-600 focus:ring-offset-2"
                     >
                         {!cart[productId] ? t('addToCart') : t('viewCart')}
                     </button>
@@ -207,15 +207,15 @@ const ProductDetails = ({ product }) => {
                     <button
                         onClick={buyItNowHandler}
                         aria-label={`Buy ${translateProductName(product.name)} now`}
-                        className="bg-yellow-500 text-slate-900 px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-yellow-400 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                        className="bg-yellow-500 dark:bg-yellow-600 dark:hover:bg-yellow-500 text-slate-900 dark:text-gray-100 px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-yellow-400 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-yellow-500 dark:focus:ring-yellow-600 focus:ring-offset-2"
                     >
                         {t('buyItNow')}
                     </button>
                 </div>
-                <hr className="border-gray-300 my-5" />
-                <div className="flex flex-col gap-4 text-slate-500">
-                    <p className="flex gap-3"> <CreditCardIcon className="text-slate-400" /> {t('securedPayment')} </p>
-                    <p className="flex gap-3"> <UserIcon className="text-slate-400" /> {t('trustedByTopBrands')} </p>
+                <hr className="border-gray-300 dark:border-gray-700 my-5 transition-colors duration-200" />
+                <div className="flex flex-col gap-4 text-slate-500 dark:text-gray-400 transition-colors duration-200">
+                    <p className="flex gap-3"> <CreditCardIcon className="text-slate-400 dark:text-gray-500" /> {t('securedPayment')} </p>
+                    <p className="flex gap-3"> <UserIcon className="text-slate-400 dark:text-gray-500" /> {t('trustedByTopBrands')} </p>
                 </div>
 
             </div>

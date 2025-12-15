@@ -11,7 +11,7 @@ const FeeBreakdown = ({ sellingPrice, deliveryOption = 'self-delivery' }) => {
   })
 
   // Fee configuration
-  const PLATFORM_FEE_PERCENTAGE = 8.5 // 8.5% platform fee
+  const PLATFORM_FEE_PERCENTAGE = 10 // 10% platform fee
   const DELIVERY_FEE_FIXED = 2.50 // $2.50 fixed delivery fee for platform delivery
 
   useEffect(() => {
