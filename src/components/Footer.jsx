@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { productDummyData } from "@/assets/assets";
 import { useContext } from "react";
 import { LanguageCurrencyContext } from "@/contexts/LanguageCurrencyContext";
+import { ArrowUp } from "lucide-react";
 
 const Footer = () => {
     // Safely get context without throwing error
@@ -73,6 +74,13 @@ const Footer = () => {
         { icon: LinkedinIcon, link: "https://www.linkedin.com", hoverColor: "hover:bg-blue-700", iconHoverColor: "group-hover:stroke-white" },
     ]
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
     return (
         <footer className="bg-blue-900 dark:bg-gray-900 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-3 sm:px-6">
@@ -115,12 +123,21 @@ const Footer = () => {
                 </div>
                 
                 {/* Payment Methods Strip */}
-                <div className="flex flex-col sm:flex-row items-center justify-between py-4 border-t border-white/20">
-                    <p className="text-sm text-white mb-4 sm:mb-0">
+                <div className="flex flex-col sm:flex-row items-center justify-between py-4 border-t border-white/20 dark:border-gray-700">
+                    <p className="text-sm text-white dark:text-gray-300 mb-4 sm:mb-0 transition-colors duration-200">
                         {t('copyright')}
                     </p>
                     
                     <div className="flex items-center gap-3 flex-wrap">
+                        {/* Go to Top Button */}
+                        <button
+                            onClick={scrollToTop}
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-white/10 dark:bg-gray-800/50 hover:bg-white/20 dark:hover:bg-gray-700/50 border border-white/20 dark:border-gray-700 text-white dark:text-gray-300 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                            aria-label="Go to top"
+                        >
+                            <ArrowUp size={18} />
+                            <span className="text-sm font-medium">Go to Top</span>
+                        </button>
                         {/* VISA */}
                         <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg px-4 py-2 flex items-center justify-center min-w-[60px]">
                             <div className="text-white font-bold text-lg tracking-wider">VISA</div>

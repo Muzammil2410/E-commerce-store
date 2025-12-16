@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { ShoppingBag, Eye, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Image from '@/components/Image'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function OrderHistoryTab({ orders }) {
+  const { t } = useLanguageCurrency()
   const [dateRange, setDateRange] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
 
@@ -35,26 +37,26 @@ export default function OrderHistoryTab({ orders }) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Order History</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('orderHistory')}</h2>
         <div className="flex gap-3">
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm transition-colors"
           >
-            <option value="all">All Time</option>
-            <option value="7days">Last 7 Days</option>
-            <option value="30days">Last 30 Days</option>
-            <option value="90days">Last 90 Days</option>
+            <option value="all">{t('allTime')}</option>
+            <option value="7days">{t('last7Days')}</option>
+            <option value="30days">{t('last30Days')}</option>
+            <option value="90days">{t('last90Days')}</option>
           </select>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm transition-colors"
           >
-            <option value="all">All Status</option>
-            <option value="DELIVERED">Delivered</option>
-            <option value="CANCELLED">Cancelled</option>
+            <option value="all">{t('allStatus')}</option>
+            <option value="DELIVERED">{t('delivered')}</option>
+            <option value="CANCELLED">{t('cancelOrder')}</option>
           </select>
         </div>
       </div>
@@ -64,11 +66,11 @@ export default function OrderHistoryTab({ orders }) {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">Order ID</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">Product</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">Delivery Date</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">Actions</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('orderId')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('product')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('deliveryDate')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('status')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase transition-colors duration-300">{t('actions')}</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
@@ -97,7 +99,7 @@ export default function OrderHistoryTab({ orders }) {
                           {order.orderItems[0]?.product?.name || 'Product'}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                          {order.orderItems.length} {order.orderItems.length === 1 ? 'item' : 'items'}
+                          {order.orderItems.length} {t('items')}
                         </p>
                       </div>
                     </div>
@@ -125,7 +127,7 @@ export default function OrderHistoryTab({ orders }) {
                   <td className="px-4 py-4 whitespace-nowrap">
                     <button className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium flex items-center space-x-1 transition-colors duration-300">
                       <Eye size={16} />
-                      <span>View Details</span>
+                      <span>{t('viewDetails')}</span>
                     </button>
                   </td>
                 </tr>
@@ -136,11 +138,11 @@ export default function OrderHistoryTab({ orders }) {
       ) : (
         <div className="text-center py-12">
           <ShoppingBag className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4 transition-colors duration-300" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">No orders found</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">{t('noOrdersFound')}</h3>
           <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">
             {deliveredOrders.length === 0 
-              ? "You haven't placed any orders yet."
-              : "Try adjusting your filters."
+              ? t('noOrdersPlacedYet')
+              : t('tryAdjustingFilters')
             }
           </p>
           {deliveredOrders.length === 0 && (
@@ -148,7 +150,7 @@ export default function OrderHistoryTab({ orders }) {
               to="/shop"
               className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors inline-block"
             >
-              Start Shopping
+              {t('startShopping')}
             </Link>
           )}
         </div>

@@ -293,13 +293,13 @@ export default function ProfilePage() {
     }
 
     const tabs = [
-        { id: 'profile', label: 'Profile', icon: User },
-        { id: 'active-orders', label: 'Active Orders', icon: Package },
-        { id: 'tracking', label: 'Delivery Tracking', icon: Truck },
-        { id: 'orders', label: 'Order History', icon: ShoppingBag },
-        { id: 'returns', label: 'Returns & Refunds', icon: RotateCcw },
-        { id: 'addresses', label: 'Addresses', icon: MapPin },
-        { id: 'wishlist', label: 'Wishlist', icon: Heart }
+        { id: 'profile', label: t('profileTab'), icon: User },
+        { id: 'active-orders', label: t('activeOrdersTab'), icon: Package },
+        { id: 'tracking', label: t('deliveryTrackingTab'), icon: Truck },
+        { id: 'orders', label: t('orderHistoryTab'), icon: ShoppingBag },
+        { id: 'returns', label: t('returnsRefundsTab'), icon: RotateCcw },
+        { id: 'addresses', label: t('addressesTab'), icon: MapPin },
+        { id: 'wishlist', label: t('wishlistTab'), icon: Heart }
     ]
 
     if (!user) {
@@ -312,8 +312,8 @@ export default function ProfilePage() {
             <div className="max-w-7xl mx-auto px-4">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">My Account</h1>
-                    <p className="text-gray-600 dark:text-gray-300 mt-2 transition-colors duration-300">Manage your account settings and preferences</p>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('myAccount')}</h1>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2 transition-colors duration-300">{t('manageAccountSettings')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -373,7 +373,7 @@ export default function ProfilePage() {
                                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors mt-4"
                             >
                                 <LogOut size={20} />
-                                Logout
+                                {t('logout')}
                             </button>
                         </div>
                     </div>
@@ -383,12 +383,12 @@ export default function ProfilePage() {
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
                             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
-                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Profile Information</h2>
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{t('profileInformation')}</h2>
                                 
                                 {/* Profile Picture Section */}
                                 <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 transition-colors duration-300">
-                                        Profile Picture
+                                        {t('profilePicture')}
                                     </label>
                                     <div className="flex items-center gap-6">
                                         <div className="relative">
@@ -409,7 +409,7 @@ export default function ProfilePage() {
                                             <label className="cursor-pointer">
                                                 <span className="inline-flex items-center gap-2 bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
                                                     <Camera size={18} />
-                                                    {profilePicture ? 'Change Picture' : 'Upload Picture'}
+                                                    {profilePicture ? t('changePicture') : t('uploadPicture')}
                                                 </span>
                                                 <input
                                                     type="file"
@@ -426,7 +426,7 @@ export default function ProfilePage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                            Full Name
+                                            {t('fullNameLabel')}
                                         </label>
                                         <input
                                             type="text"
@@ -440,7 +440,7 @@ export default function ProfilePage() {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                            Email Address
+                                            {t('emailAddressLabel')}
                                         </label>
                                         <input
                                             type="email"
@@ -461,13 +461,13 @@ export default function ProfilePage() {
                                                 onClick={handleSaveProfile}
                                                 className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                             >
-                                                Save Changes
+                                                {t('saveChanges')}
                                             </button>
                                             <button 
                                                 onClick={handleCancelEdit}
                                                 className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                                             >
-                                                Cancel
+                                                {t('cancelButton')}
                                             </button>
                                         </>
                                     ) : (
@@ -475,7 +475,7 @@ export default function ProfilePage() {
                                             onClick={handleEditProfile}
                                             className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                         >
-                                            Edit Profile
+                                            {t('editProfile')}
                                         </button>
                                     )}
                                 </div>
@@ -506,13 +506,13 @@ export default function ProfilePage() {
                         {activeTab === 'addresses' && (
                             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Saved Addresses</h2>
+                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('savedAddresses')}</h2>
                                     <button
                                         onClick={() => setShowAddressModal(true)}
                                         className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center gap-2"
                                     >
                                         <Plus size={20} />
-                                        Add Address
+                                        {t('addAddress')}
                                     </button>
                                 </div>
 
@@ -545,7 +545,7 @@ export default function ProfilePage() {
                                                     {address.email && <p>{address.email}</p>}
                                                     {address.updatedAt && (
                                                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 transition-colors duration-300">
-                                                            Updated: {new Date(address.updatedAt).toLocaleDateString()}
+                                                            {t('updated')}: {new Date(address.updatedAt).toLocaleDateString()}
                                                         </p>
                                                     )}
                                                 </div>
@@ -555,13 +555,13 @@ export default function ProfilePage() {
                                 ) : (
                                     <div className="text-center py-12">
                                         <MapPin className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4 transition-colors duration-300" />
-                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">No addresses saved</h3>
-                                        <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Add an address to make checkout faster.</p>
+                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">{t('noAddressesSaved')}</h3>
+                                        <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">{t('addAddressToCheckout')}</p>
                                         <button
                                             onClick={() => setShowAddressModal(true)}
                                             className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                         >
-                                            Add Address
+                                            {t('addAddress')}
                                         </button>
                                     </div>
                                 )}
@@ -571,7 +571,7 @@ export default function ProfilePage() {
                         {/* Wishlist Tab */}
                         {activeTab === 'wishlist' && (
                             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
-                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Wishlist ({wishlistArray.length})</h2>
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{t('wishlistTab')} ({wishlistArray.length})</h2>
                                 
                                 {wishlistArray.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -612,13 +612,13 @@ export default function ProfilePage() {
                                 ) : (
                                     <div className="text-center py-12">
                                         <Heart className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4 transition-colors duration-300" />
-                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">Your wishlist is empty</h3>
-                                        <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Save items you love for later.</p>
+                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">{t('yourWishlistEmpty')}</h3>
+                                        <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">{t('saveItemsForLater')}</p>
                                         <Link
                                             to="/shop"
                                             className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                         >
-                                            Start Shopping
+                                            {t('startShopping')}
                                         </Link>
                                     </div>
                                 )}
@@ -634,13 +634,13 @@ export default function ProfilePage() {
                 <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors duration-300">
                     <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 transition-colors duration-300">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
-                            {editingAddress ? 'Edit Address' : 'Add New Address'}
+                            {editingAddress ? t('editAddress') : t('addNewAddress')}
                         </h3>
                         
                         <form onSubmit={handleAddressSubmit} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                    Full Name *
+                                    {t('fullNameLabel')} *
                                 </label>
                                 <input
                                     type="text"
@@ -654,7 +654,7 @@ export default function ProfilePage() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                        Email *
+                                        {t('emailAddressLabel')} *
                                     </label>
                                     <input
                                         type="email"
@@ -666,7 +666,7 @@ export default function ProfilePage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                        Phone *
+                                        {t('phone')} *
                                     </label>
                                     <PhoneInput
                                         value={addressForm.phone}
@@ -674,7 +674,7 @@ export default function ProfilePage() {
                                         defaultCountry="PK"
                                         international
                                         countryCallingCodeEditable={false}
-                                        placeholder="Enter your phone number"
+                                        placeholder={t('enterYourPhoneNumber')}
                                         className="phone-input"
                                         style={{
                                             '--PhoneInput-color--focus': '#3b82f6',
@@ -686,7 +686,7 @@ export default function ProfilePage() {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                    Street Address *
+                                    {t('streetAddress')} *
                                 </label>
                                 <textarea
                                     value={addressForm.street}
@@ -700,7 +700,7 @@ export default function ProfilePage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                        City *
+                                        {t('cityLabel')} *
                                     </label>
                                     <input
                                         type="text"
@@ -712,7 +712,7 @@ export default function ProfilePage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                        State *
+                                        {t('stateLabel')} *
                                     </label>
                                     <input
                                         type="text"
@@ -724,7 +724,7 @@ export default function ProfilePage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                                        ZIP *
+                                        {t('zipLabel')} *
                                     </label>
                                     <input
                                         type="text"
@@ -741,7 +741,7 @@ export default function ProfilePage() {
                                     type="submit"
                                     className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                                 >
-                                    {editingAddress ? 'Update Address' : 'Add Address'}
+                                    {editingAddress ? t('updateAddress') : t('addAddress')}
                                 </button>
                                 <button
                                     type="button"
@@ -761,7 +761,7 @@ export default function ProfilePage() {
                                     }}
                                     className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                                 >
-                                    Cancel
+                                    {t('cancelButton')}
                                 </button>
                             </div>
                         </form>

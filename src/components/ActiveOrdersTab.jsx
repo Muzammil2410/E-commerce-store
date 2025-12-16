@@ -2,8 +2,10 @@
 import { useState } from 'react'
 import { Package, Calendar, X } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function ActiveOrdersTab({ orders, setOrders }) {
+  const { t } = useLanguageCurrency()
   const [showRescheduleModal, setShowRescheduleModal] = useState(null)
   const [showCancelModal, setShowCancelModal] = useState(null)
   const [rescheduleDate, setRescheduleDate] = useState('')
@@ -15,7 +17,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
 
   const handleReschedule = (orderId) => {
     if (!rescheduleDate) {
-      toast.error('Please select a date')
+      toast.error(t('selectDate'))
       return
     }
     // Update order with new date
@@ -25,14 +27,14 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
         : order
     )
     setOrders(updatedOrders)
-    toast.success('Delivery rescheduled successfully')
+    toast.success(t('deliveryRescheduled'))
     setShowRescheduleModal(null)
     setRescheduleDate('')
   }
 
   const handleCancel = (orderId) => {
     if (!cancelReason) {
-      toast.error('Please provide a cancellation reason')
+      toast.error(t('provideCancellationReason'))
       return
     }
     // Update order status
@@ -42,14 +44,14 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
         : order
     )
     setOrders(updatedOrders)
-    toast.success('Order cancelled successfully')
+    toast.success(t('orderCancelled'))
     setShowCancelModal(null)
     setCancelReason('')
   }
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Active Orders</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{t('activeOrdersTab')}</h2>
       
       {activeOrders.length > 0 ? (
         <div className="space-y-4">
@@ -58,10 +60,10 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                    Order #{order.id.slice(-8).toUpperCase()}
+                    {t('orderNumber')} #{order.id.slice(-8).toUpperCase()}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                    Placed on {new Date(order.createdAt).toLocaleDateString()}
+                    {t('placedOn')} {new Date(order.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <span className={`px-3 py-1 text-sm font-medium rounded-full ${
@@ -77,15 +79,15 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
                 <div className="flex items-center space-x-3">
                   <Package className="w-5 h-5 text-gray-400 dark:text-gray-500 transition-colors duration-300" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">{order.orderItems.length} item(s)</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">Total: ${order.total.toFixed(2)}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">{order.orderItems.length} {t('items')}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('totalLabel')}: ${order.total.toFixed(2)}</p>
                   </div>
                 </div>
                 {order.expectedDeliveryDate && (
                   <div className="flex items-center space-x-3">
                     <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-500 transition-colors duration-300" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">Expected Delivery</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('expectedDelivery')}</p>
                       <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
                         {new Date(order.expectedDeliveryDate).toLocaleDateString()}
                       </p>
@@ -99,13 +101,13 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
                   onClick={() => setShowRescheduleModal(order.id)}
                   className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
                 >
-                  Reschedule Delivery
+                  {t('rescheduleDelivery')}
                 </button>
                 <button
                   onClick={() => setShowCancelModal(order.id)}
                   className="px-4 py-2 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm font-medium"
                 >
-                  Cancel Order
+                  {t('cancelOrder')}
                 </button>
               </div>
             </div>
@@ -114,8 +116,8 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
       ) : (
         <div className="text-center py-12">
           <Package className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4 transition-colors duration-300" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">No active orders</h3>
-          <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">You don't have any active orders at the moment.</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">{t('noActiveOrders')}</h3>
+          <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('noActiveOrdersDesc')}</p>
         </div>
       )}
 
@@ -124,7 +126,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
         <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors duration-300">
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 transition-colors duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Reschedule Delivery</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('rescheduleDelivery')}</h3>
               <button
                 onClick={() => {
                   setShowRescheduleModal(null)
@@ -137,7 +139,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                Select New Delivery Date
+                {t('selectNewDeliveryDate')}
               </label>
               <input
                 type="date"
@@ -152,7 +154,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
                 onClick={() => handleReschedule(showRescheduleModal)}
                 className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
               >
-                Confirm
+                {t('confirm')}
               </button>
               <button
                 onClick={() => {
@@ -161,7 +163,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
                 }}
                 className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
-                Cancel
+                {t('cancelButton')}
               </button>
             </div>
           </div>
@@ -173,7 +175,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
         <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors duration-300">
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 transition-colors duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Cancel Order</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('cancelOrder')}</h3>
               <button
                 onClick={() => {
                   setShowCancelModal(null)
@@ -186,13 +188,13 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                Reason for Cancellation
+                {t('reasonForCancellation')}
               </label>
               <textarea
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
                 rows={4}
-                placeholder="Please provide a reason for cancellation..."
+                placeholder={t('pleaseProvideCancellationReason')}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none transition-colors"
               />
             </div>
@@ -201,7 +203,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
                 onClick={() => handleCancel(showCancelModal)}
                 className="flex-1 bg-red-600 dark:bg-red-500 text-white py-2 rounded-lg hover:bg-red-700 dark:hover:bg-red-600 transition-colors"
               >
-                Confirm Cancellation
+                {t('confirmCancellation')}
               </button>
               <button
                 onClick={() => {
@@ -210,7 +212,7 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
                 }}
                 className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
-                Keep Order
+                {t('keepOrder')}
               </button>
             </div>
           </div>

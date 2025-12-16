@@ -1,5 +1,5 @@
 'use client'
-import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Menu, X, Sun, Moon } from "lucide-react";
+import { Search, ShoppingCart, ChevronDown, User, LogOut, Heart, Menu, X, Sun, Moon, Bell } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Image from "@/components/Image";
 import { assets } from '@/assets/assets';
@@ -38,9 +38,11 @@ const Navbar = () => {
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
     const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false)
     const [hoveredCategory, setHoveredCategory] = useState(null)
+    const [showNotificationModal, setShowNotificationModal] = useState(false)
     const languageModalRef = useRef(null)
     const languageDropdownRef = useRef(null)
     const currencyDropdownRef = useRef(null)
+    const notificationModalRef = useRef(null)
 
     // Update local state when context changes
     useEffect(() => {
@@ -140,6 +142,9 @@ const Navbar = () => {
             if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
                 setShowMobileAuth(false)
                 setShowMobileSearch(false)
+            }
+            if (notificationModalRef.current && !notificationModalRef.current.contains(event.target)) {
+                setShowNotificationModal(false)
             }
             if (languageModalRef.current && !languageModalRef.current.contains(event.target)) {
                 // Don't close if clicking on language or currency dropdown inside modal
@@ -456,12 +461,15 @@ const Navbar = () => {
                     <Link to="/" className="sm:hidden hover:scale-105 transition-transform duration-200 flex-shrink-0">
                         <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden">
                             <Image 
-                                src={assets.zizla_logo} 
+                                src={isDarkMode ? assets.darkModeLogo : assets.zizla_logo} 
                                 alt="Zizla Logo" 
                                 width={350} 
                                 height={140} 
-                                className="h-16 w-auto dark:mix-blend-multiply"
-                                style={{ 
+                                className={`h-16 w-auto ${isDarkMode ? 'dark-mode-logo' : ''}`}
+                                style={isDarkMode ? {
+                                    backgroundColor: '#111827',
+                                    display: 'block'
+                                } : {
                                     backgroundColor: 'transparent',
                                     filter: 'contrast(1.2) brightness(1.1)'
                                 }}
@@ -473,12 +481,15 @@ const Navbar = () => {
                     <Link to="/" className="hidden sm:block hover:scale-105 transition-transform duration-200 flex-shrink-0">
                         <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden">
                             <Image 
-                                src={assets.zizla_logo} 
+                                src={isDarkMode ? assets.darkModeLogo : assets.zizla_logo} 
                                 alt="Zizla Logo" 
                                 width={350} 
                                 height={140} 
-                                className="h-12 md:h-14 lg:h-16 w-auto dark:mix-blend-multiply"
-                                style={{ 
+                                className={`h-12 md:h-14 lg:h-16 w-auto ${isDarkMode ? 'dark-mode-logo' : ''}`}
+                                style={isDarkMode ? {
+                                    backgroundColor: '#111827',
+                                    display: 'block'
+                                } : {
                                     backgroundColor: 'transparent',
                                     filter: 'contrast(1.2) brightness(1.1)'
                                 }}
@@ -664,6 +675,16 @@ const Navbar = () => {
 
                         {user ? (
                             <div className="flex items-center gap-3">
+                                {/* Notifications */}
+                                <button
+                                    onClick={() => setShowNotificationModal(!showNotificationModal)}
+                                    className="relative flex items-center gap-1.5 sm:gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm"
+                                    aria-label="Notifications"
+                                >
+                                    <Bell size={16} className="sm:w-[18px] sm:h-[18px] hover:scale-110 transition-transform duration-200" />
+                                    <span className="hidden sm:inline">Notifications</span>
+                                </button>
+
                                 {/* Wishlist */}
                                 <Link to="/profile?tab=wishlist" className="relative flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm">
                                     <Heart size={16} className="sm:w-[18px] sm:h-[18px] hover:scale-110 transition-transform duration-200" />
@@ -987,6 +1008,53 @@ const Navbar = () => {
                             >
                                 {t('save')}
                             </button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Notification Modal */}
+            {showNotificationModal && (
+                <>
+                    {/* Backdrop */}
+                    <div 
+                        className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998] transition-colors duration-200"
+                        onClick={() => setShowNotificationModal(false)}
+                    />
+                    
+                    {/* Modal */}
+                    <div 
+                        ref={notificationModalRef}
+                        className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl dark:shadow-gray-900/50 max-w-md w-full p-6 sm:p-8 relative transition-colors duration-200">
+                            {/* Close Button */}
+                            <button
+                                type="button"
+                                onClick={() => setShowNotificationModal(false)}
+                                className="absolute top-4 right-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
+                                aria-label="Close notifications"
+                            >
+                                <X size={24} />
+                            </button>
+                            
+                            {/* Header */}
+                            <div className="flex items-center gap-3 mb-6">
+                                <Bell size={24} className="text-blue-600 dark:text-blue-400" />
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-200">Notifications</h2>
+                            </div>
+                            
+                            {/* Empty State */}
+                            <div className="flex flex-col items-center justify-center py-12 px-4">
+                                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 transition-colors duration-200">
+                                    <Bell size={32} className="text-gray-400 dark:text-gray-500" />
+                                </div>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-200">No notifications yet</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 text-center max-w-sm transition-colors duration-200">
+                                    When you have new notifications, they'll appear here.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </>

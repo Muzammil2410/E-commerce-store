@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { RotateCcw, Upload, X, CheckCircle, Clock, FileCheck, Package } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Image from '@/components/Image'
+import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
 export default function ReturnsRefundsTab({ orders }) {
+  const { t } = useLanguageCurrency()
   const [showReturnModal, setShowReturnModal] = useState(null)
   const [returnReason, setReturnReason] = useState('')
   const [returnImage, setReturnImage] = useState(null)
@@ -16,17 +18,17 @@ export default function ReturnsRefundsTab({ orders }) {
   const eligibleOrders = orders.filter(order => order.status === 'DELIVERED')
 
   const returnReasons = [
-    'Defective/Damaged Product',
-    'Wrong Item Received',
-    'Not as Described',
-    'Changed My Mind',
-    'Size/Color Issue',
-    'Other'
+    t('defectiveDamaged'),
+    t('wrongItem'),
+    t('notAsDescribed'),
+    t('changedMind'),
+    t('sizeColorIssue'),
+    t('other')
   ]
 
   const handleRequestReturn = (order) => {
     if (!returnReason) {
-      toast.error('Please select a return reason')
+      toast.error(t('pleaseSelectReturnReason'))
       return
     }
 
@@ -44,7 +46,7 @@ export default function ReturnsRefundsTab({ orders }) {
     setReturnRequests(updatedRequests)
     localStorage.setItem('returnRequests', JSON.stringify(updatedRequests))
     
-    toast.success('Return request submitted successfully')
+    toast.success(t('returnRequestSubmitted'))
     setShowReturnModal(null)
     setReturnReason('')
     setReturnImage(null)
@@ -73,18 +75,18 @@ export default function ReturnsRefundsTab({ orders }) {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Returns & Refunds</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{t('returnsRefunds')}</h2>
 
       {/* Info Note */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6 transition-colors duration-300">
         <p className="text-sm text-blue-800 dark:text-blue-300 transition-colors duration-300">
-          <strong>Note:</strong> Refund will be processed within 3–5 business days after return approval.
+          <strong>{t('note')}:</strong> {t('refundProcessed')}
         </p>
       </div>
 
       {/* Eligible Orders */}
       <div className="mb-8">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">Eligible for Return</h3>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('eligibleForReturn')}</h3>
         {eligibleOrders.length > 0 ? (
           <div className="space-y-4">
             {eligibleOrders.map((order) => {
@@ -97,12 +99,12 @@ export default function ReturnsRefundsTab({ orders }) {
                         Order #{order.id.slice(-8).toUpperCase()}
                       </h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                        Delivered on {new Date(order.updatedAt || order.createdAt).toLocaleDateString()}
+                        {t('deliveredOn')} {new Date(order.updatedAt || order.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">${order.total.toFixed(2)}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{order.orderItems.length} item(s)</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{order.orderItems.length} {t('items')}</p>
                     </div>
                   </div>
                   
@@ -134,11 +136,11 @@ export default function ReturnsRefundsTab({ orders }) {
                       className="w-full sm:w-auto px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
                     >
                       <RotateCcw size={16} />
-                      <span>Request Return</span>
+                      <span>{t('requestReturn')}</span>
                     </button>
                   ) : (
                     <div className="text-sm text-blue-600 dark:text-blue-400 font-medium transition-colors duration-300">
-                      Return request already submitted
+                      {t('returnRequestAlreadySubmitted')}
                     </div>
                   )}
                 </div>
@@ -148,7 +150,7 @@ export default function ReturnsRefundsTab({ orders }) {
         ) : (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400 transition-colors duration-300">
             <Package className="w-12 h-12 mx-auto mb-2 text-gray-400 dark:text-gray-500 transition-colors duration-300" />
-            <p>No eligible orders for return</p>
+            <p>{t('noEligibleOrdersForReturn')}</p>
           </div>
         )}
       </div>
@@ -156,7 +158,7 @@ export default function ReturnsRefundsTab({ orders }) {
       {/* Return Requests */}
       {returnRequests.length > 0 && (
         <div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">Return Requests</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('returnRequests')}</h3>
           <div className="space-y-4">
             {returnRequests.map((request) => {
               const steps = getReturnStatusSteps(request)
@@ -165,10 +167,10 @@ export default function ReturnsRefundsTab({ orders }) {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <h4 className="font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                        Return #{request.id.slice(-6).toUpperCase()}
+                        {t('returnNumber')} #{request.id.slice(-6).toUpperCase()}
                       </h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                        Order #{request.orderId.slice(-8).toUpperCase()}
+                        {t('orderNumber')} #{request.orderId.slice(-8).toUpperCase()}
                       </p>
                     </div>
                     <span className={`px-3 py-1 text-sm font-medium rounded-full ${
@@ -183,7 +185,7 @@ export default function ReturnsRefundsTab({ orders }) {
 
                   <div className="mb-4">
                     <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 transition-colors duration-300">
-                      <strong>Reason:</strong> {request.reason}
+                      <strong>{t('reason')}:</strong> {request.reason}
                     </p>
                     {request.image && (
                       <div className="mt-2">
@@ -194,7 +196,7 @@ export default function ReturnsRefundsTab({ orders }) {
 
                   {/* Timeline */}
                   <div className="border-t border-gray-200 dark:border-gray-700 pt-4 transition-colors duration-300">
-                    <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3 transition-colors duration-300">Return Status</h5>
+                    <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-3 transition-colors duration-300">{t('returnStatus')}</h5>
                     <div className="space-y-3">
                       {steps.map((step, index) => (
                         <div key={index} className="flex items-center space-x-3">
@@ -230,7 +232,7 @@ export default function ReturnsRefundsTab({ orders }) {
         <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors duration-300">
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-auto transition-colors duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Request Return</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('requestReturn')}</h3>
               <button
                 onClick={() => {
                   setShowReturnModal(null)
@@ -246,14 +248,14 @@ export default function ReturnsRefundsTab({ orders }) {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                  Return Reason *
+                  {t('returnReason')} *
                 </label>
                 <select
                   value={returnReason}
                   onChange={(e) => setReturnReason(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
                 >
-                  <option value="">Select a reason</option>
+                  <option value="">{t('selectReturnReason')}</option>
                   {returnReasons.map(reason => (
                     <option key={reason} value={reason}>{reason}</option>
                   ))}
@@ -262,7 +264,7 @@ export default function ReturnsRefundsTab({ orders }) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
-                  Product Photo (Optional)
+                  {t('productPhotoOptional')}
                 </label>
                 {returnImage ? (
                   <div className="relative">
@@ -278,7 +280,7 @@ export default function ReturnsRefundsTab({ orders }) {
                   <label className="block">
                     <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-white dark:bg-gray-700">
                       <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mx-auto mb-2 transition-colors duration-300" />
-                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">Click to upload or drag and drop</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('clickToUpload')}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-300">PNG, JPG up to 10MB</p>
                     </div>
                     <input
@@ -296,7 +298,7 @@ export default function ReturnsRefundsTab({ orders }) {
                   onClick={() => handleRequestReturn(showReturnModal)}
                   className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                 >
-                  Submit Request
+                  {t('submitRequest')}
                 </button>
                 <button
                   onClick={() => {
@@ -306,7 +308,7 @@ export default function ReturnsRefundsTab({ orders }) {
                   }}
                   className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
-                  Cancel
+                  {t('cancelButton')}
                 </button>
               </div>
             </div>
