@@ -1,14 +1,24 @@
 'use client'
 import { createContext, useContext, useState, useEffect } from 'react'
 
-export const LanguageCurrencyContext = createContext()
+// Default context value to prevent errors
+const defaultContextValue = {
+  language: 'English',
+  currency: 'PKR - Pakistani Rupee',
+  t: (key) => key,
+  formatCurrency: (amount) => `$${amount.toFixed(2)}`,
+  getCurrencySymbol: () => '$',
+  translateProductName: (name) => name,
+  updateLanguage: () => {},
+  updateCurrency: () => {},
+}
+
+export const LanguageCurrencyContext = createContext(defaultContextValue)
 
 export const useLanguageCurrency = () => {
   const context = useContext(LanguageCurrencyContext)
-  if (!context) {
-    throw new Error('useLanguageCurrency must be used within LanguageCurrencyProvider')
-  }
-  return context
+  // Return context or default value if not found (more defensive approach)
+  return context || defaultContextValue
 }
 
 // Translation files
@@ -2908,18 +2918,41 @@ const currencySymbols = {
 }
 
 export const LanguageCurrencyProvider = ({ children }) => {
-  const [language, setLanguage] = useState('English')
-  const [currency, setCurrency] = useState('PKR - Pakistani Rupee')
+  // Initialize with saved preferences or defaults
+  const getInitialLanguage = () => {
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem('language')
+      if (savedLanguage && translations[savedLanguage]) {
+        return savedLanguage
+      }
+    }
+    return 'English'
+  }
+
+  const getInitialCurrency = () => {
+    if (typeof window !== 'undefined') {
+      const savedCurrency = localStorage.getItem('currency')
+      if (savedCurrency && currencyRates[savedCurrency] !== undefined) {
+        return savedCurrency
+      }
+    }
+    return 'PKR - Pakistani Rupee'
+  }
+
+  const [language, setLanguage] = useState(getInitialLanguage)
+  const [currency, setCurrency] = useState(getInitialCurrency)
 
   useEffect(() => {
-    // Load saved preferences
-    const savedLanguage = localStorage.getItem('language')
-    const savedCurrency = localStorage.getItem('currency')
-    if (savedLanguage && translations[savedLanguage]) {
-      setLanguage(savedLanguage)
-    }
-    if (savedCurrency && currencyRates[savedCurrency] !== undefined) {
-      setCurrency(savedCurrency)
+    // Load saved preferences on mount
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem('language')
+      const savedCurrency = localStorage.getItem('currency')
+      if (savedLanguage && translations[savedLanguage]) {
+        setLanguage(savedLanguage)
+      }
+      if (savedCurrency && currencyRates[savedCurrency] !== undefined) {
+        setCurrency(savedCurrency)
+      }
     }
   }, [])
 
