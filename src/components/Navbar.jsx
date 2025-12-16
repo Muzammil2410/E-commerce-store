@@ -459,19 +459,22 @@ const Navbar = () => {
 
                     {/* Mobile: Logo on left */}
                     <Link to="/" className="sm:hidden hover:scale-105 transition-transform duration-200 flex-shrink-0">
-                        <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden">
+                        <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden flex items-center justify-center" style={{ height: '4rem', maxHeight: '4rem' }}>
                             <Image 
-                                src={isDarkMode ? assets.darkModeLogo : assets.zizla_logo} 
+                                src={isDarkMode ? assets.helloLogo : assets.zizla_logo} 
                                 alt="Zizla Logo" 
                                 width={350} 
                                 height={140} 
-                                className={`h-16 w-auto ${isDarkMode ? 'dark-mode-logo' : ''}`}
-                                style={isDarkMode ? {
-                                    backgroundColor: '#111827',
-                                    display: 'block'
-                                } : {
-                                    backgroundColor: 'transparent',
-                                    filter: 'contrast(1.2) brightness(1.1)'
+                                className="h-16 w-auto"
+                                style={{
+                                    backgroundColor: isDarkMode ? '#111827' : 'transparent',
+                                    display: 'block',
+                                    objectFit: 'contain',
+                                    maxHeight: '4rem',
+                                    height: '4rem',
+                                    width: 'auto',
+                                    maxWidth: 'none',
+                                    ...(isDarkMode ? {} : { filter: 'contrast(1.2) brightness(1.1)' })
                                 }}
                             />
                         </div>
@@ -479,19 +482,20 @@ const Navbar = () => {
 
                     {/* Desktop: Logo */}
                     <Link to="/" className="hidden sm:block hover:scale-105 transition-transform duration-200 flex-shrink-0">
-                        <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden">
+                        <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden flex items-center justify-center">
                             <Image 
-                                src={isDarkMode ? assets.darkModeLogo : assets.zizla_logo} 
+                                src={isDarkMode ? assets.helloLogo : assets.zizla_logo} 
                                 alt="Zizla Logo" 
                                 width={350} 
                                 height={140} 
-                                className={`h-12 md:h-14 lg:h-16 w-auto ${isDarkMode ? 'dark-mode-logo' : ''}`}
-                                style={isDarkMode ? {
-                                    backgroundColor: '#111827',
-                                    display: 'block'
-                                } : {
-                                    backgroundColor: 'transparent',
-                                    filter: 'contrast(1.2) brightness(1.1)'
+                                className="h-12 md:h-14 lg:h-16 w-auto"
+                                style={{
+                                    backgroundColor: isDarkMode ? '#111827' : 'transparent',
+                                    display: 'block',
+                                    objectFit: 'contain',
+                                    width: 'auto',
+                                    maxWidth: 'none',
+                                    ...(isDarkMode ? {} : { filter: 'contrast(1.2) brightness(1.1)' })
                                 }}
                             />
                         </div>
