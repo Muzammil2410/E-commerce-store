@@ -1,7 +1,7 @@
 'use client'
 
+import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useState } from 'react'
 
 export default function BargainPage() {
   const navigate = useNavigate()

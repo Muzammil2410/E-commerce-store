@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 
 // Default context value to prevent errors
 const defaultContextValue = {

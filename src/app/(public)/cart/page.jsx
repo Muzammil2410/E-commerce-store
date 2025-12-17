@@ -1,11 +1,11 @@
 'use client'
+import React, { useEffect, useState } from "react";
 import Counter from "@/components/Counter";
 import OrderSummary from "@/components/OrderSummary";
 import PageTitle from "@/components/PageTitle";
 import { deleteItemFromCart } from "@/lib/features/cart/cartSlice";
 import { Trash2Icon } from "lucide-react";
 import Image from "@/components/Image";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext';
 

@@ -1,10 +1,9 @@
 'use client'
+import React, { useEffect, useState, useContext } from "react";
 import ProductDescription from "@/components/ProductDescription";
 import ProductDetails from "@/components/ProductDetails";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useContext } from "react";
 import { LanguageCurrencyContext } from "@/contexts/LanguageCurrencyContext";
 
 export default function Product() {

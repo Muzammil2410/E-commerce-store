@@ -8,38 +8,46 @@ import StoreRoot from "@/app/store/layout";
 import Loading from "@/components/Loading";
 // Import AuthLogin directly instead of lazy loading to avoid Router context issues
 import AuthLogin from "@/app/(public)/auth/login/page";
-const AccountTypeSelection = lazy(() => import("@/app/(public)/auth/page"));
+// Import Home directly to fix React context issue with lazy loading
+import Home from "@/app/(public)/page";
+// Import AccountTypeSelection directly to fix React context issue with lazy loading
+import AccountTypeSelection from "@/app/(public)/auth/page";
+// Import Seller and Product directly to fix React context issue with lazy loading
+import Seller from "@/app/(public)/seller/page";
+import Product from "@/app/(public)/product/[productId]/page";
+// Import Checkout, Cart, and Bargain directly to fix React context issue with lazy loading
+import Checkout from "@/app/(public)/checkout/page";
+import Cart from "@/app/(public)/cart/page";
+import Bargain from "@/app/(public)/bargain/page";
+// Import Profile directly since it's used after login
+import Profile from "@/app/(public)/profile/page";
+// Import SellerDashboard directly since it's used after seller login
+import SellerDashboard from "@/app/(public)/seller/dashboard/page";
+// Import SellerRegister directly since it's accessed from seller page
+import SellerRegister from "@/app/(public)/seller/register/page";
+// Import all seller dashboard pages directly to fix React context issues
+import SellerProducts from "@/app/(public)/seller/dashboard/products/page";
+import SellerProductsAdd from "@/app/(public)/seller/dashboard/products/add/page";
+import SellerProductsEdit from "@/app/(public)/seller/dashboard/products/edit/[id]/page";
+import SellerProductsView from "@/app/(public)/seller/dashboard/products/view/[id]/page";
+import SellerSales from "@/app/(public)/seller/dashboard/sales/page";
+import SellerOrders from "@/app/(public)/seller/dashboard/orders/page";
+import SellerDelivery from "@/app/(public)/seller/dashboard/delivery/page";
+import SellerDeliverySchedule from "@/app/(public)/seller/dashboard/delivery/schedule/page";
 
 // Lazy load pages for code splitting and better performance
-const Home = lazy(() => import("@/app/(public)/page"));
 const Pricing = lazy(() => import("@/app/(public)/pricing/page"));
-const Cart = lazy(() => import("@/app/(public)/cart/page"));
 const Shop = lazy(() => import("@/app/(public)/shop/page"));
 const ShopUser = lazy(() => import("@/app/(public)/shop/[username]/page"));
-const Product = lazy(() => import("@/app/(public)/product/[productId]/page"));
-const Bargain = lazy(() => import("@/app/(public)/bargain/page"));
 const Login = lazy(() => import("@/app/(public)/login/page"));
 const Register = lazy(() => import("@/app/(public)/register/page"));
-const Profile = lazy(() => import("@/app/(public)/profile/page"));
 const Orders = lazy(() => import("@/app/(public)/orders/page"));
-const Checkout = lazy(() => import("@/app/(public)/checkout/page"));
 const AuthRegister = lazy(() => import("@/app/(public)/auth/register/page"));
 const AuthForgot = lazy(() => import("@/app/(public)/auth/forgot-password/page"));
 const ForgotPassword = lazy(() => import("@/app/(public)/forgot-password/page"));
 const PrivacyPolicy = lazy(() => import("@/app/(public)/privacy-policy/page"));
 const Support = lazy(() => import("@/app/(public)/support/page"));
-const Seller = lazy(() => import("@/app/(public)/seller/page"));
 const SellerLogin = lazy(() => import("@/app/(public)/seller/login/page"));
-const SellerRegister = lazy(() => import("@/app/(public)/seller/register/page"));
-const SellerDashboard = lazy(() => import("@/app/(public)/seller/dashboard/page"));
-const SellerProducts = lazy(() => import("@/app/(public)/seller/dashboard/products/page"));
-const SellerProductsAdd = lazy(() => import("@/app/(public)/seller/dashboard/products/add/page"));
-const SellerProductsEdit = lazy(() => import("@/app/(public)/seller/dashboard/products/edit/[id]/page"));
-const SellerProductsView = lazy(() => import("@/app/(public)/seller/dashboard/products/view/[id]/page"));
-const SellerSales = lazy(() => import("@/app/(public)/seller/dashboard/sales/page"));
-const SellerOrders = lazy(() => import("@/app/(public)/seller/dashboard/orders/page"));
-const SellerDelivery = lazy(() => import("@/app/(public)/seller/dashboard/delivery/page"));
-const SellerDeliverySchedule = lazy(() => import("@/app/(public)/seller/dashboard/delivery/schedule/page"));
 const AdminPage = lazy(() => import("@/app/admin/page"));
 const AdminStores = lazy(() => import("@/app/admin/stores/page"));
 const AdminCoupons = lazy(() => import("@/app/admin/coupons/page"));
@@ -62,16 +70,16 @@ const createPublicRoute = (Component: React.ComponentType) => (
 );
 
 export const router = createBrowserRouter([
-  { path: "/", element: createPublicRoute(Home) },
+  { path: "/", element: <PublicLayout><Home /></PublicLayout> },
   { path: "/pricing", element: createPublicRoute(Pricing) },
-  { path: "/cart", element: createPublicRoute(Cart) },
+  { path: "/cart", element: <PublicLayout><Cart /></PublicLayout> },
   { path: "/shop", element: createPublicRoute(Shop) },
   { path: "/shop/:username", element: createPublicRoute(ShopUser) },
-  { path: "/product/:productId", element: createPublicRoute(Product) },
-  { path: "/bargain", element: createPublicRoute(Bargain) },
+  { path: "/product/:productId", element: <PublicLayout><Product /></PublicLayout> },
+  { path: "/bargain", element: <PublicLayout><Bargain /></PublicLayout> },
   { path: "/login", element: createPublicRoute(Login) },
   { path: "/register", element: createPublicRoute(Register) },
-  { path: "/auth", element: createPublicRoute(AccountTypeSelection) },
+  { path: "/auth", element: <PublicLayout><AccountTypeSelection /></PublicLayout> },
   { 
     path: "/auth/login", 
     element: (
@@ -99,21 +107,21 @@ export const router = createBrowserRouter([
   { path: "/forgot-password", element: createPublicRoute(ForgotPassword) },
   { path: "/privacy-policy", element: createPublicRoute(PrivacyPolicy) },
   { path: "/support", element: createPublicRoute(Support) },
-  { path: "/seller", element: createPublicRoute(Seller) },
+  { path: "/seller", element: <PublicLayout><Seller /></PublicLayout> },
   { path: "/seller/login", element: createPublicRoute(SellerLogin) },
-  { path: "/seller/register", element: createPublicRoute(SellerRegister) },
-  { path: "/seller/dashboard", element: createPublicRoute(SellerDashboard) },
-  { path: "/seller/dashboard/products", element: createPublicRoute(SellerProducts) },
-  { path: "/seller/dashboard/products/add", element: createPublicRoute(SellerProductsAdd) },
-  { path: "/seller/dashboard/products/edit/:id", element: createPublicRoute(SellerProductsEdit) },
-  { path: "/seller/dashboard/products/view/:id", element: createPublicRoute(SellerProductsView) },
-  { path: "/seller/dashboard/sales", element: createPublicRoute(SellerSales) },
-  { path: "/seller/dashboard/orders", element: createPublicRoute(SellerOrders) },
-  { path: "/seller/dashboard/delivery", element: createPublicRoute(SellerDelivery) },
-  { path: "/seller/dashboard/delivery/schedule", element: createPublicRoute(SellerDeliverySchedule) },
-  { path: "/profile", element: createPublicRoute(Profile) },
+  { path: "/seller/register", element: <PublicLayout><SellerRegister /></PublicLayout> },
+  { path: "/seller/dashboard", element: <PublicLayout><SellerDashboard /></PublicLayout> },
+  { path: "/seller/dashboard/products", element: <PublicLayout><SellerProducts /></PublicLayout> },
+  { path: "/seller/dashboard/products/add", element: <PublicLayout><SellerProductsAdd /></PublicLayout> },
+  { path: "/seller/dashboard/products/edit/:id", element: <PublicLayout><SellerProductsEdit /></PublicLayout> },
+  { path: "/seller/dashboard/products/view/:id", element: <PublicLayout><SellerProductsView /></PublicLayout> },
+  { path: "/seller/dashboard/sales", element: <PublicLayout><SellerSales /></PublicLayout> },
+  { path: "/seller/dashboard/orders", element: <PublicLayout><SellerOrders /></PublicLayout> },
+  { path: "/seller/dashboard/delivery", element: <PublicLayout><SellerDelivery /></PublicLayout> },
+  { path: "/seller/dashboard/delivery/schedule", element: <PublicLayout><SellerDeliverySchedule /></PublicLayout> },
+  { path: "/profile", element: <PublicLayout><Profile /></PublicLayout> },
   { path: "/orders", element: createPublicRoute(Orders) },
-  { path: "/checkout", element: createPublicRoute(Checkout) },
+  { path: "/checkout", element: <PublicLayout><Checkout /></PublicLayout> },
 
   // Admin and Store sections (render their own layouts)
   { path: "/admin", element: <AdminRoot><LazyWrapper><AdminPage /></LazyWrapper></AdminRoot> },

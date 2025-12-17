@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Edit, Package, DollarSign, Truck, FileText, Search, Eye, Calendar, Tag } from 'lucide-react'
 import Image from '@/components/Image'

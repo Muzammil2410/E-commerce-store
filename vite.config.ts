@@ -8,14 +8,36 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react({
+    jsxRuntime: 'automatic',
+    babel: {
+      plugins: [],
+    },
+  })],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
+    dedupe: ['react', 'react-dom'],
   },
   optimizeDeps: {
-    include: ['react-is', 'recharts', 'date-fns'],
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+      'react-router-dom',
+      'react-redux',
+      '@reduxjs/toolkit',
+      'react-hot-toast',
+      'react-helmet-async',
+      '@tanstack/react-query',
+      'lucide-react',
+      'react-is',
+      'recharts',
+      'date-fns',
+    ],
+    force: true,
   },
   build: {
     rollupOptions: {
@@ -43,5 +65,11 @@ export default defineConfig({
     headers: {
       'Cache-Control': 'public, max-age=31536000',
     },
+    fs: {
+      strict: false,
+    },
+  },
+  esbuild: {
+    jsx: 'automatic',
   },
 })

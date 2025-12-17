@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import BestSelling from "@/components/BestSelling";
 import Hero from "@/components/Hero";
 import Testimonials from "@/components/Testimonials";

@@ -1,9 +1,9 @@
 'use client'
 
+import React, { useState, useEffect, useRef } from "react";
 import { addToCart } from "@/lib/features/cart/cartSlice";
 import { StarIcon, TagIcon, CreditCardIcon, UserIcon } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
 import Image from "@/components/Image";
 import Counter from "./Counter";
 import { useDispatch, useSelector } from "react-redux";

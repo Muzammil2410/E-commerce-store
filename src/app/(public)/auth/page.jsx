@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, ShoppingBag, Store, Sparkles } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
