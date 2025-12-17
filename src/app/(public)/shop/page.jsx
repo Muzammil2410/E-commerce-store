@@ -1,5 +1,5 @@
 'use client'
-import { Suspense, useState, useEffect } from "react"
+import React, { Suspense, useState, useEffect } from "react"
 import ProductCard from "@/components/ProductCard"
 import { MoveLeftIcon, Filter, SlidersHorizontal, X } from "lucide-react"
 import { useNavigate, useSearchParams } from "react-router-dom"
@@ -76,7 +76,7 @@ function ShopContent() {
 
     return (
         <div className="min-h-[70vh] mx-3 sm:mx-6">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-[95%] xl:max-w-[98%] mx-auto">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between my-6 gap-4">
                     <h1 className="text-xl sm:text-2xl text-slate-500 dark:text-gray-400 flex items-center gap-2 transition-colors duration-200">
@@ -178,7 +178,7 @@ function ShopContent() {
                     {/* Products Grid */}
                     <div className="flex-1 order-1 lg:order-2">
                         {filteredProducts.length > 0 ? (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 xl:gap-8 mx-auto mb-32">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 xl:gap-7 mx-auto mb-32">
                                 {filteredProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))}

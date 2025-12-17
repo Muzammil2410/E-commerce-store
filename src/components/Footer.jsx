@@ -84,7 +84,7 @@ const Footer = () => {
     return (
         <footer className="bg-blue-900 dark:bg-blue-900 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-3 sm:px-6">
-                <div className="flex flex-col lg:flex-row items-start justify-between gap-8 sm:gap-10 py-8 sm:py-10 border-b border-gray-700 dark:border-gray-700 text-white transition-colors duration-200">
+                <div className="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-16 py-8 sm:py-10 border-b border-gray-700 dark:border-gray-700 text-white transition-colors duration-200">
                     {/* Company Information - Left Side */}
                     <div className="w-full lg:w-auto lg:max-w-[410px]">
                         <Link to="/" className="text-4xl font-semibold text-blue-500 dark:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
@@ -103,7 +103,7 @@ const Footer = () => {
                     </div>
                     
                     {/* Link Sections - Right Side (3 columns with equal spacing) */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-8 lg:gap-12 w-full lg:w-auto lg:flex-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 lg:gap-16 w-full lg:w-auto lg:flex-1">
                         {linkSections.map((section, index) => (
                             <div key={index} className="min-w-[150px]">
                                 <h3 className="font-semibold text-gray-300 dark:text-gray-300 mb-4 text-sm uppercase">{section.title}</h3>

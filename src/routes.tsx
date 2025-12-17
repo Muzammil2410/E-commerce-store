@@ -19,6 +19,8 @@ import Product from "@/app/(public)/product/[productId]/page";
 import Checkout from "@/app/(public)/checkout/page";
 import Cart from "@/app/(public)/cart/page";
 import Bargain from "@/app/(public)/bargain/page";
+// Import Shop directly to fix React context issue with lazy loading
+import Shop from "@/app/(public)/shop/page";
 // Import Profile directly since it's used after login
 import Profile from "@/app/(public)/profile/page";
 // Import SellerDashboard directly since it's used after seller login
@@ -37,7 +39,6 @@ import SellerDeliverySchedule from "@/app/(public)/seller/dashboard/delivery/sch
 
 // Lazy load pages for code splitting and better performance
 const Pricing = lazy(() => import("@/app/(public)/pricing/page"));
-const Shop = lazy(() => import("@/app/(public)/shop/page"));
 const ShopUser = lazy(() => import("@/app/(public)/shop/[username]/page"));
 const Login = lazy(() => import("@/app/(public)/login/page"));
 const Register = lazy(() => import("@/app/(public)/register/page"));
@@ -73,7 +74,7 @@ export const router = createBrowserRouter([
   { path: "/", element: <PublicLayout><Home /></PublicLayout> },
   { path: "/pricing", element: createPublicRoute(Pricing) },
   { path: "/cart", element: <PublicLayout><Cart /></PublicLayout> },
-  { path: "/shop", element: createPublicRoute(Shop) },
+  { path: "/shop", element: <PublicLayout><Shop /></PublicLayout> },
   { path: "/shop/:username", element: createPublicRoute(ShopUser) },
   { path: "/product/:productId", element: <PublicLayout><Product /></PublicLayout> },
   { path: "/bargain", element: <PublicLayout><Bargain /></PublicLayout> },
