@@ -60,8 +60,8 @@ const Footer = () => {
         {
             title: t('contact'),
             links: [
-                { text: "+1-212-456-7890", path: '/', icon: MailIcon },
-                { text: "contact@example.com", path: '/', icon: PhoneIcon },
+                { text: "+1-212-456-7890", path: '/', icon: PhoneIcon },
+                { text: "contact@example.com", path: '/', icon: MailIcon },
                 { text: "794 Francisco, 94102", path: '/', icon: MapPinIcon }
             ]
         }
@@ -82,17 +82,18 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-blue-900 dark:bg-gray-900 transition-colors duration-200">
+        <footer className="bg-blue-900 dark:bg-blue-900 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-3 sm:px-6">
-                <div className="flex flex-col md:flex-row items-start justify-between gap-8 sm:gap-10 py-8 sm:py-10 border-b border-white/20 dark:border-gray-700 text-white transition-colors duration-200">
-                    <div>
-                        <Link to="/" className="text-4xl font-semibold text-white">
-                            <span className="text-blue-300">Ziz</span>la<span className="text-blue-300 text-5xl leading-0">.</span>
+                <div className="flex flex-col lg:flex-row items-start justify-between gap-8 sm:gap-10 py-8 sm:py-10 border-b border-gray-700 dark:border-gray-700 text-white transition-colors duration-200">
+                    {/* Company Information - Left Side */}
+                    <div className="w-full lg:w-auto lg:max-w-[410px]">
+                        <Link to="/" className="text-4xl font-semibold text-blue-500 dark:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                            Zizla<span className="text-blue-500 dark:text-blue-400">.</span>
                         </Link>
-                        <p className="max-w-[410px] mt-6 text-sm text-white/90">{t('welcome')}, {t('description')}</p>
+                        <p className="mt-4 text-sm text-gray-300 dark:text-gray-300 leading-relaxed">{t('welcome')}, {t('description')}</p>
                         <div className="flex items-center gap-3 mt-5">
                             {socialIcons.map((item, i) => (
-                                <a href={item.link} key={i} target="_blank" rel="noreferrer" className={`group flex items-center justify-center w-10 h-10 bg-white/10 border border-white/20 hover:scale-110 hover:border-transparent transition-all duration-300 rounded-full ${item.hoverColor}`}>
+                                <a href={item.link} key={i} target="_blank" rel="noreferrer" className={`group flex items-center justify-center w-10 h-10 bg-gray-800 dark:bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-700 border border-gray-700 dark:border-gray-700 hover:border-transparent transition-all duration-300 rounded-full ${item.hoverColor}`}>
                                     <div className={item.iconHoverColor}>
                                         <item.icon />
                                     </div>
@@ -100,17 +101,19 @@ const Footer = () => {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5 text-sm ">
+                    
+                    {/* Link Sections - Right Side (3 columns with equal spacing) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-8 lg:gap-12 w-full lg:w-auto lg:flex-1">
                         {linkSections.map((section, index) => (
-                            <div key={index}>
-                                <h3 className="font-bold text-gray-300 md:mb-5 mb-3">{section.title}</h3>
+                            <div key={index} className="min-w-[150px]">
+                                <h3 className="font-semibold text-gray-300 dark:text-gray-300 mb-4 text-sm uppercase">{section.title}</h3>
                                 <ul className="space-y-2.5">
                                     {section.links.map((link, i) => (
                                         <li key={i} className="flex items-center gap-2">
-                                            {link.icon && <link.icon />}
+                                            {link.icon && <span className="flex-shrink-0"><link.icon /></span>}
                                             <Link 
                                                 to={link.path} 
-                                                className={`text-white hover:underline transition ${link.isBold ? 'font-semibold' : ''}`}
+                                                className={`text-sm text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white hover:underline transition ${link.isBold ? 'font-semibold' : ''}`}
                                             >
                                                 {link.text}
                                             </Link>

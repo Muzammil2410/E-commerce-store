@@ -119,25 +119,25 @@ const ShopByCategory = () => {
                                     {categories
                                         .slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide)
                                         .map((category, index) => (
-                                        <div key={index} className='group cursor-pointer'>
-                                            <div className='relative w-32 h-32 sm:w-48 sm:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 mx-auto mb-3 sm:mb-4 lg:mb-6 rounded-full overflow-hidden bg-white border-2 sm:border-4 border-gray-100 shadow-lg group-hover:shadow-2xl group-hover:scale-105 group-hover:border-blue-200 transition-all duration-500'>
+                                        <div key={index} className='cursor-pointer'>
+                                            <div className='relative w-32 h-32 sm:w-48 sm:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 mx-auto mb-3 sm:mb-4 lg:mb-6 rounded-full overflow-hidden bg-white border-2 sm:border-4 border-gray-100 shadow-lg'>
                                                 {category.image ? (
                                                     <Image 
                                                         src={category.image} 
                                                         alt={category.name}
                                                         fill
-                                                        className='object-cover group-hover:scale-110 transition-transform duration-500'
+                                                        className='object-cover'
                                                     />
                                                 ) : (
                                                     <div className='w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center'>
                                                         <span className='text-gray-500 text-sm'>No Image</span>
                                                     </div>
                                                 )}
-                                                <div className='absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300'></div>
+                                                <div className='absolute inset-0 bg-black/10'></div>
                                             </div>
                                             
                                             <div className='text-center'>
-                                                <h3 className='text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300'>
+                                                <h3 className='text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white'>
                                                     {category.name}
                                                 </h3>
                                             </div>
