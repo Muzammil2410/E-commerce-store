@@ -430,7 +430,7 @@ const Navbar = () => {
         ],
         'Home Audio & Theatre': [
             {
-                title: 'Audio Systems',
+                title: 'Audio System',
                 items: ['Soundbars', 'Home Theater Systems', 'Stereo Systems', 'Speakers'],
                 viewMore: true
             },
