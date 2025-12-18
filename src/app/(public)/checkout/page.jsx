@@ -240,7 +240,7 @@ export default function CheckoutPage() {
                                     </div>
                                     <div>
                                         <label htmlFor="phone" className="sr-only">Phone Number</label>
-                                        <div className="phone-input" ref={phoneInputRef}>
+                                        <div className="phone-input border border-gray-300 dark:border-gray-600 rounded" ref={phoneInputRef}>
                                             <PhoneInput 
                                                 id="phone"
                                                 defaultCountry="PK" 

@@ -253,10 +253,91 @@ img {
     width: 100%;
     display: flex;
     align-items: stretch;
-    min-height: 3rem; /* Match the height of other form inputs */
 }
 
-.phone-input .PhoneInputInput {
+/* Focus styles for phone-input with border */
+.phone-input.border:focus-within {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dark .phone-input.border:focus-within {
+    border-color: #60a5fa !important;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+/* When phone-input has border class, adjust inner borders to match p-3 inputs */
+.phone-input.border {
+    align-items: center;
+}
+
+.phone-input.border .PhoneInputInput {
+    flex: 1;
+    padding: 0.75rem 1rem; /* Match p-3 (0.75rem) vertical padding exactly */
+    border: none;
+    border-radius: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: #111827;
+    height: auto;
+}
+
+.phone-input.border .PhoneInputInput:focus {
+    box-shadow: none;
+}
+
+/* Dark mode styles for PhoneInputInput when wrapper has border */
+.dark .phone-input.border .PhoneInputInput {
+    background-color: transparent;
+    color: white;
+}
+
+.dark .phone-input.border .PhoneInputInput:focus {
+    box-shadow: none;
+}
+
+.dark .phone-input.border .PhoneInputInput::placeholder {
+    color: #9ca3af;
+}
+
+.phone-input.border .PhoneInputCountrySelect {
+    padding: 0.75rem 0.5rem; /* Match p-3 (0.75rem) vertical padding exactly */
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    min-width: 90px; /* Ensure enough space for country code */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: #111827;
+    height: auto;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.phone-input.border .PhoneInputCountrySelect:focus {
+    box-shadow: none;
+}
+
+/* Dark mode styles for PhoneInputCountrySelect when wrapper has border */
+.dark .phone-input.border .PhoneInputCountrySelect {
+    background-color: transparent;
+    color: white;
+}
+
+.dark .phone-input.border .PhoneInputCountrySelect:focus {
+    box-shadow: none;
+}
+
+/* Default styles when no border class (for backward compatibility) */
+.phone-input:not(.border) .PhoneInputInput {
     flex: 1;
     padding: 0.75rem 1rem; /* px-4 py-3 equivalent */
     border: 1px solid #d1d5db;
@@ -272,28 +353,28 @@ img {
     color: #111827;
 }
 
-.phone-input .PhoneInputInput:focus {
+.phone-input:not(.border) .PhoneInputInput:focus {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Dark mode styles for PhoneInputInput */
-.dark .phone-input .PhoneInputInput {
+.dark .phone-input:not(.border) .PhoneInputInput {
     border-color: #4b5563;
     background-color: #374151;
     color: white;
 }
 
-.dark .phone-input .PhoneInputInput:focus {
+.dark .phone-input:not(.border) .PhoneInputInput:focus {
     border-color: #60a5fa;
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
 }
 
-.dark .phone-input .PhoneInputInput::placeholder {
+.dark .phone-input:not(.border) .PhoneInputInput::placeholder {
     color: #9ca3af;
 }
 
-.phone-input .PhoneInputCountrySelect {
+.phone-input:not(.border) .PhoneInputCountrySelect {
     padding: 0.75rem 0.5rem; /* Match py-3 from other inputs */
     border: 1px solid #d1d5db;
     border-radius: 0.5rem 0 0 0.5rem;
@@ -310,19 +391,19 @@ img {
     color: #111827;
 }
 
-.phone-input .PhoneInputCountrySelect:focus {
+.phone-input:not(.border) .PhoneInputCountrySelect:focus {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Dark mode styles for PhoneInputCountrySelect */
-.dark .phone-input .PhoneInputCountrySelect {
+.dark .phone-input:not(.border) .PhoneInputCountrySelect {
     border-color: #4b5563;
     background-color: #374151;
     color: white;
 }
 
-.dark .phone-input .PhoneInputCountrySelect:focus {
+.dark .phone-input:not(.border) .PhoneInputCountrySelect:focus {
     border-color: #60a5fa;
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
 }

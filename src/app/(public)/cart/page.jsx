@@ -4,10 +4,11 @@ import Counter from "@/components/Counter";
 import OrderSummary from "@/components/OrderSummary";
 import PageTitle from "@/components/PageTitle";
 import { deleteItemFromCart } from "@/lib/features/cart/cartSlice";
-import { Trash2Icon } from "lucide-react";
+import { Trash2Icon, ShoppingBag, ArrowRight } from "lucide-react";
 import Image from "@/components/Image";
 import { useDispatch, useSelector } from "react-redux";
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext';
+import { Link } from "react-router-dom";
 
 export default function Cart() {
 
@@ -134,8 +135,37 @@ export default function Cart() {
             </div>
         </div>
     ) : (
-        <div className="min-h-[80vh] mx-6 flex items-center justify-center text-slate-400 dark:text-gray-500 transition-colors duration-200">
-            <h1 className="text-2xl sm:text-4xl font-semibold">Your cart is empty</h1>
+        <div className="min-h-[80vh] mx-3 sm:mx-6 flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+            <div className="max-w-md w-full text-center px-4 py-8">
+                <div className="mb-6 flex justify-center">
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-blue-100 dark:bg-blue-900/30 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                        <div className="relative bg-blue-50 dark:bg-blue-900/20 rounded-full p-6">
+                            <ShoppingBag className="w-16 h-16 text-blue-600 dark:text-blue-400 mx-auto" strokeWidth={1.5} />
+                        </div>
+                    </div>
+                </div>
+                
+                <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-gray-100 mb-4 transition-colors duration-200">
+                    Your cart is waiting to be filled!
+                </h1>
+                
+                <p className="text-lg sm:text-xl text-slate-600 dark:text-gray-300 mb-2 transition-colors duration-200">
+                    Discover amazing products and exclusive deals
+                </p>
+                
+                <p className="text-base text-slate-500 dark:text-gray-400 mb-8 transition-colors duration-200">
+                    Start shopping now and find something special just for you
+                </p>
+                
+                <Link 
+                    to="/shop"
+                    className="inline-flex items-center justify-center gap-2 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2"
+                >
+                    <span>Start Shopping</span>
+                    <ArrowRight className="w-5 h-5" />
+                </Link>
+            </div>
         </div>
     )
 }
