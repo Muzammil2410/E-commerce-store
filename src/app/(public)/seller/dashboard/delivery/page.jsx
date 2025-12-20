@@ -132,7 +132,7 @@ export default function DeliveryManagement() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
@@ -150,9 +150,9 @@ export default function DeliveryManagement() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6">
         {/* Tabs */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 mb-6 transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 mb-4 sm:mb-5 md:mb-6 transition-colors duration-300">
           <div className="border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
             <nav className="flex overflow-x-auto -mb-px">
               {tabs.map((tab) => {
@@ -167,7 +167,7 @@ export default function DeliveryManagement() {
                         setActiveTab(tab.id)
                       }
                     }}
-                    className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                    className={`flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                       activeTab === tab.id
                         ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400'
                         : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
@@ -184,30 +184,30 @@ export default function DeliveryManagement() {
 
         {/* Delivery Orders Tab */}
         {activeTab === 'orders' && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden transition-colors duration-300">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('orderId')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('customerName')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('deliveryAddress')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('distance')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('status')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('actions')}</th>
+                    <th className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('orderId')}</th>
+                    <th className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300 hidden sm:table-cell">{t('customerName')}</th>
+                    <th className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300 hidden md:table-cell">{t('deliveryAddress')}</th>
+                    <th className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300 hidden lg:table-cell">{t('distance')}</th>
+                    <th className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('status')}</th>
+                    <th className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">{t('actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
                   {orders.map((order) => (
                     <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">#{order.id.slice(-8)}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900 dark:text-white transition-colors duration-300">{order.user?.name || 'Customer'}</div>
                         <div className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{order.user?.email || ''}</div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4">
                         <div className="text-sm text-gray-900 dark:text-white transition-colors duration-300">
                           {order.address?.street || 'N/A'}, {order.address?.city || 'N/A'}
                         </div>
@@ -215,10 +215,10 @@ export default function DeliveryManagement() {
                           {order.address?.state || ''} {order.address?.zip || ''}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900 dark:text-white transition-colors duration-300">{calculateDistance(order.address)}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap">
                         <div className="mb-2">
                           <span className={`px-2 py-1 text-xs font-medium rounded-full transition-colors duration-300 ${
                             getDeliveryStatus(order) === 'Delivered' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' :
@@ -264,7 +264,7 @@ export default function DeliveryManagement() {
         {/* Proof of Delivery Tab */}
         {activeTab === 'proof' && (
           <div className="space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('uploadProofOfDelivery')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {orders.map((order) => {
@@ -315,7 +315,7 @@ export default function DeliveryManagement() {
             </div>
 
             {/* Delivery List */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('deliveryStatus')}</h3>
               <div className="space-y-3">
                 {orders.map((order) => {
@@ -355,7 +355,7 @@ export default function DeliveryManagement() {
         {/* Parcel Scanner Tab */}
         {activeTab === 'scanner' && (
           <div className="space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('scanParcel')}</h3>
               <div className="bg-gray-900 dark:bg-black rounded-lg p-8 mb-4 relative overflow-hidden transition-colors duration-300">
                 <div className="aspect-video bg-gray-800 dark:bg-gray-900 rounded-lg flex items-center justify-center border-4 border-blue-500 dark:border-blue-400 transition-colors duration-300">
@@ -384,7 +384,7 @@ export default function DeliveryManagement() {
             </div>
 
             {/* Recent Scans */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('recentScans')}</h3>
               {scannedParcels.length > 0 ? (
                 <div className="overflow-x-auto">

@@ -116,10 +116,10 @@ export default function SellerProducts() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8">
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 mb-4 sm:mb-6 transition-colors duration-300">
-          <div className="flex flex-col sm:flex-row gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 transition-colors duration-300">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             {/* Search */}
             <div className="flex-1">
               <div className="relative">
@@ -152,7 +152,7 @@ export default function SellerProducts() {
 
         {/* Products Grid */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {filteredProducts.map((product) => (
               <div key={product.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 overflow-hidden hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow">
                 {/* Product Image */}

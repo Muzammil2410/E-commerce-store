@@ -220,10 +220,10 @@ export default function SalesDashboard() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6">
         {/* No Data Message */}
         {salesData.totalOrders === 0 && (
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8 transition-colors duration-300">
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-5 md:p-6 mb-6 sm:mb-7 md:mb-8 transition-colors duration-300">
             <div className="flex items-center space-x-3">
               <BarChart3 className="w-8 h-8 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
               <div>
@@ -237,8 +237,8 @@ export default function SalesDashboard() {
         )}
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-6 sm:mb-7 md:mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('totalRevenue')}</p>
@@ -254,7 +254,7 @@ export default function SalesDashboard() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('totalOrders')}</p>
@@ -270,7 +270,7 @@ export default function SalesDashboard() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('productsSold')}</p>
@@ -286,7 +286,7 @@ export default function SalesDashboard() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('netProfit')}</p>
@@ -306,7 +306,7 @@ export default function SalesDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Fee Breakdown */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center transition-colors duration-300">
                 <PieChart className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
                 {t('feeBreakdown')}
@@ -351,7 +351,7 @@ export default function SalesDashboard() {
           {/* Top Selling Products & Recent Orders */}
           <div className="lg:col-span-2 space-y-8">
             {/* Top Selling Products */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center transition-colors duration-300">
                 <BarChart3 className="w-5 h-5 mr-2 text-green-600 dark:text-green-400 transition-colors duration-300" />
                 {t('topSellingProducts')}
@@ -386,7 +386,7 @@ export default function SalesDashboard() {
             </div>
 
             {/* Recent Orders */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center transition-colors duration-300">
                 <Receipt className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400 transition-colors duration-300" />
                 {t('recentOrders')}
@@ -431,19 +431,19 @@ export default function SalesDashboard() {
 
         {/* Additional Stats */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('averageOrderValue')}</h3>
             <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300">{formatCurrency(salesData.averageOrderValue)}</p>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 transition-colors duration-300">{t('perOrder')}</p>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('platformFees')}</h3>
             <p className="text-3xl font-bold text-red-600 dark:text-red-400 transition-colors duration-300">-{formatCurrency(salesData.platformFees)}</p>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 transition-colors duration-300">{PLATFORM_FEE_PERCENTAGE}% {t('ofTotalSales')}</p>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 transition-colors duration-300">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{t('deliveryFees')}</h3>
             <p className="text-3xl font-bold text-orange-600 dark:text-orange-400 transition-colors duration-300">-{formatCurrency(salesData.deliveryFees)}</p>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 transition-colors duration-300">

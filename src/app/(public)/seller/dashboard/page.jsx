@@ -207,9 +207,9 @@ export default function SellerDashboard() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8">
         {/* Welcome Message */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 rounded-lg p-4 sm:p-6 text-white mb-6 sm:mb-8 transition-colors duration-300">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 rounded-lg p-3 sm:p-4 md:p-5 lg:p-6 text-white mb-4 sm:mb-5 md:mb-6 lg:mb-8 transition-colors duration-300">
           <h2 className="text-lg sm:text-xl font-semibold mb-2">{t('welcomeToSellerCenter')}</h2>
           <p className="text-sm sm:text-base text-blue-100 dark:text-blue-200 transition-colors duration-300">
             {t('accountCreatedSuccessfully')}
@@ -217,11 +217,11 @@ export default function SellerDashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-4 sm:mb-5 md:mb-6 lg:mb-8">
           {stats.map((stat, index) => {
             const Icon = stat.icon
             return (
-              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-3 sm:p-4 md:p-5 lg:p-6 transition-colors duration-300">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors duration-300">{stat.title}</p>
@@ -237,9 +237,9 @@ export default function SellerDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
           {/* Recent Activity */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-3 sm:p-4 md:p-5 lg:p-6 transition-colors duration-300">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">{t('recentActivity')}</h3>
             <div className="space-y-4">
               <div className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors duration-300">
@@ -260,7 +260,7 @@ export default function SellerDashboard() {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-3 sm:p-4 md:p-5 lg:p-6 transition-colors duration-300">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">{t('quickActions')}</h3>
             <div className="space-y-3">
               <button 

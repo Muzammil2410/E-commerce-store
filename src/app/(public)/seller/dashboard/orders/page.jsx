@@ -120,10 +120,10 @@ export default function SellerOrders() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-2xl shadow-xl dark:shadow-gray-900/50 p-6 text-white transform hover:scale-105 transition-all duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-6 sm:mb-7 md:mb-8">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl sm:rounded-2xl shadow-xl dark:shadow-gray-900/50 p-4 sm:p-5 md:p-6 text-white transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100 dark:text-blue-200 text-sm font-medium mb-1 transition-colors duration-300">Total Orders</p>
@@ -159,8 +159,8 @@ export default function SellerOrders() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50 p-6 mb-8 transition-colors duration-300">
-          <div className="flex flex-col sm:flex-row gap-4">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50 p-4 sm:p-5 md:p-6 mb-6 sm:mb-7 md:mb-8 transition-colors duration-300">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 transition-colors duration-300" size={20} />
@@ -197,9 +197,9 @@ export default function SellerOrders() {
             filteredOrders.map((order) => (
               <div 
                 key={order.id} 
-                className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl dark:hover:shadow-gray-900/70 transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl dark:hover:shadow-gray-900/70 transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="p-6 sm:p-8">
+                <div className="p-4 sm:p-5 md:p-6 lg:p-8">
                   {/* Order Header */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
                     <div className="flex-1">
@@ -237,11 +237,11 @@ export default function SellerOrders() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
                     {/* Left Column - Customer & Items */}
                     <div className="lg:col-span-2 space-y-6">
                       {/* Customer Info */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-100 dark:border-blue-800 transition-colors duration-300">
                           <div className="flex items-center gap-3">
                             <div className="bg-blue-500 dark:bg-blue-600 rounded-xl p-2.5 shadow-md transition-colors duration-300">

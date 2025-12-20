@@ -49,15 +49,15 @@ export default function Cart() {
     }, [cartItems, products]);
 
     return cartArray.length > 0 ? (
-        <div className="min-h-screen mx-3 sm:mx-4 md:mx-6 text-slate-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 py-4 sm:py-6 transition-colors duration-200">
+        <div className="min-h-screen mx-2 sm:mx-3 md:mx-4 lg:mx-6 text-slate-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 py-3 sm:py-4 md:py-6 transition-colors duration-200">
 
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto px-2 sm:px-0">
                 {/* Title */}
                 <PageTitle heading="My Cart" text="items in your cart" linkText="Add more" />
 
-                <div className="flex flex-col lg:flex-row items-start justify-between gap-4 sm:gap-5">
+                <div className="flex flex-col lg:flex-row items-start justify-between gap-3 sm:gap-4 md:gap-5">
 
-                    <div className="w-full lg:max-w-4xl bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl shadow-sm dark:shadow-gray-900/50 p-3 sm:p-4 overflow-x-auto transition-colors duration-200">
+                    <div className="w-full lg:max-w-4xl bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg sm:rounded-xl shadow-sm dark:shadow-gray-900/50 p-2 sm:p-3 md:p-4 overflow-x-auto transition-colors duration-200">
                         {/* Desktop Table */}
                         <table className="hidden md:table w-full text-slate-600 dark:text-gray-300 table-auto transition-colors duration-200">
                             <thead>

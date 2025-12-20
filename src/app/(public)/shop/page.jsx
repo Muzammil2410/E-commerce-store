@@ -75,19 +75,19 @@ function ShopContent() {
     }
 
     return (
-        <div className="min-h-[70vh] mx-3 sm:mx-6">
-            <div className="max-w-[95%] xl:max-w-[98%] mx-auto">
+        <div className="min-h-[70vh] mx-2 sm:mx-3 md:mx-4 lg:mx-6">
+            <div className="max-w-[95%] xl:max-w-[98%] mx-auto px-1 sm:px-0">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between my-6 gap-4">
-                    <h1 className="text-xl sm:text-2xl text-slate-500 dark:text-gray-400 flex items-center gap-2 transition-colors duration-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between my-4 sm:my-5 md:my-6 gap-3 sm:gap-4">
+                    <h1 className="text-lg sm:text-xl md:text-2xl text-slate-500 dark:text-gray-400 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 transition-colors duration-200">
                         <span className="truncate">
                             {search ? `Search Results for "${search}"` : 'All'} 
                             <span className="text-slate-700 dark:text-gray-200 font-medium transition-colors duration-200"> Products</span>
                         </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-200">({filteredProducts.length} items)</span>
+                        <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-200">({filteredProducts.length} items)</span>
                     </h1>
                     
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 md:gap-4">
                         {/* Sort Dropdown */}
                         <select
                             value={sortBy}
@@ -111,10 +111,10 @@ function ShopContent() {
                     </div>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+                <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                     {/* Filters Sidebar */}
                     {showFilters && (
-                        <div className="w-full lg:w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 lg:p-6 h-fit order-2 lg:order-1 transition-colors duration-200">
+                        <div className="w-full lg:w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4 md:p-5 lg:p-6 h-fit order-2 lg:order-1 transition-colors duration-200">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="font-semibold text-gray-900 dark:text-gray-100 transition-colors duration-200">Filters</h3>
                                 <button
@@ -178,7 +178,7 @@ function ShopContent() {
                     {/* Products Grid */}
                     <div className="flex-1 order-1 lg:order-2">
                         {filteredProducts.length > 0 ? (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 xl:gap-7 mx-auto mb-32">
+                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 mx-auto mb-20 sm:mb-24 md:mb-32">
                                 {filteredProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))}

@@ -178,23 +178,23 @@ export default function CheckoutPage() {
     const isBuyNow = !!buyNowProduct
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-6 md:py-8 transition-colors duration-200">
-            <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-3 sm:py-4 md:py-6 lg:py-8 transition-colors duration-200">
+            <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-4 lg:px-6">
                 <Link to={isBuyNow ? "/" : "/cart"} className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 mb-4 sm:mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-offset-2 rounded text-sm sm:text-base transition-colors duration-200">
                     <ArrowLeft size={18} className="sm:w-5 sm:h-5" aria-hidden="true" /> 
                     <span>{isBuyNow ? "Back to Home" : "Back to Cart"}</span>
                 </Link>
-                <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 dark:text-gray-100 transition-colors duration-200">Checkout</h1>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 dark:text-gray-100 transition-colors duration-200">Checkout</h1>
 
-                <div className={`grid ${isBuyNow ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'} gap-4 sm:gap-6 lg:gap-8`}>
+                <div className={`grid ${isBuyNow ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'} gap-3 sm:gap-4 md:gap-6 lg:gap-8`}>
                     {/* Checkout Form */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-200">
-                        <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 dark:text-gray-100 transition-colors duration-200">Shipping & Payment</h2>
-                        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" aria-label="Checkout form">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-3 sm:p-4 md:p-6 transition-colors duration-200">
+                        <h2 className="text-base sm:text-lg md:text-xl font-semibold mb-3 sm:mb-4 md:mb-6 dark:text-gray-100 transition-colors duration-200">Shipping & Payment</h2>
+                        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 md:space-y-6" aria-label="Checkout form">
                             {/* Shipping Fields */}
                             <fieldset>
                                 <legend className="sr-only">Shipping Information</legend>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                     <div>
                                         <label htmlFor="firstName" className="sr-only">First Name</label>
                                         <input 
@@ -205,7 +205,7 @@ export default function CheckoutPage() {
                                             onChange={handleShippingChange} 
                                             required 
                                             aria-required="true"
-                                            className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400" 
+                                            className="p-2.5 sm:p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base" 
                                         />
                                     </div>
                                     <div>
@@ -218,11 +218,11 @@ export default function CheckoutPage() {
                                             onChange={handleShippingChange} 
                                             required 
                                             aria-required="true"
-                                            className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400" 
+                                            className="p-2.5 sm:p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base" 
                                         />
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
                                     <div>
                                         <label htmlFor="email" className="sr-only">Email</label>
                                         <input 
@@ -256,7 +256,7 @@ export default function CheckoutPage() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mt-4">
+                                <div className="mt-3 sm:mt-4">
                                     <label htmlFor="address" className="sr-only">Address</label>
                                     <input 
                                         id="address"
@@ -267,10 +267,10 @@ export default function CheckoutPage() {
                                         required 
                                         aria-required="true"
                                         autoComplete="street-address"
-                                        className="p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                        className="p-2.5 sm:p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base" 
                                     />
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-3 sm:mt-4">
                                     <div>
                                         <label htmlFor="city" className="sr-only">City</label>
                                         <input 
@@ -324,7 +324,7 @@ export default function CheckoutPage() {
                                 <option value="card">Credit/Debit Card</option>
                             </select>
 
-                            <div className="space-y-4 mt-2">
+                            <div className="space-y-3 sm:space-y-4 mt-2">
                                     <div>
                                         <label htmlFor="cardNumber" className="sr-only">Card Number</label>
                                         <input 
@@ -337,10 +337,10 @@ export default function CheckoutPage() {
                                             aria-required="true"
                                             autoComplete="cc-number"
                                             maxLength="19"
-                                            className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400" 
+                                            className="p-2.5 sm:p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base" 
                                         />
                                     </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                         <div>
                                             <label htmlFor="expiryDate" className="sr-only">Expiry Date</label>
                                             <input 

@@ -103,7 +103,13 @@ const Navbar = () => {
 
     const handleSearch = (e) => {
         e.preventDefault()
-        navigate(`/shop?search=${encodeURIComponent(search)}&category=${encodeURIComponent(selectedCategory)}`)
+        e.stopPropagation()
+        const searchTerm = search.trim()
+        if (searchTerm) {
+            navigate(`/shop?search=${encodeURIComponent(searchTerm)}&category=${encodeURIComponent(selectedCategory)}`)
+            // Clear search after navigation
+            setSearch('')
+        }
     }
 
     const handleCategorySelect = (category) => {
@@ -503,57 +509,80 @@ const Navbar = () => {
 
                     {/* Desktop Search Bar - Centered */}
                     <div className="hidden sm:flex items-center flex-1 justify-center mx-4 md:mx-6 lg:mx-8 relative" style={{ zIndex: 50 }}>
-                        <form onSubmit={handleSearch} className="hidden md:flex items-center w-full max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] h-11 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 focus-within:bg-white dark:focus-within:bg-gray-800 focus-within:border-blue-300 dark:focus-within:border-blue-600 focus-within:shadow-sm relative" style={{ overflow: 'visible' }}>
+                        <form onSubmit={handleSearch} className="flex items-center w-full max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1200px] h-11 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 focus-within:bg-white dark:focus-within:bg-gray-800 focus-within:border-blue-300 dark:focus-within:border-blue-600 focus-within:shadow-sm relative" style={{ overflow: 'visible' }} id="search-form">
                             {/* Category Dropdown */}
                             <div className="relative flex-shrink-0" ref={dropdownRef} style={{ zIndex: 100 }}>
                                 <button
                                     type="button"
-                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setIsDropdownOpen(!isDropdownOpen);
+                                    }}
+                                    onTouchStart={(e) => {
+                                        e.stopPropagation();
+                                    }}
                                     aria-label={`Select category, currently: ${selectedCategory}`}
                                     aria-expanded={isDropdownOpen}
                                     aria-haspopup="listbox"
-                                    className={`flex items-center gap-1.5 h-full px-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-200 border-r border-gray-200 dark:border-gray-700 focus:outline-none rounded-l-full ${
+                                    className={`flex items-center gap-1.5 h-full px-3 sm:px-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white active:text-gray-900 dark:active:text-white transition-all duration-200 border-r border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-l-full touch-manipulation ${
                                         selectedCategory.length > 15 
-                                            ? 'min-w-[100px]' 
+                                            ? 'min-w-[80px] sm:min-w-[100px]' 
                                             : ''
                                     }`}
                                 >
-                                    <span className="text-sm font-medium truncate">
+                                    <span className="text-xs sm:text-sm font-medium truncate">
                                         {selectedCategory.length > 15 
                                             ? selectedCategory.substring(0, 15) + '...' 
                                             : selectedCategory
                                         }
                                     </span>
-                                    <ChevronDown size={16} className={`transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+                                    <ChevronDown size={14} className={`sm:w-4 sm:h-4 transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                                 </button>
                                 
                                 {/* Dropdown Menu - Mega Menu with Hover Subcategories */}
                                 {isDropdownOpen && (
                                     <div 
-                                        className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl dark:shadow-gray-900/50 transition-colors duration-300 flex"
-                                        style={{ zIndex: 9999, minWidth: '800px' }}
+                                        className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl dark:shadow-gray-900/50 transition-colors duration-300 flex flex-col sm:flex-row"
+                                        style={{ zIndex: 9999, minWidth: 'min(800px, 95vw)', maxWidth: '95vw' }}
+                                        onClick={(e) => e.stopPropagation()}
+                                        onTouchStart={(e) => e.stopPropagation()}
                                     >
                                         {/* Left Side - Top Categories */}
-                                        <div className="w-64 border-r border-gray-200 dark:border-gray-700 p-4">
-                                            <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 text-sm uppercase tracking-wide transition-colors duration-300">Top Categories</h4>
+                                        <div className="w-full sm:w-64 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700 p-3 sm:p-4">
+                                            <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 text-xs sm:text-sm uppercase tracking-wide transition-colors duration-300">Top Categories</h4>
                                             <ul className="space-y-1">
                                                 {topCategories.map((category, idx) => (
                                                     <li key={idx}>
                                                         <button
                                                             type="button"
-                                                            onClick={() => handleCategorySelect(category)}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                if (categorySubmenus[category]) {
+                                                                    setHoveredCategory(category);
+                                                                } else {
+                                                                    handleCategorySelect(category);
+                                                                }
+                                                            }}
                                                             onMouseEnter={() => setHoveredCategory(category)}
-                                                            className={`text-left w-full px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-between group ${
+                                                            onTouchStart={(e) => {
+                                                                e.stopPropagation();
+                                                                if (categorySubmenus[category]) {
+                                                                    setHoveredCategory(category);
+                                                                }
+                                                            }}
+                                                            className={`text-left w-full px-3 py-2.5 sm:py-2 rounded-lg transition-all duration-200 flex items-center justify-between group touch-manipulation ${
                                                                 category === selectedCategory
                                                                     ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold'
                                                                     : hoveredCategory === category
                                                                     ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
-                                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 active:bg-gray-100 dark:active:bg-gray-700'
                                                             }`}
                                                         >
-                                                            <span className="text-sm">{category}</span>
+                                                            <span className="text-xs sm:text-sm">{category}</span>
                                                             {categorySubmenus[category] && (
-                                                                <ChevronDown size={14} className="rotate-[-90deg] opacity-60 group-hover:opacity-100 transition-opacity" />
+                                                                <ChevronDown size={12} className="sm:w-3.5 sm:h-3.5 rotate-[-90deg] opacity-60 group-hover:opacity-100 transition-opacity" />
                                                             )}
                                                         </button>
                                                     </li>
@@ -561,26 +590,31 @@ const Navbar = () => {
                                             </ul>
                                         </div>
 
-                                        {/* Right Side - Subcategories (shown on hover) */}
-                                        <div className="flex-1 p-4 min-h-[400px]">
+                                        {/* Right Side - Subcategories (shown on hover/click) */}
+                                        <div className="flex-1 p-3 sm:p-4 min-h-[300px] sm:min-h-[400px] overflow-y-auto">
                                             {hoveredCategory && categorySubmenus[hoveredCategory] ? (
                                                 <div>
-                                                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4 text-sm uppercase tracking-wide transition-colors duration-300">
+                                                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 text-xs sm:text-sm uppercase tracking-wide transition-colors duration-300">
                                                         {hoveredCategory}
                                                     </h4>
-                                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                                                         {categorySubmenus[hoveredCategory].map((section, idx) => (
                                                             <div key={idx}>
-                                                                <h5 className="font-semibold text-gray-800 dark:text-gray-200 mb-2 text-sm transition-colors duration-300">
+                                                                <h5 className="font-semibold text-gray-800 dark:text-gray-200 mb-2 text-xs sm:text-sm transition-colors duration-300">
                                                                     {section.title}
                                                                 </h5>
-                                                                <ul className="space-y-1.5">
+                                                                <ul className="space-y-1 sm:space-y-1.5">
                                                                     {section.items.map((item, i) => (
                                                                         <li key={i}>
                                                                             <button
                                                                                 type="button"
-                                                                                onClick={() => handleCategorySelect(item)}
-                                                                                className="text-left w-full text-sm py-1 transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    e.stopPropagation();
+                                                                                    handleCategorySelect(item);
+                                                                                }}
+                                                                                onTouchStart={(e) => e.stopPropagation()}
+                                                                                className="text-left w-full text-xs sm:text-sm py-1.5 sm:py-1 transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 active:text-blue-600 dark:active:text-blue-400 touch-manipulation"
                                                                             >
                                                                                 {item}
                                                                             </button>
@@ -592,8 +626,9 @@ const Navbar = () => {
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500 text-sm">
-                                                    Hover over a category to see subcategories
+                                                <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500 text-xs sm:text-sm px-4 text-center">
+                                                    <span className="hidden sm:inline">Hover over a category to see subcategories</span>
+                                                    <span className="sm:hidden">Tap a category to see subcategories</span>
                                                 </div>
                                             )}
                                         </div>
@@ -602,16 +637,44 @@ const Navbar = () => {
                             </div>
                             
                             {/* Search Input */}
-                            <div className="flex items-center gap-2 px-4 flex-1 min-w-0">
-                                <Search size={18} className="text-gray-500 dark:text-gray-400 flex-shrink-0 transition-colors duration-300" />
+                            <div className="flex items-center gap-2 px-2 sm:px-3 md:px-4 flex-1 min-w-[120px] sm:min-w-[150px] relative">
+                                <Search size={16} className="sm:w-[18px] sm:h-[18px] text-gray-500 dark:text-gray-400 flex-shrink-0 transition-colors duration-300 pointer-events-none" />
                                 <input 
-                                    className="w-full bg-transparent outline-none placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:placeholder-gray-400 dark:focus:placeholder-gray-500 transition-colors duration-200 min-w-0 rounded text-sm" 
+                                    id="search-input"
+                                    className="flex-1 w-full min-w-[100px] sm:min-w-[150px] bg-transparent outline-none placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:placeholder-gray-400 dark:focus:placeholder-gray-500 transition-colors duration-200 rounded text-xs sm:text-sm md:text-base touch-manipulation py-2" 
                                     type="search" 
                                     placeholder={t('search')} 
                                     value={search} 
                                     onChange={(e) => setSearch(e.target.value)} 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.currentTarget.focus();
+                                    }}
+                                    onFocus={(e) => {
+                                        e.stopPropagation();
+                                        e.currentTarget.style.opacity = '1';
+                                        e.currentTarget.style.visibility = 'visible';
+                                    }}
+                                    onTouchStart={(e) => {
+                                        e.stopPropagation();
+                                        e.currentTarget.focus();
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleSearch(e);
+                                        }
+                                    }}
+                                    style={{ 
+                                        minWidth: '100px',
+                                        width: '100%',
+                                        display: 'block',
+                                        visibility: 'visible',
+                                        opacity: 1,
+                                        flex: '1 1 auto'
+                                    }}
                                     aria-label="Search products" 
-                                    required 
+                                    autoComplete="off"
                                 />
                             </div>
                             {suggestions.length > 0 && (
@@ -799,10 +862,18 @@ const Navbar = () => {
                         
                         {/* Mobile Search Button */}
                         <button 
-                            onClick={() => setShowMobileSearch(!showMobileSearch)} 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowMobileSearch(!showMobileSearch);
+                            }}
+                            onTouchStart={(e) => {
+                                e.stopPropagation();
+                            }}
                             aria-label="Open search"
                             aria-expanded={showMobileSearch}
-                            className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation"
+                            className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 active:text-blue-800 dark:active:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation"
+                            type="button"
                         >
                             <Search size={20} aria-hidden="true" />
                         </button>
@@ -826,8 +897,16 @@ const Navbar = () => {
                     {/* Mobile Backdrop */}
                     {(showMobileSearch || showMobileAuth) && (
                         <div 
-                            className="sm:hidden fixed inset-0 bg-black/20 z-[100]" 
-                            onClick={() => {
+                            className="sm:hidden fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998] transition-opacity duration-300" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowMobileSearch(false)
+                                setShowMobileAuth(false)
+                            }}
+                            onTouchStart={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
                                 setShowMobileSearch(false)
                                 setShowMobileAuth(false)
                             }}
@@ -836,22 +915,47 @@ const Navbar = () => {
 
                     {/* Mobile Search Dropdown */}
                     {showMobileSearch && (
-                        <div className="sm:hidden fixed left-4 right-4 top-20 z-[101] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 p-3 transition-colors duration-300" ref={mobileMenuRef}>
-                            <form onSubmit={handleSearch} className="flex items-center gap-2 mb-2">
-                                <Search size={18} className="text-gray-600 dark:text-gray-300 flex-shrink-0 transition-colors duration-300" />
-                                <input 
-                                    className="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg outline-none text-sm placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white px-3 py-2 transition-colors duration-300"
-                                    type="search"
-                                    placeholder={t('search')}
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    aria-label="Search products"
-                                    required
-                                />
+                        <div 
+                            className="sm:hidden fixed left-4 right-4 top-20 z-[9999] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl dark:shadow-gray-900/50 p-4 transition-all duration-300 animate-in fade-in slide-in-from-top-2" 
+                            ref={mobileMenuRef}
+                            onClick={(e) => e.stopPropagation()}
+                            onTouchStart={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Search Products</h3>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowMobileSearch(false)}
+                                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                                    aria-label="Close search"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSearch(e);
+                                setShowMobileSearch(false);
+                            }} className="flex items-center gap-2 mb-2">
+                                <div className="flex-1 relative">
+                                    <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                                    <input 
+                                        className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg outline-none text-sm placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white pl-10 pr-3 py-2.5 transition-colors duration-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        type="search"
+                                        placeholder={t('search')}
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        onClick={(e) => e.stopPropagation()}
+                                        onFocus={(e) => e.stopPropagation()}
+                                        autoFocus
+                                        aria-label="Search products"
+                                        required
+                                    />
+                                </div>
                                 <button 
                                     type="submit" 
                                     aria-label="Submit search"
-                                    className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none transition-colors"
+                                    className="px-4 py-2.5 bg-blue-600 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors touch-manipulation"
                                 >
                                     {t('go')}
                                 </button>

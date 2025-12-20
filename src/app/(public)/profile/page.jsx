@@ -308,35 +308,35 @@ export default function ProfilePage() {
 
     return (
         <>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-300">
-            <div className="max-w-7xl mx-auto px-4">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-6 md:py-8 transition-colors duration-300">
+            <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('myAccount')}</h1>
-                    <p className="text-gray-600 dark:text-gray-300 mt-2 transition-colors duration-300">{t('manageAccountSettings')}</p>
+                <div className="mb-4 sm:mb-6 md:mb-8">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{t('myAccount')}</h1>
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-1 sm:mt-2 transition-colors duration-300">{t('manageAccountSettings')}</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                     {/* Sidebar */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
                             {/* User Info */}
-                            <div className="text-center mb-6">
-                                <div className="relative w-20 h-20 mx-auto mb-4">
+                            <div className="text-center mb-4 sm:mb-6">
+                                <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4">
                                     {profilePicture ? (
                                         <img 
                                             src={profilePicture} 
                                             alt="Profile" 
-                                            className="w-20 h-20 rounded-full object-cover border-2 border-blue-200 dark:border-blue-700 transition-colors duration-300"
+                                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-blue-200 dark:border-blue-700 transition-colors duration-300"
                                             style={{ objectPosition: 'center 25%' }}
                                         />
                                     ) : (
-                                        <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center transition-colors duration-300">
-                                            <User className="w-10 h-10 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
+                                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center transition-colors duration-300">
+                                            <User className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
                                         </div>
                                     )}
-                                    <label className="absolute bottom-0 right-0 bg-blue-600 dark:bg-blue-500 text-white rounded-full p-1.5 cursor-pointer hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-lg">
-                                        <Camera size={14} />
+                                    <label className="absolute bottom-0 right-0 bg-blue-600 dark:bg-blue-500 text-white rounded-full p-1 sm:p-1.5 cursor-pointer hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-lg">
+                                        <Camera size={12} className="sm:w-3.5 sm:h-3.5" />
                                         <input
                                             type="file"
                                             accept="image/*"
@@ -345,24 +345,24 @@ export default function ProfilePage() {
                                         />
                                     </label>
                                 </div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">{user.name}</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{user.email}</p>
+                                <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white transition-colors duration-300">{user.name}</h3>
+                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 break-all">{user.email}</p>
                             </div>
 
                             {/* Navigation Tabs */}
-                            <nav className="space-y-2">
+                            <nav className="space-y-1 sm:space-y-2">
                                 {tabs.map((tab) => (
                                     <button
                                         key={tab.id}
                                         onClick={() => handleTabChange(tab.id)}
-                                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                                        className={`w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-left transition-colors text-sm sm:text-base ${
                                             activeTab === tab.id
                                                 ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700'
                                                 : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                         }`}
                                     >
-                                        <tab.icon size={20} />
-                                        {tab.label}
+                                        <tab.icon size={18} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                                        <span className="truncate">{tab.label}</span>
                                     </button>
                                 ))}
                             </nav>
@@ -370,10 +370,10 @@ export default function ProfilePage() {
                             {/* Logout Button */}
                             <button
                                 onClick={handleLogout}
-                                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors mt-4"
+                                className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-left text-sm sm:text-base text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors mt-3 sm:mt-4"
                             >
-                                <LogOut size={20} />
-                                {t('logout')}
+                                <LogOut size={18} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                                <span>{t('logout')}</span>
                             </button>
                         </div>
                     </div>
@@ -382,8 +382,8 @@ export default function ProfilePage() {
                     <div ref={contentRef} className="lg:col-span-3">
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-6 transition-colors duration-300">
-                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{t('profileInformation')}</h2>
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 transition-colors duration-300">{t('profileInformation')}</h2>
                                 
                                 {/* Profile Picture Section */}
                                 <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
