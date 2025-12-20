@@ -75,11 +75,11 @@ function ShopContent() {
     }
 
     return (
-        <div className="min-h-[70vh] mx-2 sm:mx-3 md:mx-4 lg:mx-6">
-            <div className="max-w-[95%] xl:max-w-[98%] mx-auto px-1 sm:px-0">
+        <div className="min-h-[70vh] mx-0 sm:mx-2 md:mx-3 lg:mx-4 xl:mx-6">
+            <div className="max-w-full sm:max-w-[95%] xl:max-w-[98%] mx-auto px-2 sm:px-3 md:px-4 lg:px-0">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between my-4 sm:my-5 md:my-6 gap-3 sm:gap-4">
-                    <h1 className="text-lg sm:text-xl md:text-2xl text-slate-500 dark:text-gray-400 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 transition-colors duration-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between my-3 sm:my-4 md:my-5 lg:my-6 gap-3 sm:gap-4 px-1 sm:px-0">
+                    <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-500 dark:text-gray-400 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 transition-colors duration-200">
                         <span className="truncate">
                             {search ? `Search Results for "${search}"` : 'All'} 
                             <span className="text-slate-700 dark:text-gray-200 font-medium transition-colors duration-200"> Products</span>
@@ -87,26 +87,34 @@ function ShopContent() {
                         <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-200">({filteredProducts.length} items)</span>
                     </h1>
                     
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 md:gap-4">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto">
                         {/* Sort Dropdown */}
                         <select
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
-                            className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm transition-colors duration-200"
+                            className="w-full sm:w-auto min-w-[160px] px-3 sm:px-4 py-2.5 sm:py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm sm:text-base appearance-none cursor-pointer touch-manipulation"
+                            style={{
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'right 0.75rem center',
+                                backgroundSize: '12px',
+                                paddingRight: '2.5rem'
+                            }}
                         >
-                            <option value="name" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Sort by Name</option>
-                            <option value="price-low" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Price: Low to High</option>
-                            <option value="price-high" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Price: High to Low</option>
-                            <option value="rating" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Highest Rated</option>
+                            <option value="name" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white py-2">Sort by Name</option>
+                            <option value="price-low" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white py-2">Price: Low to High</option>
+                            <option value="price-high" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white py-2">Price: High to Low</option>
+                            <option value="rating" className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white py-2">Highest Rated</option>
                         </select>
 
                         {/* Filter Toggle */}
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className="flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors text-sm"
+                            className="w-full sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 active:bg-gray-100 dark:active:bg-gray-500 transition-colors text-sm sm:text-base touch-manipulation"
                         >
-                            <SlidersHorizontal size={18} />
+                            <SlidersHorizontal size={18} className="flex-shrink-0" />
                             <span className="hidden sm:inline">Filters</span>
+                            <span className="sm:hidden">Filters</span>
                         </button>
                     </div>
                 </div>
