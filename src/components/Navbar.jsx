@@ -27,6 +27,7 @@ const Navbar = () => {
     const cartCount = useSelector(state => state.cart.total)
     const wishlistCount = useSelector(state => state.wishlist.total)
     const dropdownRef = useRef(null)
+    const dropdownContainerRef = useRef(null)
     const userMenuRef = useRef(null)
     const mobileMenuRef = useRef(null)
     const [showMobileAuth, setShowMobileAuth] = useState(false)
@@ -137,10 +138,17 @@ const Navbar = () => {
 
     // Close dropdown when clicking outside
     useEffect(() => {
+        if (!isDropdownOpen) return; // Don't set up listeners if dropdown is closed
+        
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false)
-                setHoveredCategory(null)
+            // Check if click is outside both the dropdown button and the dropdown container
+            const isOutsideButton = dropdownRef.current && !dropdownRef.current.contains(event.target);
+            const isOutsideContainer = dropdownContainerRef.current && !dropdownContainerRef.current.contains(event.target);
+            
+            // Only close if click is outside both the button and the container
+            if (isOutsideButton && isOutsideContainer) {
+                setIsDropdownOpen(false);
+                setHoveredCategory(null);
             }
             if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
                 setShowUserMenu(false)
@@ -162,10 +170,12 @@ const Navbar = () => {
         }
 
         document.addEventListener('mousedown', handleClickOutside)
+        document.addEventListener('touchstart', handleClickOutside)
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
+            document.removeEventListener('touchstart', handleClickOutside)
         }
-    }, [])
+    }, [isDropdownOpen])
 
     const handleSaveLanguage = () => {
         // Update context which will update the whole website
@@ -539,101 +549,6 @@ const Navbar = () => {
                                     </span>
                                     <ChevronDown size={14} className={`sm:w-4 sm:h-4 transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                                 </button>
-                                
-                                {/* Dropdown Menu - Mega Menu with Hover Subcategories */}
-                                {isDropdownOpen && (
-                                    <div 
-                                        className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl dark:shadow-gray-900/50 transition-colors duration-300 flex flex-col sm:flex-row"
-                                        style={{ zIndex: 9999, minWidth: 'min(800px, 95vw)', maxWidth: '95vw' }}
-                                        onClick={(e) => e.stopPropagation()}
-                                        onTouchStart={(e) => e.stopPropagation()}
-                                    >
-                                        {/* Left Side - Top Categories */}
-                                        <div className="w-full sm:w-64 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700 p-3 sm:p-4">
-                                            <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 text-xs sm:text-sm uppercase tracking-wide transition-colors duration-300">Top Categories</h4>
-                                            <ul className="space-y-1">
-                                                {topCategories.map((category, idx) => (
-                                                    <li key={idx}>
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                if (categorySubmenus[category]) {
-                                                                    setHoveredCategory(category);
-                                                                } else {
-                                                                    handleCategorySelect(category);
-                                                                }
-                                                            }}
-                                                            onMouseEnter={() => setHoveredCategory(category)}
-                                                            onTouchStart={(e) => {
-                                                                e.stopPropagation();
-                                                                if (categorySubmenus[category]) {
-                                                                    setHoveredCategory(category);
-                                                                }
-                                                            }}
-                                                            className={`text-left w-full px-3 py-2.5 sm:py-2 rounded-lg transition-all duration-200 flex items-center justify-between group touch-manipulation ${
-                                                                category === selectedCategory
-                                                                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold'
-                                                                    : hoveredCategory === category
-                                                                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
-                                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 active:bg-gray-100 dark:active:bg-gray-700'
-                                                            }`}
-                                                        >
-                                                            <span className="text-xs sm:text-sm">{category}</span>
-                                                            {categorySubmenus[category] && (
-                                                                <ChevronDown size={12} className="sm:w-3.5 sm:h-3.5 rotate-[-90deg] opacity-60 group-hover:opacity-100 transition-opacity" />
-                                                            )}
-                                                        </button>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-
-                                        {/* Right Side - Subcategories (shown on hover/click) */}
-                                        <div className="flex-1 p-3 sm:p-4 min-h-[300px] sm:min-h-[400px] overflow-y-auto">
-                                            {hoveredCategory && categorySubmenus[hoveredCategory] ? (
-                                                <div>
-                                                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 text-xs sm:text-sm uppercase tracking-wide transition-colors duration-300">
-                                                        {hoveredCategory}
-                                                    </h4>
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                                                        {categorySubmenus[hoveredCategory].map((section, idx) => (
-                                                            <div key={idx}>
-                                                                <h5 className="font-semibold text-gray-800 dark:text-gray-200 mb-2 text-xs sm:text-sm transition-colors duration-300">
-                                                                    {section.title}
-                                                                </h5>
-                                                                <ul className="space-y-1 sm:space-y-1.5">
-                                                                    {section.items.map((item, i) => (
-                                                                        <li key={i}>
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={(e) => {
-                                                                                    e.preventDefault();
-                                                                                    e.stopPropagation();
-                                                                                    handleCategorySelect(item);
-                                                                                }}
-                                                                                onTouchStart={(e) => e.stopPropagation()}
-                                                                                className="text-left w-full text-xs sm:text-sm py-1.5 sm:py-1 transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 active:text-blue-600 dark:active:text-blue-400 touch-manipulation"
-                                                                            >
-                                                                                {item}
-                                                                            </button>
-                                                                        </li>
-                                                                    ))}
-                                                                </ul>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500 text-xs sm:text-sm px-4 text-center">
-                                                    <span className="hidden sm:inline">Hover over a category to see subcategories</span>
-                                                    <span className="sm:hidden">Tap a category to see subcategories</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                             
                             {/* Search Input */}
@@ -828,11 +743,30 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile: Search and Menu on right */}
-                    <div className="flex sm:hidden items-center gap-3 flex-shrink-0">
+                    <div className="flex sm:hidden items-center gap-2 sm:gap-3 flex-shrink-0">
+                        {/* Mobile Category Button */}
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsDropdownOpen(!isDropdownOpen);
+                            }}
+                            onTouchStart={(e) => {
+                                e.stopPropagation();
+                            }}
+                            aria-label={`Select category, currently: ${selectedCategory}`}
+                            aria-expanded={isDropdownOpen}
+                            className="flex items-center gap-1 px-2.5 py-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 active:text-blue-800 dark:active:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation min-h-[44px]"
+                            type="button"
+                        >
+                            <span className="text-xs font-medium truncate max-w-[60px]">{selectedCategory.length > 8 ? selectedCategory.substring(0, 8) + '...' : selectedCategory}</span>
+                            <ChevronDown size={16} className={`transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
                         {/* Mobile Language/Currency Button */}
                         <button
                             onClick={() => setShowLanguageModal(true)}
-                            className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors p-2 touch-manipulation"
+                            className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors p-2 touch-manipulation min-h-[44px]"
                             aria-label="Select language and currency"
                         >
                             <span className="text-sm font-medium">{language.substring(0, 2).toUpperCase()}</span>
@@ -846,7 +780,7 @@ const Navbar = () => {
                                 e.stopPropagation();
                                 toggleTheme();
                             }}
-                            className="relative group flex items-center justify-center p-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors touch-manipulation"
+                            className="relative group flex items-center justify-center p-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors touch-manipulation min-h-[44px]"
                             aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                             type="button"
                         >
@@ -872,7 +806,7 @@ const Navbar = () => {
                             }}
                             aria-label="Open search"
                             aria-expanded={showMobileSearch}
-                            className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 active:text-blue-800 dark:active:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation"
+                            className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 active:text-blue-800 dark:active:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation min-h-[44px]"
                             type="button"
                         >
                             <Search size={20} aria-hidden="true" />
@@ -996,6 +930,186 @@ const Navbar = () => {
                     )}
                 </div>
             </div>
+
+            {/* Category Dropdown Menu - Outside container so visible on both mobile and desktop */}
+            {isDropdownOpen && (
+                <>
+                    {/* Backdrop - Always visible when dropdown is open */}
+                    <div 
+                        className="fixed inset-0 bg-black/30 dark:bg-black/50 sm:bg-black/20 sm:dark:bg-black/40 z-[9997] sm:z-[9998]"
+                        onClick={(e) => {
+                            // Only close if clicking directly on backdrop, not if event came from dropdown
+                            if (e.target === e.currentTarget) {
+                                setIsDropdownOpen(false);
+                            }
+                        }}
+                        onTouchStart={(e) => {
+                            // Only close if touching directly on backdrop, not if event came from dropdown
+                            if (e.target === e.currentTarget) {
+                                setIsDropdownOpen(false);
+                            }
+                        }}
+                    />
+                    <div 
+                        ref={dropdownContainerRef}
+                        data-dropdown-container
+                        className="fixed sm:absolute top-[70px] sm:top-[calc(100%+0.5rem)] left-1/2 sm:left-auto sm:right-auto -translate-x-1/2 sm:translate-x-0 mt-0 sm:mt-0 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-xl shadow-2xl dark:shadow-gray-900/50 transition-all duration-300 flex flex-col sm:flex-row z-[9999] w-[calc(100vw-2rem)] sm:w-auto sm:min-w-[min(800px,95vw)] max-w-[calc(100vw-2rem)] sm:max-w-[95vw] max-h-[calc(100vh-90px)] sm:max-h-[80vh] overflow-hidden"
+                        style={{
+                            ...(window.innerWidth >= 640 && dropdownRef.current ? {
+                                left: `${dropdownRef.current.getBoundingClientRect().left}px`,
+                                transform: 'none'
+                            } : {})
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                        onTouchStart={(e) => {
+                            e.stopPropagation();
+                        }}
+                        onTouchEnd={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
+                        {/* Left Side - Top Categories */}
+                        <div className="w-full sm:w-64 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700 p-4 overflow-y-auto max-h-[50vh] sm:max-h-none flex-shrink-0">
+                            <div className="flex items-center justify-between mb-4 sm:mb-3 sticky top-0 bg-white dark:bg-gray-800 pb-2 z-10">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 text-sm uppercase tracking-wide transition-colors duration-300">Top Categories</h4>
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    className="sm:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-700 p-2 rounded-full transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
+                                    aria-label="Close categories"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
+                            <ul className="space-y-2 sm:space-y-1">
+                                {topCategories.map((category, idx) => (
+                                    <li key={idx}>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                // Prevent event from bubbling to backdrop
+                                                if (e.target === e.currentTarget || e.currentTarget.contains(e.target)) {
+                                                    if (categorySubmenus[category]) {
+                                                        setHoveredCategory(category);
+                                                        // Keep dropdown open when category has subcategories
+                                                    } else {
+                                                        handleCategorySelect(category);
+                                                        setIsDropdownOpen(false);
+                                                    }
+                                                }
+                                            }}
+                                            onMouseEnter={() => {
+                                                if (window.innerWidth >= 640) {
+                                                    setHoveredCategory(category);
+                                                }
+                                            }}
+                                            onTouchStart={(e) => {
+                                                e.stopPropagation();
+                                                // Set hovered category immediately on touch start for better UX
+                                                if (categorySubmenus[category]) {
+                                                    setHoveredCategory(category);
+                                                }
+                                            }}
+                                            onTouchEnd={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                // Prevent event from bubbling to backdrop
+                                                if (categorySubmenus[category]) {
+                                                    setHoveredCategory(category);
+                                                    // Keep dropdown open when category has subcategories
+                                                } else {
+                                                    handleCategorySelect(category);
+                                                    setIsDropdownOpen(false);
+                                                }
+                                            }}
+                                            className={`text-left w-full px-4 py-3.5 sm:py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between group touch-manipulation min-h-[48px] sm:min-h-[44px] border border-transparent ${
+                                                category === selectedCategory
+                                                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold border-blue-300 dark:border-blue-600'
+                                                    : hoveredCategory === category
+                                                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600'
+                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 active:bg-gray-100 dark:active:bg-gray-700 border-gray-200 dark:border-gray-600'
+                                            }`}
+                                        >
+                                            <span className="text-base sm:text-sm font-semibold">{category}</span>
+                                            {categorySubmenus[category] && (
+                                                <ChevronDown size={18} className="sm:w-3.5 sm:h-3.5 rotate-[-90deg] sm:rotate-0 opacity-70 group-hover:opacity-100 transition-opacity flex-shrink-0 text-gray-600 dark:text-gray-400" />
+                                            )}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Right Side - Subcategories (shown on hover/click) */}
+                        <div className="flex-1 p-4 min-h-[200px] sm:min-h-[300px] md:min-h-[400px] overflow-y-auto max-h-[calc(100vh-200px)] sm:max-h-none">
+                            {hoveredCategory && categorySubmenus[hoveredCategory] ? (
+                                <div>
+                                    <div className="flex items-center justify-between mb-4 sticky top-0 bg-white dark:bg-gray-800 pb-2 z-10">
+                                        <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base sm:text-sm uppercase tracking-wide transition-colors duration-300">
+                                            {hoveredCategory}
+                                        </h4>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                setHoveredCategory(null);
+                                            }}
+                                            className="sm:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium"
+                                            aria-label="Back to categories"
+                                        >
+                                            ← Back
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-4 md:gap-6">
+                                        {categorySubmenus[hoveredCategory].map((section, idx) => (
+                                            <div key={idx} className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-3 sm:p-2">
+                                                <h5 className="font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-2 text-base sm:text-sm transition-colors duration-300">
+                                                    {section.title}
+                                                </h5>
+                                                <ul className="space-y-2 sm:space-y-1">
+                                                    {section.items.map((item, i) => (
+                                                        <li key={i}>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    handleCategorySelect(item);
+                                                                    setIsDropdownOpen(false);
+                                                                }}
+                                                                onTouchStart={(e) => e.stopPropagation()}
+                                                                className="text-left w-full text-sm sm:text-xs py-2.5 sm:py-1.5 px-2 transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 active:text-blue-600 dark:active:text-blue-400 touch-manipulation min-h-[44px] sm:min-h-0 rounded-md hover:bg-white dark:hover:bg-gray-600/50 active:bg-blue-50 dark:active:bg-blue-900/20 font-medium"
+                                                            >
+                                                                {item}
+                                                            </button>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-gray-400 dark:text-gray-500 px-4 text-center">
+                                    <div className="mb-4">
+                                        <ChevronDown size={32} className="mx-auto text-gray-300 dark:text-gray-600 animate-bounce" />
+                                    </div>
+                                    <p className="text-base sm:text-sm font-medium mb-1">Select a category</p>
+                                    <p className="text-sm sm:text-xs">Tap a category from the left to see subcategories</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </>
+            )}
+
             <hr className="border-gray-300" />
 
             {/* Language and Currency Modal */}
