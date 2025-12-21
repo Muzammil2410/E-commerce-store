@@ -2998,18 +2998,21 @@ export const LanguageCurrencyProvider = ({ children }) => {
     localStorage.setItem('currency', newCurrency)
   }
 
+  // Memoize context value to ensure proper updates when language/currency changes
+  const contextValue = React.useMemo(() => ({
+    language,
+    currency,
+    t,
+    formatCurrency,
+    getCurrencySymbol,
+    translateProductName,
+    updateLanguage,
+    updateCurrency,
+  }), [language, currency])
+
   return (
     <LanguageCurrencyContext.Provider
-      value={{
-        language,
-        currency,
-        t,
-        formatCurrency,
-        getCurrencySymbol,
-        translateProductName,
-        updateLanguage,
-        updateCurrency,
-      }}
+      value={contextValue}
     >
       {children}
     </LanguageCurrencyContext.Provider>

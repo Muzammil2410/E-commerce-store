@@ -27,6 +27,8 @@ import Profile from "@/app/(public)/profile/page";
 import SellerDashboard from "@/app/(public)/seller/dashboard/page";
 // Import SellerRegister directly since it's accessed from seller page
 import SellerRegister from "@/app/(public)/seller/register/page";
+// Import SellerLogin directly to fix React context issues
+import SellerLogin from "@/app/(public)/seller/login/page";
 // Import all seller dashboard pages directly to fix React context issues
 import SellerProducts from "@/app/(public)/seller/dashboard/products/page";
 import SellerProductsAdd from "@/app/(public)/seller/dashboard/products/add/page";
@@ -48,7 +50,6 @@ const AuthForgot = lazy(() => import("@/app/(public)/auth/forgot-password/page")
 const ForgotPassword = lazy(() => import("@/app/(public)/forgot-password/page"));
 const PrivacyPolicy = lazy(() => import("@/app/(public)/privacy-policy/page"));
 const Support = lazy(() => import("@/app/(public)/support/page"));
-const SellerLogin = lazy(() => import("@/app/(public)/seller/login/page"));
 const AdminPage = lazy(() => import("@/app/admin/page"));
 const AdminStores = lazy(() => import("@/app/admin/stores/page"));
 const AdminCoupons = lazy(() => import("@/app/admin/coupons/page"));
@@ -109,7 +110,7 @@ export const router = createBrowserRouter([
   { path: "/privacy-policy", element: createPublicRoute(PrivacyPolicy) },
   { path: "/support", element: createPublicRoute(Support) },
   { path: "/seller", element: <PublicLayout><Seller /></PublicLayout> },
-  { path: "/seller/login", element: createPublicRoute(SellerLogin) },
+  { path: "/seller/login", element: <PublicLayout><SellerLogin /></PublicLayout> },
   { path: "/seller/register", element: <PublicLayout><SellerRegister /></PublicLayout> },
   { path: "/seller/dashboard", element: <PublicLayout><SellerDashboard /></PublicLayout> },
   { path: "/seller/dashboard/products", element: <PublicLayout><SellerProducts /></PublicLayout> },

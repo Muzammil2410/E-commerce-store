@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
@@ -20,7 +20,7 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 export default function ProfilePage() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { formatCurrency, t, translateProductName } = useLanguageCurrency()
+    const { formatCurrency, t, translateProductName, language } = useLanguageCurrency()
     const [activeTab, setActiveTab] = useState('profile')
     const [user, setUser] = useState(null)
     const [orders, setOrders] = useState([])
@@ -292,7 +292,8 @@ export default function ProfilePage() {
         }
     }
 
-    const tabs = [
+    // Memoize tabs to recalculate when language changes
+    const tabs = useMemo(() => [
         { id: 'profile', label: t('profileTab'), icon: User },
         { id: 'active-orders', label: t('activeOrdersTab'), icon: Package },
         { id: 'tracking', label: t('deliveryTrackingTab'), icon: Truck },
@@ -300,7 +301,7 @@ export default function ProfilePage() {
         { id: 'returns', label: t('returnsRefundsTab'), icon: RotateCcw },
         { id: 'addresses', label: t('addressesTab'), icon: MapPin },
         { id: 'wishlist', label: t('wishlistTab'), icon: Heart }
-    ]
+    ], [t, language])
 
     if (!user) {
         return <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">Loading...</div>
