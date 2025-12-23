@@ -55,11 +55,33 @@
         min-height: 44px; /* Touch-friendly minimum height */
     }
     
+    /* Remove dropdown arrow from payment method select */
+    select#paymentMethod {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        background-image: none !important;
+        background: none !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    select#paymentMethod::-ms-expand {
+        display: none !important;
+    }
+    
+    select#paymentMethod::-webkit-appearance {
+        -webkit-appearance: none !important;
+    }
+    
     /* Ensure select dropdowns are readable on mobile */
     @media (max-width: 640px) {
         select {
             font-size: 16px; /* Prevents zoom on iOS */
             padding: 0.625rem 2.5rem 0.625rem 0.75rem;
+        }
+        
+        select#paymentMethod {
+            padding-right: 0.75rem !important;
         }
         
         option {

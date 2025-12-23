@@ -668,11 +668,11 @@ const Navbar = () => {
                                 </button>
 
                                 {/* Wishlist */}
-                                <Link to="/profile?tab=wishlist" className="relative flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm">
+                                <Link to="/wishlist" className="relative flex items-center gap-1.5 sm:gap-2 text-gray-600 hover:text-blue-800 hover:bg-blue-50 hover:px-2 sm:hover:px-3 hover:py-1.5 sm:hover:py-2 hover:rounded-full hover:scale-105 transition-all duration-200 font-medium text-xs sm:text-sm">
                                     <Heart size={16} className="sm:w-[18px] sm:h-[18px] hover:scale-110 transition-transform duration-200" />
                                     <span className="hidden sm:inline">{t('wishlist')}</span>
                                     {wishlistCount > 0 && (
-                                        <button className="absolute -top-1 left-3 text-[8px] text-white bg-red-500 size-3.5 rounded-full hover:bg-red-600 hover:scale-110 transition-all duration-200">{wishlistCount}</button>
+                                        <span className="absolute -top-1 left-3 text-[8px] text-white bg-red-500 size-3.5 rounded-full hover:bg-red-600 hover:scale-110 transition-all duration-200 flex items-center justify-center font-medium">{wishlistCount}</span>
                                     )}
                                 </Link>
 
@@ -714,7 +714,7 @@ const Navbar = () => {
                                                     {t('orders')}
                                                 </Link>
                                                 <Link
-                                                    to="/profile?tab=wishlist"
+                                                    to="/wishlist"
                                                     className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                                     onClick={() => setShowUserMenu(false)}
                                                 >

@@ -113,7 +113,7 @@ const OrderItem = ({ order }) => {
 
                         {/* Delay Warning */}
                         {isOrderDelayed() && (
-                            <div className="flex items-center gap-1 text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded transition-colors duration-200">
+                            <div className="flex items-center justify-center gap-1 text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded transition-colors duration-200">
                                 <AlertCircle size={12} />
                                 <span>Delayed</span>
                             </div>
@@ -158,7 +158,7 @@ const OrderItem = ({ order }) => {
                                 </button>
                                 <div className="flex items-center justify-center gap-1 text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded transition-colors duration-200">
                                     <AlertCircle size={14} />
-                                    <span>Order is delayed</span>
+                                    <span>Delayed</span>
                                 </div>
                             </>
                         )}

@@ -23,6 +23,10 @@ import Bargain from "@/app/(public)/bargain/page";
 import Shop from "@/app/(public)/shop/page";
 // Import Profile directly since it's used after login
 import Profile from "@/app/(public)/profile/page";
+// Import Wishlist directly since it's accessed from navbar
+import Wishlist from "@/app/(public)/wishlist/page";
+// Import Orders directly to fix React context issues
+import Orders from "@/app/(public)/orders/page";
 // Import SellerDashboard directly since it's used after seller login
 import SellerDashboard from "@/app/(public)/seller/dashboard/page";
 // Import SellerRegister directly since it's accessed from seller page
@@ -44,7 +48,6 @@ const Pricing = lazy(() => import("@/app/(public)/pricing/page"));
 const ShopUser = lazy(() => import("@/app/(public)/shop/[username]/page"));
 const Login = lazy(() => import("@/app/(public)/login/page"));
 const Register = lazy(() => import("@/app/(public)/register/page"));
-const Orders = lazy(() => import("@/app/(public)/orders/page"));
 const AuthRegister = lazy(() => import("@/app/(public)/auth/register/page"));
 const AuthForgot = lazy(() => import("@/app/(public)/auth/forgot-password/page"));
 const ForgotPassword = lazy(() => import("@/app/(public)/forgot-password/page"));
@@ -122,7 +125,8 @@ export const router = createBrowserRouter([
   { path: "/seller/dashboard/delivery", element: <PublicLayout><SellerDelivery /></PublicLayout> },
   { path: "/seller/dashboard/delivery/schedule", element: <PublicLayout><SellerDeliverySchedule /></PublicLayout> },
   { path: "/profile", element: <PublicLayout><Profile /></PublicLayout> },
-  { path: "/orders", element: createPublicRoute(Orders) },
+  { path: "/wishlist", element: <PublicLayout><Wishlist /></PublicLayout> },
+  { path: "/orders", element: <PublicLayout><Orders /></PublicLayout> },
   { path: "/checkout", element: <PublicLayout><Checkout /></PublicLayout> },
 
   // Admin and Store sections (render their own layouts)

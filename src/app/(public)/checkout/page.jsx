@@ -31,6 +31,7 @@ export default function CheckoutPage() {
     const [cardInfo, setCardInfo] = useState({
         cardNumber: '', expiryDate: '', cvv: '', cardName: ''
     })
+    const [errors, setErrors] = useState({})
 
     const taxRate = 0.1 // 10% tax
 
@@ -111,11 +112,108 @@ export default function CheckoutPage() {
         }
     }, [isDarkMode])
 
-    const handleShippingChange = (e) => setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value })
-    const handleCardChange = (e) => setCardInfo({ ...cardInfo, [e.target.name]: e.target.value })
+    const handleShippingChange = (e) => {
+        const { name, value } = e.target
+        setShippingInfo({ ...shippingInfo, [name]: value })
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: '' })
+        }
+    }
+
+    const handleCardChange = (e) => {
+        const { name, value } = e.target
+        let formattedValue = value
+
+        // Format card number (only digits, add spaces every 4 digits)
+        if (name === 'cardNumber') {
+            // Remove all non-digit characters first
+            formattedValue = value.replace(/\D/g, '')
+            // Limit to 16 digits
+            if (formattedValue.length > 16) formattedValue = formattedValue.slice(0, 16)
+            // Add spaces every 4 digits
+            formattedValue = formattedValue.replace(/(.{4})/g, '$1 ').trim()
+        }
+        // Format expiry date (MM/YY)
+        else if (name === 'expiryDate') {
+            formattedValue = value.replace(/\D/g, '')
+            if (formattedValue.length >= 2) {
+                formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2, 4)
+            }
+            if (formattedValue.length > 5) formattedValue = formattedValue.slice(0, 5)
+        }
+        // Format CVV (only numbers, max 4 digits)
+        else if (name === 'cvv') {
+            formattedValue = value.replace(/\D/g, '').slice(0, 4)
+        }
+        // Card name - only letters and spaces
+        else if (name === 'cardName') {
+            formattedValue = value.replace(/[^a-zA-Z\s]/g, '')
+        }
+
+        setCardInfo({ ...cardInfo, [name]: formattedValue })
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: '' })
+        }
+    }
+
+    const validateForm = () => {
+        const newErrors = {}
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!shippingInfo.email || !emailRegex.test(shippingInfo.email)) {
+            newErrors.email = 'Please enter a valid email address'
+        }
+
+        // Validate phone number
+        if (!shippingInfo.phone || shippingInfo.phone.length < 10) {
+            newErrors.phone = 'Please enter a valid phone number'
+        }
+
+        // Validate card number (should be 16 digits after removing spaces)
+        const cardNumberDigits = cardInfo.cardNumber.replace(/\s/g, '')
+        if (!cardNumberDigits || cardNumberDigits.length < 13 || cardNumberDigits.length > 19) {
+            newErrors.cardNumber = 'Please enter a valid card number'
+        }
+
+        // Validate expiry date (MM/YY format)
+        const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/
+        if (!cardInfo.expiryDate || !expiryRegex.test(cardInfo.expiryDate)) {
+            newErrors.expiryDate = 'Please enter a valid expiry date (MM/YY)'
+        } else {
+            // Check if card is expired
+            const [month, year] = cardInfo.expiryDate.split('/')
+            const expiryDate = new Date(2000 + parseInt(year), parseInt(month) - 1)
+            const today = new Date()
+            if (expiryDate < today) {
+                newErrors.expiryDate = 'Card has expired'
+            }
+        }
+
+        // Validate CVV (3-4 digits)
+        if (!cardInfo.cvv || cardInfo.cvv.length < 3 || cardInfo.cvv.length > 4) {
+            newErrors.cvv = 'Please enter a valid CVV (3-4 digits)'
+        }
+
+        // Validate cardholder name
+        if (!cardInfo.cardName || cardInfo.cardName.trim().length < 2) {
+            newErrors.cardName = 'Please enter the cardholder name'
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        
+        if (!validateForm()) {
+            toast.error('Please fix the errors in the form')
+            return
+        }
+
         setLoading(true)
         await new Promise(resolve => setTimeout(resolve, 1500))
         toast.success('Order placed successfully!')
@@ -235,25 +333,44 @@ export default function CheckoutPage() {
                                             required 
                                             aria-required="true"
                                             autoComplete="email"
-                                            className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400" 
+                                            className={`p-3 border ${errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400`}
+                                            aria-invalid={errors.email ? 'true' : 'false'}
+                                            aria-describedby={errors.email ? 'email-error' : undefined}
                                         />
+                                        {errors.email && (
+                                            <p id="email-error" className="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                                                {errors.email}
+                                            </p>
+                                        )}
                                     </div>
                                     <div>
                                         <label htmlFor="phone" className="sr-only">Phone Number</label>
-                                        <div className="phone-input border border-gray-300 dark:border-gray-600 rounded" ref={phoneInputRef}>
+                                        <div className={`phone-input border ${errors.phone ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} rounded`} ref={phoneInputRef}>
                                             <PhoneInput 
                                                 id="phone"
                                                 defaultCountry="PK" 
                                                 value={shippingInfo.phone} 
-                                                onChange={val => setShippingInfo({ ...shippingInfo, phone: val })} 
+                                                onChange={val => {
+                                                    setShippingInfo({ ...shippingInfo, phone: val })
+                                                    if (errors.phone) {
+                                                        setErrors({ ...errors, phone: '' })
+                                                    }
+                                                }} 
                                                 className="w-full" 
                                                 aria-label="Phone number"
+                                                aria-invalid={errors.phone ? 'true' : 'false'}
+                                                aria-describedby={errors.phone ? 'phone-error' : undefined}
                                                 style={{
                                                     '--PhoneInput-color--focus': isDarkMode ? '#60a5fa' : '#3b82f6',
                                                     '--PhoneInputCountrySelect-marginRight': '0.5rem',
                                                 }}
                                             />
                                         </div>
+                                        {errors.phone && (
+                                            <p id="phone-error" className="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                                                {errors.phone}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="mt-3 sm:mt-4">
@@ -320,9 +437,16 @@ export default function CheckoutPage() {
                             <fieldset>
                                 <legend className="sr-only">Payment Information</legend>
                                 <label htmlFor="paymentMethod" className="sr-only">Payment Method</label>
-                                <select id="paymentMethod" value="card" disabled aria-label="Payment method: Credit/Debit Card" className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200">
-                                <option value="card">Credit/Debit Card</option>
-                            </select>
+                                <input 
+                                    id="paymentMethod" 
+                                    type="text" 
+                                    value="Credit/Debit Card" 
+                                    disabled 
+                                    readOnly
+                                    aria-label="Payment method: Credit/Debit Card" 
+                                    className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200 font-sans cursor-default" 
+                                    style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
+                                />
 
                             <div className="space-y-3 sm:space-y-4 mt-2">
                                     <div>
@@ -330,15 +454,31 @@ export default function CheckoutPage() {
                                         <input 
                                             id="cardNumber"
                                             name="cardNumber" 
+                                            type="text"
+                                            inputMode="numeric"
+                                            pattern="[0-9\s]*"
                                             placeholder="Card Number" 
                                             value={cardInfo.cardNumber} 
                                             onChange={handleCardChange} 
+                                            onKeyPress={(e) => {
+                                                // Only allow digits and space
+                                                if (!/[0-9\s]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                                                    e.preventDefault()
+                                                }
+                                            }}
                                             required 
                                             aria-required="true"
                                             autoComplete="cc-number"
                                             maxLength="19"
-                                            className="p-2.5 sm:p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base" 
+                                            className={`p-2.5 sm:p-3 border ${errors.cardNumber ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base`}
+                                            aria-invalid={errors.cardNumber ? 'true' : 'false'}
+                                            aria-describedby={errors.cardNumber ? 'cardNumber-error' : undefined}
                                         />
+                                        {errors.cardNumber && (
+                                            <p id="cardNumber-error" className="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                                                {errors.cardNumber}
+                                            </p>
+                                        )}
                                     </div>
                                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                         <div>
@@ -353,8 +493,15 @@ export default function CheckoutPage() {
                                                 aria-required="true"
                                                 autoComplete="cc-exp"
                                                 maxLength="5"
-                                                className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400" 
+                                                className={`p-3 border ${errors.expiryDate ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400`}
+                                                aria-invalid={errors.expiryDate ? 'true' : 'false'}
+                                                aria-describedby={errors.expiryDate ? 'expiryDate-error' : undefined}
                                             />
+                                            {errors.expiryDate && (
+                                                <p id="expiryDate-error" className="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                                                    {errors.expiryDate}
+                                                </p>
+                                            )}
                                         </div>
                                         <div>
                                             <label htmlFor="cvv" className="sr-only">CVV</label>
@@ -368,8 +515,15 @@ export default function CheckoutPage() {
                                                 aria-required="true"
                                                 autoComplete="cc-csc"
                                                 maxLength="4"
-                                                className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400" 
+                                                className={`p-3 border ${errors.cvv ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400`}
+                                                aria-invalid={errors.cvv ? 'true' : 'false'}
+                                                aria-describedby={errors.cvv ? 'cvv-error' : undefined}
                                             />
+                                            {errors.cvv && (
+                                                <p id="cvv-error" className="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                                                    {errors.cvv}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                     <div>
@@ -383,8 +537,15 @@ export default function CheckoutPage() {
                                             required 
                                             aria-required="true"
                                             autoComplete="cc-name"
-                                            className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400" 
+                                            className={`p-3 border ${errors.cardName ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400`}
+                                            aria-invalid={errors.cardName ? 'true' : 'false'}
+                                            aria-describedby={errors.cardName ? 'cardName-error' : undefined}
                                         />
+                                        {errors.cardName && (
+                                            <p id="cardName-error" className="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                                                {errors.cardName}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             </fieldset>

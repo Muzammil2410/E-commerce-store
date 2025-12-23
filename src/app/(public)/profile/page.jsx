@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
 import { User, MapPin, ShoppingBag, Heart, LogOut, Edit, Plus, Trash2, Eye, Truck, Package, RotateCcw, Bell, Camera } from 'lucide-react'
@@ -20,6 +20,7 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 export default function ProfilePage() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [searchParams] = useSearchParams()
     const { formatCurrency, t, translateProductName, language } = useLanguageCurrency()
     const [activeTab, setActiveTab] = useState('profile')
     const [user, setUser] = useState(null)
@@ -79,6 +80,18 @@ export default function ProfilePage() {
             setAddresses([addressDummyData])
         }
     }, [navigate])
+
+    // Read tab from URL query parameter
+    useEffect(() => {
+        const tab = searchParams.get('tab')
+        if (tab) {
+            // Validate that the tab exists in our tabs array
+            const validTabs = ['profile', 'active-orders', 'tracking', 'orders', 'returns', 'addresses', 'wishlist']
+            if (validTabs.includes(tab)) {
+                setActiveTab(tab)
+            }
+        }
+    }, [searchParams])
 
     const handleLogout = () => {
         localStorage.removeItem('user')
