@@ -31,8 +31,15 @@ export default function PublicLayout({ children }) {
     // Check if current path is the main seller choice page
     const isSellerChoicePage = pathname === '/seller'
 
-    // If user is logged in and NOT on home page or auth page, don't show navbar/header/banner
-    if (user && !isAuthPage && !isHomePage) {
+    // Check if current path is profile page
+    const isProfilePage = pathname === '/profile'
+
+    // Check if user is logged in (check localStorage directly to avoid first render issue)
+    const userData = typeof window !== 'undefined' ? localStorage.getItem('user') : null
+    const isUserLoggedIn = userData !== null
+
+    // If user is logged in and NOT on home page, auth page, or profile page, don't show navbar/header/banner
+    if (isUserLoggedIn && !isAuthPage && !isHomePage && !isProfilePage) {
         return (
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
                 <ScrollToTop />
