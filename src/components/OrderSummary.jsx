@@ -35,7 +35,7 @@ const OrderSummary = ({ totalPrice, items }) => {
 
     return (
         <div className='w-full max-w-lg lg:max-w-[340px] bg-slate-50/30 dark:bg-gray-800/50 border border-slate-200 dark:border-gray-700 text-slate-500 dark:text-gray-300 text-sm rounded-xl p-4 sm:p-6 lg:p-7 transition-colors duration-200'>
-            <h2 className='text-lg sm:text-xl font-medium text-slate-600 dark:text-gray-200'>Payment Summary</h2>
+            <h2 className='text-lg sm:text-xl font-medium text-slate-600 dark:text-gray-200'>Payment Method</h2>
             <div className='flex gap-2 items-center mt-4'>
                 <input type="radio" id="CARD" onChange={() => setPaymentMethod('CARD')} checked={paymentMethod === 'CARD'} className='accent-gray-500 dark:accent-gray-400' />
 <label htmlFor="CARD" className='cursor-pointer dark:text-gray-300'>Credit/Debit Card</label>
@@ -46,7 +46,6 @@ const OrderSummary = ({ totalPrice, items }) => {
                 <label htmlFor="STRIPE" className='cursor-pointer dark:text-gray-300'>Stripe Payment</label>
             </div>
             <div className='my-4 py-4 border-y border-slate-200 dark:border-gray-700 text-slate-400 dark:text-gray-400'>
-                <p>Address</p>
                 {
                     selectedAddress ? (
                         <div className='flex gap-2 items-center'>
