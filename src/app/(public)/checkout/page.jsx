@@ -136,10 +136,27 @@ export default function CheckoutPage() {
         }
         // Format expiry date (MM/YY)
         else if (name === 'expiryDate') {
-            formattedValue = value.replace(/\D/g, '')
-            if (formattedValue.length >= 2) {
-                formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2, 4)
+            // Remove all non-digit characters
+            let digitsOnly = value.replace(/\D/g, '')
+            
+            // Validate month as user types
+            if (digitsOnly.length >= 2) {
+                const month = parseInt(digitsOnly.slice(0, 2))
+                // If month is 00 or > 12, reject the second digit
+                if (month === 0 || month > 12) {
+                    // Keep only the first digit
+                    digitsOnly = digitsOnly.slice(0, 1)
+                }
             }
+            
+            // Format with slash after month
+            if (digitsOnly.length >= 2) {
+                formattedValue = digitsOnly.slice(0, 2) + '/' + digitsOnly.slice(2, 4)
+            } else {
+                formattedValue = digitsOnly
+            }
+            
+            // Limit total length to 5 (MM/YY)
             if (formattedValue.length > 5) formattedValue = formattedValue.slice(0, 5)
         }
         // Format CVV (only numbers, max 4 digits)
@@ -181,14 +198,22 @@ export default function CheckoutPage() {
         // Validate expiry date (MM/YY format)
         const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/
         if (!cardInfo.expiryDate || !expiryRegex.test(cardInfo.expiryDate)) {
-            newErrors.expiryDate = 'Please enter a valid expiry date (MM/YY)'
+            newErrors.expiryDate = 'Please enter a valid expiry date (MM/YY). Month must be 01-12'
         } else {
             // Check if card is expired
             const [month, year] = cardInfo.expiryDate.split('/')
-            const expiryDate = new Date(2000 + parseInt(year), parseInt(month) - 1)
-            const today = new Date()
-            if (expiryDate < today) {
-                newErrors.expiryDate = 'Card has expired'
+            const monthNum = parseInt(month)
+            const yearNum = parseInt(year)
+            
+            // Double-check month is valid (should already be validated by regex, but extra safety)
+            if (monthNum < 1 || monthNum > 12) {
+                newErrors.expiryDate = 'Month must be between 01-12'
+            } else {
+                const expiryDate = new Date(2000 + yearNum, monthNum - 1)
+                const today = new Date()
+                if (expiryDate < today) {
+                    newErrors.expiryDate = 'Card has expired'
+                }
             }
         }
 
