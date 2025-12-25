@@ -312,12 +312,25 @@ img {
 /* When phone-input has border class, adjust inner borders to match p-3 inputs */
 .phone-input.border {
     align-items: center;
+    overflow: hidden;
+    background-color: white;
+}
+
+.dark .phone-input.border {
+    background-color: #374151;
+}
+
+.phone-input.border .PhoneInput {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    border: none;
 }
 
 .phone-input.border .PhoneInputInput {
     flex: 1;
     padding: 0.75rem 1rem; /* Match p-3 (0.75rem) vertical padding exactly */
-    border: none;
+    border: none !important;
     border-radius: 0;
     font-size: 1rem;
     line-height: 1.5;
@@ -330,7 +343,9 @@ img {
 }
 
 .phone-input.border .PhoneInputInput:focus {
+    border: none !important;
     box-shadow: none;
+    outline: none;
 }
 
 /* Dark mode styles for PhoneInputInput when wrapper has border */
@@ -349,7 +364,7 @@ img {
 
 .phone-input.border .PhoneInputCountrySelect {
     padding: 0.75rem 0.5rem; /* Match p-3 (0.75rem) vertical padding exactly */
-    border: none;
+    border: none !important;
     border-radius: 0;
     background-color: transparent;
     outline: none;
@@ -366,7 +381,29 @@ img {
 }
 
 .phone-input.border .PhoneInputCountrySelect:focus {
+    border: none !important;
     box-shadow: none;
+    outline: none;
+}
+
+.phone-input.border .PhoneInputCountrySelect:focus-visible {
+    outline: none;
+}
+
+/* Ensure no borders appear on any inner elements */
+.phone-input.border * {
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.phone-input.border .PhoneInputInput,
+.phone-input.border .PhoneInputCountrySelect {
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+.phone-input.border .PhoneInputCountrySelect:focus-visible {
+    outline: none;
 }
 
 /* Dark mode styles for PhoneInputCountrySelect when wrapper has border */

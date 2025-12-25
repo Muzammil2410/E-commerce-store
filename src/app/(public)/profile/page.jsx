@@ -16,12 +16,14 @@ import ReturnsRefundsTab from '@/components/ReturnsRefundsTab'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 export default function ProfilePage() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [searchParams] = useSearchParams()
     const { formatCurrency, t, translateProductName, language } = useLanguageCurrency()
+    const { isDarkMode } = useTheme()
     const [activeTab, setActiveTab] = useState('profile')
     const [user, setUser] = useState(null)
     const [orders, setOrders] = useState([])
@@ -193,6 +195,56 @@ export default function ProfilePage() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [addressForm.city, addressForm.state])
+
+    // Apply dark mode styles to phone input dropdown
+    useEffect(() => {
+        if (!isDarkMode) return
+
+        const applyDarkModeStyles = () => {
+            // Find all PhoneInputCountrySelect elements
+            const selects = document.querySelectorAll('.PhoneInputCountrySelect, select.PhoneInputCountrySelect')
+            selects.forEach(select => {
+                // Apply color-scheme for native dropdown
+                select.style.colorScheme = 'dark'
+                select.style.backgroundColor = '#374151'
+                select.style.color = 'white'
+                select.style.borderColor = '#4b5563'
+                
+                // Style options
+                const options = select.querySelectorAll('option')
+                options.forEach(option => {
+                    option.style.backgroundColor = '#374151'
+                    option.style.color = 'white'
+                })
+            })
+        }
+
+        // Apply immediately
+        applyDarkModeStyles()
+
+        // Watch for new select elements (if component re-renders)
+        const observer = new MutationObserver(applyDarkModeStyles)
+        observer.observe(document.body, { childList: true, subtree: true })
+
+        // Also apply on focus/click events
+        const handleSelectInteraction = (e) => {
+            if (e.target.classList.contains('PhoneInputCountrySelect') || 
+                e.target.closest('.PhoneInputCountrySelect')) {
+                setTimeout(applyDarkModeStyles, 0)
+            }
+        }
+
+        document.addEventListener('focus', handleSelectInteraction, true)
+        document.addEventListener('click', handleSelectInteraction, true)
+        document.addEventListener('mousedown', handleSelectInteraction, true)
+
+        return () => {
+            observer.disconnect()
+            document.removeEventListener('focus', handleSelectInteraction, true)
+            document.removeEventListener('click', handleSelectInteraction, true)
+            document.removeEventListener('mousedown', handleSelectInteraction, true)
+        }
+    }, [isDarkMode])
 
     const handleDeleteAddress = (addressId) => {
         const updatedAddresses = addresses.filter(addr => addr.id !== addressId)
@@ -691,7 +743,7 @@ export default function ProfilePage() {
                                         placeholder={t('enterYourPhoneNumber')}
                                         className="phone-input"
                                         style={{
-                                            '--PhoneInput-color--focus': '#3b82f6',
+                                            '--PhoneInput-color--focus': isDarkMode ? '#60a5fa' : '#3b82f6',
                                             '--PhoneInputCountrySelect-marginRight': '0.5rem',
                                         }}
                                     />

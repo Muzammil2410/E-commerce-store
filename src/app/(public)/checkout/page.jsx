@@ -356,7 +356,7 @@ export default function CheckoutPage() {
                                                         setErrors({ ...errors, phone: '' })
                                                     }
                                                 }} 
-                                                className="w-full" 
+                                                className="p-2.5 sm:p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base" 
                                                 aria-label="Phone number"
                                                 aria-invalid={errors.phone ? 'true' : 'false'}
                                                 aria-describedby={errors.phone ? 'phone-error' : undefined}
@@ -444,7 +444,7 @@ export default function CheckoutPage() {
                                     disabled 
                                     readOnly
                                     aria-label="Payment method: Credit/Debit Card" 
-                                    className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200 font-sans cursor-default" 
+                                    className="p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200 font-sans cursor-default" 
                                     style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
                                 />
 
