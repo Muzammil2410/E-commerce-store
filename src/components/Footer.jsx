@@ -20,6 +20,7 @@ const Footer = () => {
             welcome: 'Welcome to Zizla',
             description: 'your ultimate destination for the latest and smartest gadgets. From smartphones and smartwatches to essential accessories, we bring you the best in innovation — all in one place.',
             copyright: 'Copyright 2025 © Zizla All Right Reserved.',
+            goToTop: 'Go to Top',
         };
         return fallbackTranslations[key] || key;
     });
@@ -93,7 +94,7 @@ const Footer = () => {
                         <p className="mt-4 text-sm text-gray-300 dark:text-gray-300 leading-relaxed">{t('welcome')}, {t('description')}</p>
                         <div className="flex items-center gap-3 mt-5">
                             {socialIcons.map((item, i) => (
-                                <a href={item.link} key={i} target="_blank" rel="noreferrer" className={`group flex items-center justify-center w-10 h-10 bg-gray-800 dark:bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-700 border border-gray-700 dark:border-gray-700 hover:border-transparent transition-all duration-300 rounded-full ${item.hoverColor}`}>
+                                <a href={item.link} key={i} target="_blank" rel="noreferrer" className={`group flex items-center justify-center w-10 h-10 bg-gray-800 dark:bg-gray-800 border border-gray-700 dark:border-gray-700 hover:border-transparent transition-all duration-300 rounded-full ${item.hoverColor}`}>
                                     <div className={item.iconHoverColor}>
                                         <item.icon />
                                     </div>
@@ -139,7 +140,7 @@ const Footer = () => {
                             aria-label="Go to top"
                         >
                             <ArrowUp size={18} />
-                            <span className="text-sm font-medium">Go to Top</span>
+                            <span className="text-sm font-medium">{t('goToTop')}</span>
                         </button>
                         {/* VISA */}
                         <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg px-4 py-2 flex items-center justify-center min-w-[60px]">

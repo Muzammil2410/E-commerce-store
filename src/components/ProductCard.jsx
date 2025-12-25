@@ -17,7 +17,7 @@ const ProductCard = memo(({ product }) => {
     }, [product.rating]);
 
     return (
-        <article className='group w-full max-w-none mx-auto transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 relative overflow-hidden'>
+        <article className='group w-full max-w-none mx-auto transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 relative'>
             <Link to={`/product/${product.id}`} aria-label={`View details for ${translateProductName(product.name)}`}>
                 <div className='bg-[#F5F5F5] dark:bg-gray-800 h-36 sm:h-44 md:h-52 lg:h-56 rounded-lg flex items-center justify-center overflow-hidden shadow-sm dark:shadow-gray-900/50 group-hover:shadow-lg transition-all duration-300'>
                     <Image 
@@ -30,14 +30,14 @@ const ProductCard = memo(({ product }) => {
                     />
                 </div>
                 <div className='flex justify-between gap-2 sm:gap-3 text-xs sm:text-sm text-slate-800 dark:text-gray-100 pt-2'>
-                    <div className='flex-1 min-w-0'>
+                    <div className='flex-1 min-w-0 overflow-visible'>
                         <h3 className='group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 font-medium truncate'>{translateProductName(product.name)}</h3>
-                        <div className='flex group-hover:scale-110 transition-transform duration-300 mt-1' role="img" aria-label={`Rating: ${rating} out of 5 stars`}>
+                        <div className='flex group-hover:scale-110 transition-transform duration-300 mt-1 pl-0.5 overflow-visible' role="img" aria-label={`Rating: ${rating} out of 5 stars`}>
                             {Array(5).fill('').map((_, index) => (
                                 <StarIcon 
                                     key={index} 
                                     size={12} 
-                                    className='text-transparent group-hover:scale-110 transition-transform duration-300' 
+                                    className='text-transparent group-hover:scale-110 transition-transform duration-300 flex-shrink-0' 
                                     style={{transitionDelay: `${index * 50}ms`}} 
                                     fill={rating >= index + 1 ? "#FCD34D" : "#D1D5DB"}
                                     aria-hidden="true"

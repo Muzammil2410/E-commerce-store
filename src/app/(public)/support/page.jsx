@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef } from 'react'
-import { ArrowLeft, Plus, X } from 'lucide-react'
+import { ArrowLeft, Plus, X, CheckCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
@@ -9,6 +9,7 @@ export default function Support() {
   const { t } = useLanguageCurrency()
   const [query, setQuery] = useState('')
   const [attachedImages, setAttachedImages] = useState([])
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const fileInputRef = useRef(null)
 
   const handleFileSelect = (e) => {
@@ -39,8 +40,23 @@ export default function Support() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Handle form submission logic here
+    // Check if user has written something
     if (query.trim() || attachedImages.length > 0) {
+      // Show success message
+      setIsSubmitted(true)
+      
+      // Clear form
+      setQuery('')
+      setAttachedImages([])
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setIsSubmitted(false)
+      }, 5000)
+      
       // You can add your submission logic here
       console.log('Query submitted:', query)
       console.log('Attached images:', attachedImages)
@@ -86,6 +102,16 @@ export default function Support() {
           <div className="max-w-2xl mx-auto">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6 transition-colors duration-200">{t('tellYourQuery')}</h2>
             
+            {/* Success Message */}
+            {isSubmitted && (
+              <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3">
+                <CheckCircle className="text-green-600 dark:text-green-400 flex-shrink-0" size={24} />
+                <p className="text-green-800 dark:text-green-200 font-medium">
+                  {t('responseHasBeenSubmitted')}
+                </p>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
                 <textarea
