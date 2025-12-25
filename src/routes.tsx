@@ -27,6 +27,8 @@ import Profile from "@/app/(public)/profile/page";
 import Wishlist from "@/app/(public)/wishlist/page";
 // Import Orders directly to fix React context issues
 import Orders from "@/app/(public)/orders/page";
+// Import Support directly to fix React context issues
+import Support from "@/app/(public)/support/page";
 // Import SellerDashboard directly since it's used after seller login
 import SellerDashboard from "@/app/(public)/seller/dashboard/page";
 // Import SellerRegister directly since it's accessed from seller page
@@ -52,7 +54,6 @@ const AuthRegister = lazy(() => import("@/app/(public)/auth/register/page"));
 const AuthForgot = lazy(() => import("@/app/(public)/auth/forgot-password/page"));
 const ForgotPassword = lazy(() => import("@/app/(public)/forgot-password/page"));
 const PrivacyPolicy = lazy(() => import("@/app/(public)/privacy-policy/page"));
-const Support = lazy(() => import("@/app/(public)/support/page"));
 const AdminPage = lazy(() => import("@/app/admin/page"));
 const AdminStores = lazy(() => import("@/app/admin/stores/page"));
 const AdminCoupons = lazy(() => import("@/app/admin/coupons/page"));
@@ -111,7 +112,7 @@ export const router = createBrowserRouter([
   { path: "/auth/forgot-password", element: createPublicRoute(AuthForgot) },
   { path: "/forgot-password", element: createPublicRoute(ForgotPassword) },
   { path: "/privacy-policy", element: createPublicRoute(PrivacyPolicy) },
-  { path: "/support", element: createPublicRoute(Support) },
+  { path: "/support", element: <PublicLayout><Support /></PublicLayout> },
   { path: "/seller", element: <PublicLayout><Seller /></PublicLayout> },
   { path: "/seller/login", element: <PublicLayout><SellerLogin /></PublicLayout> },
   { path: "/seller/register", element: <PublicLayout><SellerRegister /></PublicLayout> },

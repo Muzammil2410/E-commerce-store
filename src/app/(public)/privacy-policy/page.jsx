@@ -147,6 +147,16 @@ export default function PrivacyPolicy() {
               </p>
             </div>
           </div>
+          
+          {/* Cancel/Close Button */}
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => navigate('/')}
+              className="px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg font-medium transition-colors duration-200 shadow-sm hover:shadow-md"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
