@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus } from 'lucide-react'
+import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus, Edit, Save, XCircle } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import toast from 'react-hot-toast'
 
@@ -16,6 +16,8 @@ export default function SellerDashboard() {
   const [showLanguageModal, setShowLanguageModal] = useState(false)
   const [selectedLanguage, setSelectedLanguage] = useState(language)
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
+  const [isEditingBusinessInfo, setIsEditingBusinessInfo] = useState(false)
+  const [editFormData, setEditFormData] = useState({})
   const languageModalRef = useRef(null)
   const languageDropdownRef = useRef(null)
 
@@ -65,7 +67,9 @@ export default function SellerDashboard() {
   useEffect(() => {
     const data = localStorage.getItem('sellerProfile')
     if (data) {
-      setSellerData(JSON.parse(data))
+      const parsedData = JSON.parse(data)
+      setSellerData(parsedData)
+      setEditFormData(parsedData)
       
       // Load existing products and remove any dummy products
       const existingProducts = JSON.parse(localStorage.getItem('products') || '[]')
@@ -82,6 +86,46 @@ export default function SellerDashboard() {
       navigate('/seller/register')
     }
   }, [navigate])
+
+  const handleEditBusinessInfo = () => {
+    setIsEditingBusinessInfo(true)
+    setEditFormData({ ...sellerData })
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditingBusinessInfo(false)
+    setEditFormData({ ...sellerData })
+  }
+
+  const handleInputChange = (field, value) => {
+    setEditFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleSaveBusinessInfo = () => {
+    // Validate required fields
+    if (!editFormData.businessName || !editFormData.businessName.trim()) {
+      toast.error('Business name is required')
+      return
+    }
+    if (!editFormData.email || !editFormData.email.trim()) {
+      toast.error('Email is required')
+      return
+    }
+    if (!editFormData.phone || !editFormData.phone.trim()) {
+      toast.error('Phone number is required')
+      return
+    }
+    if (!editFormData.businessAddress || !editFormData.businessAddress.trim()) {
+      toast.error('Business address is required')
+      return
+    }
+
+    // Save to localStorage
+    localStorage.setItem('sellerProfile', JSON.stringify(editFormData))
+    setSellerData(editFormData)
+    setIsEditingBusinessInfo(false)
+    toast.success('Business information updated successfully')
+  }
 
   const handleLogout = () => {
     // Clear seller data from localStorage
@@ -329,26 +373,154 @@ export default function SellerDashboard() {
 
         {/* Business Info */}
         <div className="mt-6 sm:mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">{t('yourBusinessInformation')}</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            <div>
-              <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('businessDetails')}</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('name')}: {sellerData.businessName || t('notProvided')}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('type')}: {sellerData.businessType}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('email')}: {sellerData.email}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('phone')}: {sellerData.phone}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('categories')}</h4>
-              <div className="flex flex-wrap gap-2">
-                {sellerData.selectedCategories.map((category, index) => (
-                  <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs rounded-full transition-colors duration-300">
-                    {category}
-                  </span>
-                ))}
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('yourBusinessInformation')}</h3>
+            {!isEditingBusinessInfo && (
+              <button
+                onClick={handleEditBusinessInfo}
+                className="flex items-center space-x-2 px-3 py-2 text-sm bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              >
+                <Edit size={16} />
+                <span>Edit</span>
+              </button>
+            )}
+          </div>
+
+          {!isEditingBusinessInfo ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('businessDetails')}</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('name')}: {sellerData.businessName || t('notProvided')}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('type')}: {sellerData.businessType}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('email')}: {sellerData.email}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('phone')}: {sellerData.phone}</p>
+                {sellerData.businessAddress && (
+                  <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 mt-2">
+                    <span className="font-medium">Business Address:</span> {sellerData.businessAddress}
+                  </p>
+                )}
+                {sellerData.warehouseAddress && (
+                  <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 mt-2">
+                    <span className="font-medium">Warehouse Address:</span> {sellerData.warehouseAddress}
+                  </p>
+                )}
+                {sellerData.ntnTaxId && (
+                  <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 mt-2">
+                    <span className="font-medium">NTN/Tax ID:</span> {sellerData.ntnTaxId}
+                  </p>
+                )}
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('categories')}</h4>
+                <div className="flex flex-wrap gap-2">
+                  {sellerData.selectedCategories && sellerData.selectedCategories.length > 0 ? (
+                    sellerData.selectedCategories.map((category, index) => (
+                      <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs rounded-full transition-colors duration-300">
+                        {category}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-sm text-gray-500 dark:text-gray-400">No categories selected</span>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name *</label>
+                  <input
+                    type="text"
+                    value={editFormData.fullName || ''}
+                    onChange={(e) => handleInputChange('fullName', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Business Name *</label>
+                  <input
+                    type="text"
+                    value={editFormData.businessName || ''}
+                    onChange={(e) => handleInputChange('businessName', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email *</label>
+                  <input
+                    type="email"
+                    value={editFormData.email || ''}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone *</label>
+                  <input
+                    type="tel"
+                    value={editFormData.phone || ''}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Business Type *</label>
+                  <select
+                    value={editFormData.businessType || 'Individual'}
+                    onChange={(e) => handleInputChange('businessType', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  >
+                    <option value="Individual">Individual</option>
+                    <option value="Company">Company</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">NTN/Tax ID (Optional)</label>
+                  <input
+                    type="text"
+                    value={editFormData.ntnTaxId || ''}
+                    onChange={(e) => handleInputChange('ntnTaxId', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Business Address *</label>
+                <textarea
+                  value={editFormData.businessAddress || ''}
+                  onChange={(e) => handleInputChange('businessAddress', e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Warehouse Address (Optional)</label>
+                <textarea
+                  value={editFormData.warehouseAddress || ''}
+                  onChange={(e) => handleInputChange('warehouseAddress', e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none"
+                />
+              </div>
+              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={handleCancelEdit}
+                  className="flex items-center space-x-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <XCircle size={16} />
+                  <span>Cancel</span>
+                </button>
+                <button
+                  onClick={handleSaveBusinessInfo}
+                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                >
+                  <Save size={16} />
+                  <span>Save Changes</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
