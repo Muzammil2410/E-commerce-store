@@ -44,6 +44,7 @@ import SellerSales from "@/app/(public)/seller/dashboard/sales/page";
 import SellerOrders from "@/app/(public)/seller/dashboard/orders/page";
 import SellerDelivery from "@/app/(public)/seller/dashboard/delivery/page";
 import SellerDeliverySchedule from "@/app/(public)/seller/dashboard/delivery/schedule/page";
+import SellerEmployees from "@/app/(public)/seller/dashboard/employees/page";
 
 // Lazy load pages for code splitting and better performance
 const Pricing = lazy(() => import("@/app/(public)/pricing/page"));
@@ -125,6 +126,7 @@ export const router = createBrowserRouter([
   { path: "/seller/dashboard/orders", element: <PublicLayout><SellerOrders /></PublicLayout> },
   { path: "/seller/dashboard/delivery", element: <PublicLayout><SellerDelivery /></PublicLayout> },
   { path: "/seller/dashboard/delivery/schedule", element: <PublicLayout><SellerDeliverySchedule /></PublicLayout> },
+  { path: "/seller/dashboard/employees", element: <PublicLayout><SellerEmployees /></PublicLayout> },
   { path: "/profile", element: <PublicLayout><Profile /></PublicLayout> },
   { path: "/wishlist", element: <PublicLayout><Wishlist /></PublicLayout> },
   { path: "/orders", element: <PublicLayout><Orders /></PublicLayout> },

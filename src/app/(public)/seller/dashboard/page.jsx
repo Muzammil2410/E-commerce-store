@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X } from 'lucide-react'
+import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import toast from 'react-hot-toast'
 
@@ -310,6 +310,16 @@ export default function SellerDashboard() {
                 <div className="flex items-center space-x-3">
                   <Package className="w-5 h-5 text-orange-600 dark:text-orange-400 transition-colors duration-300" />
                   <span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{t('deliveryManagement')}</span>
+                </div>
+                <span className="text-gray-400 dark:text-gray-500 transition-colors duration-300">→</span>
+              </button>
+              <button 
+                onClick={() => navigate('/seller/dashboard/employees', { replace: false })}
+                className="w-full flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <div className="flex items-center space-x-3">
+                  <UserPlus className="w-5 h-5 text-indigo-600 dark:text-indigo-400 transition-colors duration-300" />
+                  <span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">Employee Management System</span>
                 </div>
                 <span className="text-gray-400 dark:text-gray-500 transition-colors duration-300">→</span>
               </button>

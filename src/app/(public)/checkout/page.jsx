@@ -31,9 +31,11 @@ export default function CheckoutPage() {
     const [cardInfo, setCardInfo] = useState({
         cardNumber: '', expiryDate: '', cvv: '', cardName: ''
     })
+    const [deliveryOption, setDeliveryOption] = useState('')
     const [errors, setErrors] = useState({})
 
     const taxRate = 0.1 // 10% tax
+    const platformDeliveryFee = 10 // Platform delivery fee
 
     // Check if Buy It Now product exists
     const buyNowProduct = location.state?.buyNowProduct || null
@@ -60,7 +62,8 @@ export default function CheckoutPage() {
     }, [cartItems, products, buyNowProduct])
 
     const taxAmount = totalPrice * taxRate
-    const finalTotal = totalPrice + taxAmount
+    const deliveryFee = deliveryOption === 'platform-delivery' ? platformDeliveryFee : 0
+    const finalTotal = totalPrice + taxAmount + deliveryFee
 
     // Apply dark mode styles to phone input dropdown
     useEffect(() => {
@@ -225,6 +228,11 @@ export default function CheckoutPage() {
         // Validate cardholder name
         if (!cardInfo.cardName || cardInfo.cardName.trim().length < 2) {
             newErrors.cardName = 'Please enter the cardholder name'
+        }
+
+        // Validate delivery option
+        if (!deliveryOption) {
+            newErrors.deliveryOption = 'Please select a delivery option'
         }
 
         setErrors(newErrors)
@@ -458,6 +466,77 @@ export default function CheckoutPage() {
                             </div>
                             </fieldset>
 
+                            {/* Delivery Options */}
+                            <fieldset>
+                                <legend className="sr-only">Delivery Options</legend>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4 transition-colors duration-200">Delivery Options *</label>
+                                <div className="space-y-3">
+                                    <label className={`flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-colors ${
+                                        deliveryOption === 'self-delivery' 
+                                            ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30' 
+                                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
+                                    }`}>
+                                        <input
+                                            type="radio"
+                                            name="deliveryOption"
+                                            value="self-delivery"
+                                            checked={deliveryOption === 'self-delivery'}
+                                            onChange={(e) => {
+                                                setDeliveryOption(e.target.value)
+                                                if (errors.deliveryOption) {
+                                                    setErrors({ ...errors, deliveryOption: '' })
+                                                }
+                                            }}
+                                            className="w-4 h-4 text-blue-600 dark:text-blue-400 border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 mt-1"
+                                            aria-label="Self-Delivery option"
+                                        />
+                                        <div className="flex-1">
+                                            <div className="font-medium text-gray-900 dark:text-white transition-colors duration-200">Self-Delivery</div>
+                                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 transition-colors duration-200">
+                                                The seller handles delivery directly. Free shipping included.
+                                            </p>
+                                        </div>
+                                    </label>
+
+                                    <label className={`flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-colors ${
+                                        deliveryOption === 'platform-delivery' 
+                                            ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30' 
+                                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
+                                    }`}>
+                                        <input
+                                            type="radio"
+                                            name="deliveryOption"
+                                            value="platform-delivery"
+                                            checked={deliveryOption === 'platform-delivery'}
+                                            onChange={(e) => {
+                                                setDeliveryOption(e.target.value)
+                                                if (errors.deliveryOption) {
+                                                    setErrors({ ...errors, deliveryOption: '' })
+                                                }
+                                            }}
+                                            className="w-4 h-4 text-blue-600 dark:text-blue-400 border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 mt-1"
+                                            aria-label="Platform-Delivery option"
+                                        />
+                                        <div className="flex-1">
+                                            <div className="font-medium text-gray-900 dark:text-white transition-colors duration-200">Platform-Delivery</div>
+                                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 transition-colors duration-200">
+                                                Zizla handles delivery for you. Fast and reliable shipping service.
+                                            </p>
+                                            <div className="mt-2 px-3 py-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-md transition-colors duration-200">
+                                                <p className="text-xs text-yellow-800 dark:text-yellow-200 transition-colors duration-200">
+                                                    <strong>Note:</strong> Additional delivery fee of {formatCurrency(platformDeliveryFee)} will be charged per order.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {errors.deliveryOption && (
+                                    <p className="text-red-500 dark:text-red-400 text-sm mt-2 transition-colors duration-200" role="alert">
+                                        {errors.deliveryOption}
+                                    </p>
+                                )}
+                            </fieldset>
+
                             {/* Payment - only Card */}
                             <fieldset>
                                 <legend className="sr-only">Payment Information</legend>
@@ -610,9 +689,9 @@ export default function CheckoutPage() {
                                 <span>Subtotal</span>
                                 <span>{formatCurrency(totalPrice)}</span>
                             </div>
-                            <div className="flex justify-between text-gray-600 dark:text-gray-300 transition-colors duration-200" aria-label="Shipping: Free">
-                                <span>Shipping</span>
-                                <span>Free</span>
+                            <div className="flex justify-between text-gray-600 dark:text-gray-300 transition-colors duration-200" aria-label={`Delivery: ${deliveryOption === 'platform-delivery' ? formatCurrency(deliveryFee) : 'Free'}`}>
+                                <span>Delivery</span>
+                                <span>{deliveryOption === 'platform-delivery' ? formatCurrency(deliveryFee) : 'Free'}</span>
                             </div>
                             <div className="flex justify-between text-gray-600 dark:text-gray-300 transition-colors duration-200" aria-label={`Tax: ${formatCurrency(taxAmount)}`}>
                                 <span>Tax</span>

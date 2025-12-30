@@ -39,7 +39,6 @@ export default function SellerRegister() {
     businessType: 'Individual',
     ntnTaxId: '',
     businessAddress: '',
-    warehouseAddress: '',
     
     // Delivery Options
     deliveryOption: '',
@@ -100,7 +99,6 @@ export default function SellerRegister() {
         
       case 2:
         if (!formData.businessAddress.trim()) newErrors.businessAddress = 'Business address is required'
-        if (!formData.warehouseAddress.trim()) newErrors.warehouseAddress = 'Warehouse address is required'
         if (!formData.deliveryOption) newErrors.deliveryOption = 'Please select a delivery option'
         break
         
@@ -308,20 +306,6 @@ export default function SellerRegister() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Warehouse Address *</label>
-              <textarea
-                value={formData.warehouseAddress}
-                onChange={(e) => handleInputChange('warehouseAddress', e.target.value)}
-                rows={4}
-                className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none ${
-                  errors.warehouseAddress ? 'border-red-500 dark:border-red-400' : ''
-                }`}
-                placeholder="Enter your warehouse address"
-              />
-              {errors.warehouseAddress && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-300">{errors.warehouseAddress}</p>}
-            </div>
-
-            <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4 transition-colors duration-300">Delivery Options *</label>
               <div className="space-y-3">
                 <label className={`flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-colors ${
@@ -484,7 +468,6 @@ export default function SellerRegister() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Type: {formData.businessType}</p>
                   {formData.ntnTaxId && <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">NTN/Tax ID: {formData.ntnTaxId}</p>}
                   <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Address: {formData.businessAddress}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Warehouse: {formData.warehouseAddress}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">Delivery: {formData.deliveryOption === 'self-delivery' ? 'Self-Delivery' : 'Platform-Delivery'}</p>
                 </div>
 

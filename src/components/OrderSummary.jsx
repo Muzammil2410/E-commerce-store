@@ -21,14 +21,117 @@ const OrderSummary = ({ totalPrice, items }) => {
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [couponCodeInput, setCouponCodeInput] = useState('');
     const [coupon, setCoupon] = useState('');
+    const [cardInfo, setCardInfo] = useState({
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        cardName: ''
+    });
+    const [cardErrors, setCardErrors] = useState({});
 
     const handleCouponCode = async (event) => {
         event.preventDefault();
         
     }
 
+    const handleCardChange = (e) => {
+        const { name, value } = e.target;
+        let formattedValue = value;
+
+        // Format card number (only digits, add spaces every 4 digits)
+        if (name === 'cardNumber') {
+            formattedValue = value.replace(/\D/g, '');
+            if (formattedValue.length > 16) formattedValue = formattedValue.slice(0, 16);
+            formattedValue = formattedValue.replace(/(.{4})/g, '$1 ').trim();
+        }
+        // Format expiry date (MM/YY)
+        else if (name === 'expiryDate') {
+            let digitsOnly = value.replace(/\D/g, '');
+            
+            if (digitsOnly.length >= 2) {
+                const month = parseInt(digitsOnly.slice(0, 2));
+                if (month === 0 || month > 12) {
+                    digitsOnly = digitsOnly.slice(0, 1);
+                }
+            }
+            
+            if (digitsOnly.length >= 2) {
+                formattedValue = digitsOnly.slice(0, 2) + '/' + digitsOnly.slice(2, 4);
+            } else {
+                formattedValue = digitsOnly;
+            }
+            
+            if (formattedValue.length > 5) formattedValue = formattedValue.slice(0, 5);
+        }
+        // Format CVV (only numbers, max 4 digits)
+        else if (name === 'cvv') {
+            formattedValue = value.replace(/\D/g, '').slice(0, 4);
+        }
+        // Card name - only letters and spaces
+        else if (name === 'cardName') {
+            formattedValue = value.replace(/[^a-zA-Z\s]/g, '');
+        }
+
+        setCardInfo({ ...cardInfo, [name]: formattedValue });
+        // Clear error when user starts typing
+        if (cardErrors[name]) {
+            setCardErrors({ ...cardErrors, [name]: '' });
+        }
+    };
+
+    const validateCardInfo = () => {
+        const newErrors = {};
+
+        // Validate card number (should be 16 digits after removing spaces)
+        const cardNumberDigits = cardInfo.cardNumber.replace(/\s/g, '');
+        if (!cardNumberDigits || cardNumberDigits.length < 13 || cardNumberDigits.length > 19) {
+            newErrors.cardNumber = 'Please enter a valid card number';
+        }
+
+        // Validate expiry date (MM/YY format)
+        const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        if (!cardInfo.expiryDate || !expiryRegex.test(cardInfo.expiryDate)) {
+            newErrors.expiryDate = 'Please enter a valid expiry date (MM/YY)';
+        } else {
+            const [month, year] = cardInfo.expiryDate.split('/');
+            const monthNum = parseInt(month);
+            const yearNum = parseInt(year);
+            
+            if (monthNum < 1 || monthNum > 12) {
+                newErrors.expiryDate = 'Month must be between 01-12';
+            } else {
+                const expiryDate = new Date(2000 + yearNum, monthNum - 1);
+                const today = new Date();
+                if (expiryDate < today) {
+                    newErrors.expiryDate = 'Card has expired';
+                }
+            }
+        }
+
+        // Validate CVV (3-4 digits)
+        if (!cardInfo.cvv || cardInfo.cvv.length < 3 || cardInfo.cvv.length > 4) {
+            newErrors.cvv = 'Please enter a valid CVV (3-4 digits)';
+        }
+
+        // Validate cardholder name
+        if (!cardInfo.cardName || cardInfo.cardName.trim().length < 2) {
+            newErrors.cardName = 'Please enter the cardholder name';
+        }
+
+        setCardErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
+
+        // Validate card info if payment method is CARD
+        if (paymentMethod === 'CARD') {
+            if (!validateCardInfo()) {
+                toast.error('Please fix the errors in the card information');
+                return;
+            }
+        }
 
         navigate('/orders')
     }
@@ -38,13 +141,104 @@ const OrderSummary = ({ totalPrice, items }) => {
             <h2 className='text-lg sm:text-xl font-medium text-slate-600 dark:text-gray-200'>Payment Method</h2>
             <div className='flex gap-2 items-center mt-4'>
                 <input type="radio" id="CARD" onChange={() => setPaymentMethod('CARD')} checked={paymentMethod === 'CARD'} className='accent-gray-500 dark:accent-gray-400' />
-<label htmlFor="CARD" className='cursor-pointer dark:text-gray-300'>Credit/Debit Card</label>
-
+                <label htmlFor="CARD" className='cursor-pointer dark:text-gray-300'>Credit/Debit Card</label>
             </div>
-            <div className='flex gap-2 items-center mt-1'>
-                <input type="radio" id="STRIPE" name='payment' onChange={() => setPaymentMethod('STRIPE')} checked={paymentMethod === 'STRIPE'} className='accent-gray-500 dark:accent-gray-400' />
-                <label htmlFor="STRIPE" className='cursor-pointer dark:text-gray-300'>Stripe Payment</label>
-            </div>
+            
+            {/* Card Input Fields */}
+            {paymentMethod === 'CARD' && (
+                <div className='mt-4 space-y-3'>
+                    <div>
+                        <label htmlFor="cardNumber" className='block text-xs text-slate-600 dark:text-gray-400 mb-1'>Card Number</label>
+                        <input
+                            id="cardNumber"
+                            name="cardNumber"
+                            type="text"
+                            inputMode="numeric"
+                            placeholder="1234 5678 9012 3456"
+                            value={cardInfo.cardNumber}
+                            onChange={handleCardChange}
+                            onKeyPress={(e) => {
+                                if (!/[0-9\s]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                                    e.preventDefault();
+                                }
+                            }}
+                            maxLength="19"
+                            className={`w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 outline-none transition-colors duration-200 ${
+                                cardErrors.cardNumber 
+                                    ? 'border-red-500 dark:border-red-400 focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400' 
+                                    : 'border-slate-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400'
+                            }`}
+                        />
+                        {cardErrors.cardNumber && (
+                            <p className="text-red-500 dark:text-red-400 text-xs mt-1">{cardErrors.cardNumber}</p>
+                        )}
+                    </div>
+                    
+                    <div className='grid grid-cols-2 gap-3'>
+                        <div>
+                            <label htmlFor="expiryDate" className='block text-xs text-slate-600 dark:text-gray-400 mb-1'>MM/YY</label>
+                            <input
+                                id="expiryDate"
+                                name="expiryDate"
+                                type="text"
+                                placeholder="MM/YY"
+                                value={cardInfo.expiryDate}
+                                onChange={handleCardChange}
+                                maxLength="5"
+                                className={`w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 outline-none transition-colors duration-200 ${
+                                    cardErrors.expiryDate 
+                                        ? 'border-red-500 dark:border-red-400 focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400' 
+                                        : 'border-slate-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400'
+                                }`}
+                            />
+                            {cardErrors.expiryDate && (
+                                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{cardErrors.expiryDate}</p>
+                            )}
+                        </div>
+                        <div>
+                            <label htmlFor="cvv" className='block text-xs text-slate-600 dark:text-gray-400 mb-1'>CVV</label>
+                            <input
+                                id="cvv"
+                                name="cvv"
+                                type="text"
+                                inputMode="numeric"
+                                placeholder="123"
+                                value={cardInfo.cvv}
+                                onChange={handleCardChange}
+                                maxLength="4"
+                                className={`w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 outline-none transition-colors duration-200 ${
+                                    cardErrors.cvv 
+                                        ? 'border-red-500 dark:border-red-400 focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400' 
+                                        : 'border-slate-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400'
+                                }`}
+                            />
+                            {cardErrors.cvv && (
+                                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{cardErrors.cvv}</p>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="cardName" className='block text-xs text-slate-600 dark:text-gray-400 mb-1'>Cardholder Name</label>
+                        <input
+                            id="cardName"
+                            name="cardName"
+                            type="text"
+                            placeholder="John Doe"
+                            value={cardInfo.cardName}
+                            onChange={handleCardChange}
+                            className={`w-full p-2.5 border rounded-lg dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 outline-none transition-colors duration-200 ${
+                                cardErrors.cardName 
+                                    ? 'border-red-500 dark:border-red-400 focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400' 
+                                    : 'border-slate-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400'
+                            }`}
+                        />
+                        {cardErrors.cardName && (
+                            <p className="text-red-500 dark:text-red-400 text-xs mt-1">{cardErrors.cardName}</p>
+                        )}
+                    </div>
+                </div>
+            )}
             <div className='my-4 py-4 border-y border-slate-200 dark:border-gray-700 text-slate-400 dark:text-gray-400'>
                 {
                     selectedAddress ? (
