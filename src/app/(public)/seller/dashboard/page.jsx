@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus, Edit, Save, XCircle } from 'lucide-react'
+import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus, Edit, Save, XCircle, Upload, FileText, Tag } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import toast from 'react-hot-toast'
 
@@ -20,6 +20,12 @@ export default function SellerDashboard() {
   const [editFormData, setEditFormData] = useState({})
   const languageModalRef = useRef(null)
   const languageDropdownRef = useRef(null)
+
+  const categories = [
+    'Electronics', 'Clothing', 'Books', 'Cosmetics', 'Home & Kitchen',
+    'Sports & Outdoors', 'Toys & Games', 'Beauty & Health', 'Food & Drink',
+    'Hobbies & Crafts', 'Automotive', 'Health & Personal Care'
+  ]
 
   // Update local state when context changes
   useEffect(() => {
@@ -99,6 +105,26 @@ export default function SellerDashboard() {
 
   const handleInputChange = (field, value) => {
     setEditFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleCategoryToggle = (category) => {
+    setEditFormData(prev => {
+      const currentCategories = prev.selectedCategories || []
+      const newCategories = currentCategories.includes(category)
+        ? currentCategories.filter(c => c !== category)
+        : [...currentCategories, category]
+      return { ...prev, selectedCategories: newCategories }
+    })
+  }
+
+  const handleDocumentUpload = (docType, file) => {
+    setEditFormData(prev => ({
+      ...prev,
+      documents: {
+        ...(prev.documents || {}),
+        [docType]: file
+      }
+    }))
   }
 
   const handleSaveBusinessInfo = () => {
@@ -424,6 +450,29 @@ export default function SellerDashboard() {
                   )}
                 </div>
               </div>
+              <div>
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Documents</h4>
+                <div className="flex flex-wrap gap-2">
+                  {sellerData.documents && Object.keys(sellerData.documents).filter(key => sellerData.documents[key]).length > 0 ? (
+                    Object.entries(sellerData.documents).map(([key, value]) => {
+                      if (!value) return null
+                      const labels = {
+                        businessLicense: 'Business License',
+                        taxCertificate: 'Tax Certificate',
+                        bankStatement: 'Bank Statement',
+                        idCard: 'ID Card'
+                      }
+                      return (
+                        <span key={key} className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs rounded-full transition-colors duration-300">
+                          {labels[key] || key}
+                        </span>
+                      )
+                    })
+                  ) : (
+                    <span className="text-sm text-gray-500 dark:text-gray-400">No documents uploaded</span>
+                  )}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="space-y-4">
@@ -503,6 +552,99 @@ export default function SellerDashboard() {
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none"
                 />
               </div>
+
+              {/* Categories Section */}
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                  <Tag size={16} />
+                  Product Categories
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {categories.map((category) => (
+                    <label key={category} className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                      (editFormData.selectedCategories || []).includes(category)
+                        ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30'
+                        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}>
+                      <input
+                        type="checkbox"
+                        checked={(editFormData.selectedCategories || []).includes(category)}
+                        onChange={() => handleCategoryToggle(category)}
+                        className="w-4 h-4 text-blue-600 dark:text-blue-400 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{category}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Documents Section */}
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                  <FileText size={16} />
+                  Business Documents
+                </label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Update your business documents (Preview only - no actual upload)</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { key: 'businessLicense', label: 'Business License', description: 'Upload your business license document' },
+                    { key: 'taxCertificate', label: 'Tax Certificate', description: 'Upload your tax registration certificate' },
+                    { key: 'bankStatement', label: 'Bank Statement', description: 'Upload your recent bank statement', required: true },
+                    { key: 'idCard', label: 'ID Card', description: 'Upload your national ID card', required: true }
+                  ].map(({ key, label, description, required }) => (
+                    <div key={key} className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                      <label className="cursor-pointer">
+                        <div className="text-center">
+                          {editFormData.documents && editFormData.documents[key] ? (
+                            <div className="space-y-2">
+                              {editFormData.documents[key] instanceof File ? (
+                                <>
+                                  <img
+                                    src={URL.createObjectURL(editFormData.documents[key])}
+                                    alt={label}
+                                    className="mx-auto rounded-lg object-cover max-h-24"
+                                  />
+                                  <p className="text-xs text-green-600 dark:text-green-400 font-medium">{editFormData.documents[key].name}</p>
+                                </>
+                              ) : (
+                                <p className="text-xs text-gray-600 dark:text-gray-400">Document uploaded</p>
+                              )}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  handleDocumentUpload(key, null)
+                                }}
+                                className="text-red-500 dark:text-red-400 text-xs hover:text-red-700 dark:hover:text-red-300 transition-colors"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mx-auto transition-colors" />
+                              <div>
+                                <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                  {label}
+                                  {required && <span className="text-red-500 dark:text-red-400"> *</span>}
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{description}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => handleDocumentUpload(key, e.target.files[0])}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={handleCancelEdit}

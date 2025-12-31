@@ -25,7 +25,9 @@ import {
   LogIn,
   Eye,
   EyeOff,
-  Settings
+  Settings,
+  FileText,
+  Download
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
@@ -52,6 +54,8 @@ export default function EmployeeManagement() {
   const [editingEmployee, setEditingEmployee] = useState(null)
   const [selectedEmployee, setSelectedEmployee] = useState(null)
   const [showSalaryModal, setShowSalaryModal] = useState(false)
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -261,11 +265,233 @@ export default function EmployeeManagement() {
     })
   }
 
+  // Generate monthly report data
+  const generateMonthlyReport = () => {
+    const monthStart = new Date(selectedYear, selectedMonth - 1, 1)
+    const monthEnd = new Date(selectedYear, selectedMonth, 0, 23, 59, 59)
+    
+    const reportData = employees.map(employee => {
+      // Filter attendance for the selected month
+      const monthlyAttendance = (employee.attendance || []).filter(att => {
+        const attDate = new Date(att.date)
+        return attDate >= monthStart && attDate <= monthEnd
+      })
+      
+      // Filter activity log for the selected month
+      const monthlyActivity = (employee.activityLog || []).filter(act => {
+        const actDate = new Date(act.timestamp || act.date)
+        return actDate >= monthStart && actDate <= monthEnd
+      })
+      
+      // Calculate working days (assuming 22 working days per month)
+      const workingDays = 22
+      const presentDays = monthlyAttendance.filter(att => att.status === 'present').length
+      const absentDays = monthlyAttendance.filter(att => att.status === 'absent').length
+      const leaveDays = monthlyAttendance.filter(att => att.status === 'leave').length
+      
+      // Calculate salary
+      const fixedSalary = parseFloat(employee.salary?.fixedSalary || 0)
+      const perOrderCommission = parseFloat(employee.salary?.perOrderCommission || 0)
+      const performanceBonus = parseFloat(employee.salary?.performanceBonus || 0)
+      const totalSalary = fixedSalary + (perOrderCommission * (monthlyActivity.length || 0)) + performanceBonus
+      
+      return {
+        name: employee.name,
+        email: employee.email,
+        phone: employee.phone,
+        role: employee.role,
+        status: employee.status,
+        workingDays,
+        presentDays,
+        absentDays,
+        leaveDays,
+        attendanceRate: workingDays > 0 ? ((presentDays / workingDays) * 100).toFixed(2) : 0,
+        activityCount: monthlyActivity.length,
+        lastLogin: employee.lastLogin ? formatDate(employee.lastLogin) : 'Never',
+        fixedSalary: fixedSalary.toFixed(2),
+        perOrderCommission: perOrderCommission.toFixed(2),
+        performanceBonus: performanceBonus.toFixed(2),
+        totalSalary: totalSalary.toFixed(2)
+      }
+    })
+    
+    return reportData
+  }
+
+  // Download CSV
+  const downloadCSV = () => {
+    const reportData = generateMonthlyReport()
+    const monthName = new Date(selectedYear, selectedMonth - 1).toLocaleString('default', { month: 'long' })
+    
+    // CSV Headers
+    const headers = [
+      'Employee Name',
+      'Email',
+      'Phone',
+      'Role',
+      'Status',
+      'Working Days',
+      'Present Days',
+      'Absent Days',
+      'Leave Days',
+      'Attendance Rate (%)',
+      'Activity Count',
+      'Last Login',
+      'Fixed Salary ($)',
+      'Per Order Commission ($)',
+      'Performance Bonus ($)',
+      'Total Salary ($)'
+    ]
+    
+    // CSV Rows
+    const rows = reportData.map(emp => [
+      emp.name,
+      emp.email,
+      emp.phone,
+      emp.role,
+      emp.status,
+      emp.workingDays,
+      emp.presentDays,
+      emp.absentDays,
+      emp.leaveDays,
+      emp.attendanceRate,
+      emp.activityCount,
+      emp.lastLogin,
+      emp.fixedSalary,
+      emp.perOrderCommission,
+      emp.performanceBonus,
+      emp.totalSalary
+    ])
+    
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n')
+    
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', `employee_report_${monthName}_${selectedYear}.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    
+    toast.success('CSV report downloaded successfully')
+  }
+
+  // Download PDF
+  const downloadPDF = () => {
+    const reportData = generateMonthlyReport()
+    const monthName = new Date(selectedYear, selectedMonth - 1).toLocaleString('default', { month: 'long' })
+    
+    // Create HTML content for PDF
+    let htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Employee Monthly Report - ${monthName} ${selectedYear}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          h1 { color: #1f2937; margin-bottom: 10px; }
+          h2 { color: #4b5563; margin-top: 30px; margin-bottom: 15px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
+          th { background-color: #f3f4f6; font-weight: bold; }
+          tr:nth-child(even) { background-color: #f9fafb; }
+          .summary { margin-top: 30px; padding: 15px; background-color: #f3f4f6; border-radius: 5px; }
+          .summary-item { margin: 5px 0; }
+        </style>
+      </head>
+      <body>
+        <h1>Employee Monthly Tracking Report</h1>
+        <h2>${monthName} ${selectedYear}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Employee Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Present Days</th>
+              <th>Absent Days</th>
+              <th>Leave Days</th>
+              <th>Attendance Rate (%)</th>
+              <th>Activity Count</th>
+              <th>Total Salary ($)</th>
+            </tr>
+          </thead>
+          <tbody>
+    `
+    
+    reportData.forEach(emp => {
+      htmlContent += `
+        <tr>
+          <td>${emp.name}</td>
+          <td>${emp.email}</td>
+          <td>${emp.role}</td>
+          <td>${emp.status}</td>
+          <td>${emp.presentDays}</td>
+          <td>${emp.absentDays}</td>
+          <td>${emp.leaveDays}</td>
+          <td>${emp.attendanceRate}%</td>
+          <td>${emp.activityCount}</td>
+          <td>$${emp.totalSalary}</td>
+        </tr>
+      `
+    })
+    
+    // Add summary
+    const totalEmployees = reportData.length
+    const activeEmployees = reportData.filter(emp => emp.status === 'active').length
+    const totalSalary = reportData.reduce((sum, emp) => sum + parseFloat(emp.totalSalary), 0)
+    const avgAttendanceRate = reportData.reduce((sum, emp) => sum + parseFloat(emp.attendanceRate), 0) / totalEmployees
+    
+    htmlContent += `
+          </tbody>
+        </table>
+        <div class="summary">
+          <h2>Summary</h2>
+          <div class="summary-item"><strong>Total Employees:</strong> ${totalEmployees}</div>
+          <div class="summary-item"><strong>Active Employees:</strong> ${activeEmployees}</div>
+          <div class="summary-item"><strong>Total Salary Paid:</strong> $${totalSalary.toFixed(2)}</div>
+          <div class="summary-item"><strong>Average Attendance Rate:</strong> ${avgAttendanceRate.toFixed(2)}%</div>
+        </div>
+      </body>
+      </html>
+    `
+    
+    // Create blob and download
+    const blob = new Blob([htmlContent], { type: 'text/html' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `employee_report_${monthName}_${selectedYear}.html`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    
+    // Also try to print as PDF
+    const printWindow = window.open('', '_blank')
+    printWindow.document.write(htmlContent)
+    printWindow.document.close()
+    printWindow.onload = () => {
+      printWindow.print()
+    }
+    
+    toast.success('PDF report generated. Use browser print to save as PDF.')
+  }
+
   const tabs = [
     { id: 'list', label: 'Employee List', icon: Users },
     { id: 'roles', label: 'Roles & Permissions', icon: Shield },
     { id: 'attendance', label: 'Attendance / Activity', icon: Clock },
-    { id: 'salary', label: 'Salary / Commission', icon: DollarSign }
+    { id: 'salary', label: 'Salary / Commission', icon: DollarSign },
+    { id: 'reports', label: 'Monthly Reports', icon: FileText }
   ]
 
   return (
@@ -620,6 +846,136 @@ export default function EmployeeManagement() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Monthly Reports Tab */}
+        {activeTab === 'reports' && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+              <FileText className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
+              Monthly Tracking Report
+            </h2>
+            
+            {/* Month/Year Selector */}
+            <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+              <div className="flex items-center space-x-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Month</label>
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+                      <option key={month} value={month}>
+                        {new Date(selectedYear, month - 1).toLocaleString('default', { month: 'long' })}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Year</label>
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  >
+                    {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              {/* Download Buttons */}
+              <div className="flex items-end space-x-3 mt-4 sm:mt-0">
+                <button
+                  onClick={downloadCSV}
+                  className="flex items-center space-x-2 px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
+                >
+                  <Download size={18} />
+                  <span>Download CSV</span>
+                </button>
+                <button
+                  onClick={downloadPDF}
+                  className="flex items-center space-x-2 px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600 transition-colors"
+                >
+                  <Download size={18} />
+                  <span>Download PDF</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Report Table */}
+            {employees.length === 0 ? (
+              <div className="text-center py-12">
+                <FileText className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-gray-300">No employees to generate report</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Employee Name</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Role</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Status</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Present Days</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Absent Days</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Leave Days</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Attendance Rate</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Activity Count</th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase border border-gray-200 dark:border-gray-600">Total Salary</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {generateMonthlyReport().map((report, index) => (
+                      <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">{report.name}</td>
+                        <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{report.role}</td>
+                        <td className="px-4 py-3 text-sm border border-gray-200 dark:border-gray-600">
+                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(report.status)}`}>
+                            {report.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">{report.presentDays}</td>
+                        <td className="px-4 py-3 text-sm text-center text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">{report.absentDays}</td>
+                        <td className="px-4 py-3 text-sm text-center text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">{report.leaveDays}</td>
+                        <td className="px-4 py-3 text-sm text-center text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">{report.attendanceRate}%</td>
+                        <td className="px-4 py-3 text-sm text-center text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">{report.activityCount}</td>
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">${report.totalSalary}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <td colSpan="3" className="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">Total</td>
+                      <td className="px-4 py-3 text-sm text-center font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">
+                        {generateMonthlyReport().reduce((sum, r) => sum + r.presentDays, 0)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-center font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">
+                        {generateMonthlyReport().reduce((sum, r) => sum + r.absentDays, 0)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-center font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">
+                        {generateMonthlyReport().reduce((sum, r) => sum + r.leaveDays, 0)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-center font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">
+                        {generateMonthlyReport().length > 0 
+                          ? (generateMonthlyReport().reduce((sum, r) => sum + parseFloat(r.attendanceRate), 0) / generateMonthlyReport().length).toFixed(2)
+                          : 0}%
+                      </td>
+                      <td className="px-4 py-3 text-sm text-center font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">
+                        {generateMonthlyReport().reduce((sum, r) => sum + r.activityCount, 0)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600">
+                        ${generateMonthlyReport().reduce((sum, r) => sum + parseFloat(r.totalSalary), 0).toFixed(2)}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            )}
           </div>
         )}
 

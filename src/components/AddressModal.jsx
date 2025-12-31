@@ -2,10 +2,14 @@
 import React, { useState, useEffect, useRef } from "react"
 import { XIcon } from "lucide-react"
 import { toast } from "react-hot-toast"
+import { useDispatch } from "react-redux"
+import { addAddress } from "@/lib/features/address/addressSlice"
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
-const AddressModal = ({ setShowAddressModal }) => {
+const AddressModal = ({ setShowAddressModal, onAddressAdded }) => {
+
+    const dispatch = useDispatch()
 
     const [address, setAddress] = useState({
         name: '',
@@ -79,6 +83,19 @@ const AddressModal = ({ setShowAddressModal }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const newAddress = {
+            id: 'addr_' + Date.now(),
+            ...address,
+            createdAt: new Date().toISOString()
+        }
+
+        dispatch(addAddress(newAddress))
+        toast.success('Address added successfully')
+        
+        if (onAddressAdded) {
+            onAddressAdded(newAddress)
+        }
+
         setShowAddressModal(false)
     }
 
@@ -94,7 +111,7 @@ const AddressModal = ({ setShowAddressModal }) => {
                     <input name="state" onChange={handleAddressChange} value={address.state} className="p-2 px-4 outline-none border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-400 rounded w-full transition-colors duration-200" type="text" placeholder="State" required />
                 </div>
                 <div className="flex gap-4">
-                    <input name="zip" onChange={handleAddressChange} value={address.zip} className="p-2 px-4 outline-none border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-400 rounded w-full transition-colors duration-200" type="number" placeholder="Zip code" required />
+                    <input name="zip" onChange={handleAddressChange} value={address.zip} className="p-2 px-4 outline-none border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-400 rounded w-full transition-colors duration-200" type="text" placeholder="Zip code" required />
                     <input name="country" onChange={handleAddressChange} value={address.country} className="p-2 px-4 outline-none border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-400 rounded w-full transition-colors duration-200" type="text" placeholder="Country" required />
                 </div>
                 <div className="phone-input">

@@ -19,6 +19,7 @@ const OrderSummary = ({ totalPrice, items }) => {
 
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [showAddressModal, setShowAddressModal] = useState(false);
+    const [addressError, setAddressError] = useState('');
     const [couponCodeInput, setCouponCodeInput] = useState('');
     const [coupon, setCoupon] = useState('');
     const [cardInfo, setCardInfo] = useState({
@@ -124,6 +125,13 @@ const OrderSummary = ({ totalPrice, items }) => {
 
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
+
+        // Validate address
+        if (!selectedAddress) {
+            setAddressError('Please select or add a delivery address');
+            toast.error('Please select or add a delivery address');
+            return;
+        }
 
         // Validate card info if payment method is CARD
         if (paymentMethod === 'CARD') {
@@ -239,19 +247,82 @@ const OrderSummary = ({ totalPrice, items }) => {
                     </div>
                 </div>
             )}
-            <div className='my-4 py-4 border-y border-slate-200 dark:border-gray-700 text-slate-400 dark:text-gray-400'>
+            <div className='my-4 py-4 border-y border-slate-200 dark:border-gray-700'>
+                <label className='block text-sm font-medium text-slate-600 dark:text-gray-300 mb-2'>
+                    Delivery Address <span className="text-red-500">*</span>
+                </label>
                 {
                     selectedAddress ? (
-                        <div className='flex gap-2 items-center'>
-                            <p className='dark:text-gray-300'>{selectedAddress.name}, {selectedAddress.city}, {selectedAddress.state}, {selectedAddress.zip}</p>
-                            <SquarePenIcon onClick={() => setSelectedAddress(null)} className='cursor-pointer dark:text-gray-400 dark:hover:text-gray-300' size={18} />
+                        <div className='space-y-2'>
+                            <div className='flex gap-2 items-center p-2 bg-slate-50 dark:bg-gray-700/50 rounded-lg'>
+                                <p className='text-sm dark:text-gray-300 flex-1'>{selectedAddress.name}, {selectedAddress.city}, {selectedAddress.state}, {selectedAddress.zip}</p>
+                                <SquarePenIcon onClick={() => {
+                                    setSelectedAddress(null);
+                                    setAddressError('');
+                                }} className='cursor-pointer dark:text-gray-400 dark:hover:text-gray-300 flex-shrink-0' size={18} />
+                            </div>
+                            {addressList && addressList.length > 0 && (
+                                <button 
+                                    type="button"
+                                    className='text-xs text-slate-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200 underline' 
+                                    onClick={() => setShowAddressModal(true)}
+                                >
+                                    Change Address
+                                </button>
+                            )}
                         </div>
                     ) : (
-                        <div>
-                            <button className='flex items-center gap-1 text-slate-600 dark:text-gray-300 dark:hover:text-gray-100 mt-1 transition-colors duration-200' onClick={() => setShowAddressModal(true)} >Add Address <PlusIcon size={18} /></button>
+                        <div className='space-y-2'>
+                            {addressList && addressList.length > 0 ? (
+                                <div className='space-y-2'>
+                                    <select
+                                        onChange={(e) => {
+                                            if (e.target.value) {
+                                                const selected = addressList.find(addr => addr.id === e.target.value);
+                                                if (selected) {
+                                                    setSelectedAddress(selected);
+                                                    setAddressError('');
+                                                }
+                                            }
+                                        }}
+                                        value={selectedAddress?.id || ''}
+                                        className={`w-full p-2 border rounded-lg dark:bg-gray-700 dark:text-gray-200 outline-none transition-colors duration-200 text-sm ${
+                                            addressError 
+                                                ? 'border-red-500 dark:border-red-400 focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400' 
+                                                : 'border-slate-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400'
+                                        }`}
+                                    >
+                                        <option value="">Select a saved address</option>
+                                        {addressList.map((addr) => (
+                                            <option key={addr.id} value={addr.id}>
+                                                {addr.name} - {addr.city}, {addr.state}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <div className='text-center text-slate-500 dark:text-gray-400 text-xs'>or</div>
+                                </div>
+                            ) : null}
+                            <button 
+                                type="button"
+                                className={`w-full flex items-center justify-center gap-1 text-slate-600 dark:text-gray-300 dark:hover:text-gray-100 py-2 px-3 border rounded-lg transition-colors duration-200 ${
+                                    addressError 
+                                        ? 'border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-900/20' 
+                                        : 'border-slate-300 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-700'
+                                }`}
+                                onClick={() => {
+                                    setShowAddressModal(true);
+                                    setAddressError('');
+                                }}
+                            >
+                                <PlusIcon size={18} />
+                                Add New Address
+                            </button>
                         </div>
                     )
                 }
+                {addressError && (
+                    <p className="text-red-500 dark:text-red-400 text-xs mt-2">{addressError}</p>
+                )}
             </div>
             <div className='pb-4 border-b border-slate-200 dark:border-gray-700'>
                 <div className='flex justify-between'>
@@ -287,7 +358,15 @@ const OrderSummary = ({ totalPrice, items }) => {
             </div>
             <button onClick={e => toast.promise(handlePlaceOrder(e), { loading: 'placing Order...' })} className='w-full bg-slate-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white py-2.5 rounded hover:bg-slate-900 active:scale-95 transition-all'>Place Order</button>
 
-            {showAddressModal && <AddressModal setShowAddressModal={setShowAddressModal} />}
+            {showAddressModal && (
+                <AddressModal 
+                    setShowAddressModal={setShowAddressModal} 
+                    onAddressAdded={(newAddress) => {
+                        setSelectedAddress(newAddress);
+                        setAddressError('');
+                    }}
+                />
+            )}
 
         </div>
     )
