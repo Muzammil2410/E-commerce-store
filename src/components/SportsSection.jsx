@@ -28,7 +28,7 @@ const SportsSection = () => {
             <Title title={t('gadgets')} description={description} href='/shop?category=Gadgets' />
             <div className='mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6'>
                 {gadgetsProducts.map((product, index) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard key={product.id} product={product} hideDiscount={true} />
                 ))}
             </div>
         </div>

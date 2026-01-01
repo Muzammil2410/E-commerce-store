@@ -6,7 +6,7 @@ import React, { memo, useMemo, useState } from 'react'
 import WishlistButton from './WishlistButton'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 
-const ProductCard = memo(({ product }) => {
+const ProductCard = memo(({ product, hideDiscount = false }) => {
 
     const { formatCurrency, translateProductName } = useLanguageCurrency()
     const imageSrc = product.images?.[0] || product.image || '';
@@ -60,42 +60,49 @@ const ProductCard = memo(({ product }) => {
                         </div>
                     </div>
                     <div className='flex flex-col items-end flex-shrink-0'>
-                        {(() => {
-                            // Check if product has salePrice
-                            if (product.salePrice && product.salePrice > 0) {
-                                return (
-                                    <div className='flex flex-col items-end'>
-                                        <p className='group-hover:text-green-600 dark:group-hover:text-green-400 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-bold text-green-600 dark:text-green-400' aria-label={`Sale Price: ${formatCurrency(product.salePrice)}`}>
-                                            {formatCurrency(product.salePrice)}
+                        {hideDiscount ? (
+                            // Show only regular price when hideDiscount is true
+                            <p className='group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-medium' aria-label={`Price: ${formatCurrency(product.price || product.mrp || 0)}`}>
+                                {formatCurrency(product.price || product.mrp || 0)}
+                            </p>
+                        ) : (
+                            (() => {
+                                // Check if product has salePrice
+                                if (product.salePrice && product.salePrice > 0) {
+                                    return (
+                                        <div className='flex flex-col items-end'>
+                                            <p className='group-hover:text-green-600 dark:group-hover:text-green-400 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-bold text-green-600 dark:text-green-400' aria-label={`Sale Price: ${formatCurrency(product.salePrice)}`}>
+                                                {formatCurrency(product.salePrice)}
+                                            </p>
+                                            <p className='text-xs text-gray-500 dark:text-gray-400 line-through transition-all duration-300' aria-label={`Original Price: ${formatCurrency(product.price || product.mrp || 0)}`}>
+                                                {formatCurrency(product.price || product.mrp || 0)}
+                                            </p>
+                                        </div>
+                                    )
+                                }
+                                // Check if product has discount (mrp > price)
+                                else if (product.mrp && product.price && product.mrp > product.price) {
+                                    return (
+                                        <div className='flex flex-col items-end'>
+                                            <p className='group-hover:text-green-600 dark:group-hover:text-green-400 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-bold text-green-600 dark:text-green-400' aria-label={`Sale Price: ${formatCurrency(product.price)}`}>
+                                                {formatCurrency(product.price)}
+                                            </p>
+                                            <p className='text-xs text-gray-500 dark:text-gray-400 line-through transition-all duration-300' aria-label={`Original Price: ${formatCurrency(product.mrp)}`}>
+                                                {formatCurrency(product.mrp)}
+                                            </p>
+                                        </div>
+                                    )
+                                }
+                                // No discount
+                                else {
+                                    return (
+                                        <p className='group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-medium' aria-label={`Price: ${formatCurrency(product.price || 0)}`}>
+                                            {formatCurrency(product.price || 0)}
                                         </p>
-                                        <p className='text-xs text-gray-500 dark:text-gray-400 line-through transition-all duration-300' aria-label={`Original Price: ${formatCurrency(product.price || product.mrp || 0)}`}>
-                                            {formatCurrency(product.price || product.mrp || 0)}
-                                        </p>
-                                    </div>
-                                )
-                            }
-                            // Check if product has discount (mrp > price)
-                            else if (product.mrp && product.price && product.mrp > product.price) {
-                                return (
-                                    <div className='flex flex-col items-end'>
-                                        <p className='group-hover:text-green-600 dark:group-hover:text-green-400 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-bold text-green-600 dark:text-green-400' aria-label={`Sale Price: ${formatCurrency(product.price)}`}>
-                                            {formatCurrency(product.price)}
-                                        </p>
-                                        <p className='text-xs text-gray-500 dark:text-gray-400 line-through transition-all duration-300' aria-label={`Original Price: ${formatCurrency(product.mrp)}`}>
-                                            {formatCurrency(product.mrp)}
-                                        </p>
-                                    </div>
-                                )
-                            }
-                            // No discount
-                            else {
-                                return (
-                                    <p className='group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:font-semibold transition-all duration-300 text-sm sm:text-base font-medium' aria-label={`Price: ${formatCurrency(product.price || 0)}`}>
-                                        {formatCurrency(product.price || 0)}
-                                    </p>
-                                )
-                            }
-                        })()}
+                                    )
+                                }
+                            })()
+                        )}
                     </div>
                 </div>
             </Link>

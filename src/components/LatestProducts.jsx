@@ -17,7 +17,7 @@ const LatestProducts = () => {
             <Title title={t('latestProducts')} description={description} href='/shop' />
             <div className='mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6'>
                 {products.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, displayQuantity).map((product, index) => (
-                    <ProductCard key={index} product={product} />
+                    <ProductCard key={index} product={product} hideDiscount={true} />
                 ))}
             </div>
         </div>
