@@ -238,28 +238,14 @@ export default function LoginPage() {
 
                     {/* Sign Up Link */}
                     <div className="mt-6 text-center">
-                        <p className="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300">
+                        <p className="text-gray-800 dark:text-gray-200 text-lg sm:text-xl font-semibold transition-colors duration-300">
                             {t('dontHaveAccount')}{' '}
                             <button 
                                 type="button"
                                 onClick={() => navigate('/auth/register')}
-                                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
+                                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-bold underline underline-offset-2 transition-colors"
                             >
                                 {t('signUp')}
-                            </button>
-                        </p>
-                    </div>
-
-                    {/* Login as Seller Link */}
-                    <div className="mt-4 text-center pb-2">
-                        <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed transition-colors duration-300">
-                            {t('areYouSeller')}{' '}
-                            <button 
-                                type="button"
-                                onClick={() => navigate('/seller')}
-                                className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium transition-colors cursor-pointer"
-                            >
-                                {t('loginAsSeller')}
                             </button>
                         </p>
                     </div>

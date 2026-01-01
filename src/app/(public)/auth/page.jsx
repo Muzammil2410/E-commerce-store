@@ -83,11 +83,11 @@ export default function AccountTypeSelection() {
 
                     {/* Footer Text */}
                     <div className="mt-8 text-center">
-                        <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                        <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 font-medium transition-colors duration-300">
                             Already have an account?{' '}
                             <button 
                                 onClick={() => navigate('/auth/login')}
-                                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium underline underline-offset-2 transition-colors"
+                                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold underline underline-offset-2 transition-colors"
                             >
                                 Sign in
                             </button>
