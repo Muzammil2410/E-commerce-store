@@ -78,7 +78,7 @@ const Hero = () => {
                             <Image className='w-20 h-20 sm:w-24 sm:h-24 xl:w-32 xl:h-32 object-contain' src={assets.hero_product_img1} alt="Best Products" />
                         </div>
                     </Link>
-                    <Link to="/shop" className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border border-green-200 dark:border-green-800 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm dark:shadow-gray-900/50 transition-all duration-300 hover:shadow-md dark:hover:shadow-gray-900/70 cursor-pointer'>
+                    <Link to="/discounts" className='flex-1 flex items-center justify-between w-full bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border border-green-200 dark:border-green-800 rounded-2xl xl:rounded-3xl p-4 sm:p-6 xl:p-8 group shadow-sm dark:shadow-gray-900/50 transition-all duration-300 hover:shadow-md dark:hover:shadow-gray-900/70 cursor-pointer'>
                         <div className='flex-1'>
                             <p className='text-xl sm:text-2xl xl:text-3xl font-medium text-gray-800 dark:text-white mb-2 sm:mb-4 transition-colors duration-300'>{t('discounts')}</p>
                             <p className='flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium text-sm transition-colors duration-300'>{t('viewMore')} <ArrowRightIcon className='group-hover:ml-2 transition-all' size={16} /> </p>

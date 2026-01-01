@@ -21,6 +21,8 @@ import Cart from "@/app/(public)/cart/page";
 import Bargain from "@/app/(public)/bargain/page";
 // Import Shop directly to fix React context issue with lazy loading
 import Shop from "@/app/(public)/shop/page";
+// Import Discounts directly to fix React context issue with lazy loading
+import Discounts from "@/app/(public)/discounts/page";
 // Import Profile directly since it's used after login
 import Profile from "@/app/(public)/profile/page";
 // Import Wishlist directly since it's accessed from navbar
@@ -81,6 +83,7 @@ export const router = createBrowserRouter([
   { path: "/pricing", element: createPublicRoute(Pricing) },
   { path: "/cart", element: <PublicLayout><Cart /></PublicLayout> },
   { path: "/shop", element: <PublicLayout><Shop /></PublicLayout> },
+  { path: "/discounts", element: <PublicLayout><Discounts /></PublicLayout> },
   { path: "/shop/:username", element: createPublicRoute(ShopUser) },
   { path: "/product/:productId", element: <PublicLayout><Product /></PublicLayout> },
   { path: "/bargain", element: <PublicLayout><Bargain /></PublicLayout> },
