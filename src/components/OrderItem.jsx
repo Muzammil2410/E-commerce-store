@@ -35,7 +35,7 @@ const OrderItem = ({ order }) => {
 
     return (
         <>
-            <tr className="text-sm hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors duration-200">
+            <tr className="text-base hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors duration-200">
                 <td className="text-left py-6 px-6">
                     <div className="flex flex-col gap-6">
                         {order.orderItems.map((item, index) => (
@@ -49,10 +49,10 @@ const OrderItem = ({ order }) => {
                                         height={50}
                                     />
                                 </div>
-                                <div className="flex flex-col justify-center text-sm">
-                                    <p className="font-semibold text-slate-700 dark:text-gray-200 text-base transition-colors duration-200">{translateProductName(item.product.name)}</p>
-                                    <p className="dark:text-gray-300 mt-1 transition-colors duration-200">{formatCurrency(item.price)} × {item.quantity} </p>
-                                    <p className="mb-2 text-xs dark:text-gray-400 transition-colors duration-200">{new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                                <div className="flex flex-col justify-center text-base">
+                                    <p className="font-semibold text-slate-700 dark:text-gray-200 text-lg transition-colors duration-200">{translateProductName(item.product.name)}</p>
+                                    <p className="dark:text-gray-300 mt-1 text-base transition-colors duration-200">{formatCurrency(item.price)} × {item.quantity} </p>
+                                    <p className="mb-2 text-sm dark:text-gray-400 transition-colors duration-200">{new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                                     {ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId) && (
                                         <div>
                                             <Rating value={ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId).rating} />
@@ -64,30 +64,30 @@ const OrderItem = ({ order }) => {
                     </div>
                 </td>
 
-                <td className="text-center max-md:hidden dark:text-gray-200 py-6 px-6 font-semibold transition-colors duration-200">{formatCurrency(order.total)}</td>
+                <td className="text-center max-md:hidden dark:text-gray-200 py-6 px-6 font-semibold text-base transition-colors duration-200">{formatCurrency(order.total)}</td>
 
                 <td className="text-left max-md:hidden dark:text-gray-300 py-6 px-6 transition-colors duration-200">
                     <div className="space-y-1">
-                        <p className="font-medium text-slate-700 dark:text-gray-200">{order.address.name}</p>
-                        <p className="text-sm">{order.address.street}</p>
-                        <p className="text-sm">{order.address.city}, {order.address.state} {order.address.zip}</p>
-                        <p className="text-sm">{order.address.country}</p>
-                        <p className="text-sm">{order.address.phone}</p>
+                        <p className="font-medium text-slate-700 dark:text-gray-200 text-base">{order.address.name}</p>
+                        <p className="text-base">{order.address.street}</p>
+                        <p className="text-base">{order.address.city}, {order.address.state} {order.address.zip}</p>
+                        <p className="text-base">{order.address.country}</p>
+                        <p className="text-base">{order.address.phone}</p>
                     </div>
                 </td>
 
-                <td className="text-left space-y-2 text-sm max-md:hidden py-6 px-6">
+                <td className="text-left space-y-2 text-base max-md:hidden py-6 px-6">
                     <div className="flex flex-col gap-3">
                         <div
-                            className={`flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 w-fit transition-colors duration-200 ${order.status === 'confirmed'
+                            className={`flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 w-full transition-colors duration-200 ${order.status === 'confirmed'
                                 ? 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30'
                                 : order.status === 'delivered'
                                     ? 'text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/30'
                                     : 'text-slate-700 dark:text-gray-400 bg-slate-100 dark:bg-gray-700'
                                 }`}
                         >
-                            <DotIcon size={12} className="scale-250" />
-                            <span className="text-xs font-semibold">{order.status.split('_').join(' ').toLowerCase()}</span>
+                            <DotIcon size={14} className="scale-250" />
+                            <span className="text-sm font-semibold">{order.status.split('_').join(' ').toLowerCase()}</span>
                         </div>
                         
                         {/* Chat Button for Delayed Orders */}
@@ -104,18 +104,18 @@ const OrderItem = ({ order }) => {
                                         senderName: 'Buyer'
                                     });
                                 }}
-                                className="flex items-center justify-center gap-2 px-3 py-1.5 bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                className="flex items-center justify-center gap-2 px-3 py-1.5 w-full bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 aria-label="Chat with seller about delayed order"
                             >
-                                <MessageCircle size={14} />
+                                <MessageCircle size={16} />
                                 <span>Chat with Seller</span>
                             </button>
                         )}
 
                         {/* Delay Warning */}
                         {isOrderDelayed() && (
-                            <div className="flex items-center justify-center gap-1 text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded transition-colors duration-200">
-                                <AlertCircle size={12} />
+                            <div className="flex items-center justify-center gap-1 text-red-600 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/30 px-3 py-1.5 w-full rounded transition-colors duration-200">
+                                <AlertCircle size={14} />
                                 <span>Delayed</span>
                             </div>
                         )}
@@ -125,13 +125,13 @@ const OrderItem = ({ order }) => {
             {/* Mobile */}
             <tr className="md:hidden">
                 <td colSpan={5}>
-                    <p className="dark:text-gray-300 transition-colors duration-200">{order.address.name}, {order.address.street}</p>
-                    <p className="dark:text-gray-300 transition-colors duration-200">{order.address.city}, {order.address.state}, {order.address.zip}, {order.address.country}</p>
-                    <p className="dark:text-gray-300 transition-colors duration-200">{order.address.phone}</p>
+                    <p className="dark:text-gray-300 text-base transition-colors duration-200">{order.address.name}, {order.address.street}</p>
+                    <p className="dark:text-gray-300 text-base transition-colors duration-200">{order.address.city}, {order.address.state}, {order.address.zip}, {order.address.country}</p>
+                    <p className="dark:text-gray-300 text-base transition-colors duration-200">{order.address.phone}</p>
                     <br />
                     <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-center">
-                            <span className='text-center px-6 py-1.5 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 transition-colors duration-200' >
+                            <span className='text-center px-6 py-1.5 text-sm rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 transition-colors duration-200' >
                                 {order.status.replace(/_/g, ' ').toLowerCase()}
                             </span>
                         </div>
@@ -151,14 +151,14 @@ const OrderItem = ({ order }) => {
                                             senderName: 'Buyer'
                                         });
                                     }}
-                                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white text-base rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     aria-label="Chat with seller about delayed order"
                                 >
-                                    <MessageCircle size={16} />
+                                    <MessageCircle size={18} />
                                     <span>Chat with Seller</span>
                                 </button>
-                                <div className="flex items-center justify-center gap-1 text-red-600 dark:text-red-400 text-xs bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded transition-colors duration-200">
-                                    <AlertCircle size={14} />
+                                <div className="flex items-center justify-center gap-1 text-red-600 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded transition-colors duration-200">
+                                    <AlertCircle size={16} />
                                     <span>Delayed</span>
                                 </div>
                             </>

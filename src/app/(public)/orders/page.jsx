@@ -23,13 +23,13 @@ export default function Orders() {
                         {/* Desktop Table */}
                         <div className="hidden md:block bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-200">
                             <div className="overflow-x-auto">
-                                <table className="w-full text-slate-500 dark:text-gray-300 table-auto transition-colors duration-200">
+                                <table className="w-full text-slate-500 dark:text-gray-300 table-auto transition-colors duration-200 text-base">
                                     <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                                         <tr className="text-slate-700 dark:text-gray-200">
-                                            <th className="text-left py-4 px-6 font-semibold text-sm">Product</th>
-                                            <th className="text-center py-4 px-6 font-semibold text-sm">Total Price</th>
-                                            <th className="text-left py-4 px-6 font-semibold text-sm">Address</th>
-                                            <th className="text-left py-4 px-6 font-semibold text-sm">Status</th>
+                                            <th className="text-left py-4 px-6 font-semibold text-base">Product</th>
+                                            <th className="text-center py-4 px-6 font-semibold text-base">Total Price</th>
+                                            <th className="text-left py-4 px-6 font-semibold text-base">Address</th>
+                                            <th className="text-left py-4 px-6 font-semibold text-base">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -48,7 +48,7 @@ export default function Orders() {
                                     <div className="space-y-4">
                                         {/* Products */}
                                         <div>
-                                            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-200">Products</h3>
+                                            <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-200">Products</h3>
                                             {order.orderItems.map((item, index) => (
                                                 <div key={index} className="flex items-center gap-4 mb-4 last:mb-0 p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg transition-colors duration-200">
                                                     <div className="w-20 h-20 bg-white dark:bg-gray-700 flex items-center justify-center rounded-lg flex-shrink-0 shadow-sm transition-colors duration-200">
@@ -59,8 +59,8 @@ export default function Orders() {
                                                         />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="font-semibold text-slate-800 dark:text-gray-100 text-sm truncate transition-colors duration-200">{item.product.name}</p>
-                                                        <p className="text-xs text-slate-600 dark:text-gray-400 mt-1 transition-colors duration-200">{formatCurrency(item.price)} × {item.quantity}</p>
+                                                        <p className="font-semibold text-slate-800 dark:text-gray-100 text-base truncate transition-colors duration-200">{item.product.name}</p>
+                                                        <p className="text-sm text-slate-600 dark:text-gray-400 mt-1 transition-colors duration-200">{formatCurrency(item.price)} × {item.quantity}</p>
                                                     </div>
                                                 </div>
                                             ))}
@@ -68,27 +68,27 @@ export default function Orders() {
 
                                         {/* Total Price */}
                                         <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                                            <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-200">Total:</span>
+                                            <span className="text-base font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-200">Total:</span>
                                             <span className="text-xl font-bold text-slate-800 dark:text-gray-100 transition-colors duration-200">{formatCurrency(order.total)}</span>
                                         </div>
 
                                         {/* Address */}
                                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                                            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3 transition-colors duration-200">Delivery Address</h3>
+                                            <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-3 transition-colors duration-200">Delivery Address</h3>
                                             <div className="space-y-1 bg-gray-50 dark:bg-gray-700/30 p-3 rounded-lg transition-colors duration-200">
-                                                <p className="text-sm font-medium text-gray-800 dark:text-gray-200 transition-colors duration-200">{order.address.name}</p>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.street}</p>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.city}, {order.address.state} {order.address.zip}</p>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.country}</p>
-                                                <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.phone}</p>
+                                                <p className="text-base font-medium text-gray-800 dark:text-gray-200 transition-colors duration-200">{order.address.name}</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.street}</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.city}, {order.address.state} {order.address.zip}</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.country}</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-200">{order.address.phone}</p>
                                             </div>
                                         </div>
 
                                         {/* Status */}
                                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                                             <div className="flex items-center justify-between mb-3">
-                                                <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-200">Status:</span>
-                                                <span className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-colors duration-200 ${
+                                                <span className="text-base font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-200">Status:</span>
+                                                <span className={`px-4 py-1.5 text-sm font-semibold rounded-full transition-colors duration-200 ${
                                                     order.status === 'confirmed' || order.status === 'CONFIRMED'
                                                         ? 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30'
                                                         : order.status === 'delivered' || order.status === 'DELIVERED'
@@ -100,7 +100,7 @@ export default function Orders() {
                                             </div>
                                             {/* Order Date */}
                                             <div className="pt-2">
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-200">
+                                                <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-200">
                                                     Ordered: {new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                                 </p>
                                             </div>

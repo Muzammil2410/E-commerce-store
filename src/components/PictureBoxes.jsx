@@ -3,6 +3,7 @@ import React from 'react'
 import Image from '@/components/Image'
 import { assets } from '@/assets/assets'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
+import { Link } from 'react-router-dom'
 
 const PictureBoxes = () => {
     const { t } = useLanguageCurrency()
@@ -15,9 +16,9 @@ const PictureBoxes = () => {
                         <div className='text-left z-10 flex-1'>
                             <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('newArrivals')}</h3>
                             <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('discoverLatestTrends')}</p>
-                            <button className='bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
+                            <Link to="/shop" className='inline-block bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
                                 {t('shopNow')}
-                            </button>
+                            </Link>
                         </div>
                         <div className='flex-shrink-0 ml-4'>
                             <Image src={assets.product_img1} alt={t('newArrivals')} width={140} height={140} className='w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-lg shadow-lg object-cover' />
@@ -30,9 +31,9 @@ const PictureBoxes = () => {
                         <div className='text-left z-10 flex-1'>
                             <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('specialOffers')}</h3>
                             <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('limitedTimeDeals')}</p>
-                            <button className='bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
+                            <Link to="/shop" className='inline-block bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
                                 {t('viewOffers')}
-                            </button>
+                            </Link>
                         </div>
                         <div className='flex-shrink-0 ml-4'>
                             <Image src={assets.product_img2} alt={t('specialOffers')} width={140} height={140} className='w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-lg shadow-lg object-cover' />
