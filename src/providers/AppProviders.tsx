@@ -5,6 +5,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LanguageCurrencyProvider } from "@/contexts/LanguageCurrencyContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import EmployeeAuthInitializer from "@/components/EmployeeAuthInitializer";
 
 const queryClient = new QueryClient();
 
@@ -13,6 +14,7 @@ export default function AppProviders({ children }: { children: React.ReactNode }
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <StoreProvider>
+          <EmployeeAuthInitializer />
           <ThemeProvider>
             <LanguageCurrencyProvider>
               {children}
