@@ -47,6 +47,17 @@ import SellerOrders from "@/app/(public)/seller/dashboard/orders/page";
 import SellerDelivery from "@/app/(public)/seller/dashboard/delivery/page";
 import SellerDeliverySchedule from "@/app/(public)/seller/dashboard/delivery/schedule/page";
 import SellerEmployees from "@/app/(public)/seller/dashboard/employees/page";
+// Import Employee and Admin pages for task/attendance system
+import EmployeeLogin from "@/app/(public)/employee/login/page";
+import EmployeeDashboard from "@/app/(public)/employee/dashboard/page";
+import EmployeeTasks from "@/app/(public)/employee/tasks/page";
+import EmployeeTaskDetail from "@/app/(public)/employee/tasks/[id]/page";
+import EmployeeAttendance from "@/app/(public)/employee/attendance/page";
+import EmployeeLeave from "@/app/(public)/employee/leave/page";
+import AdminDashboard from "@/app/(public)/admin/dashboard/page";
+import AdminTasks from "@/app/(public)/admin/tasks/page";
+import AdminAttendance from "@/app/(public)/admin/attendance/page";
+import AdminLeave from "@/app/(public)/admin/leave/page";
 
 // Lazy load pages for code splitting and better performance
 const Pricing = lazy(() => import("@/app/(public)/pricing/page"));
@@ -134,6 +145,20 @@ export const router = createBrowserRouter([
   { path: "/wishlist", element: <PublicLayout><Wishlist /></PublicLayout> },
   { path: "/orders", element: <PublicLayout><Orders /></PublicLayout> },
   { path: "/checkout", element: <PublicLayout><Checkout /></PublicLayout> },
+
+  // Employee Portal Routes
+  { path: "/employee/login", element: <PublicLayout><EmployeeLogin /></PublicLayout> },
+  { path: "/employee/dashboard", element: <PublicLayout><EmployeeDashboard /></PublicLayout> },
+  { path: "/employee/tasks", element: <PublicLayout><EmployeeTasks /></PublicLayout> },
+  { path: "/employee/tasks/:id", element: <PublicLayout><EmployeeTaskDetail /></PublicLayout> },
+  { path: "/employee/attendance", element: <PublicLayout><EmployeeAttendance /></PublicLayout> },
+  { path: "/employee/leave", element: <PublicLayout><EmployeeLeave /></PublicLayout> },
+
+  // Admin Portal Routes (Task/Attendance System)
+  { path: "/admin/dashboard", element: <PublicLayout><AdminDashboard /></PublicLayout> },
+  { path: "/admin/tasks", element: <PublicLayout><AdminTasks /></PublicLayout> },
+  { path: "/admin/attendance", element: <PublicLayout><AdminAttendance /></PublicLayout> },
+  { path: "/admin/leave", element: <PublicLayout><AdminLeave /></PublicLayout> },
 
   // Admin and Store sections (render their own layouts)
   { path: "/admin", element: <AdminRoot><LazyWrapper><AdminPage /></LazyWrapper></AdminRoot> },
