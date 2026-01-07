@@ -8,6 +8,8 @@ import StoreRoot from "@/app/store/layout";
 import Loading from "@/components/Loading";
 // Import AuthLogin directly instead of lazy loading to avoid Router context issues
 import AuthLogin from "@/app/(public)/auth/login/page";
+// Import AuthForgot directly instead of lazy loading to avoid Router context issues
+import AuthForgot from "@/app/(public)/auth/forgot-password/page";
 // Import Home directly to fix React context issue with lazy loading
 import Home from "@/app/(public)/page";
 // Import AccountTypeSelection directly to fix React context issue with lazy loading
@@ -65,7 +67,6 @@ const ShopUser = lazy(() => import("@/app/(public)/shop/[username]/page"));
 const Login = lazy(() => import("@/app/(public)/login/page"));
 const Register = lazy(() => import("@/app/(public)/register/page"));
 const AuthRegister = lazy(() => import("@/app/(public)/auth/register/page"));
-const AuthForgot = lazy(() => import("@/app/(public)/auth/forgot-password/page"));
 const ForgotPassword = lazy(() => import("@/app/(public)/forgot-password/page"));
 const PrivacyPolicy = lazy(() => import("@/app/(public)/privacy-policy/page"));
 const AdminPage = lazy(() => import("@/app/admin/page"));
@@ -124,7 +125,14 @@ export const router = createBrowserRouter([
     )
   },
   { path: "/auth/register", element: createPublicRoute(AuthRegister) },
-  { path: "/auth/forgot-password", element: createPublicRoute(AuthForgot) },
+  { 
+    path: "/auth/forgot-password", 
+    element: (
+      <PublicLayout>
+        <AuthForgot />
+      </PublicLayout>
+    )
+  },
   { path: "/forgot-password", element: createPublicRoute(ForgotPassword) },
   { path: "/privacy-policy", element: createPublicRoute(PrivacyPolicy) },
   { path: "/support", element: <PublicLayout><Support /></PublicLayout> },
