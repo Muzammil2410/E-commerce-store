@@ -76,10 +76,10 @@ export default function EmployeeDashboard() {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">
                         Welcome back, {currentUser.name}!
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 font-medium">
                         {format(new Date(), 'EEEE, MMMM d, yyyy')}
                     </p>
                 </div>
@@ -87,11 +87,11 @@ export default function EmployeeDashboard() {
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     {/* Tasks Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Total Tasks</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Total Tasks</p>
+                                <p className="text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
                                     {employeeTasks.length}
                                 </p>
                             </div>
@@ -99,7 +99,7 @@ export default function EmployeeDashboard() {
                                 <CheckCircle2 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                             </div>
                         </div>
-                        <div className="mt-4 flex gap-2 text-xs">
+                        <div className="mt-4 flex gap-3 text-xs font-semibold">
                             <span className="text-yellow-600 dark:text-yellow-400">
                                 {pendingTasks.length} Pending
                             </span>
@@ -113,11 +113,11 @@ export default function EmployeeDashboard() {
                     </div>
                     
                     {/* Attendance Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Today's Status</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Today's Status</p>
+                                <p className="text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
                                     {isClockedIn ? 'Clocked In' : todayAttendance?.status || 'Not Started'}
                                 </p>
                             </div>
@@ -126,18 +126,18 @@ export default function EmployeeDashboard() {
                             </div>
                         </div>
                         {todayAttendance?.hoursWorked > 0 && (
-                            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                            <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                                 {todayAttendance.hoursWorked} hours worked
                             </p>
                         )}
                     </div>
                     
                     {/* Leave Requests Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Leave Requests</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Leave Requests</p>
+                                <p className="text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
                                     {pendingLeaveRequests.length}
                                 </p>
                             </div>
@@ -145,17 +145,17 @@ export default function EmployeeDashboard() {
                                 <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                             </div>
                         </div>
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                             Pending approval
                         </p>
                     </div>
                     
                     {/* Performance Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Completion Rate</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Completion Rate</p>
+                                <p className="text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
                                     {employeeTasks.length > 0 
                                         ? Math.round((completedTasks.length / employeeTasks.length) * 100)
                                         : 0}%
@@ -165,7 +165,7 @@ export default function EmployeeDashboard() {
                                 <TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                             </div>
                         </div>
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                             {completedTasks.length} of {employeeTasks.length} tasks
                         </p>
                     </div>
@@ -174,14 +174,14 @@ export default function EmployeeDashboard() {
                 {/* Main Content Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Today's Tasks */}
-                    <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
                                 Today's Tasks
                             </h2>
                             <button
                                 onClick={() => navigate('/employee/tasks')}
-                                className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                                className="px-4 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors border border-blue-200 dark:border-blue-800"
                             >
                                 View All
                             </button>
@@ -190,26 +190,26 @@ export default function EmployeeDashboard() {
                         {employeeTasks.length === 0 ? (
                             <div className="text-center py-8">
                                 <CheckCircle2 className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                                <p className="text-gray-600 dark:text-gray-400">No tasks assigned</p>
+                                <p className="text-base font-medium text-gray-600 dark:text-gray-400">No tasks assigned</p>
                             </div>
                         ) : (
                             <div className="space-y-3">
                                 {employeeTasks.slice(0, 5).map(task => (
                                     <div
                                         key={task.id}
-                                        className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer"
+                                        className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 cursor-pointer hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600"
                                         onClick={() => navigate(`/employee/tasks/${task.id}`)}
                                     >
                                         <div className="flex items-start justify-between">
                                             <div className="flex-1">
-                                                <h3 className="font-medium text-gray-900 dark:text-white">
+                                                <h3 className="text-base font-bold text-gray-900 dark:text-white">
                                                     {task.title}
                                                 </h3>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                                <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1.5 leading-relaxed">
                                                     {task.description}
                                                 </p>
-                                                <div className="flex items-center gap-4 mt-2">
-                                                    <span className={`text-xs px-2 py-1 rounded ${
+                                                <div className="flex items-center gap-4 mt-3">
+                                                    <span className={`text-xs font-semibold px-2.5 py-1 rounded ${
                                                         task.status === 'completed' 
                                                             ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                                                             : task.status === 'in-progress'
@@ -218,7 +218,7 @@ export default function EmployeeDashboard() {
                                                     }`}>
                                                         {task.status}
                                                     </span>
-                                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                    <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                                                         Due: {format(new Date(task.deadline), 'MMM d')}
                                                     </span>
                                                 </div>
@@ -241,42 +241,42 @@ export default function EmployeeDashboard() {
                     {/* Quick Actions & Recent Attendance */}
                     <div className="space-y-6">
                         {/* Quick Actions */}
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
+                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
                                 Quick Actions
                             </h2>
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                                 <button
                                     onClick={() => navigate('/employee/attendance')}
-                                    className="w-full text-left px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                                    className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border border-blue-700 dark:border-blue-600"
                                 >
-                                    <Clock className="w-5 h-5 inline mr-2" />
-                                    Mark Attendance
+                                    <Clock className="w-5 h-5" />
+                                    <span>Mark Attendance</span>
                                 </button>
                                 <button
                                     onClick={() => navigate('/employee/leave')}
-                                    className="w-full text-left px-4 py-3 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                                    className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-purple-600 dark:bg-purple-500 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border border-purple-700 dark:border-purple-600"
                                 >
-                                    <Calendar className="w-5 h-5 inline mr-2" />
-                                    Request Leave
+                                    <Calendar className="w-5 h-5" />
+                                    <span>Request Leave</span>
                                 </button>
                                 <button
                                     onClick={() => navigate('/employee/tasks')}
-                                    className="w-full text-left px-4 py-3 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+                                    className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border border-green-700 dark:border-green-600"
                                 >
-                                    <CheckCircle2 className="w-5 h-5 inline mr-2" />
-                                    View Tasks
+                                    <CheckCircle2 className="w-5 h-5" />
+                                    <span>View Tasks</span>
                                 </button>
                             </div>
                         </div>
                         
                         {/* Recent Attendance */}
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
+                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
                                 Recent Attendance
                             </h2>
                             {recentAttendance.length === 0 ? (
-                                <p className="text-sm text-gray-600 dark:text-gray-400">No attendance records</p>
+                                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">No attendance records</p>
                             ) : (
                                 <div className="space-y-3">
                                     {recentAttendance.map(record => (
@@ -285,11 +285,11 @@ export default function EmployeeDashboard() {
                                             className="flex items-center justify-between text-sm"
                                         >
                                             <div>
-                                                <p className="text-gray-900 dark:text-white font-medium">
+                                                <p className="text-gray-900 dark:text-white font-semibold text-base">
                                                     {format(new Date(record.date), 'MMM d, yyyy')}
                                                 </p>
                                                 {record.clockIn && (
-                                                    <p className="text-gray-600 dark:text-gray-400">
+                                                    <p className="text-gray-600 dark:text-gray-400 font-medium text-sm mt-0.5">
                                                         {format(new Date(record.clockIn), 'h:mm a')} -{' '}
                                                         {record.clockOut 
                                                             ? format(new Date(record.clockOut), 'h:mm a')
@@ -297,7 +297,7 @@ export default function EmployeeDashboard() {
                                                     </p>
                                                 )}
                                             </div>
-                                            <span className={`px-2 py-1 rounded text-xs ${
+                                            <span className={`px-2.5 py-1 rounded text-xs font-semibold ${
                                                 record.status === 'present'
                                                     ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                                                     : record.status === 'late'

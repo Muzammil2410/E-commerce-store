@@ -113,6 +113,29 @@ export default function EmployeeLogin() {
                 </div>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Demo Credentials */}
+                    <div className="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 text-center">
+                            Demo Credentials:
+                        </p>
+                        <div className="space-y-2">
+                            <button
+                                type="button"
+                                onClick={() => fillDemoCredentials('employee')}
+                                className="w-full text-left px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-sm"
+                            >
+                                <span className="font-medium">Employee:</span> employee@company.com / employee123
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => fillDemoCredentials('admin')}
+                                className="w-full text-left px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-sm"
+                            >
+                                <span className="font-medium">Admin:</span> admin@company.com / admin123
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Email Address
@@ -184,29 +207,6 @@ export default function EmployeeLogin() {
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </form>
-                
-                {/* Demo Credentials */}
-                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 text-center">
-                        Demo Credentials:
-                    </p>
-                    <div className="space-y-2">
-                        <button
-                            type="button"
-                            onClick={() => fillDemoCredentials('employee')}
-                            className="w-full text-left px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-sm"
-                        >
-                            <span className="font-medium">Employee:</span> employee@company.com / employee123
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => fillDemoCredentials('admin')}
-                            className="w-full text-left px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-sm"
-                        >
-                            <span className="font-medium">Admin:</span> admin@company.com / admin123
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     )

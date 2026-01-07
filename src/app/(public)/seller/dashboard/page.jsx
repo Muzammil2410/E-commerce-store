@@ -6,6 +6,7 @@ import { clearCart } from "@/lib/features/cart/cartSlice"
 import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus, Edit, Save, XCircle, Upload, FileText, Tag, Building2, Mail, Phone, MapPin, Warehouse, FileCheck, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import toast from 'react-hot-toast'
+import PhoneNumberInput from '@/components/PhoneNumberInput'
 
 export default function SellerDashboard() {
   const navigate = useNavigate()
@@ -18,6 +19,7 @@ export default function SellerDashboard() {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
   const [isEditingBusinessInfo, setIsEditingBusinessInfo] = useState(false)
   const [editFormData, setEditFormData] = useState({})
+  const [phoneValidation, setPhoneValidation] = useState({ isValid: false, e164Format: '' })
   const languageModalRef = useRef(null)
   const languageDropdownRef = useRef(null)
 
@@ -107,6 +109,14 @@ export default function SellerDashboard() {
     setEditFormData(prev => ({ ...prev, [field]: value }))
   }
 
+  const handlePhoneValidation = (isValid, e164Format) => {
+    setPhoneValidation({ isValid, e164Format })
+    // Update form data with E.164 format if valid
+    if (isValid && e164Format) {
+      setEditFormData(prev => ({ ...prev, phone: e164Format }))
+    }
+  }
+
   const handleCategoryToggle = (category) => {
     setEditFormData(prev => {
       const currentCategories = prev.selectedCategories || []
@@ -139,6 +149,10 @@ export default function SellerDashboard() {
     }
     if (!editFormData.phone || !editFormData.phone.trim()) {
       toast.error('Phone number is required')
+      return
+    }
+    if (!phoneValidation.isValid) {
+      toast.error('Please enter a valid phone number for the selected country')
       return
     }
     if (!editFormData.businessAddress || !editFormData.businessAddress.trim()) {
@@ -447,8 +461,8 @@ export default function SellerDashboard() {
                       <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Name</p>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.businessName || t('notProvided')}</p>
+                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Name</p>
+                      <p className="text-sm text-gray-900 dark:text-white mt-1">{sellerData.businessName || t('notProvided')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -456,8 +470,8 @@ export default function SellerDashboard() {
                       <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Type</p>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.businessType || 'Not specified'}</p>
+                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Type</p>
+                      <p className="text-sm text-gray-900 dark:text-white mt-1">{sellerData.businessType || 'Not specified'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -465,8 +479,8 @@ export default function SellerDashboard() {
                       <Mail className="w-4 h-4 text-green-600 dark:text-green-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Email Address</p>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1 break-all">{sellerData.email}</p>
+                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Email Address</p>
+                      <p className="text-sm text-gray-900 dark:text-white mt-1 break-all">{sellerData.email}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -474,8 +488,8 @@ export default function SellerDashboard() {
                       <Phone className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Phone Number</p>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.phone || t('notProvided')}</p>
+                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Phone Number</p>
+                      <p className="text-sm text-gray-900 dark:text-white mt-1">{sellerData.phone || t('notProvided')}</p>
                     </div>
                   </div>
                   {sellerData.ntnTaxId && (
@@ -500,7 +514,7 @@ export default function SellerDashboard() {
                       <MapPin className="w-5 h-5 text-red-600 dark:text-red-400" />
                       <h4 className="font-semibold text-gray-900 dark:text-white">Business Address</h4>
                     </div>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{sellerData.businessAddress}</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed pl-7">{sellerData.businessAddress}</p>
                   </div>
                 )}
                 {sellerData.warehouseAddress && (
@@ -509,7 +523,7 @@ export default function SellerDashboard() {
                       <Warehouse className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                       <h4 className="font-semibold text-gray-900 dark:text-white">Warehouse Address</h4>
                     </div>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{sellerData.warehouseAddress}</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed pl-7">{sellerData.warehouseAddress}</p>
                   </div>
                 )}
               </div>
@@ -606,11 +620,11 @@ export default function SellerDashboard() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone *</label>
-                  <input
-                    type="tel"
-                    value={editFormData.phone || ''}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
+                  <PhoneNumberInput
+                    value={editFormData.phone}
+                    onChange={(value) => handleInputChange('phone', value)}
+                    onValidationChange={handlePhoneValidation}
+                    placeholder="Enter your phone number"
                   />
                 </div>
                 <div>
