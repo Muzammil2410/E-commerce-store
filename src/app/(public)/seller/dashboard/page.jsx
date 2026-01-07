@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus, Edit, Save, XCircle, Upload, FileText, Tag } from 'lucide-react'
+import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus, Edit, Save, XCircle, Upload, FileText, Tag, Building2, Mail, Phone, MapPin, Warehouse, FileCheck, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import toast from 'react-hot-toast'
 
@@ -399,12 +399,20 @@ export default function SellerDashboard() {
 
         {/* Business Info */}
         <div className="mt-6 sm:mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
-          <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('yourBusinessInformation')}</h3>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                <Building2 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('yourBusinessInformation')}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">Manage your business profile and settings</p>
+              </div>
+            </div>
             {!isEditingBusinessInfo && (
               <button
                 onClick={handleEditBusinessInfo}
-                className="flex items-center space-x-2 px-3 py-2 text-sm bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 text-sm bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
               >
                 <Edit size={16} />
                 <span>Edit</span>
@@ -413,48 +421,133 @@ export default function SellerDashboard() {
           </div>
 
           {!isEditingBusinessInfo ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('businessDetails')}</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('name')}: {sellerData.businessName || t('notProvided')}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('type')}: {sellerData.businessType}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('email')}: {sellerData.email}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('phone')}: {sellerData.phone}</p>
-                {sellerData.businessAddress && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 mt-2">
-                    <span className="font-medium">Business Address:</span> {sellerData.businessAddress}
-                  </p>
-                )}
-                {sellerData.warehouseAddress && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 mt-2">
-                    <span className="font-medium">Warehouse Address:</span> {sellerData.warehouseAddress}
-                  </p>
-                )}
-                {sellerData.ntnTaxId && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 mt-2">
-                    <span className="font-medium">NTN/Tax ID:</span> {sellerData.ntnTaxId}
-                  </p>
-                )}
+            <div className="space-y-6">
+              {/* Account Status */}
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-100 dark:bg-green-900/40 rounded-full">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Account Status</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Your business account is active and ready to sell</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('categories')}</h4>
-                <div className="flex flex-wrap gap-2">
-                  {sellerData.selectedCategories && sellerData.selectedCategories.length > 0 ? (
-                    sellerData.selectedCategories.map((category, index) => (
-                      <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs rounded-full transition-colors duration-300">
-                        {category}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-sm text-gray-500 dark:text-gray-400">No categories selected</span>
+
+              {/* Business Details Card */}
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <Building2 size={18} className="text-blue-600 dark:text-blue-400" />
+                  {t('businessDetails')}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg mt-0.5">
+                      <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Name</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.businessName || t('notProvided')}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg mt-0.5">
+                      <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Type</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.businessType || 'Not specified'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg mt-0.5">
+                      <Mail className="w-4 h-4 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Email Address</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1 break-all">{sellerData.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg mt-0.5">
+                      <Phone className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Phone Number</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.phone || t('notProvided')}</p>
+                    </div>
+                  </div>
+                  {sellerData.ntnTaxId && (
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg mt-0.5">
+                        <FileCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">NTN/Tax ID</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.ntnTaxId}</p>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
-              <div>
-                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Documents</h4>
-                <div className="flex flex-wrap gap-2">
-                  {sellerData.documents && Object.keys(sellerData.documents).filter(key => sellerData.documents[key]).length > 0 ? (
-                    Object.entries(sellerData.documents).map(([key, value]) => {
+
+              {/* Address Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sellerData.businessAddress && (
+                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-2 mb-3">
+                      <MapPin className="w-5 h-5 text-red-600 dark:text-red-400" />
+                      <h4 className="font-semibold text-gray-900 dark:text-white">Business Address</h4>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{sellerData.businessAddress}</p>
+                  </div>
+                )}
+                {sellerData.warehouseAddress && (
+                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Warehouse className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                      <h4 className="font-semibold text-gray-900 dark:text-white">Warehouse Address</h4>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{sellerData.warehouseAddress}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Categories Section */}
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <Tag className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  {t('categories')}
+                </h4>
+                {sellerData.selectedCategories && sellerData.selectedCategories.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {sellerData.selectedCategories.map((category, index) => (
+                      <span 
+                        key={index} 
+                        className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium rounded-lg transition-colors duration-300 border border-blue-200 dark:border-blue-800"
+                      >
+                        {category}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                    <AlertCircle size={16} />
+                    <span className="text-sm">No categories selected</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Documents Section */}
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  Business Documents
+                </h4>
+                {sellerData.documents && Object.keys(sellerData.documents).filter(key => sellerData.documents[key]).length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {Object.entries(sellerData.documents).map(([key, value]) => {
                       if (!value) return null
                       const labels = {
                         businessLicense: 'Business License',
@@ -463,15 +556,22 @@ export default function SellerDashboard() {
                         idCard: 'ID Card'
                       }
                       return (
-                        <span key={key} className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs rounded-full transition-colors duration-300">
-                          {labels[key] || key}
-                        </span>
+                        <div 
+                          key={key} 
+                          className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+                          <span className="text-sm font-medium text-green-800 dark:text-green-300">{labels[key] || key}</span>
+                        </div>
                       )
-                    })
-                  ) : (
-                    <span className="text-sm text-gray-500 dark:text-gray-400">No documents uploaded</span>
-                  )}
-                </div>
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                    <AlertCircle size={16} />
+                    <span className="text-sm">No documents uploaded</span>
+                  </div>
+                )}
               </div>
             </div>
           ) : (

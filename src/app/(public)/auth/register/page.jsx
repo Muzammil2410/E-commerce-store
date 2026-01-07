@@ -56,7 +56,7 @@ export default function RegisterPage() {
             image: '/api/placeholder/40/40'
         }))
         
-        navigate('/profile')
+        navigate('/auth/login')
         setLoading(false)
     }
 
