@@ -206,23 +206,23 @@ export default function AdminDashboard() {
                             <div className="space-y-2">
                                 <button
                                     onClick={() => navigate('/admin/tasks')}
-                                    className="w-full text-left px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                                    className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
                                 >
-                                    <CheckCircle2 className="w-5 h-5 inline mr-2" />
+                                    <CheckCircle2 className="w-4 h-4" />
                                     Manage Tasks
                                 </button>
                                 <button
                                     onClick={() => navigate('/admin/attendance')}
-                                    className="w-full text-left px-4 py-3 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                                    className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
                                 >
-                                    <Clock className="w-5 h-5 inline mr-2" />
+                                    <Clock className="w-4 h-4" />
                                     Monitor Attendance
                                 </button>
                                 <button
                                     onClick={() => navigate('/admin/leave')}
-                                    className="w-full text-left px-4 py-3 bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
+                                    className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
                                 >
-                                    <Calendar className="w-5 h-5 inline mr-2" />
+                                    <Calendar className="w-4 h-4" />
                                     Manage Leaves
                                 </button>
                             </div>

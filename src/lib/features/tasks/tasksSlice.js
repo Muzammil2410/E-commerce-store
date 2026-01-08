@@ -92,11 +92,56 @@ const tasksSlice = createSlice({
                 state.tasks[taskIndex].assignedTo = employeeId
                 state.tasks[taskIndex].updatedAt = new Date().toISOString()
             }
+        },
+        addTaskFile: (state, action) => {
+            const { taskId, file } = action.payload
+            const taskIndex = state.tasks.findIndex(task => task.id === taskId)
+            if (taskIndex !== -1) {
+                if (!state.tasks[taskIndex].files) {
+                    state.tasks[taskIndex].files = []
+                }
+                const fileData = {
+                    id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    uploadedAt: new Date().toISOString(),
+                    url: URL.createObjectURL(file) // In production, this would be a server URL
+                }
+                state.tasks[taskIndex].files.push(fileData)
+                state.tasks[taskIndex].updatedAt = new Date().toISOString()
+            }
+        },
+        addTaskComment: (state, action) => {
+            const { taskId, comment, authorId, authorName } = action.payload
+            const taskIndex = state.tasks.findIndex(task => task.id === taskId)
+            if (taskIndex !== -1) {
+                if (!state.tasks[taskIndex].comments) {
+                    state.tasks[taskIndex].comments = []
+                }
+                const newComment = {
+                    id: `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    text: comment,
+                    authorId,
+                    author: authorName || 'Employee',
+                    timestamp: new Date().toISOString()
+                }
+                state.tasks[taskIndex].comments.push(newComment)
+                state.tasks[taskIndex].updatedAt = new Date().toISOString()
+            }
+        },
+        removeTaskFile: (state, action) => {
+            const { taskId, fileId } = action.payload
+            const taskIndex = state.tasks.findIndex(task => task.id === taskId)
+            if (taskIndex !== -1 && state.tasks[taskIndex].files) {
+                state.tasks[taskIndex].files = state.tasks[taskIndex].files.filter(f => f.id !== fileId)
+                state.tasks[taskIndex].updatedAt = new Date().toISOString()
+            }
         }
     }
 })
 
-export const { addTask, updateTask, updateTaskProgress, deleteTask, assignTask } = tasksSlice.actions
+export const { addTask, updateTask, updateTaskProgress, deleteTask, assignTask, addTaskFile, addTaskComment, removeTaskFile } = tasksSlice.actions
 
 export default tasksSlice.reducer
 

@@ -69,31 +69,11 @@ export default function AdminLeave() {
     }
     
     const getStatusColor = (status) => {
-        switch (status) {
-            case 'approved':
-                return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-            case 'rejected':
-                return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-            case 'pending':
-                return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-            default:
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-        }
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
     }
     
     const getTypeColor = (type) => {
-        switch (type) {
-            case 'sick':
-                return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-            case 'vacation':
-                return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-            case 'personal':
-                return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
-            case 'emergency':
-                return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400'
-            default:
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-        }
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
     }
     
     const getEmployeeBalance = (employeeId) => {
@@ -113,16 +93,16 @@ export default function AdminLeave() {
                 
                 {/* Filters */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
                         <Filter className="w-5 h-5 text-gray-400" />
                         {['pending', 'approved', 'rejected'].map(status => (
                             <button
                                 key={status}
                                 onClick={() => setFilter(status)}
-                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                className={`px-3 py-1 rounded text-sm ${
                                     filter === status
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                        ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
+                                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                                 }`}
                             >
                                 {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -150,12 +130,12 @@ export default function AdminLeave() {
                                     key={request.id}
                                     className="bg-white dark:bg-gray-800 rounded-lg shadow p-6"
                                 >
-                                    <div className="flex items-start justify-between mb-4">
-                                        <div className="flex items-center gap-4">
+                                    <div className="flex items-center justify-between mb-4 gap-4">
+                                        <div className="flex items-center gap-4 flex-1 min-w-0">
                                             <div className="flex-shrink-0 h-12 w-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
                                                 <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                                             </div>
-                                            <div>
+                                            <div className="min-w-0">
                                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                                                     {request.employeeName}
                                                 </h3>
@@ -166,11 +146,11 @@ export default function AdminLeave() {
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getTypeColor(request.type)}`}>
+                                        <div className="flex items-center gap-2 flex-shrink-0">
+                                            <span className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap ${getTypeColor(request.type)}`}>
                                                 {request.type}
                                             </span>
-                                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(request.status)}`}>
+                                            <span className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap ${getStatusColor(request.status)}`}>
                                                 {request.status}
                                             </span>
                                         </div>

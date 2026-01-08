@@ -79,19 +79,19 @@ export default function AdminAttendance() {
                     </div>
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Present</p>
-                        <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.present}</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.present}</p>
                     </div>
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Late</p>
-                        <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.late}</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.late}</p>
                     </div>
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Absent</p>
-                        <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.absent}</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.absent}</p>
                     </div>
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Clocked In</p>
-                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.clockedIn}</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.clockedIn}</p>
                     </div>
                 </div>
                 
