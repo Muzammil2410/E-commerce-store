@@ -157,9 +157,10 @@ const ShopByCategory = () => {
                             onClick={() => setCurrentSlide(index)}
                             className={`w-3 h-3 rounded-full transition-all duration-300 ${
                                 index === currentSlide 
-                                    ? 'bg-blue-600 scale-125' 
+                                    ? 'scale-125' 
                                     : 'bg-gray-300 hover:bg-gray-400'
                             }`}
+                            style={index === currentSlide ? { backgroundColor: '#3977ED' } : {}}
                         />
                     ))}
                 </div>
@@ -167,7 +168,12 @@ const ShopByCategory = () => {
             
             {/* View All Categories Button */}
             <div className='text-center mt-8 sm:mt-12'>
-                <button className='bg-blue-600 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:bg-blue-700 hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md'>
+                <button 
+                    className='text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md'
+                    style={{ backgroundColor: '#3977ED' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                >
                     {t('viewAllCategories')}
                 </button>
             </div>

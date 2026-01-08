@@ -32,13 +32,48 @@ export default function EmployeeLeave() {
     if (!currentUser) return null
     
     const employeeRequests = requests.filter(req => req.employeeId === currentUser.id)
-    const employeeBalance = balances[currentUser.id] || {
+    
+    // Calculate accurate counts from approved leave requests
+    const approvedRequests = employeeRequests.filter(req => req.status === 'approved')
+    const sickUsed = approvedRequests
+        .filter(req => req.type === 'sick')
+        .reduce((sum, req) => sum + (req.days || 0), 0)
+    const vacationUsed = approvedRequests
+        .filter(req => req.type === 'vacation')
+        .reduce((sum, req) => sum + (req.days || 0), 0)
+    const personalUsed = approvedRequests
+        .filter(req => req.type === 'personal')
+        .reduce((sum, req) => sum + (req.days || 0), 0)
+    const totalUsed = approvedRequests.reduce((sum, req) => sum + (req.days || 0), 0)
+    
+    // Get base balance from Redux or use defaults
+    const baseBalance = balances[currentUser.id] || {
         total: 20,
-        used: 0,
-        remaining: 20,
-        sick: { total: 10, used: 0, remaining: 10 },
-        vacation: { total: 15, used: 0, remaining: 15 },
-        personal: { total: 5, used: 0, remaining: 5 }
+        sick: { total: 10 },
+        vacation: { total: 15 },
+        personal: { total: 5 }
+    }
+    
+    // Calculate accurate remaining balances
+    const employeeBalance = {
+        total: baseBalance.total,
+        used: totalUsed,
+        remaining: baseBalance.total - totalUsed,
+        sick: {
+            total: baseBalance.sick?.total || 10,
+            used: sickUsed,
+            remaining: (baseBalance.sick?.total || 10) - sickUsed
+        },
+        vacation: {
+            total: baseBalance.vacation?.total || 15,
+            used: vacationUsed,
+            remaining: (baseBalance.vacation?.total || 15) - vacationUsed
+        },
+        personal: {
+            total: baseBalance.personal?.total || 5,
+            used: personalUsed,
+            remaining: (baseBalance.personal?.total || 5) - personalUsed
+        }
     }
     
     const handleInputChange = (e) => {
@@ -140,7 +175,14 @@ export default function EmployeeLeave() {
             <div className="max-w-4xl mx-auto">
                 <button
                     onClick={() => navigate('/employee/dashboard')}
-                    className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mb-6"
+                    className="inline-flex items-center gap-2 hover:underline mb-6 transition-colors"
+                    style={{ color: '#3977ED' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#2d5fcc'
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#3977ED'
+                    }}
                 >
                     <ArrowLeft className="w-5 h-5" />
                     Back to Dashboard
@@ -152,7 +194,14 @@ export default function EmployeeLeave() {
                     </h1>
                     <button
                         onClick={() => setShowForm(!showForm)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                        className="px-4 py-2 text-white rounded-lg font-medium transition-colors"
+                        style={{ backgroundColor: '#3977ED' }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#2d5fcc'
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#3977ED'
+                        }}
                     >
                         {showForm ? 'Cancel' : '+ Request Leave'}
                     </button>
@@ -164,30 +213,30 @@ export default function EmployeeLeave() {
                         Leave Balance
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                        <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total</p>
-                            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
                                 {employeeBalance.remaining}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                 {employeeBalance.used} used
                             </p>
                         </div>
-                        <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4">
+                        <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Sick</p>
-                            <p className="text-2xl font-bold text-red-600 dark:text-red-400">
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
                                 {employeeBalance.sick?.remaining || 0}
                             </p>
                         </div>
-                        <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
+                        <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Vacation</p>
-                            <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
                                 {employeeBalance.vacation?.remaining || 0}
                             </p>
                         </div>
-                        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
+                        <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Personal</p>
-                            <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
                                 {employeeBalance.personal?.remaining || 0}
                             </p>
                         </div>
@@ -293,14 +342,28 @@ export default function EmployeeLeave() {
                             <div className="flex gap-3">
                                 <button
                                     type="submit"
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     Submit Request
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setShowForm(false)}
-                                    className="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 font-medium transition-colors"
+                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     Cancel
                                 </button>

@@ -735,7 +735,13 @@ const Navbar = () => {
                                 </div>
                             </div>
                         ) : (
-                            <Link to="/auth" className="relative px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap">
+                            <Link 
+                                to="/auth" 
+                                className="relative px-5 md:px-6 py-2.5 md:py-3 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap"
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                            >
                                 <User size={18} className="md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
                                 <span>{t('loginRegister')}</span>
                             </Link>
@@ -889,7 +895,10 @@ const Navbar = () => {
                                 <button 
                                     type="submit" 
                                     aria-label="Submit search"
-                                    className="px-4 py-2.5 bg-blue-600 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors touch-manipulation"
+                                    className="px-4 py-2.5 text-white text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors touch-manipulation"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                 >
                                     {t('go')}
                                 </button>
@@ -1226,7 +1235,10 @@ const Navbar = () => {
                             {/* Save Button */}
                             <button
                                 onClick={handleSaveLanguage}
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                                className="w-full text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                             >
                                 {t('save')}
                             </button>

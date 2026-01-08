@@ -156,7 +156,14 @@ export default function AdminDashboard() {
                             </h2>
                             <button
                                 onClick={() => navigate('/admin/leave')}
-                                className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                                className="text-sm hover:underline transition-colors"
+                                style={{ color: '#3977ED' }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.color = '#2d5fcc'
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.color = '#3977ED'
+                                }}
                             >
                                 View All
                             </button>
@@ -206,21 +213,42 @@ export default function AdminDashboard() {
                             <div className="space-y-2">
                                 <button
                                     onClick={() => navigate('/admin/tasks')}
-                                    className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     <CheckCircle2 className="w-4 h-4" />
                                     Manage Tasks
                                 </button>
                                 <button
                                     onClick={() => navigate('/admin/attendance')}
-                                    className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     <Clock className="w-4 h-4" />
                                     Monitor Attendance
                                 </button>
                                 <button
                                     onClick={() => navigate('/admin/leave')}
-                                    className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     <Calendar className="w-4 h-4" />
                                     Manage Leaves

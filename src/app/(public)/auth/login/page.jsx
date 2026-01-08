@@ -115,7 +115,10 @@ export default function LoginPage() {
                         <button
                             type="button"
                             onClick={fillDemoCredentials}
-                            className="mt-3 text-xs bg-blue-600 dark:bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                            className="mt-3 text-xs text-white px-3 py-1 rounded transition-colors"
+                            style={{ backgroundColor: '#3977ED' }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                         >
                             {t('fillDemoCredentials')}
                         </button>
@@ -230,7 +233,10 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 px-4 rounded-lg focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400"
+                            className="w-full py-3 px-4 rounded-lg focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-white"
+                            style={{ backgroundColor: '#3977ED' }}
+                            onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#2d5fcc')}
+                            onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#3977ED')}
                         >
                             {loading ? t('signingIn') : t('signIn')}
                         </button>

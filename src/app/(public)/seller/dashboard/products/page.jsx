@@ -84,7 +84,14 @@ export default function SellerProducts() {
             </div>
             <button
               onClick={() => navigate('/seller/dashboard/products/add')}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors"
+              style={{ backgroundColor: '#3977ED' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#2d5fcc'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#3977ED'
+              }}
             >
               <Plus size={20} />
               <span>{t('addProduct')}</span>
@@ -107,7 +114,14 @@ export default function SellerProducts() {
             </div>
         <button
           onClick={() => navigate('/seller/dashboard/products/add', { replace: false })}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors"
+          style={{ backgroundColor: '#3977ED' }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#2d5fcc'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#3977ED'
+          }}
         >
           <Plus size={20} />
           <span>{t('addProduct')}</span>
@@ -265,7 +279,14 @@ export default function SellerProducts() {
             {!searchTerm && filterStatus === 'all' && (
               <button
                 onClick={() => navigate('/seller/dashboard/products/add')}
-                className="flex items-center space-x-2 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors mx-auto"
+                className="flex items-center space-x-2 px-6 py-3 text-white rounded-lg transition-colors mx-auto"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2d5fcc'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3977ED'
+                }}
               >
                 <Plus size={20} />
                 <span>{t('addYourFirstProduct')}</span>

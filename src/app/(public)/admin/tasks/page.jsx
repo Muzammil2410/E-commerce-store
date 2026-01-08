@@ -107,7 +107,14 @@ export default function AdminTasks() {
                     </h1>
                     <button
                         onClick={() => setShowForm(!showForm)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors flex items-center gap-2"
+                        className="px-4 py-2 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                        style={{ backgroundColor: '#3977ED' }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#2d5fcc'
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#3977ED'
+                        }}
                     >
                         <Plus className="w-5 h-5" />
                         Assign Task
@@ -199,14 +206,28 @@ export default function AdminTasks() {
                             <div className="flex gap-3">
                                 <button
                                     type="submit"
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     Assign Task
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setShowForm(false)}
-                                    className="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 font-medium transition-colors"
+                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     Cancel
                                 </button>
@@ -225,9 +246,20 @@ export default function AdminTasks() {
                                 onClick={() => setFilter(status)}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                     filter === status
-                                        ? 'bg-blue-600 text-white'
+                                        ? 'text-white'
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                 }`}
+                                style={filter === status ? { backgroundColor: '#3977ED' } : {}}
+                                onMouseEnter={(e) => {
+                                    if (filter === status) {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (filter === status) {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }
+                                }}
                             >
                                 {status.charAt(0).toUpperCase() + status.slice(1)}
                             </button>
@@ -287,8 +319,8 @@ export default function AdminTasks() {
                                                 </div>
                                                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                                     <div
-                                                        className="bg-blue-600 h-2 rounded-full"
-                                                        style={{ width: `${task.progress}%` }}
+                                                        className="h-2 rounded-full"
+                                                        style={{ width: `${task.progress}%`, backgroundColor: '#3977ED' }}
                                                     ></div>
                                                 </div>
                                             </div>

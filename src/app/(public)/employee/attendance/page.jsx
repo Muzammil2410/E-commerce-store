@@ -97,7 +97,14 @@ export default function EmployeeAttendance() {
             <div className="max-w-4xl mx-auto">
                 <button
                     onClick={() => navigate('/employee/dashboard')}
-                    className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mb-6"
+                    className="inline-flex items-center gap-2 hover:underline mb-6 transition-colors"
+                    style={{ color: '#3977ED' }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#2d5fcc'
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#3977ED'
+                    }}
                 >
                     <ArrowLeft className="w-5 h-5" />
                     Back to Dashboard
@@ -138,7 +145,14 @@ export default function EmployeeAttendance() {
                             {!isClockedIn ? (
                                 <button
                                     onClick={handleClockIn}
-                                    className="px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg transition-colors shadow-lg"
+                                    className="px-8 py-4 text-white rounded-lg font-semibold text-lg transition-colors shadow-lg"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     <Clock className="w-5 h-5 inline mr-2" />
                                     Clock In
@@ -146,7 +160,14 @@ export default function EmployeeAttendance() {
                             ) : (
                                 <button
                                     onClick={handleClockOut}
-                                    className="px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-lg transition-colors shadow-lg"
+                                    className="px-8 py-4 text-white rounded-lg font-semibold text-lg transition-colors shadow-lg"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
                                 >
                                     <Clock className="w-5 h-5 inline mr-2" />
                                     Clock Out

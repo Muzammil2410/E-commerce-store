@@ -99,7 +99,14 @@ export default function EmployeeTasks() {
                 <div className="mb-6">
                     <button
                         onClick={() => navigate('/employee/dashboard')}
-                        className="text-blue-600 dark:text-blue-400 hover:underline mb-4 inline-flex items-center"
+                        className="hover:underline mb-4 inline-flex items-center transition-colors"
+                        style={{ color: '#3977ED' }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#2d5fcc'
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#3977ED'
+                        }}
                     >
                         ← Back to Dashboard
                     </button>
@@ -124,9 +131,20 @@ export default function EmployeeTasks() {
                                 onClick={() => setFilter(status)}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                     filter === status
-                                        ? 'bg-blue-600 text-white'
+                                        ? 'text-white'
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                 }`}
+                                style={filter === status ? { backgroundColor: '#3977ED' } : {}}
+                                onMouseEnter={(e) => {
+                                    if (filter === status) {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (filter === status) {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }
+                                }}
                             >
                                 {status.charAt(0).toUpperCase() + status.slice(1)}
                             </button>
@@ -203,8 +221,8 @@ export default function EmployeeTasks() {
                                                 </div>
                                                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                                     <div
-                                                        className="bg-blue-600 h-2 rounded-full transition-all"
-                                                        style={{ width: `${task.progress}%` }}
+                                                        className="h-2 rounded-full transition-all"
+                                                        style={{ width: `${task.progress}%`, backgroundColor: '#3977ED' }}
                                                     ></div>
                                                 </div>
                                             </div>
@@ -218,7 +236,14 @@ export default function EmployeeTasks() {
                                                         e.stopPropagation()
                                                         handleStatusChange(task.id, 'in-progress')
                                                     }}
-                                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
+                                                    className="px-4 py-2 text-white rounded-lg text-sm font-medium transition-colors"
+                                                    style={{ backgroundColor: '#3977ED' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                                    }}
                                                 >
                                                     Start Task
                                                 </button>
@@ -230,7 +255,14 @@ export default function EmployeeTasks() {
                                                             e.stopPropagation()
                                                             handleStatusChange(task.id, 'completed')
                                                         }}
-                                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium transition-colors"
+                                                        className="px-4 py-2 text-white rounded-lg text-sm font-medium transition-colors"
+                                                        style={{ backgroundColor: '#3977ED' }}
+                                                        onMouseEnter={(e) => {
+                                                            e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.currentTarget.style.backgroundColor = '#3977ED'
+                                                        }}
                                                     >
                                                         Mark Complete
                                                     </button>
@@ -239,7 +271,14 @@ export default function EmployeeTasks() {
                                                             e.stopPropagation()
                                                             navigate(`/employee/tasks/${task.id}`)
                                                         }}
-                                                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 text-sm font-medium transition-colors"
+                                                        className="px-4 py-2 text-white rounded-lg text-sm font-medium transition-colors"
+                                                        style={{ backgroundColor: '#3977ED' }}
+                                                        onMouseEnter={(e) => {
+                                                            e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.currentTarget.style.backgroundColor = '#3977ED'
+                                                        }}
                                                     >
                                                         Update Progress
                                                     </button>

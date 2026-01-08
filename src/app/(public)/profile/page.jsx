@@ -401,7 +401,11 @@ export default function ProfilePage() {
                                             <User className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
                                         </div>
                                     )}
-                                    <label className="absolute bottom-0 right-0 bg-blue-600 dark:bg-blue-500 text-white rounded-full p-1 sm:p-1.5 cursor-pointer hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-lg">
+                                    <label className="absolute bottom-0 right-0 text-white rounded-full p-1 sm:p-1.5 cursor-pointer transition-colors shadow-lg"
+                                        style={{ backgroundColor: '#3977ED' }}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                                    >
                                         <Camera size={12} className="sm:w-3.5 sm:h-3.5" />
                                         <input
                                             type="file"
@@ -423,9 +427,10 @@ export default function ProfilePage() {
                                         onClick={() => handleTabChange(tab.id)}
                                         className={`w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-left transition-colors text-sm sm:text-base ${
                                             activeTab === tab.id
-                                                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700'
+                                                ? 'text-white border'
                                                 : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                         }`}
+                                        style={activeTab === tab.id ? { backgroundColor: '#3977ED', borderColor: '#3977ED' } : {}}
                                     >
                                         <tab.icon size={18} className="sm:w-5 sm:h-5 flex-shrink-0" />
                                         <span className="truncate">{tab.label}</span>
@@ -473,7 +478,11 @@ export default function ProfilePage() {
                                         </div>
                                         <div>
                                             <label className="cursor-pointer">
-                                                <span className="inline-flex items-center gap-2 bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
+                                                <span className="inline-flex items-center gap-2 text-white px-4 py-2 rounded-lg transition-colors"
+                                                    style={{ backgroundColor: '#3977ED' }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                                                >
                                                     <Camera size={18} />
                                                     {profilePicture ? t('changePicture') : t('uploadPicture')}
                                                 </span>
@@ -525,7 +534,10 @@ export default function ProfilePage() {
                                         <>
                                             <button 
                                                 onClick={handleSaveProfile}
-                                                className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                                                className="text-white px-6 py-3 rounded-lg transition-colors"
+                                                style={{ backgroundColor: '#3977ED' }}
+                                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                             >
                                                 {t('saveChanges')}
                                             </button>
@@ -539,7 +551,10 @@ export default function ProfilePage() {
                                     ) : (
                                         <button 
                                             onClick={handleEditProfile}
-                                            className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                                            className="text-white px-6 py-3 rounded-lg transition-colors"
+                                            style={{ backgroundColor: '#3977ED' }}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                         >
                                             {t('editProfile')}
                                         </button>
@@ -575,7 +590,10 @@ export default function ProfilePage() {
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">{t('savedAddresses')}</h2>
                                     <button
                                         onClick={() => setShowAddressModal(true)}
-                                        className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center gap-2"
+                                        className="text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                                        style={{ backgroundColor: '#3977ED' }}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                     >
                                         <Plus size={20} />
                                         {t('addAddress')}
@@ -625,7 +643,10 @@ export default function ProfilePage() {
                                         <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">{t('addAddressToCheckout')}</p>
                                         <button
                                             onClick={() => setShowAddressModal(true)}
-                                            className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                                            className="text-white px-6 py-3 rounded-lg transition-colors"
+                                            style={{ backgroundColor: '#3977ED' }}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                         >
                                             {t('addAddress')}
                                         </button>
@@ -666,7 +687,10 @@ export default function ProfilePage() {
                                                     <div className="flex items-center gap-2 pt-2">
                                                         <Link
                                                             to={`/product/${item.product.id}`}
-                                                            className="flex-1 bg-blue-600 dark:bg-blue-500 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-sm"
+                                                            className="flex-1 text-white text-center py-2 px-4 rounded-lg transition-colors text-sm"
+                                                            style={{ backgroundColor: '#3977ED' }}
+                                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                                         >
                                                             {t('viewProduct')}
                                                         </Link>
@@ -682,7 +706,10 @@ export default function ProfilePage() {
                                         <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">{t('saveItemsForLater')}</p>
                                         <Link
                                             to="/shop"
-                                            className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                                            className="text-white px-6 py-3 rounded-lg transition-colors inline-block"
+                                            style={{ backgroundColor: '#3977ED' }}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                         >
                                             {t('startShopping')}
                                         </Link>
@@ -805,7 +832,10 @@ export default function ProfilePage() {
                             <div className="flex items-center gap-3 pt-4">
                                 <button
                                     type="submit"
-                                    className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                                    className="flex-1 text-white py-3 rounded-lg transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                                 >
                                     {editingAddress ? t('updateAddress') : t('addAddress')}
                                 </button>

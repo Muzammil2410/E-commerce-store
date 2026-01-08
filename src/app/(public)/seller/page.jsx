@@ -51,7 +51,15 @@ export default function SellerChoicePage() {
                                 <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">
                                     {t('signInToExistingSeller')}
                                 </p>
-                                <button className="w-full bg-green-600 dark:bg-green-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 dark:hover:bg-green-600 transition-colors">
+                                <button className="w-full text-white py-3 px-6 rounded-lg font-medium transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
+                                >
                                     {t('signIn')}
                                 </button>
                             </div>
@@ -72,7 +80,15 @@ export default function SellerChoicePage() {
                                 <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">
                                     {t('createSellerAccount')}
                                 </p>
-                                <button className="w-full bg-blue-600 dark:bg-blue-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
+                                <button className="w-full text-white py-3 px-6 rounded-lg font-medium transition-colors"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }}
+                                >
                                     {t('getStarted')}
                                 </button>
                             </div>

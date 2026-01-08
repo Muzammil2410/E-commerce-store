@@ -395,7 +395,7 @@ export default function EmployeeManagement() {
       <head>
         <title>Employee Monthly Report - ${monthName} ${selectedYear}</title>
         <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
+          body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; margin: 20px; }
           h1 { color: #1f2937; margin-bottom: 10px; }
           h2 { color: #4b5563; margin-top: 30px; margin-bottom: 15px; }
           table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -518,7 +518,14 @@ export default function EmployeeManagement() {
                 resetForm()
                 setShowAddModal(true)
               }}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors"
+              style={{ backgroundColor: '#3977ED' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#2d5fcc'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#3977ED'
+              }}
             >
               <Plus size={20} />
               <span className="hidden sm:inline">Add Employee</span>
@@ -609,7 +616,14 @@ export default function EmployeeManagement() {
                   {employees.length === 0 && (
                     <button
                       onClick={() => setShowAddModal(true)}
-                      className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                      className="inline-flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors"
+                      style={{ backgroundColor: '#3977ED' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#3977ED'
+                      }}
                     >
                       <Plus size={20} />
                       <span>Add Employee</span>
@@ -1018,7 +1032,14 @@ export default function EmployeeManagement() {
                           }))
                           setShowSalaryModal(true)
                         }}
-                        className="px-3 py-1.5 text-sm bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                        className="px-3 py-1.5 text-sm text-white rounded-lg transition-colors"
+                        style={{ backgroundColor: '#3977ED' }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#2d5fcc'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#3977ED'
+                        }}
                       >
                         <Settings size={16} className="inline mr-1" />
                         Manage
@@ -1211,7 +1232,14 @@ export default function EmployeeManagement() {
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                    className="flex-1 px-4 py-2 text-white rounded-lg transition-colors"
+                    style={{ backgroundColor: '#3977ED' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#2d5fcc'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#3977ED'
+                    }}
                   >
                     {editingEmployee ? 'Update' : 'Add'} Employee
                   </button>
@@ -1305,7 +1333,14 @@ export default function EmployeeManagement() {
                   <button
                     type="button"
                     onClick={() => handleSaveSalary(selectedEmployee.id)}
-                    className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                    className="flex-1 px-4 py-2 text-white rounded-lg transition-colors"
+                    style={{ backgroundColor: '#3977ED' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#2d5fcc'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#3977ED'
+                    }}
                   >
                     Save Changes
                   </button>

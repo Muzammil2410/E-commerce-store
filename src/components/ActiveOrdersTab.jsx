@@ -152,7 +152,10 @@ export default function ActiveOrdersTab({ orders, setOrders }) {
             <div className="flex gap-3">
               <button
                 onClick={() => handleReschedule(showRescheduleModal)}
-                className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                className="flex-1 text-white py-2 rounded-lg transition-colors"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
               >
                 {t('confirm')}
               </button>

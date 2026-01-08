@@ -172,7 +172,10 @@ const ProductDetails = ({ product }) => {
                     <button
                         type="button"
                         onClick={() => navigate('/bargain', { state: { from: location.pathname } })}
-                        className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95 transition-all"
+                        className="flex items-center gap-2 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95 transition-all"
+                        style={{ backgroundColor: '#3977ED' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                         aria-label="Bargain"
                     >
                         💬 Bargain
@@ -198,7 +201,10 @@ const ProductDetails = ({ product }) => {
                     <button 
                         onClick={() => !cart[productId] ? addToCartHandler() : navigate('/cart')} 
                         aria-label={!cart[productId] ? `Add ${translateProductName(product.name)} to cart` : 'View cart'}
-                        className="bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-slate-900 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-gray-600 focus:ring-offset-2"
+                        className="text-white px-8 sm:px-10 py-3 text-sm font-medium rounded active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        style={{ backgroundColor: '#3977ED' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                     >
                         {!cart[productId] ? t('addToCart') : t('viewCart')}
                     </button>
@@ -207,7 +213,10 @@ const ProductDetails = ({ product }) => {
                     <button
                         onClick={buyItNowHandler}
                         aria-label={`Buy ${translateProductName(product.name)} now`}
-                        className="bg-yellow-500 dark:bg-yellow-600 dark:hover:bg-yellow-500 text-slate-900 dark:text-gray-100 px-8 sm:px-10 py-3 text-sm font-medium rounded hover:bg-yellow-400 active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-yellow-500 dark:focus:ring-yellow-600 focus:ring-offset-2"
+                        className="text-white px-8 sm:px-10 py-3 text-sm font-medium rounded active:scale-95 transition w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        style={{ backgroundColor: '#3977ED' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                     >
                         {t('buyItNow')}
                     </button>

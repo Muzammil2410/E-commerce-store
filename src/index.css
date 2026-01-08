@@ -2,7 +2,7 @@
 
 @theme {
   --breakpoint-xs: 475px;
-  --font-family-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-family-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-family-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 

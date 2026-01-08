@@ -2,8 +2,7 @@
  * Typography Example Component
  * 
  * This component demonstrates the proper usage of the global typography system:
- * - Poppins for headings (font-weight 600-700)
- * - Inter for body text (font-weight 400-500)
+ * - Inter for all text (headings and body) - font-weight 300-900
  * 
  * All typography is applied globally via CSS, so no font families need to be
  * hardcoded in components. Simply use semantic HTML elements and Tailwind utilities.
@@ -12,7 +11,7 @@
 export default function TypographyExample() {
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-8">
-      {/* Headings - Automatically use Poppins with font-weight 600-700 */}
+      {/* Headings - Automatically use Inter with font-weight 600-700 */}
       <section className="space-y-4">
         <h1>Heading 1 - Main Title</h1>
         <h2>Heading 2 - Section Title</h2>
@@ -43,7 +42,7 @@ export default function TypographyExample() {
           <h2 className="mb-4">Article Title</h2>
           <p className="font-normal mb-4">
             This demonstrates a typical article structure. The heading automatically
-            uses Poppins with font-weight 700, while the body text uses Inter with
+            uses Inter with font-weight 700, while the body text uses Inter with
             font-weight 400. No additional font classes are needed.
           </p>
           <p className="font-normal">
@@ -75,10 +74,10 @@ export default function TypographyExample() {
       <section className="space-y-4">
         <h3>Semantic Font Family Utilities</h3>
         <p className="font-heading font-semibold text-lg">
-          This text uses font-heading utility (Poppins) with semibold weight
+          This text uses font-heading utility (Inter) with semibold weight
         </p>
         <p className="font-heading font-bold text-xl">
-          This text uses font-heading utility (Poppins) with bold weight
+          This text uses font-heading utility (Inter) with bold weight
         </p>
         <p className="font-body font-normal">
           This text explicitly uses font-body utility (Inter) with normal weight

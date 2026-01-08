@@ -16,7 +16,13 @@ const PictureBoxes = () => {
                         <div className='text-left z-10 flex-1'>
                             <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('newArrivals')}</h3>
                             <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('discoverLatestTrends')}</p>
-                            <Link to="/shop" className='inline-block bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
+                            <Link 
+                                to="/shop" 
+                                className='inline-block text-white px-6 py-2 rounded-full transition-colors duration-200'
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                            >
                                 {t('shopNow')}
                             </Link>
                         </div>
@@ -31,7 +37,13 @@ const PictureBoxes = () => {
                         <div className='text-left z-10 flex-1'>
                             <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('specialOffers')}</h3>
                             <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('limitedTimeDeals')}</p>
-                            <Link to="/shop" className='inline-block bg-blue-600 dark:bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200'>
+                            <Link 
+                                to="/shop" 
+                                className='inline-block text-white px-6 py-2 rounded-full transition-colors duration-200'
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                            >
                                 {t('viewOffers')}
                             </Link>
                         </div>

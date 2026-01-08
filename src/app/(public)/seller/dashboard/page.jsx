@@ -220,7 +220,14 @@ export default function SellerDashboard() {
             <div className="flex flex-col space-y-3">
             <button
               onClick={() => navigate('/seller/dashboard/products/add', { replace: false })}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors"
+              style={{ backgroundColor: '#3977ED' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#2d5fcc'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#3977ED'
+              }}
             >
               <Plus size={20} />
               <span>{t('addProduct')}</span>
@@ -267,7 +274,14 @@ export default function SellerDashboard() {
 
               <button 
                 onClick={() => navigate('/seller/dashboard/products/add')}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2d5fcc'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3977ED'
+                }}
               >
                 <Plus size={20} />
                 <span>{t('addProduct')}</span>
@@ -426,7 +440,14 @@ export default function SellerDashboard() {
             {!isEditingBusinessInfo && (
               <button
                 onClick={handleEditBusinessInfo}
-                className="flex items-center space-x-2 px-4 py-2 text-sm bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
+                className="flex items-center space-x-2 px-4 py-2 text-sm text-white rounded-lg transition-colors shadow-sm"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2d5fcc'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3977ED'
+                }}
               >
                 <Edit size={16} />
                 <span>Edit</span>
@@ -461,7 +482,7 @@ export default function SellerDashboard() {
                       <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Name</p>
+                      <p className="text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Name</p>
                       <p className="text-sm text-gray-900 dark:text-white mt-1">{sellerData.businessName || t('notProvided')}</p>
                     </div>
                   </div>
@@ -470,7 +491,7 @@ export default function SellerDashboard() {
                       <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Type</p>
+                      <p className="text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Business Type</p>
                       <p className="text-sm text-gray-900 dark:text-white mt-1">{sellerData.businessType || 'Not specified'}</p>
                     </div>
                   </div>
@@ -479,7 +500,7 @@ export default function SellerDashboard() {
                       <Mail className="w-4 h-4 text-green-600 dark:text-green-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Email Address</p>
+                      <p className="text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Email Address</p>
                       <p className="text-sm text-gray-900 dark:text-white mt-1 break-all">{sellerData.email}</p>
                     </div>
                   </div>
@@ -488,7 +509,7 @@ export default function SellerDashboard() {
                       <Phone className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Phone Number</p>
+                      <p className="text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Phone Number</p>
                       <p className="text-sm text-gray-900 dark:text-white mt-1">{sellerData.phone || t('notProvided')}</p>
                     </div>
                   </div>
@@ -769,7 +790,14 @@ export default function SellerDashboard() {
                 </button>
                 <button
                   onClick={handleSaveBusinessInfo}
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors"
+                  style={{ backgroundColor: '#3977ED' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#2d5fcc'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#3977ED'
+                  }}
                 >
                   <Save size={16} />
                   <span>Save Changes</span>
@@ -853,7 +881,14 @@ export default function SellerDashboard() {
               {/* Save Button */}
               <button
                 onClick={handleSaveLanguage}
-                className="w-full bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md dark:shadow-gray-900/50 hover:shadow-lg"
+                className="w-full text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md dark:shadow-gray-900/50 hover:shadow-lg"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2d5fcc'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3977ED'
+                }}
               >
                 {t('save')}
               </button>

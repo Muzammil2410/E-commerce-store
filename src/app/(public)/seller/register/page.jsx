@@ -454,7 +454,7 @@ export default function SellerRegister() {
                   }`}
                 />
                 <span className="text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                  I agree to the <button type="button" onClick={() => setShowTermsModal(true)} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors duration-300">Terms and Conditions</button> and <button type="button" onClick={() => setShowPrivacyModal(true)} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors duration-300">Privacy Policy</button>
+                  I agree to the <button type="button" onClick={() => setShowTermsModal(true)} className="text-[#3977ED] dark:text-[#3977ED] hover:text-[#2d5fcc] dark:hover:text-[#2d5fcc] underline transition-colors duration-300">Terms and Conditions</button> and <button type="button" onClick={() => setShowPrivacyModal(true)} className="text-[#3977ED] dark:text-[#3977ED] hover:text-[#2d5fcc] dark:hover:text-[#2d5fcc] underline transition-colors duration-300">Privacy Policy</button>
                 </span>
               </label>
               {errors.agreeToTerms && <p className="text-red-500 dark:text-red-400 text-sm mt-1 transition-colors duration-300">{errors.agreeToTerms}</p>}
@@ -567,7 +567,14 @@ export default function SellerRegister() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="flex items-center space-x-2 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                    className="flex items-center space-x-2 px-6 py-3 text-white rounded-lg font-medium transition-colors"
+                    style={{ backgroundColor: '#3977ED' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#2d5fcc'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#3977ED'
+                    }}
                   >
                     <span>Next</span>
                     <ChevronRight size={20} />
@@ -577,7 +584,18 @@ export default function SellerRegister() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex items-center space-x-2 px-6 py-3 bg-green-600 dark:bg-green-500 text-white rounded-lg font-medium hover:bg-green-700 dark:hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center space-x-2 px-6 py-3 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: isSubmitting ? '#3977ED' : '#3977ED' }}
+                    onMouseEnter={(e) => {
+                      if (!isSubmitting) {
+                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSubmitting) {
+                        e.currentTarget.style.backgroundColor = '#3977ED'
+                      }
+                    }}
                   >
                     {isSubmitting ? (
                       <>
@@ -725,7 +743,14 @@ export default function SellerRegister() {
             <div className="flex justify-end p-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0 transition-colors duration-300">
               <button
                 onClick={() => setShowTermsModal(false)}
-                className="px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                className="px-6 py-2 text-white rounded-lg transition-colors"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2d5fcc'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3977ED'
+                }}
               >
                 Close
               </button>
@@ -878,7 +903,14 @@ export default function SellerRegister() {
             <div className="flex justify-end p-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0 transition-colors duration-300">
               <button
                 onClick={() => setShowPrivacyModal(false)}
-                className="px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                className="px-6 py-2 text-white rounded-lg transition-colors"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2d5fcc'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3977ED'
+                }}
               >
                 Close
               </button>

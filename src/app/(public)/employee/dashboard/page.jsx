@@ -462,7 +462,7 @@ export default function EmployeeDashboard() {
                                     {employeeTasks.length}
                                 </p>
                             </div>
-                            <CheckCircle2 className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <CheckCircle2 className="w-5 h-5" style={{ color: '#3977ED' }} />
                         </div>
                         <div className="mt-3 flex gap-3 text-xs text-gray-600 dark:text-gray-400">
                             <span>{pendingTasks.length} Pending</span>
@@ -480,7 +480,7 @@ export default function EmployeeDashboard() {
                                     {isClockedIn ? 'Clocked In' : todayAttendance?.status || 'Not Started'}
                                 </p>
                             </div>
-                            <Clock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <Clock className="w-5 h-5" style={{ color: '#3977ED' }} />
                         </div>
                         {todayAttendance?.hoursWorked > 0 && (
                             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -498,7 +498,7 @@ export default function EmployeeDashboard() {
                                     {efficiencyScore}%
                                 </p>
                             </div>
-                            <Zap className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <Zap className="w-5 h-5" style={{ color: '#3977ED' }} />
                         </div>
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             {onTimeTasks.length} on-time, {delayedTasks.length} delayed
@@ -514,7 +514,7 @@ export default function EmployeeDashboard() {
                                     {overtimeData.overtime.toFixed(1)}
                                 </p>
                             </div>
-                            <Clock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <Clock className="w-5 h-5" style={{ color: '#3977ED' }} />
                         </div>
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             This month
@@ -659,9 +659,9 @@ export default function EmployeeDashboard() {
                                     <span className="text-gray-600 dark:text-gray-400">Absent</span>
                                 </div>
                             </div>
-                            <div className="mt-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                                <p className="text-xs font-semibold text-purple-800 dark:text-purple-300 mb-1">Overtime Summary</p>
-                                <p className="text-sm font-bold text-purple-900 dark:text-purple-200">
+                            <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <p className="text-xs font-semibold text-blue-800 dark:text-blue-300 mb-1">Overtime Summary</p>
+                                <p className="text-sm font-bold text-blue-900 dark:text-blue-200">
                                     {overtimeData.overtime.toFixed(1)} hours this month
                                 </p>
                             </div>
@@ -734,7 +734,7 @@ export default function EmployeeDashboard() {
                                                         </span>
                                                     )}
                                                     {task.comments && task.comments.length > 0 && (
-                                                        <span className="text-xs font-medium text-purple-600 dark:text-purple-400 flex items-center gap-1">
+                                                        <span className="text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center gap-1">
                                                             <MessageSquare size={12} />
                                                             {task.comments.length}
                                                         </span>
@@ -744,8 +744,8 @@ export default function EmployeeDashboard() {
                                             {task.status !== 'completed' && (
                                                 <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                                     <div
-                                                        className="bg-blue-600 h-2 rounded-full"
-                                                        style={{ width: `${task.progress || 0}%` }}
+                                                        className="h-2 rounded-full"
+                                                        style={{ width: `${task.progress || 0}%`, backgroundColor: '#3977ED' }}
                                                     ></div>
                                                 </div>
                                             )}
@@ -833,7 +833,7 @@ export default function EmployeeDashboard() {
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-sm font-bold text-purple-600 dark:text-purple-400">
+                                            <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
                                                 +{day.overtime.toFixed(2)}h
                                             </p>
                                             <p className="text-xs text-gray-500 dark:text-gray-400">overtime</p>
@@ -861,21 +861,42 @@ export default function EmployeeDashboard() {
                         <div className="space-y-2">
                             <button
                                 onClick={() => navigate('/employee/attendance')}
-                                className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                                className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#3977ED'
+                                }}
                             >
                                 <Clock className="w-4 h-4" />
                                 <span>Mark Attendance</span>
                             </button>
                             <button
                                 onClick={() => navigate('/employee/leave')}
-                                className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                                className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#3977ED'
+                                }}
                             >
                                 <Calendar className="w-4 h-4" />
                                 <span>Request Leave</span>
                             </button>
                             <button
                                 onClick={() => navigate('/employee/tasks')}
-                                className="w-full flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                                className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#3977ED'
+                                }}
                             >
                                 <CheckCircle2 className="w-4 h-4" />
                                 <span>View Tasks</span>
@@ -1003,8 +1024,8 @@ export default function EmployeeDashboard() {
                                                                 </div>
                                                                 {record.hoursWorked > 8 && (
                                                                     <div className="flex items-center justify-between mt-1">
-                                                                        <span className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase">Overtime</span>
-                                                                        <span className="text-sm font-bold text-purple-600 dark:text-purple-400">
+                                                                        <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase">Overtime</span>
+                                                                        <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
                                                                             +{(record.hoursWorked - 8).toFixed(2)} hours
                                                                         </span>
                                                                     </div>
@@ -1078,7 +1099,14 @@ export default function EmployeeDashboard() {
                                     {selectedTask.status !== 'in-progress' && (
                                         <button
                                             onClick={() => handleTaskStatusChange(selectedTask.id, 'in-progress')}
-                                            className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-sm"
+                                            className="px-4 py-2 text-white rounded text-sm transition-colors"
+                                            style={{ backgroundColor: '#3977ED' }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#3977ED'
+                                            }}
                                         >
                                             Mark In Progress
                                         </button>
@@ -1086,7 +1114,14 @@ export default function EmployeeDashboard() {
                                     {selectedTask.status !== 'completed' && (
                                         <button
                                             onClick={() => handleTaskStatusChange(selectedTask.id, 'completed')}
-                                            className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-sm"
+                                            className="px-4 py-2 text-white rounded text-sm transition-colors"
+                                            style={{ backgroundColor: '#3977ED' }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#3977ED'
+                                            }}
                                         >
                                             Mark Completed
                                         </button>
@@ -1187,7 +1222,18 @@ export default function EmployeeDashboard() {
                                     <button
                                         onClick={() => handleAddComment(selectedTask.id)}
                                         disabled={!taskComment.trim()}
-                                        className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-4 py-2 text-white rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        style={{ backgroundColor: taskComment.trim() ? '#3977ED' : '#3977ED' }}
+                                        onMouseEnter={(e) => {
+                                            if (taskComment.trim()) {
+                                                e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (taskComment.trim()) {
+                                                e.currentTarget.style.backgroundColor = '#3977ED'
+                                            }
+                                        }}
                                     >
                                         <MessageSquare size={18} />
                                     </button>

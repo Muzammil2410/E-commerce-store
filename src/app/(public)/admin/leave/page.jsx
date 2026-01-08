@@ -216,14 +216,28 @@ export default function AdminLeave() {
                                             <div className="flex gap-3">
                                                 <button
                                                     onClick={() => handleApprove(request.id)}
-                                                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors flex items-center gap-2"
+                                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                                                    style={{ backgroundColor: '#3977ED' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                                    }}
                                                 >
                                                     <CheckCircle2 className="w-5 h-5" />
                                                     Approve
                                                 </button>
                                                 <button
                                                     onClick={() => handleReject(request.id)}
-                                                    className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors flex items-center gap-2"
+                                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                                                    style={{ backgroundColor: '#3977ED' }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                                    }}
                                                 >
                                                     <XCircle className="w-5 h-5" />
                                                     Reject

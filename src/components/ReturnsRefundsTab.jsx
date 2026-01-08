@@ -133,7 +133,10 @@ export default function ReturnsRefundsTab({ orders }) {
                   {!hasReturnRequest ? (
                     <button
                       onClick={() => setShowReturnModal(order)}
-                      className="w-full sm:w-auto px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
+                      className="w-full sm:w-auto px-4 py-2 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+                      style={{ backgroundColor: '#3977ED' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                     >
                       <RotateCcw size={16} />
                       <span>{t('requestReturn')}</span>
@@ -296,7 +299,10 @@ export default function ReturnsRefundsTab({ orders }) {
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={() => handleRequestReturn(showReturnModal)}
-                  className="flex-1 bg-blue-600 dark:bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  className="flex-1 text-white py-2 rounded-lg transition-colors"
+                  style={{ backgroundColor: '#3977ED' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                 >
                   {t('submitRequest')}
                 </button>

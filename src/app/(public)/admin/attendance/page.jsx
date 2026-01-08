@@ -115,9 +115,20 @@ export default function AdminAttendance() {
                                     onClick={() => setFilter(status)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                         filter === status
-                                            ? 'bg-blue-600 text-white'
+                                            ? 'text-white'
                                             : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
+                                    style={filter === status ? { backgroundColor: '#3977ED' } : {}}
+                                    onMouseEnter={(e) => {
+                                        if (filter === status) {
+                                            e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (filter === status) {
+                                            e.currentTarget.style.backgroundColor = '#3977ED'
+                                        }
+                                    }}
                                 >
                                     {status.charAt(0).toUpperCase() + status.slice(1)}
                                 </button>

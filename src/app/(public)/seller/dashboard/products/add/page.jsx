@@ -814,7 +814,18 @@ export default function AddProduct() {
                 <button
                   onClick={handlePublish}
                   disabled={isSubmitting}
-                  className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center space-x-2 px-6 py-3 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: isSubmitting ? '#3977ED' : '#3977ED' }}
+                  onMouseEnter={(e) => {
+                    if (!isSubmitting) {
+                      e.currentTarget.style.backgroundColor = '#2d5fcc'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSubmitting) {
+                      e.currentTarget.style.backgroundColor = '#3977ED'
+                    }
+                  }}
                 >
                   {isSubmitting ? (
                     <>

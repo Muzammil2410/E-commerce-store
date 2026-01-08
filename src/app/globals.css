@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
   --breakpoint-xs: 475px;
   --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-family-serif: 'Playfair Display', Georgia, serif;
+  --font-family-serif: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer components {
@@ -15,6 +15,12 @@
         100% {
             transform: translateX(-50%);
         }
+    }
+    
+    /* Category marquee button hover - #3977ED */
+    .category-marquee-button:hover {
+        background-color: #3977ED !important;
+        color: white !important;
     }
     
     @keyframes blob {
@@ -104,9 +110,9 @@
         font-weight: 400;
     }
     
-    /* Headings with elegant serif font */
+    /* Headings with Inter font */
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Playfair Display', Georgia, serif;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
         font-weight: 600;
         line-height: 1.2;
     }
@@ -160,14 +166,40 @@
         font-size: clamp(18px, 1.25rem, 22px);
     }
     
-    /* Utility class for serif font (headings) */
+    /* Utility class for headings (using Inter) */
     .font-serif, .font-heading {
-        font-family: 'Playfair Display', Georgia, serif;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     }
     
     /* Utility class for sans-serif font (body) */
     .font-sans, .font-body {
         font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    }
+    
+    /* Ensure Inter is used everywhere - comprehensive coverage */
+    *, *::before, *::after {
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+    }
+    
+    /* Ensure Inter in all text elements */
+    p, span, div, a, li, td, th, label, input, textarea, select, button, 
+    h1, h2, h3, h4, h5, h6, small, strong, em, b, i, u, code, pre {
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+    }
+    
+    /* Ensure Inter in form elements */
+    input, textarea, select, button, option {
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+    }
+    
+    /* Ensure Inter in modals and overlays */
+    [role="dialog"], .modal, .overlay, .popup {
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+    }
+    
+    /* Ensure Inter in iframes (for PDFs, etc.) */
+    iframe {
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
     }
 }
 

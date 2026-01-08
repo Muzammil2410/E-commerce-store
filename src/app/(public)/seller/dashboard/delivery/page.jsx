@@ -302,7 +302,16 @@ export default function DeliveryManagement() {
                               onChange={(e) => handleImageUpload(order.id, e.target.files[0])}
                               className="hidden"
                             />
-                            <span className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 cursor-pointer text-sm transition-colors">
+                            <span 
+                              className="px-4 py-2 text-white rounded-lg cursor-pointer text-sm transition-colors inline-block"
+                              style={{ backgroundColor: '#3977ED' }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = '#2d5fcc'
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = '#3977ED'
+                              }}
+                            >
                               {t('uploadPhoto')}
                             </span>
                           </label>
@@ -376,7 +385,14 @@ export default function DeliveryManagement() {
               </div>
               <button
                 onClick={handleScanParcel}
-                className="w-full py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
+                className="w-full py-3 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
+                style={{ backgroundColor: '#3977ED' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2d5fcc'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3977ED'
+                }}
               >
                 <QrCode size={20} />
                 <span>{t('scanParcel')}</span>

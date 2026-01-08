@@ -97,7 +97,7 @@ export default function SellerLoginPage() {
                             <button
                                 type="button"
                                 onClick={() => navigate('/seller/register')}
-                                className="text-green-700 dark:text-green-400 font-medium hover:underline transition-colors duration-300"
+                                className="text-[#3977ED] dark:text-[#3977ED] font-medium hover:text-[#2d5fcc] dark:hover:text-[#2d5fcc] hover:underline transition-colors duration-300"
                             >
                                 Register as Seller
                             </button>
@@ -161,7 +161,7 @@ export default function SellerLoginPage() {
                             <button 
                                 type="button"
                                 onClick={() => navigate('/auth/forgot-password')}
-                                className="text-sm text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"
+                                className="text-sm text-[#3977ED] dark:text-[#3977ED] hover:text-[#2d5fcc] dark:hover:text-[#2d5fcc] transition-colors"
                             >
                                 Forgot password?
                             </button>
@@ -171,7 +171,18 @@ export default function SellerLoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 px-4 rounded-lg focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600 focus:ring-green-500 dark:focus:ring-green-400"
+                            className="w-full py-3 px-4 rounded-lg focus:ring-2 focus:ring-[#3977ED] dark:focus:ring-[#3977ED] focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-white"
+                            style={{ backgroundColor: loading ? '#3977ED' : '#3977ED' }}
+                            onMouseEnter={(e) => {
+                                if (!loading) {
+                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (!loading) {
+                                    e.currentTarget.style.backgroundColor = '#3977ED'
+                                }
+                            }}
                         >
                             {loading ? 'Signing in as Seller...' : 'Sign In as Seller'}
                         </button>
@@ -184,7 +195,7 @@ export default function SellerLoginPage() {
                             <button 
                                 type="button"
                                 onClick={() => navigate('/seller/register')}
-                                className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium transition-colors"
+                                className="text-[#3977ED] dark:text-[#3977ED] hover:text-[#2d5fcc] dark:hover:text-[#2d5fcc] font-medium transition-colors"
                             >
                                 Register as Seller
                             </button>

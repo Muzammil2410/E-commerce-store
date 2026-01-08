@@ -148,7 +148,10 @@ export default function OrderHistoryTab({ orders }) {
           {deliveredOrders.length === 0 && (
             <Link
               to="/shop"
-              className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors inline-block"
+              className="text-white px-6 py-3 rounded-lg transition-colors inline-block"
+              style={{ backgroundColor: '#3977ED' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
             >
               {t('startShopping')}
             </Link>

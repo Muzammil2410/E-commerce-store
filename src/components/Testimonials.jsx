@@ -64,7 +64,10 @@ const Testimonials = () => {
             <div className='text-center mt-12'>
                 <button 
                     onClick={() => setShowAllReviews(true)}
-                    className='bg-blue-600 text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md'
+                    className='text-white px-8 py-3 rounded-full font-medium hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md'
+                    style={{ backgroundColor: '#3977ED' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
                 >
                     {t('viewAllReviews')}
                 </button>
