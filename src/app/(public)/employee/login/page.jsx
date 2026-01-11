@@ -202,18 +202,7 @@ export default function EmployeeLogin() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full text-white py-3 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-[#3977ED] dark:focus:ring-[#3977ED] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        style={{ backgroundColor: loading ? '#3977ED' : '#3977ED' }}
-                        onMouseEnter={(e) => {
-                            if (!loading) {
-                                e.currentTarget.style.backgroundColor = '#2d5fcc'
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (!loading) {
-                                e.currentTarget.style.backgroundColor = '#3977ED'
-                            }
-                        }}
+                        className="w-full bg-blue-600 dark:bg-blue-700 text-white py-3 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>

@@ -2,11 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, Clock, CheckCircle2, AlertCircle, TrendingUp, Bell, X, Upload, MessageSquare, FileText, Flag, ChevronLeft, ChevronRight, Zap, Download, Trash2 } from 'lucide-react'
+import { Calendar, Clock, CheckCircle2, AlertCircle, TrendingUp, Bell, X, Upload, MessageSquare, FileText, Flag, ChevronLeft, ChevronRight, Zap } from 'lucide-react'
 import { format, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, isToday, startOfMonth, endOfMonth } from 'date-fns'
 import toast from 'react-hot-toast'
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { addTaskFile, addTaskComment, removeTaskFile, updateTask } from '@/lib/features/tasks/tasksSlice'
 
 export default function EmployeeDashboard() {
     const navigate = useNavigate()
@@ -22,14 +21,10 @@ export default function EmployeeDashboard() {
     const [showNotifications, setShowNotifications] = useState(false)
     const [performanceView, setPerformanceView] = useState('weekly') // 'weekly' or 'monthly'
     const [calendarMonth, setCalendarMonth] = useState(new Date())
-    const [selectedTaskId, setSelectedTaskId] = useState(null)
+    const [selectedTask, setSelectedTask] = useState(null)
     const [showTaskModal, setShowTaskModal] = useState(false)
     const [taskComment, setTaskComment] = useState('')
-    const [attendanceHistoryView, setAttendanceHistoryView] = useState('recent') // 'recent' or 'all'
-    const [showOvertimeDetails, setShowOvertimeDetails] = useState(false)
-    
-    // Get selected task from Redux state to ensure it's always up-to-date
-    const selectedTask = selectedTaskId ? tasks.find(t => t.id === selectedTaskId) : null
+    const [taskFiles, setTaskFiles] = useState({})
     
     useEffect(() => {
         // Check if user is logged in
@@ -140,50 +135,7 @@ export default function EmployeeDashboard() {
     const inProgressTasks = employeeTasks.filter(task => task.status === 'in-progress')
     const completedTasks = employeeTasks.filter(task => task.status === 'completed')
     
-    // Calculate comprehensive efficiency score
-    const calculateEfficiencyScore = () => {
-        if (completedTasks.length === 0) return 0
-        
-        let score = 0
-        let totalWeight = 0
-        
-        // Factor 1: On-time completion (40% weight)
-        const onTimeTasks = completedTasks.filter(task => {
-            if (!task.completedAt) return false
-            return new Date(task.completedAt) <= new Date(task.deadline)
-        })
-        const onTimeRate = onTimeTasks.length / completedTasks.length
-        score += onTimeRate * 40
-        totalWeight += 40
-        
-        // Factor 2: Task completion rate (30% weight)
-        const completionRate = completedTasks.length / employeeTasks.length
-        score += completionRate * 30
-        totalWeight += 30
-        
-        // Factor 3: Average progress on active tasks (20% weight)
-        const activeTasks = employeeTasks.filter(t => t.status !== 'completed')
-        if (activeTasks.length > 0) {
-            const avgProgress = activeTasks.reduce((sum, t) => sum + (t.progress || 0), 0) / activeTasks.length
-            score += (avgProgress / 100) * 20
-            totalWeight += 20
-        } else {
-            totalWeight += 20
-        }
-        
-        // Factor 4: Priority handling (10% weight) - high priority tasks completed first
-        const highPriorityCompleted = completedTasks.filter(t => t.priority === 'high').length
-        const highPriorityTotal = employeeTasks.filter(t => t.priority === 'high').length
-        if (highPriorityTotal > 0) {
-            const priorityRate = highPriorityCompleted / highPriorityTotal
-            score += priorityRate * 10
-        }
-        totalWeight += 10
-        
-        return Math.round(score)
-    }
-    
-    const efficiencyScore = calculateEfficiencyScore()
+    // Calculate efficiency score (on-time vs delayed)
     const onTimeTasks = completedTasks.filter(task => {
         if (!task.completedAt) return false
         return new Date(task.completedAt) <= new Date(task.deadline)
@@ -192,6 +144,9 @@ export default function EmployeeDashboard() {
         if (!task.completedAt) return false
         return new Date(task.completedAt) > new Date(task.deadline)
     })
+    const efficiencyScore = completedTasks.length > 0 
+        ? Math.round((onTimeTasks.length / completedTasks.length) * 100)
+        : 0
     
     // Performance data for charts
     const getPerformanceData = () => {
@@ -269,7 +224,7 @@ export default function EmployeeDashboard() {
         })
     }
     
-    // Calculate comprehensive overtime hours
+    // Calculate overtime hours
     const calculateOvertime = () => {
         const thisMonth = records.filter(r => {
             if (r.employeeId !== currentUser.id) return false
@@ -279,35 +234,10 @@ export default function EmployeeDashboard() {
         })
         
         const totalHours = thisMonth.reduce((sum, r) => sum + (r.hoursWorked || 0), 0)
-        const workingDays = thisMonth.filter(r => r.status === 'present' || r.status === 'late' || r.status === 'half-day').length
-        const standardHours = workingDays * 8 // Assuming 8 hours per day
+        const standardHours = thisMonth.length * 8 // Assuming 8 hours per day
         const overtime = Math.max(0, totalHours - standardHours)
         
-        // Calculate daily breakdown
-        const dailyBreakdown = thisMonth
-            .filter(r => r.hoursWorked > 0)
-            .map(r => {
-                const dayOvertime = Math.max(0, (r.hoursWorked || 0) - 8)
-                return {
-                    date: r.date,
-                    clockIn: r.clockIn,
-                    clockOut: r.clockOut,
-                    hoursWorked: r.hoursWorked,
-                    standardHours: 8,
-                    overtime: dayOvertime,
-                    status: r.status
-                }
-            })
-            .filter(d => d.overtime > 0)
-            .sort((a, b) => new Date(b.date) - new Date(a.date))
-        
-        return { 
-            total: totalHours, 
-            standard: standardHours, 
-            overtime,
-            workingDays,
-            dailyBreakdown
-        }
+        return { total: totalHours, standard: standardHours, overtime }
     }
     
     const overtimeData = calculateOvertime()
@@ -324,48 +254,24 @@ export default function EmployeeDashboard() {
     const unreadNotifications = notifications.filter(n => !n.read).length
     
     const handleTaskStatusChange = (taskId, newStatus) => {
-        dispatch(updateTask({
-            id: taskId,
-            updates: {
-                status: newStatus,
-                ...(newStatus === 'completed' && { completedAt: new Date().toISOString() })
-            }
-        }))
+        // In a real app, this would dispatch an action to update the task
         toast.success(`Task status changed to ${newStatus}`)
+        setShowTaskModal(false)
     }
     
     const handleFileUpload = (taskId, file) => {
-        if (!file) return
-        
-        // Validate file size (max 10MB)
-        if (file.size > 10 * 1024 * 1024) {
-            toast.error('File size must be less than 10MB')
-            return
-        }
-        
-        dispatch(addTaskFile({
-            taskId,
-            file
+        setTaskFiles(prev => ({
+            ...prev,
+            [taskId]: [...(prev[taskId] || []), file]
         }))
         toast.success('File uploaded successfully')
     }
     
     const handleAddComment = (taskId) => {
         if (!taskComment.trim()) return
-        
-        dispatch(addTaskComment({
-            taskId,
-            comment: taskComment,
-            authorId: currentUser?.id || 'unknown',
-            authorName: currentUser?.name || 'Employee'
-        }))
         toast.success('Comment added')
         setTaskComment('')
-    }
-    
-    const handleRemoveFile = (taskId, fileId) => {
-        dispatch(removeTaskFile({ taskId, fileId }))
-        toast.success('File removed')
+        setShowTaskModal(false)
     }
     
     const getPriorityColor = (priority) => {
@@ -387,19 +293,19 @@ export default function EmployeeDashboard() {
                 {/* Header with Notifications */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                            Welcome back, {currentUser.name}
+                        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">
+                            Welcome back, {currentUser.name}!
                         </h1>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 font-medium">
                             {format(new Date(), 'EEEE, MMMM d, yyyy')}
                         </p>
                     </div>
                     <div className="relative">
                         <button
                             onClick={() => setShowNotifications(!showNotifications)}
-                            className="relative p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                            className="relative p-3 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
-                            <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                            <Bell className="w-6 h-6 text-gray-600 dark:text-gray-400" />
                             {unreadNotifications > 0 && (
                                 <span className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                                     {unreadNotifications}
@@ -408,7 +314,7 @@ export default function EmployeeDashboard() {
                         </button>
                         
                         {showNotifications && (
-                            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 z-50 max-h-96 overflow-y-auto shadow-lg">
+                            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 max-h-96 overflow-y-auto">
                                 <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                                     <h3 className="font-bold text-gray-900 dark:text-white">Notifications</h3>
                                     <button
@@ -454,69 +360,83 @@ export default function EmployeeDashboard() {
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     {/* Tasks Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Total Tasks</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Total Tasks</p>
+                                <p className="text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
                                     {employeeTasks.length}
                                 </p>
                             </div>
-                            <CheckCircle2 className="w-5 h-5" style={{ color: '#3977ED' }} />
+                            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                <CheckCircle2 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                            </div>
                         </div>
-                        <div className="mt-3 flex gap-3 text-xs text-gray-600 dark:text-gray-400">
-                            <span>{pendingTasks.length} Pending</span>
-                            <span>{inProgressTasks.length} In Progress</span>
-                            <span>{completedTasks.length} Done</span>
+                        <div className="mt-4 flex gap-3 text-xs font-semibold">
+                            <span className="text-yellow-600 dark:text-yellow-400">
+                                {pendingTasks.length} Pending
+                            </span>
+                            <span className="text-blue-600 dark:text-blue-400">
+                                {inProgressTasks.length} In Progress
+                            </span>
+                            <span className="text-green-600 dark:text-green-400">
+                                {completedTasks.length} Done
+                            </span>
                         </div>
                     </div>
                     
                     {/* Attendance Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Today's Status</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Today's Status</p>
+                                <p className={`${isClockedIn || todayAttendance?.status ? 'text-3xl' : 'text-xl'} font-extrabold text-gray-900 dark:text-white mt-2`}>
                                     {isClockedIn ? 'Clocked In' : todayAttendance?.status || 'Not Started'}
                                 </p>
                             </div>
-                            <Clock className="w-5 h-5" style={{ color: '#3977ED' }} />
+                            <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                                <Clock className="w-6 h-6 text-green-600 dark:text-green-400" />
+                            </div>
                         </div>
                         {todayAttendance?.hoursWorked > 0 && (
-                            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                            <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                                 {todayAttendance.hoursWorked} hours worked
                             </p>
                         )}
                     </div>
                     
                     {/* Efficiency Score Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Efficiency Score</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Efficiency Score</p>
+                                <p className="text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
                                     {efficiencyScore}%
                                 </p>
                             </div>
-                            <Zap className="w-5 h-5" style={{ color: '#3977ED' }} />
+                            <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                                <Zap className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                            </div>
                         </div>
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                             {onTimeTasks.length} on-time, {delayedTasks.length} delayed
                         </p>
                     </div>
                     
                     {/* Overtime Hours Card */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 border border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Overtime Hours</p>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                                <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Overtime Hours</p>
+                                <p className="text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
                                     {overtimeData.overtime.toFixed(1)}
                                 </p>
                             </div>
-                            <Clock className="w-5 h-5" style={{ color: '#3977ED' }} />
+                            <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                                <Clock className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                            </div>
                         </div>
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                             This month
                         </p>
                     </div>
@@ -530,23 +450,23 @@ export default function EmployeeDashboard() {
                             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
                                 Performance Graph
                             </h2>
-                            <div className="flex gap-1">
+                            <div className="flex gap-2">
                                 <button
                                     onClick={() => setPerformanceView('weekly')}
-                                    className={`px-3 py-1 text-sm rounded ${
+                                    className={`px-3 py-1 text-sm font-medium rounded-lg transition-colors ${
                                         performanceView === 'weekly'
-                                            ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                     }`}
                                 >
                                     Weekly
                                 </button>
                                 <button
                                     onClick={() => setPerformanceView('monthly')}
-                                    className={`px-3 py-1 text-sm rounded ${
+                                    className={`px-3 py-1 text-sm font-medium rounded-lg transition-colors ${
                                         performanceView === 'monthly'
-                                            ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                     }`}
                                 >
                                     Monthly
@@ -567,7 +487,7 @@ export default function EmployeeDashboard() {
                     
                     {/* Task Completion Trend */}
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
                             Task Completion Trend
                         </h2>
                         <ResponsiveContainer width="100%" height={250}>
@@ -659,9 +579,9 @@ export default function EmployeeDashboard() {
                                     <span className="text-gray-600 dark:text-gray-400">Absent</span>
                                 </div>
                             </div>
-                            <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                <p className="text-xs font-semibold text-blue-800 dark:text-blue-300 mb-1">Overtime Summary</p>
-                                <p className="text-sm font-bold text-blue-900 dark:text-blue-200">
+                            <div className="mt-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                <p className="text-xs font-semibold text-purple-800 dark:text-purple-300 mb-1">Overtime Summary</p>
+                                <p className="text-sm font-bold text-purple-900 dark:text-purple-200">
                                     {overtimeData.overtime.toFixed(1)} hours this month
                                 </p>
                             </div>
@@ -676,9 +596,9 @@ export default function EmployeeDashboard() {
                             </h2>
                             <button
                                 onClick={() => navigate('/employee/tasks')}
-                                className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                                className="px-4 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors border border-blue-200 dark:border-blue-800"
                             >
-                                View All →
+                                View All
                             </button>
                         </div>
                         
@@ -694,7 +614,7 @@ export default function EmployeeDashboard() {
                                         key={task.id}
                                         className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 cursor-pointer hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600"
                                         onClick={() => {
-                                            setSelectedTaskId(task.id)
+                                            setSelectedTask(task)
                                             setShowTaskModal(true)
                                         }}
                                     >
@@ -734,7 +654,7 @@ export default function EmployeeDashboard() {
                                                         </span>
                                                     )}
                                                     {task.comments && task.comments.length > 0 && (
-                                                        <span className="text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                                                        <span className="text-xs font-medium text-purple-600 dark:text-purple-400 flex items-center gap-1">
                                                             <MessageSquare size={12} />
                                                             {task.comments.length}
                                                         </span>
@@ -744,8 +664,8 @@ export default function EmployeeDashboard() {
                                             {task.status !== 'completed' && (
                                                 <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                                     <div
-                                                        className="h-2 rounded-full"
-                                                        style={{ width: `${task.progress || 0}%`, backgroundColor: '#3977ED' }}
+                                                        className="bg-blue-600 h-2 rounded-full"
+                                                        style={{ width: `${task.progress || 0}%` }}
                                                     ></div>
                                                 </div>
                                             )}
@@ -757,295 +677,81 @@ export default function EmployeeDashboard() {
                     </div>
                 </div>
                 
-                {/* Overtime Section */}
-                <div className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-                            Overtime Details
-                        </h2>
-                        <button
-                            onClick={() => setShowOvertimeDetails(!showOvertimeDetails)}
-                            className="px-3 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                        >
-                            {showOvertimeDetails ? 'Hide' : 'Show'}
-                        </button>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded border border-gray-200 dark:border-gray-600">
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Total Overtime</p>
-                            <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                                {overtimeData.overtime.toFixed(1)} hours
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                {format(calendarMonth, 'MMMM yyyy')}
-                            </p>
-                        </div>
-                        
-                        <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded border border-gray-200 dark:border-gray-600">
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Total Hours</p>
-                            <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                                {overtimeData.total.toFixed(1)} hours
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                {overtimeData.workingDays} working days
-                            </p>
-                        </div>
-                        
-                        <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded border border-gray-200 dark:border-gray-600">
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Standard Hours</p>
-                            <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                                {overtimeData.standard.toFixed(1)} hours
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                Expected for {overtimeData.workingDays} days
-                            </p>
-                        </div>
-                    </div>
-                    
-                    {showOvertimeDetails && overtimeData.dailyBreakdown.length > 0 && (
-                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Daily Overtime Breakdown</h3>
-                            <div className="space-y-2 max-h-64 overflow-y-auto">
-                                {overtimeData.dailyBreakdown.map((day, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
-                                    >
-                                        <div className="flex-1">
-                                            <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                                                {format(new Date(day.date), 'EEEE, MMM d, yyyy')}
-                                            </p>
-                                            <div className="flex items-center gap-4 mt-1">
-                                                {day.clockIn && (
-                                                    <span className="text-xs text-gray-600 dark:text-gray-400">
-                                                        In: {format(new Date(day.clockIn), 'h:mm a')}
-                                                    </span>
-                                                )}
-                                                {day.clockOut && (
-                                                    <span className="text-xs text-gray-600 dark:text-gray-400">
-                                                        Out: {format(new Date(day.clockOut), 'h:mm a')}
-                                                    </span>
-                                                )}
-                                                <span className="text-xs text-gray-600 dark:text-gray-400">
-                                                    Total: {day.hoursWorked.toFixed(2)}h
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                                                +{day.overtime.toFixed(2)}h
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">overtime</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                    
-                    {showOvertimeDetails && overtimeData.dailyBreakdown.length === 0 && (
-                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 text-center py-4">
-                            <p className="text-sm text-gray-500 dark:text-gray-400">No overtime recorded for this month</p>
-                        </div>
-                    )}
-                </div>
-                
-                {/* Quick Actions & Attendance History */}
+                {/* Quick Actions & Recent Attendance */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Quick Actions */}
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
                             Quick Actions
                         </h2>
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             <button
                                 onClick={() => navigate('/employee/attendance')}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
-                                style={{ backgroundColor: '#3977ED' }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#3977ED'
-                                }}
+                                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border border-blue-700 dark:border-blue-600"
                             >
-                                <Clock className="w-4 h-4" />
+                                <Clock className="w-5 h-5" />
                                 <span>Mark Attendance</span>
                             </button>
                             <button
                                 onClick={() => navigate('/employee/leave')}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
-                                style={{ backgroundColor: '#3977ED' }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#3977ED'
-                                }}
+                                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-purple-600 dark:bg-purple-500 text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border border-purple-700 dark:border-purple-600"
                             >
-                                <Calendar className="w-4 h-4" />
+                                <Calendar className="w-5 h-5" />
                                 <span>Request Leave</span>
                             </button>
                             <button
                                 onClick={() => navigate('/employee/tasks')}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
-                                style={{ backgroundColor: '#3977ED' }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#3977ED'
-                                }}
+                                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border border-green-700 dark:border-green-600"
                             >
-                                <CheckCircle2 className="w-4 h-4" />
+                                <CheckCircle2 className="w-5 h-5" />
                                 <span>View Tasks</span>
                             </button>
                         </div>
                     </div>
                     
-                    {/* Attendance History */}
-                    <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-                                Attendance History
-                            </h2>
-                            <div className="flex gap-1">
-                                <button
-                                    onClick={() => setAttendanceHistoryView('recent')}
-                                    className={`px-3 py-1 text-sm rounded ${
-                                        attendanceHistoryView === 'recent'
-                                            ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                                    }`}
-                                >
-                                    Recent
-                                </button>
-                                <button
-                                    onClick={() => setAttendanceHistoryView('all')}
-                                    className={`px-3 py-1 text-sm rounded ${
-                                        attendanceHistoryView === 'all'
-                                            ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                                    }`}
-                                >
-                                    All
-                                </button>
-                            </div>
-                        </div>
-                        
-                        {(() => {
-                            const allAttendance = records
-                                .filter(record => record.employeeId === currentUser.id)
-                                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                            
-                            const displayAttendance = attendanceHistoryView === 'recent' 
-                                ? allAttendance.slice(0, 10)
-                                : allAttendance
-                            
-                            if (displayAttendance.length === 0) {
-                                return (
-                                    <div className="text-center py-8">
-                                        <Clock className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">No attendance records</p>
+                    {/* Recent Attendance */}
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+                            Recent Attendance
+                        </h2>
+                        {recentAttendance.length === 0 ? (
+                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">No attendance records</p>
+                        ) : (
+                            <div className="space-y-3">
+                                {recentAttendance.map(record => (
+                                    <div
+                                        key={record.id}
+                                        className="flex items-center justify-between text-sm"
+                                    >
+                                        <div>
+                                            <p className="text-gray-900 dark:text-white font-semibold text-base">
+                                                {format(new Date(record.date), 'MMM d, yyyy')}
+                                            </p>
+                                            {record.clockIn && (
+                                                <p className="text-gray-600 dark:text-gray-400 font-medium text-sm mt-0.5">
+                                                    {format(new Date(record.clockIn), 'h:mm a')} -{' '}
+                                                    {record.clockOut 
+                                                        ? format(new Date(record.clockOut), 'h:mm a')
+                                                        : 'In Progress'}
+                                                    {record.clockIn && new Date(record.clockIn).getHours() >= 9 && (
+                                                        <span className="ml-2 text-yellow-600 dark:text-yellow-400 text-xs">⚠ Late</span>
+                                                    )}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <span className={`px-2.5 py-1 rounded text-xs font-semibold ${
+                                            record.status === 'present'
+                                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                                                : record.status === 'late'
+                                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                                : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                                        }`}>
+                                            {record.status}
+                                        </span>
                                     </div>
-                                )
-                            }
-                            
-                            return (
-                                <div className="space-y-3 max-h-96 overflow-y-auto">
-                                    {displayAttendance.map(record => {
-                                        const clockInTime = record.clockIn ? new Date(record.clockIn) : null
-                                        const clockOutTime = record.clockOut ? new Date(record.clockOut) : null
-                                        const isLate = clockInTime && clockInTime.getHours() >= 9 && clockInTime.getMinutes() > 0
-                                        
-                                        return (
-                                            <div
-                                                key={record.id}
-                                                className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-                                            >
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex-1">
-                                                        <div className="flex items-center gap-3 mb-2">
-                                                            <p className="text-base font-bold text-gray-900 dark:text-white">
-                                                                {format(new Date(record.date), 'EEEE, MMMM d, yyyy')}
-                                                            </p>
-                                                            <span className={`px-2.5 py-1 rounded text-xs font-semibold ${
-                                                                record.status === 'present'
-                                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                                                                    : record.status === 'late'
-                                                                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                                                                    : record.status === 'absent'
-                                                                    ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                                                                    : 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400'
-                                                            }`}>
-                                                                {record.status}
-                                                            </span>
-                                                        </div>
-                                                        
-                                                        <div className="grid grid-cols-2 gap-4 mt-3">
-                                                            <div>
-                                                                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Clock In</p>
-                                                                {clockInTime ? (
-                                                                    <div>
-                                                                        <p className="text-sm font-bold text-gray-900 dark:text-white">
-                                                                            {format(clockInTime, 'h:mm a')}
-                                                                        </p>
-                                                                        {isLate && (
-                                                                            <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-0.5">⚠ Late arrival</p>
-                                                                        )}
-                                                                    </div>
-                                                                ) : (
-                                                                    <p className="text-sm text-gray-400 dark:text-gray-500">Not recorded</p>
-                                                                )}
-                                                            </div>
-                                                            
-                                                            <div>
-                                                                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Clock Out</p>
-                                                                {clockOutTime ? (
-                                                                    <p className="text-sm font-bold text-gray-900 dark:text-white">
-                                                                        {format(clockOutTime, 'h:mm a')}
-                                                                    </p>
-                                                                ) : record.clockIn ? (
-                                                                    <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">In Progress</p>
-                                                                ) : (
-                                                                    <p className="text-sm text-gray-400 dark:text-gray-500">Not recorded</p>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        {record.hoursWorked > 0 && (
-                                                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                                                                <div className="flex items-center justify-between">
-                                                                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Hours Worked</span>
-                                                                    <span className="text-sm font-bold text-gray-900 dark:text-white">
-                                                                        {record.hoursWorked.toFixed(2)} hours
-                                                                    </span>
-                                                                </div>
-                                                                {record.hoursWorked > 8 && (
-                                                                    <div className="flex items-center justify-between mt-1">
-                                                                        <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase">Overtime</span>
-                                                                        <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                                                                            +{(record.hoursWorked - 8).toFixed(2)} hours
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                        
-                                                        {record.notes && (
-                                                            <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded text-xs text-gray-600 dark:text-gray-400">
-                                                                <strong>Note:</strong> {record.notes}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            )
-                        })()}
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -1053,16 +759,12 @@ export default function EmployeeDashboard() {
             {/* Task Detail Modal */}
             {showTaskModal && selectedTask && (
                 <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedTask.title}</h3>
                                 <button
-                                    onClick={() => {
-                                        setShowTaskModal(false)
-                                        setSelectedTaskId(null)
-                                        setTaskComment('')
-                                    }}
+                                    onClick={() => setShowTaskModal(false)}
                                     className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                                 >
                                     <X size={24} />
@@ -1099,14 +801,7 @@ export default function EmployeeDashboard() {
                                     {selectedTask.status !== 'in-progress' && (
                                         <button
                                             onClick={() => handleTaskStatusChange(selectedTask.id, 'in-progress')}
-                                            className="px-4 py-2 text-white rounded text-sm transition-colors"
-                                            style={{ backgroundColor: '#3977ED' }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.backgroundColor = '#2d5fcc'
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.backgroundColor = '#3977ED'
-                                            }}
+                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                                         >
                                             Mark In Progress
                                         </button>
@@ -1114,14 +809,7 @@ export default function EmployeeDashboard() {
                                     {selectedTask.status !== 'completed' && (
                                         <button
                                             onClick={() => handleTaskStatusChange(selectedTask.id, 'completed')}
-                                            className="px-4 py-2 text-white rounded text-sm transition-colors"
-                                            style={{ backgroundColor: '#3977ED' }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.backgroundColor = '#2d5fcc'
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.backgroundColor = '#3977ED'
-                                            }}
+                                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                                         >
                                             Mark Completed
                                         </button>
@@ -1131,54 +819,25 @@ export default function EmployeeDashboard() {
                             
                             <div>
                                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Upload Files</h4>
-                                <label className="flex items-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
-                                    <Upload size={18} className="text-gray-600 dark:text-gray-400" />
-                                    <span className="text-sm text-gray-700 dark:text-gray-300">Upload file</span>
+                                <label className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <Upload size={20} className="text-gray-600 dark:text-gray-400" />
+                                    <span className="text-sm text-gray-700 dark:text-gray-300">Choose file</span>
                                     <input
                                         type="file"
                                         className="hidden"
-                                        multiple
                                         onChange={(e) => {
-                                            if (e.target.files && e.target.files.length > 0) {
-                                                Array.from(e.target.files).forEach(file => {
-                                                    handleFileUpload(selectedTask.id, file)
-                                                })
+                                            if (e.target.files[0]) {
+                                                handleFileUpload(selectedTask.id, e.target.files[0])
                                             }
                                         }}
                                     />
                                 </label>
-                                {selectedTask.files && selectedTask.files.length > 0 && (
-                                    <div className="mt-3 space-y-2">
-                                        {selectedTask.files.map((file) => (
-                                            <div key={file.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                                <div className="flex items-center gap-2 flex-1">
-                                                    <FileText size={16} className="text-gray-600 dark:text-gray-400" />
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{file.name}</p>
-                                                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                            {(file.size / 1024).toFixed(2)} KB • {format(new Date(file.uploadedAt), 'MMM d, h:mm a')}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    {file.url && (
-                                                        <a
-                                                            href={file.url}
-                                                            download={file.name}
-                                                            className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                                                            title="Download"
-                                                        >
-                                                            <Download size={16} />
-                                                        </a>
-                                                    )}
-                                                    <button
-                                                        onClick={() => handleRemoveFile(selectedTask.id, file.id)}
-                                                        className="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                                                        title="Remove"
-                                                    >
-                                                        <Trash2 size={16} />
-                                                    </button>
-                                                </div>
+                                {taskFiles[selectedTask.id] && (
+                                    <div className="mt-2 space-y-1">
+                                        {taskFiles[selectedTask.id].map((file, idx) => (
+                                            <div key={idx} className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                                                <FileText size={16} />
+                                                {file.name}
                                             </div>
                                         ))}
                                     </div>
@@ -1187,56 +846,34 @@ export default function EmployeeDashboard() {
                             
                             <div>
                                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Comments & Discussion</h4>
-                                <div className="space-y-3 max-h-64 overflow-y-auto">
+                                <div className="space-y-3">
                                     {selectedTask.comments && selectedTask.comments.length > 0 ? (
-                                        selectedTask.comments
-                                            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                                            .map((comment) => (
-                                                <div key={comment.id} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                                    <div className="flex items-start justify-between mb-1">
-                                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{comment.author}</p>
-                                                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                            {format(new Date(comment.timestamp), 'MMM d, h:mm a')}
-                                                        </p>
-                                                    </div>
-                                                    <p className="text-sm text-gray-700 dark:text-gray-300">{comment.text}</p>
-                                                </div>
-                                            ))
+                                        selectedTask.comments.map((comment, idx) => (
+                                            <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                                <p className="text-sm text-gray-900 dark:text-white">{comment.text}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                    {comment.author} - {format(new Date(comment.timestamp), 'MMM d, h:mm a')}
+                                                </p>
+                                            </div>
+                                        ))
                                     ) : (
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No comments yet. Start the discussion!</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">No comments yet</p>
                                     )}
-                                </div>
-                                <div className="flex gap-2 mt-3">
-                                    <input
-                                        type="text"
-                                        value={taskComment}
-                                        onChange={(e) => setTaskComment(e.target.value)}
-                                        onKeyPress={(e) => {
-                                            if (e.key === 'Enter' && taskComment.trim()) {
-                                                handleAddComment(selectedTask.id)
-                                            }
-                                        }}
-                                        placeholder="Add a comment..."
-                                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                    <button
-                                        onClick={() => handleAddComment(selectedTask.id)}
-                                        disabled={!taskComment.trim()}
-                                        className="px-4 py-2 text-white rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                        style={{ backgroundColor: taskComment.trim() ? '#3977ED' : '#3977ED' }}
-                                        onMouseEnter={(e) => {
-                                            if (taskComment.trim()) {
-                                                e.currentTarget.style.backgroundColor = '#2d5fcc'
-                                            }
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            if (taskComment.trim()) {
-                                                e.currentTarget.style.backgroundColor = '#3977ED'
-                                            }
-                                        }}
-                                    >
-                                        <MessageSquare size={18} />
-                                    </button>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={taskComment}
+                                            onChange={(e) => setTaskComment(e.target.value)}
+                                            placeholder="Add a comment..."
+                                            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                        />
+                                        <button
+                                            onClick={() => handleAddComment(selectedTask.id)}
+                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                        >
+                                            <MessageSquare size={20} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
