@@ -601,13 +601,13 @@ export default function EmployeeDashboard() {
                             </div>
                         </div>
                         <div className="mt-4 flex gap-3 text-xs font-semibold">
-                            <span className="text-gray-600 dark:text-gray-400">
+                            <span className="text-yellow-600 dark:text-yellow-400">
                                 {pendingTasks.length} Pending
                             </span>
-                            <span className="text-gray-600 dark:text-gray-400">
+                            <span className="text-blue-600 dark:text-blue-400">
                                 {inProgressTasks.length} In Progress
                             </span>
-                            <span className="text-gray-600 dark:text-gray-400">
+                            <span className="text-green-600 dark:text-green-400">
                                 {completedTasks.length} Done
                             </span>
                         </div>
@@ -888,7 +888,15 @@ export default function EmployeeDashboard() {
                                                     {task.description}
                                                 </p>
                                                 <div className="flex items-center gap-4 mt-3">
-                                                    <span className={`text-xs font-semibold px-2.5 py-1 rounded bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300`}>
+                                                    <span className={`text-xs font-semibold px-2.5 py-1 rounded ${
+                                                        task.status === 'pending'
+                                                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                                            : task.status === 'in-progress'
+                                                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                                                            : task.status === 'completed'
+                                                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                                            : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                                                    }`}>
                                                         {task.status}
                                                     </span>
                                                     <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -935,6 +943,15 @@ export default function EmployeeDashboard() {
                                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                                     {deliveries.filter(d => d.status !== 'delivered').length} Active
                                 </span>
+                                <button
+                                    onClick={() => navigate('/employee/deliveries')}
+                                    className="px-3 py-1.5 text-sm font-semibold text-white rounded-lg transition-colors border"
+                                    style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
+                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                >
+                                    View All
+                                </button>
                             </div>
                         </div>
                         
@@ -957,7 +974,15 @@ export default function EmployeeDashboard() {
                                                     <h3 className="text-base font-bold text-gray-900 dark:text-white">
                                                         {delivery.orderId}
                                                     </h3>
-                                                    <span className="text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                                                        delivery.status === 'delivered'
+                                                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                                            : delivery.status === 'out-for-delivery'
+                                                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                                                            : delivery.status === 'failed'
+                                                            ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                                            : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                                                    }`}>
                                                         {delivery.status.replace('-', ' ')}
                                                     </span>
                                                 </div>
@@ -1067,12 +1092,7 @@ export default function EmployeeDashboard() {
                                 <span>View Tasks</span>
                             </button>
                             <button
-                                onClick={() => {
-                                    const deliveriesSection = document.getElementById('deliveries-section')
-                                    if (deliveriesSection) {
-                                        deliveriesSection.scrollIntoView({ behavior: 'smooth' })
-                                    }
-                                }}
+                                onClick={() => navigate('/employee/deliveries')}
                                 className="w-full flex items-center justify-start gap-3 px-4 py-3.5 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border"
                                 style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
                                 onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
@@ -1114,7 +1134,15 @@ export default function EmployeeDashboard() {
                                                 </p>
                                             )}
                                         </div>
-                                        <span className="px-2.5 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                        <span className={`px-2.5 py-1 rounded text-xs font-semibold ${
+                                            record.status === 'present'
+                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                                : record.status === 'late'
+                                                ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                                : record.status === 'absent'
+                                                ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                                : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                                        }`}>
                                             {record.status}
                                         </span>
                                     </div>

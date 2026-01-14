@@ -44,6 +44,9 @@ export default function EmployeeLeave() {
     const personalUsed = approvedRequests
         .filter(req => req.type === 'personal')
         .reduce((sum, req) => sum + (req.days || 0), 0)
+    const emergencyUsed = approvedRequests
+        .filter(req => req.type === 'emergency')
+        .reduce((sum, req) => sum + (req.days || 0), 0)
     const totalUsed = approvedRequests.reduce((sum, req) => sum + (req.days || 0), 0)
     
     // Get base balance from Redux or use defaults
@@ -51,28 +54,41 @@ export default function EmployeeLeave() {
         total: 20,
         sick: { total: 10 },
         vacation: { total: 15 },
-        personal: { total: 5 }
+        personal: { total: 5 },
+        emergency: { total: 5 }
     }
+    
+    // Calculate total from individual leave types
+    const sickTotal = baseBalance.sick?.total || 10
+    const vacationTotal = baseBalance.vacation?.total || 15
+    const personalTotal = baseBalance.personal?.total || 5
+    const emergencyTotal = baseBalance.emergency?.total || 5
+    const calculatedTotal = sickTotal + vacationTotal + personalTotal + emergencyTotal
     
     // Calculate accurate remaining balances
     const employeeBalance = {
-        total: baseBalance.total,
+        total: calculatedTotal,
         used: totalUsed,
-        remaining: baseBalance.total - totalUsed,
+        remaining: calculatedTotal - totalUsed,
         sick: {
-            total: baseBalance.sick?.total || 10,
+            total: sickTotal,
             used: sickUsed,
-            remaining: (baseBalance.sick?.total || 10) - sickUsed
+            remaining: sickTotal - sickUsed
         },
         vacation: {
-            total: baseBalance.vacation?.total || 15,
+            total: vacationTotal,
             used: vacationUsed,
-            remaining: (baseBalance.vacation?.total || 15) - vacationUsed
+            remaining: vacationTotal - vacationUsed
         },
         personal: {
-            total: baseBalance.personal?.total || 5,
+            total: personalTotal,
             used: personalUsed,
-            remaining: (baseBalance.personal?.total || 5) - personalUsed
+            remaining: personalTotal - personalUsed
+        },
+        emergency: {
+            total: emergencyTotal,
+            used: emergencyUsed,
+            remaining: emergencyTotal - emergencyUsed
         }
     }
     
@@ -149,7 +165,7 @@ export default function EmployeeLeave() {
             case 'rejected':
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
             case 'pending':
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
             default:
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
         }
@@ -158,7 +174,7 @@ export default function EmployeeLeave() {
     const getTypeColor = (type) => {
         switch (type) {
             case 'sick':
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
             case 'vacation':
                 return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
             case 'personal':
@@ -212,7 +228,7 @@ export default function EmployeeLeave() {
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         Leave Balance
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                         <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total</p>
                             <p className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -238,6 +254,12 @@ export default function EmployeeLeave() {
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Personal</p>
                             <p className="text-2xl font-bold text-gray-900 dark:text-white">
                                 {employeeBalance.personal?.remaining || 0}
+                            </p>
+                        </div>
+                        <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Emergency</p>
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                {employeeBalance.emergency?.remaining || 0}
                             </p>
                         </div>
                     </div>
@@ -399,9 +421,6 @@ export default function EmployeeLeave() {
                                                     {request.status}
                                                 </span>
                                             </div>
-                                            <span className="text-sm text-gray-600 dark:text-gray-400">
-                                                {format(new Date(request.submittedAt), 'MMM d, yyyy')}
-                                            </span>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-3">
                                             <div>

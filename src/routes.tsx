@@ -56,6 +56,7 @@ import EmployeeTasks from "@/app/(public)/employee/tasks/page";
 import EmployeeTaskDetail from "@/app/(public)/employee/tasks/[id]/page";
 import EmployeeAttendance from "@/app/(public)/employee/attendance/page";
 import EmployeeLeave from "@/app/(public)/employee/leave/page";
+import EmployeeDeliveries from "@/app/(public)/employee/deliveries/page";
 import AdminDashboard from "@/app/(public)/admin/dashboard/page";
 import AdminTasks from "@/app/(public)/admin/tasks/page";
 import AdminAttendance from "@/app/(public)/admin/attendance/page";
@@ -161,6 +162,7 @@ export const router = createBrowserRouter([
   { path: "/employee/tasks/:id", element: <PublicLayout><EmployeeTaskDetail /></PublicLayout> },
   { path: "/employee/attendance", element: <PublicLayout><EmployeeAttendance /></PublicLayout> },
   { path: "/employee/leave", element: <PublicLayout><EmployeeLeave /></PublicLayout> },
+  { path: "/employee/deliveries", element: <PublicLayout><EmployeeDeliveries /></PublicLayout> },
 
   // Admin Portal Routes (Task/Attendance System)
   { path: "/admin/dashboard", element: <PublicLayout><AdminDashboard /></PublicLayout> },

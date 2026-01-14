@@ -1,8 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+// Load leave requests from localStorage if available
+const loadLeaveRequestsFromStorage = () => {
+    try {
+        const stored = localStorage.getItem('leaveRequests')
+        if (stored) {
+            return JSON.parse(stored)
+        }
+    } catch (error) {
+        console.error('Error loading leave requests from localStorage:', error)
+    }
+    return null
+}
+
+// Load balances from localStorage if available
+const loadBalancesFromStorage = () => {
+    try {
+        const stored = localStorage.getItem('leaveBalances')
+        if (stored) {
+            return JSON.parse(stored)
+        }
+    } catch (error) {
+        console.error('Error loading leave balances from localStorage:', error)
+    }
+    return null
+}
+
 // Initialize with sample leave requests and balances
+const storedRequests = loadLeaveRequestsFromStorage()
+const storedBalances = loadBalancesFromStorage()
+
 const initialState = {
-    requests: [
+    requests: storedRequests || [
         {
             id: 'leave_1',
             employeeId: 'emp_1',
@@ -34,7 +63,7 @@ const initialState = {
             comments: 'Approved. Enjoy your vacation!'
         }
     ],
-    balances: {
+    balances: storedBalances || {
         'emp_1': {
             total: 20,
             used: 5,
@@ -88,6 +117,13 @@ const leaveSlice = createSlice({
                 comments: ''
             }
             state.requests.push(newRequest)
+            
+            // Save to localStorage
+            try {
+                localStorage.setItem('leaveRequests', JSON.stringify(state.requests))
+            } catch (error) {
+                console.error('Error saving leave requests to localStorage:', error)
+            }
         },
         approveLeaveRequest: (state, action) => {
             const { id, reviewedBy, comments } = action.payload
@@ -112,6 +148,14 @@ const leaveSlice = createSlice({
                         balance[request.type].remaining -= request.days
                     }
                 }
+                
+                // Save to localStorage
+                try {
+                    localStorage.setItem('leaveRequests', JSON.stringify(state.requests))
+                    localStorage.setItem('leaveBalances', JSON.stringify(state.balances))
+                } catch (error) {
+                    console.error('Error saving leave data to localStorage:', error)
+                }
             }
         },
         rejectLeaveRequest: (state, action) => {
@@ -123,6 +167,13 @@ const leaveSlice = createSlice({
                 state.requests[requestIndex].reviewedBy = reviewedBy
                 state.requests[requestIndex].reviewedAt = new Date().toISOString()
                 state.requests[requestIndex].comments = comments || ''
+                
+                // Save to localStorage
+                try {
+                    localStorage.setItem('leaveRequests', JSON.stringify(state.requests))
+                } catch (error) {
+                    console.error('Error saving leave requests to localStorage:', error)
+                }
             }
         },
         updateLeaveBalance: (state, action) => {
