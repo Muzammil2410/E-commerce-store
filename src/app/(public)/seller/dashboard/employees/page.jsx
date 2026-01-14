@@ -38,8 +38,7 @@ const ROLE_PERMISSIONS = {
   'Order Manager': ['View & update orders'],
   'Warehouse Staff': ['Mark orders packed'],
   'Accounts': ['View sales & payouts'],
-  'Support Staff': ['View customer messages'],
-  'Admin': ['Full access']
+  'Support Staff': ['View customer messages']
 }
 
 export default function EmployeeManagement() {
@@ -795,7 +794,7 @@ export default function EmployeeManagement() {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-base font-semibold text-gray-700 dark:text-gray-300">
                         {employees.filter(emp => emp.role === role).length} employee{employees.filter(emp => emp.role === role).length !== 1 ? 's' : ''}
                       </span>
                     </div>

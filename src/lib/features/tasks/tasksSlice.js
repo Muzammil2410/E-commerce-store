@@ -78,6 +78,10 @@ const tasksSlice = createSlice({
                 state.tasks[taskIndex].progress = progress
                 if (status) {
                     state.tasks[taskIndex].status = status
+                    // Set completedAt timestamp when task is marked as completed
+                    if (status === 'completed' && !state.tasks[taskIndex].completedAt) {
+                        state.tasks[taskIndex].completedAt = new Date().toISOString()
+                    }
                 }
                 state.tasks[taskIndex].updatedAt = new Date().toISOString()
             }

@@ -85,29 +85,50 @@ export default function AdminLeave() {
     }
     
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-            <div className="max-w-7xl mx-auto">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                    Leave Request Management
-                </h1>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-12 transition-colors duration-200">
+            <div className="max-w-[1400px] mx-auto">
+                <div className="mb-6">
+                    <h1 className="text-2xl sm:text-3xl font-normal text-gray-900 dark:text-white mb-2">
+                        Leave Request Management
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-400">
+                        Review and manage employee leave requests
+                    </p>
+                </div>
                 
                 {/* Filters */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
-                    <div className="flex items-center gap-2">
-                        <Filter className="w-5 h-5 text-gray-400" />
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
+                    <div className="flex items-center gap-3">
+                        <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                         {['pending', 'approved', 'rejected'].map(status => (
                             <button
                                 key={status}
                                 onClick={() => setFilter(status)}
-                                className={`px-3 py-1 rounded text-sm ${
+                                className={`px-4 py-2 rounded-lg text-sm font-normal transition-colors ${
                                     filter === status
-                                        ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
-                                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                                        ? 'text-white'
+                                        : 'text-gray-600 dark:text-gray-400 hover:opacity-80'
                                 }`}
+                                style={filter === status ? { backgroundColor: '#3977ED' } : {}}
+                                onMouseEnter={(e) => {
+                                    if (filter !== status) {
+                                        e.currentTarget.style.backgroundColor = 'transparent'
+                                    } else {
+                                        e.currentTarget.style.backgroundColor = '#2d5fcc'
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (filter === status) {
+                                        e.currentTarget.style.backgroundColor = '#3977ED'
+                                    }
+                                }}
                             >
                                 {status.charAt(0).toUpperCase() + status.slice(1)}
                             </button>
                         ))}
+                        <div className="ml-auto text-sm text-gray-500 dark:text-gray-400">
+                            {filteredRequests.length} {filteredRequests.length === 1 ? 'request' : 'requests'}
+                        </div>
                     </div>
                 </div>
                 
@@ -128,15 +149,15 @@ export default function AdminLeave() {
                             return (
                                 <div
                                     key={request.id}
-                                    className="bg-white dark:bg-gray-800 rounded-lg shadow p-6"
+                                    className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow duration-200"
                                 >
-                                    <div className="flex items-center justify-between mb-4 gap-4">
+                                    <div className="flex items-center justify-between mb-6 gap-4">
                                         <div className="flex items-center gap-4 flex-1 min-w-0">
-                                            <div className="flex-shrink-0 h-12 w-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                                                <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                            <div className="flex-shrink-0 h-14 w-14 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                                <User className="w-7 h-7 text-blue-600 dark:text-blue-400" />
                                             </div>
                                             <div className="min-w-0">
-                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                                <h3 className="text-lg font-normal text-gray-900 dark:text-white mb-1">
                                                     {request.employeeName}
                                                 </h3>
                                                 {employee && (
@@ -147,45 +168,57 @@ export default function AdminLeave() {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 flex-shrink-0">
-                                            <span className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap ${getTypeColor(request.type)}`}>
+                                            <span className={`px-3 py-1.5 rounded-lg text-sm font-normal whitespace-nowrap ${getTypeColor(request.type)}`}>
                                                 {request.type}
                                             </span>
-                                            <span className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap ${getStatusColor(request.status)}`}>
+                                            <span className={`px-3 py-1.5 rounded-lg text-sm font-normal whitespace-nowrap ${getStatusColor(request.status)}`}>
                                                 {request.status}
                                             </span>
                                         </div>
                                     </div>
                                     
-                                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
-                                        <div>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Start Date</p>
-                                            <p className="font-medium text-gray-900 dark:text-white">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                                        <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                                                <p className="text-xs font-normal text-gray-500 dark:text-gray-400 uppercase tracking-wide">Start Date</p>
+                                            </div>
+                                            <p className="font-normal text-gray-900 dark:text-white text-base">
                                                 {format(new Date(request.startDate), 'MMM d, yyyy')}
                                             </p>
                                         </div>
-                                        <div>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">End Date</p>
-                                            <p className="font-medium text-gray-900 dark:text-white">
+                                        <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                                                <p className="text-xs font-normal text-gray-500 dark:text-gray-400 uppercase tracking-wide">End Date</p>
+                                            </div>
+                                            <p className="font-normal text-gray-900 dark:text-white text-base">
                                                 {format(new Date(request.endDate), 'MMM d, yyyy')}
                                             </p>
                                         </div>
-                                        <div>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Days</p>
-                                            <p className="font-medium text-gray-900 dark:text-white">
-                                                {request.days} days
+                                        <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                                                <p className="text-xs font-normal text-gray-500 dark:text-gray-400 uppercase tracking-wide">Days</p>
+                                            </div>
+                                            <p className="font-normal text-gray-900 dark:text-white text-base">
+                                                {request.days} {request.days === 1 ? 'day' : 'days'}
                                             </p>
                                         </div>
-                                        <div>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Remaining Balance</p>
-                                            <p className="font-medium text-gray-900 dark:text-white">
-                                                {balance.remaining} days
+                                        <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                                                <p className="text-xs font-normal text-gray-500 dark:text-gray-400 uppercase tracking-wide">Remaining Balance</p>
+                                            </div>
+                                            <p className="font-normal text-gray-900 dark:text-white text-base">
+                                                {balance.remaining} {balance.remaining === 1 ? 'day' : 'days'}
                                             </p>
                                         </div>
                                     </div>
                                     
-                                    <div className="mb-4">
-                                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Reason</p>
-                                        <p className="text-gray-900 dark:text-white">
+                                    <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                                        <p className="text-sm font-normal text-gray-700 dark:text-gray-300 mb-2">Reason</p>
+                                        <p className="text-gray-900 dark:text-white leading-relaxed">
                                             {request.reason}
                                         </p>
                                     </div>
@@ -200,23 +233,23 @@ export default function AdminLeave() {
                                     )}
                                     
                                     {request.status === 'pending' && (
-                                        <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                                            <div className="mb-4">
-                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
+                                            <div className="mb-6">
+                                                <label className="block text-sm font-normal text-gray-700 dark:text-gray-300 mb-3">
                                                     Add Comment
                                                 </label>
                                                 <textarea
                                                     value={comment}
                                                     onChange={(e) => setComment(e.target.value)}
-                                                    rows={3}
-                                                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    rows={4}
+                                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
                                                     placeholder="Add your comments here..."
                                                 />
                                             </div>
                                             <div className="flex gap-3">
                                                 <button
                                                     onClick={() => handleApprove(request.id)}
-                                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                                                    className="px-6 py-2 text-white rounded-lg font-normal transition-colors flex items-center gap-2"
                                                     style={{ backgroundColor: '#3977ED' }}
                                                     onMouseEnter={(e) => {
                                                         e.currentTarget.style.backgroundColor = '#2d5fcc'
@@ -230,7 +263,7 @@ export default function AdminLeave() {
                                                 </button>
                                                 <button
                                                     onClick={() => handleReject(request.id)}
-                                                    className="px-6 py-2 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                                                    className="px-6 py-2 text-white rounded-lg font-normal transition-colors flex items-center gap-2"
                                                     style={{ backgroundColor: '#3977ED' }}
                                                     onMouseEnter={(e) => {
                                                         e.currentTarget.style.backgroundColor = '#2d5fcc'

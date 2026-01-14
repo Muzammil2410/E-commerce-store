@@ -91,18 +91,31 @@ const attendanceSlice = createSlice({
             if (recordIndex !== -1) {
                 const clockInTime = new Date(state.records[recordIndex].clockIn)
                 const clockOutTime = timestamp ? new Date(timestamp) : new Date()
-                const hoursWorked = (clockOutTime - clockInTime) / (1000 * 60 * 60)
+                const millisecondsWorked = clockOutTime - clockInTime
+                const hoursWorked = millisecondsWorked / (1000 * 60 * 60)
+                const minutesWorked = millisecondsWorked / (1000 * 60)
+                
+                // Round hours to 2 decimal places
+                const roundedHours = Math.round(hoursWorked * 100) / 100
                 
                 state.records[recordIndex].clockOut = clockOutTime.toISOString()
-                state.records[recordIndex].hoursWorked = Math.round(hoursWorked * 100) / 100
+                state.records[recordIndex].hoursWorked = roundedHours
                 
-                // Determine status based on hours worked
-                if (hoursWorked < 4) {
+                // Determine status based on hours worked with accurate thresholds
+                // Minimum 0.1 hours (6 minutes) to be considered valid work
+                if (hoursWorked < 0.1) {
+                    // Less than 6 minutes - mark as absent (invalid/accidental session)
+                    state.records[recordIndex].status = 'absent'
+                    state.records[recordIndex].hoursWorked = Math.round(hoursWorked * 100) / 100 // Keep actual time for display
+                } else if (hoursWorked >= 4 && hoursWorked < 8) {
+                    // 4-8 hours - half day
                     state.records[recordIndex].status = 'half-day'
                 } else if (hoursWorked >= 8) {
+                    // 8 hours or more - full day
                     state.records[recordIndex].status = 'present'
                 } else {
-                    state.records[recordIndex].status = 'half-day'
+                    // Less than 4 hours but more than 6 minutes - mark as absent (not a valid work day)
+                    state.records[recordIndex].status = 'absent'
                 }
                 
                 // Remove from current sessions

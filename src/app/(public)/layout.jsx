@@ -34,12 +34,18 @@ export default function PublicLayout({ children }) {
     // Check if current path is profile page
     const isProfilePage = pathname === '/profile'
 
+    // Check if current path is employee page
+    const isEmployeePage = pathname.startsWith('/employee/')
+
+    // Check if current path is admin page
+    const isAdminPage = pathname.startsWith('/admin/')
+
     // Check if user is logged in (check localStorage directly to avoid first render issue)
     const userData = typeof window !== 'undefined' ? localStorage.getItem('user') : null
     const isUserLoggedIn = userData !== null
 
-    // If user is logged in and NOT on home page, auth page, or profile page, don't show navbar/header/banner
-    if (isUserLoggedIn && !isAuthPage && !isHomePage && !isProfilePage) {
+    // For auth pages, seller dashboard pages, employee pages, and admin pages (including login), show ONLY the content (no navbar, banner, footer, or categories)
+    if (isAuthPage || isSellerPage || isEmployeePage || isAdminPage) {
         return (
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
                 <ScrollToTop />
@@ -48,8 +54,8 @@ export default function PublicLayout({ children }) {
         )
     }
 
-    // For auth pages and seller dashboard pages, show ONLY the content (no navbar, banner, or categories)
-    if (isAuthPage || isSellerPage) {
+    // If user is logged in and NOT on home page, auth page, or profile page, don't show navbar/header/banner
+    if (isUserLoggedIn && !isAuthPage && !isHomePage && !isProfilePage) {
         return (
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
                 <ScrollToTop />
