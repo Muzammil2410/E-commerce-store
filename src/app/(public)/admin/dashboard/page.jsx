@@ -1,17 +1,35 @@
 'use client'
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Users, CheckCircle2, Clock, Calendar, TrendingUp, AlertCircle, User, FileText, Activity } from 'lucide-react'
+import { Users, CheckCircle2, Clock, Calendar, TrendingUp, AlertCircle, User, FileText, Activity, MessageSquare, Bell, BookOpen, Send, X, Upload, Plus } from 'lucide-react'
 import { format } from 'date-fns'
+import toast from 'react-hot-toast'
+import { loadConversations, createConversation, sendMessage, markAsRead, setActiveConversation } from '@/lib/features/chat/chatSlice'
+import { loadAnnouncements, createAnnouncement, deleteAnnouncement } from '@/lib/features/announcements/announcementsSlice'
+import { loadDocuments, uploadDocument, deleteDocument } from '@/lib/features/documents/documentsSlice'
 
 export default function AdminDashboard() {
     const navigate = useNavigate()
-    const { currentUser } = useSelector(state => state.employees)
-    const { tasks } = useSelector(state => state.tasks)
-    const { records } = useSelector(state => state.attendance)
-    const { requests } = useSelector(state => state.leave)
-    const { employees } = useSelector(state => state.employees)
+    const dispatch = useDispatch()
+    const { currentUser } = useSelector(state => state?.employees || {})
+    const { tasks = [] } = useSelector(state => state?.tasks || { tasks: [] })
+    const { records = [] } = useSelector(state => state?.attendance || { records: [] })
+    const { requests = [] } = useSelector(state => state?.leave || { requests: [] })
+    const { employees = [] } = useSelector(state => state?.employees || { employees: [] })
+    const { conversations = [], messages = {}, activeConversation = null, unreadCounts = {} } = useSelector(state => state?.chat || { conversations: [], messages: {}, activeConversation: null, unreadCounts: {} })
+    const { announcements = [] } = useSelector(state => state?.announcements || { announcements: [] })
+    const { documents = [] } = useSelector(state => state?.documents || { documents: [] })
+    
+    const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
+    const [showDocumentsModal, setShowDocumentsModal] = useState(false)
+    const [showChatModal, setShowChatModal] = useState(false)
+    const [selectedEmployee, setSelectedEmployee] = useState(null)
+    const [chatMessage, setChatMessage] = useState('')
+    const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '', priority: 'normal' })
+    const [newDocument, setNewDocument] = useState({ title: '', description: '', category: 'Other', fileUrl: '#' })
+    const [employeeSummaries, setEmployeeSummaries] = useState([])
+    const [showSummariesModal, setShowSummariesModal] = useState(false)
     
     useEffect(() => {
         const userData = localStorage.getItem('employeeUser')
@@ -28,7 +46,33 @@ export default function AdminDashboard() {
         } catch (error) {
             navigate('/employee/login')
         }
-    }, [navigate])
+        
+        // Load communication data
+        dispatch(loadConversations())
+        dispatch(loadAnnouncements())
+        dispatch(loadDocuments())
+        
+        // Load employee daily summaries
+        loadEmployeeSummaries()
+    }, [navigate, dispatch])
+    
+    const loadEmployeeSummaries = () => {
+        const summaries = JSON.parse(localStorage.getItem('admin_workLogs') || '[]')
+        // Sort by date (newest first)
+        summaries.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        setEmployeeSummaries(summaries)
+    }
+    
+    // Reload conversations periodically when chat modal is open
+    useEffect(() => {
+        if (showChatModal && activeConversation) {
+            const interval = setInterval(() => {
+                dispatch(loadConversations())
+            }, 2000) // Reload every 2 seconds
+            
+            return () => clearInterval(interval)
+        }
+    }, [showChatModal, activeConversation, dispatch])
     
     if (!currentUser || currentUser.role !== 'admin') {
         return (
@@ -143,6 +187,63 @@ export default function AdminDashboard() {
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             Awaiting approval
                         </p>
+                    </div>
+                </div>
+                
+                {/* Communication Section */}
+                <div className="mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                            Communication & Management
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <button
+                                onClick={() => setShowAnnouncementsModal(true)}
+                                className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border border-gray-200 dark:border-gray-600"
+                            >
+                                <Bell className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Announcements</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {announcements.length} announcement{announcements.length !== 1 ? 's' : ''}
+                                </p>
+                            </button>
+                            
+                            <button
+                                onClick={() => setShowDocumentsModal(true)}
+                                className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border border-gray-200 dark:border-gray-600"
+                            >
+                                <BookOpen className="w-6 h-6 text-green-600 dark:text-green-400 mb-2" />
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Documents</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {documents.length} document{documents.length !== 1 ? 's' : ''} available
+                                </p>
+                            </button>
+                            
+                            <button
+                                onClick={() => {
+                                    loadEmployeeSummaries()
+                                    setShowSummariesModal(true)
+                                }}
+                                className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border border-gray-200 dark:border-gray-600"
+                            >
+                                <FileText className="w-6 h-6 text-orange-600 dark:text-orange-400 mb-2" />
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Daily Summaries</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {employeeSummaries.length} summary{employeeSummaries.length !== 1 ? 'ies' : ''}
+                                </p>
+                            </button>
+                            
+                            <button
+                                onClick={() => setShowChatModal(true)}
+                                className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border border-gray-200 dark:border-gray-600"
+                            >
+                                <MessageSquare className="w-6 h-6 text-purple-600 dark:text-purple-400 mb-2" />
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Employee Chat</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
+                                </p>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
@@ -340,6 +441,448 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
+            
+            {/* Announcements Modal */}
+            {showAnnouncementsModal && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Manage Announcements</h3>
+                            <button
+                                onClick={() => {
+                                    setShowAnnouncementsModal(false)
+                                    setNewAnnouncement({ title: '', content: '', priority: 'normal' })
+                                }}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="p-6 space-y-6">
+                            {/* Create New Announcement */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                    <Plus size={18} />
+                                    Create New Announcement
+                                </h4>
+                                <div className="space-y-3">
+                                    <input
+                                        type="text"
+                                        value={newAnnouncement.title}
+                                        onChange={(e) => setNewAnnouncement({ ...newAnnouncement, title: e.target.value })}
+                                        placeholder="Announcement Title"
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    />
+                                    <textarea
+                                        value={newAnnouncement.content}
+                                        onChange={(e) => setNewAnnouncement({ ...newAnnouncement, content: e.target.value })}
+                                        placeholder="Announcement Content"
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                                        rows={4}
+                                    />
+                                    <select
+                                        value={newAnnouncement.priority}
+                                        onChange={(e) => setNewAnnouncement({ ...newAnnouncement, priority: e.target.value })}
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    >
+                                        <option value="normal">Normal</option>
+                                        <option value="high">High Priority</option>
+                                        <option value="low">Low Priority</option>
+                                    </select>
+                                    <button
+                                        onClick={() => {
+                                            if (newAnnouncement.title.trim() && newAnnouncement.content.trim()) {
+                                                dispatch(createAnnouncement({
+                                                    title: newAnnouncement.title,
+                                                    content: newAnnouncement.content,
+                                                    authorId: currentUser.id,
+                                                    authorName: currentUser.name,
+                                                    priority: newAnnouncement.priority
+                                                }))
+                                                setNewAnnouncement({ title: '', content: '', priority: 'normal' })
+                                                toast.success('Announcement created')
+                                            }
+                                        }}
+                                        className="w-full px-4 py-2 text-white rounded-lg transition-colors text-sm font-semibold"
+                                        style={{ backgroundColor: '#3977ED' }}
+                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                    >
+                                        Create Announcement
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Existing Announcements */}
+                            <div>
+                                <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Existing Announcements</h4>
+                                <div className="space-y-3">
+                                    {announcements.length === 0 ? (
+                                        <p className="text-center text-gray-500 dark:text-gray-400 py-4">No announcements</p>
+                                    ) : (
+                                        announcements.map(announcement => (
+                                            <div
+                                                key={announcement.id}
+                                                className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                                            >
+                                                <div className="flex items-start justify-between mb-2">
+                                                    <h5 className="font-bold text-gray-900 dark:text-white">{announcement.title}</h5>
+                                                    <button
+                                                        onClick={() => {
+                                                            dispatch(deleteAnnouncement(announcement.id))
+                                                            toast.success('Announcement deleted')
+                                                        }}
+                                                        className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                                                    >
+                                                        <X size={18} />
+                                                    </button>
+                                                </div>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{announcement.content}</p>
+                                                <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                                    <span>{announcement.priority}</span>
+                                                    <span>{format(new Date(announcement.createdAt), 'MMM d, yyyy')}</span>
+                                                    <span>{announcement.readBy.length} read</span>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Documents Modal */}
+            {showDocumentsModal && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Manage Documents</h3>
+                            <button
+                                onClick={() => {
+                                    setShowDocumentsModal(false)
+                                    setNewDocument({ title: '', description: '', category: 'Other', fileUrl: '#' })
+                                }}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="p-6 space-y-6">
+                            {/* Upload New Document */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                    <Upload size={18} />
+                                    Upload New Document
+                                </h4>
+                                <div className="space-y-3">
+                                    <input
+                                        type="text"
+                                        value={newDocument.title}
+                                        onChange={(e) => setNewDocument({ ...newDocument, title: e.target.value })}
+                                        placeholder="Document Title"
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    />
+                                    <textarea
+                                        value={newDocument.description}
+                                        onChange={(e) => setNewDocument({ ...newDocument, description: e.target.value })}
+                                        placeholder="Description"
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                                        rows={3}
+                                    />
+                                    <select
+                                        value={newDocument.category}
+                                        onChange={(e) => setNewDocument({ ...newDocument, category: e.target.value })}
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    >
+                                        <option value="Policy">Policy</option>
+                                        <option value="Handbook">Handbook</option>
+                                        <option value="Guidelines">Guidelines</option>
+                                        <option value="Forms">Forms</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <label className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <Upload size={18} className="text-gray-600 dark:text-gray-400" />
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Choose file</span>
+                                        <input type="file" className="hidden" />
+                                    </label>
+                                    <button
+                                        onClick={() => {
+                                            if (newDocument.title.trim()) {
+                                                dispatch(uploadDocument({
+                                                    ...newDocument,
+                                                    uploadedBy: currentUser.id,
+                                                    fileType: 'pdf',
+                                                    fileSize: '0 MB'
+                                                }))
+                                                setNewDocument({ title: '', description: '', category: 'Other', fileUrl: '#' })
+                                                toast.success('Document uploaded')
+                                            }
+                                        }}
+                                        className="w-full px-4 py-2 text-white rounded-lg transition-colors text-sm font-semibold"
+                                        style={{ backgroundColor: '#3977ED' }}
+                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                    >
+                                        Upload Document
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Existing Documents */}
+                            <div>
+                                <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Existing Documents</h4>
+                                <div className="space-y-3">
+                                    {documents.length === 0 ? (
+                                        <p className="text-center text-gray-500 dark:text-gray-400 py-4">No documents</p>
+                                    ) : (
+                                        documents.map(doc => (
+                                            <div
+                                                key={doc.id}
+                                                className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg flex items-start justify-between"
+                                            >
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                                        <h5 className="font-semibold text-gray-900 dark:text-white">{doc.title}</h5>
+                                                    </div>
+                                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{doc.description}</p>
+                                                    <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                                        <span>{doc.category}</span>
+                                                        <span>{doc.fileType.toUpperCase()}</span>
+                                                        <span>{doc.fileSize}</span>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => {
+                                                        dispatch(deleteDocument(doc.id))
+                                                        toast.success('Document deleted')
+                                                    }}
+                                                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 ml-4"
+                                                >
+                                                    <X size={18} />
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Chat Modal */}
+            {showChatModal && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full h-[600px] flex">
+                        {/* Employee List */}
+                        <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+                            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                                <h3 className="font-bold text-gray-900 dark:text-white">Employees</h3>
+                            </div>
+                            <div className="flex-1 overflow-y-auto">
+                                {employees.filter(emp => emp.role === 'employee').map(employee => {
+                                    const convId = `conv_admin_${employee.id}`
+                                    const unread = unreadCounts[convId] || 0
+                                    return (
+                                        <button
+                                            key={employee.id}
+                                            onClick={() => {
+                                                dispatch(createConversation({
+                                                    adminId: 'admin',
+                                                    employeeId: employee.id,
+                                                    employeeName: employee.name,
+                                                    adminName: currentUser.name
+                                                }))
+                                                // Reload conversations to ensure sync
+                                                setTimeout(() => {
+                                                    dispatch(loadConversations())
+                                                }, 100)
+                                                dispatch(setActiveConversation(convId))
+                                                dispatch(markAsRead({ conversationId: convId, userId: 'admin' }))
+                                                setSelectedEmployee(employee)
+                                            }}
+                                            className={`w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 ${
+                                                activeConversation === convId ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                                            }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-medium text-gray-900 dark:text-white">{employee.name}</span>
+                                                {unread > 0 && (
+                                                    <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                                        {unread}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                        
+                        {/* Chat Area */}
+                        <div className="flex-1 flex flex-col">
+                            {activeConversation && selectedEmployee ? (
+                                <>
+                                    <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                        <h3 className="font-bold text-gray-900 dark:text-white">{selectedEmployee.name}</h3>
+                                        <button
+                                            onClick={() => setShowChatModal(false)}
+                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                        >
+                                            <X size={24} />
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                                        {messages[activeConversation] && messages[activeConversation].length > 0 ? (
+                                            messages[activeConversation].map(msg => (
+                                                <div
+                                                    key={msg.id}
+                                                    className={`flex ${msg.senderRole === 'admin' ? 'justify-end' : 'justify-start'}`}
+                                                >
+                                                    <div className={`max-w-[70%] p-3 rounded-lg ${
+                                                        msg.senderRole === 'admin'
+                                                            ? 'bg-blue-600 text-white'
+                                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                                                    }`}>
+                                                        <p className="text-sm font-medium mb-1">{msg.senderName}</p>
+                                                        <p className="text-sm">{msg.message}</p>
+                                                        <p className="text-xs opacity-70 mt-1">
+                                                            {format(new Date(msg.timestamp), 'h:mm a')}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className="text-center text-gray-500 dark:text-gray-400 py-8">No messages yet. Start the conversation!</p>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={chatMessage}
+                                            onChange={(e) => setChatMessage(e.target.value)}
+                                            onKeyPress={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    dispatch(sendMessage({
+                                                        conversationId: activeConversation,
+                                                        senderId: 'admin',
+                                                        senderName: currentUser.name,
+                                                        senderRole: 'admin',
+                                                        message: chatMessage
+                                                    }))
+                                                    setChatMessage('')
+                                                    // Reload conversations to sync
+                                                    setTimeout(() => {
+                                                        dispatch(loadConversations())
+                                                    }, 100)
+                                                }
+                                            }}
+                                            placeholder="Type a message..."
+                                            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                        />
+                                        <button
+                                            onClick={() => {
+                                                dispatch(sendMessage({
+                                                    conversationId: activeConversation,
+                                                    senderId: 'admin',
+                                                    senderName: currentUser.name,
+                                                    senderRole: 'admin',
+                                                    message: chatMessage
+                                                }))
+                                                setChatMessage('')
+                                                // Reload conversations to sync
+                                                setTimeout(() => {
+                                                    dispatch(loadConversations())
+                                                }, 100)
+                                            }}
+                                            className="px-4 py-2 text-white rounded-lg transition-colors"
+                                            style={{ backgroundColor: '#3977ED' }}
+                                            onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                            onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                        >
+                                            <Send size={20} />
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="flex-1 flex items-center justify-center">
+                                    <p className="text-gray-500 dark:text-gray-400">Select an employee to start chatting</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Employee Daily Summaries Modal */}
+            {showSummariesModal && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Employee Daily Summaries</h3>
+                            <button
+                                onClick={() => {
+                                    setShowSummariesModal(false)
+                                    loadEmployeeSummaries() // Reload on close
+                                }}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="p-6 space-y-4">
+                            {employeeSummaries.length === 0 ? (
+                                <div className="text-center py-12">
+                                    <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                                    <p className="text-gray-600 dark:text-gray-400">No daily summaries yet</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                                        Employee summaries will appear here when they save their daily work summaries
+                                    </p>
+                                </div>
+                            ) : (
+                                employeeSummaries.map(summary => (
+                                    <div
+                                        key={summary.id}
+                                        className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                                    >
+                                        <div className="flex items-start justify-between mb-2">
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                                        <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-gray-900 dark:text-white">{summary.employeeName}</h4>
+                                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                            {format(new Date(summary.date), 'EEEE, MMMM d, yyyy')}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="ml-13 mt-2">
+                                                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                                        {summary.summary}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="text-xs text-gray-500 dark:text-gray-400 ml-4">
+                                                {format(new Date(summary.createdAt), 'h:mm a')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

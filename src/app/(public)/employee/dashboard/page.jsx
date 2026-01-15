@@ -2,19 +2,34 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, Clock, CheckCircle2, AlertCircle, TrendingUp, Bell, X, Upload, MessageSquare, FileText, Flag, ChevronLeft, ChevronRight, Zap, Package, MapPin, Phone, User, Camera, PenTool, CheckCircle } from 'lucide-react'
+import { Calendar, Clock, CheckCircle2, AlertCircle, TrendingUp, Bell, X, Upload, MessageSquare, FileText, Flag, ChevronLeft, ChevronRight, Zap, Package, MapPin, Phone, User, Camera, PenTool, CheckCircle, Settings, Globe, Trophy, Target, Play, Pause, Square, Award, BookOpen, Send, Download } from 'lucide-react'
 import { format, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, isToday, startOfMonth, endOfMonth } from 'date-fns'
 import toast from 'react-hot-toast'
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { updateTaskProgress } from '@/lib/features/tasks/tasksSlice'
+import { setCurrentUser, updateEmployee } from '@/lib/features/employees/employeesSlice'
+import { loadConversations, createConversation, sendMessage, markAsRead, setActiveConversation } from '@/lib/features/chat/chatSlice'
+import { loadAnnouncements, markAnnouncementAsRead, markAllAsRead } from '@/lib/features/announcements/announcementsSlice'
+import { loadDocuments } from '@/lib/features/documents/documentsSlice'
+import { loadProfile, updateLanguage, updateEmergencyContact, calculateProfileCompletion } from '@/lib/features/profile/profileSlice'
+import { loadWorkLogs, startTimer, stopTimer, updateDailySummary, getTodaySummary } from '@/lib/features/workLog/workLogSlice'
+import { loadAchievements, checkAchievements } from '@/lib/features/achievements/achievementsSlice'
+import { loadGoals, addGoal, updateGoalProgress, deleteGoal, getCurrentWeekGoals } from '@/lib/features/goals/goalsSlice'
 
 export default function EmployeeDashboard() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { currentUser } = useSelector(state => state.employees)
-    const { tasks } = useSelector(state => state.tasks)
-    const { records, currentSessions } = useSelector(state => state.attendance)
-    const { requests } = useSelector(state => state.leave)
+    const { currentUser } = useSelector(state => state?.employees || {})
+    const { tasks = [] } = useSelector(state => state?.tasks || { tasks: [] })
+    const { records = [], currentSessions = {} } = useSelector(state => state?.attendance || { records: [], currentSessions: {} })
+    const { requests = [] } = useSelector(state => state?.leave || { requests: [] })
+    const { conversations = [], messages = {}, activeConversation = null, unreadCounts = {} } = useSelector(state => state?.chat || { conversations: [], messages: {}, activeConversation: null, unreadCounts: {} })
+    const { announcements = [], unreadCount: announcementsUnread = 0 } = useSelector(state => state?.announcements || { announcements: [], unreadCount: 0 })
+    const { documents = [] } = useSelector(state => state?.documents || { documents: [] })
+    const { profileCompletion = 0, language = 'en', emergencyContact = null } = useSelector(state => state?.profile || { profileCompletion: 0, language: 'en', emergencyContact: null })
+    const { workLogs = [], currentTimer = null, dailySummary = null } = useSelector(state => state?.workLog || { workLogs: [], currentTimer: null, dailySummary: null })
+    const { achievements = [], userAchievements = {} } = useSelector(state => state?.achievements || { achievements: [], userAchievements: {} })
+    const { weeklyGoals = {} } = useSelector(state => state?.goals || { weeklyGoals: {} })
     
     const [todayAttendance, setTodayAttendance] = useState(null)
     const [isClockedIn, setIsClockedIn] = useState(false)
@@ -35,6 +50,22 @@ export default function EmployeeDashboard() {
     const [deliveryNotes, setDeliveryNotes] = useState('')
     const signatureCanvasRef = useRef(null)
     
+    // New feature states
+    const [showProfileModal, setShowProfileModal] = useState(false)
+    const [showChatModal, setShowChatModal] = useState(false)
+    const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
+    const [showDocumentsModal, setShowDocumentsModal] = useState(false)
+    const [chatMessage, setChatMessage] = useState('')
+    const [selectedEmployee, setSelectedEmployee] = useState(null)
+    const [workTimerRunning, setWorkTimerRunning] = useState(false)
+    const [timerDisplay, setTimerDisplay] = useState('00:00:00')
+    const [dailyWorkSummary, setDailyWorkSummary] = useState('')
+    const [newGoalTitle, setNewGoalTitle] = useState('')
+    const [newGoalTarget, setNewGoalTarget] = useState(1)
+    const [profilePhoto, setProfilePhoto] = useState(null)
+    const [editPhone, setEditPhone] = useState('')
+    const [editEmergencyContact, setEditEmergencyContact] = useState({ name: '', phone: '', relation: '' })
+    
     useEffect(() => {
         // Check if user is logged in
         const userData = localStorage.getItem('employeeUser')
@@ -49,12 +80,20 @@ export default function EmployeeDashboard() {
                 const user = JSON.parse(userData)
                 if (user.role !== 'employee' && user.role !== 'admin') {
                     navigate('/employee/login')
+                    return
                 }
+                // Set current user in Redux
+                dispatch(setCurrentUser(user))
             } catch (error) {
                 navigate('/employee/login')
             }
+        } else {
+            // Ensure we're on the right page based on role
+            if (currentUser.role === 'admin') {
+                navigate('/admin/dashboard')
+            }
         }
-    }, [navigate, currentUser])
+    }, [navigate, currentUser, dispatch])
     
     useEffect(() => {
         if (!currentUser) return
@@ -72,7 +111,70 @@ export default function EmployeeDashboard() {
         
         // Generate notifications
         generateNotifications()
-    }, [currentUser, records, currentSessions, tasks, requests])
+        
+        // Load new features data
+        dispatch(loadConversations())
+        dispatch(loadAnnouncements())
+        dispatch(loadDocuments())
+        dispatch(loadProfile({ userId: currentUser.id }))
+        dispatch(loadWorkLogs({ employeeId: currentUser.id }))
+        dispatch(loadAchievements())
+        dispatch(loadGoals({ userId: currentUser.id }))
+        dispatch(getCurrentWeekGoals({ userId: currentUser.id }))
+        
+        // Initialize profile edit states
+        setEditPhone(currentUser.phone || '')
+        if (emergencyContact) {
+            setEditEmergencyContact(emergencyContact)
+        }
+    }, [currentUser, records, currentSessions, tasks, requests, dispatch, emergencyContact])
+    
+    // Recalculate profile completion when emergency contact changes
+    useEffect(() => {
+        if (currentUser) {
+            const employeeForCalc = {
+                ...currentUser,
+                emergencyContact: emergencyContact
+            }
+            dispatch(calculateProfileCompletion({ employee: employeeForCalc }))
+        }
+    }, [currentUser, emergencyContact, dispatch])
+    
+    // Reload conversations periodically when chat modal is open
+    useEffect(() => {
+        if (showChatModal && activeConversation) {
+            const interval = setInterval(() => {
+                dispatch(loadConversations())
+            }, 2000) // Reload every 2 seconds
+            
+            return () => clearInterval(interval)
+        }
+    }, [showChatModal, activeConversation, dispatch])
+    
+    // Timer effect
+    useEffect(() => {
+        if (currentTimer && currentTimer.startTime) {
+            setWorkTimerRunning(true)
+            const interval = setInterval(() => {
+                if (currentTimer && currentTimer.startTime) {
+                    const start = new Date(currentTimer.startTime)
+                    const now = new Date()
+                    const diff = now - start
+                    const hours = Math.floor(diff / 3600000)
+                    const minutes = Math.floor((diff % 3600000) / 60000)
+                    const seconds = Math.floor((diff % 60000) / 1000)
+                    setTimerDisplay(
+                        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+                    )
+                }
+            }, 1000)
+            
+            return () => clearInterval(interval)
+        } else {
+            setWorkTimerRunning(false)
+            setTimerDisplay('00:00:00')
+        }
+    }, [currentTimer])
     
     const loadDeliveries = () => {
         if (!currentUser) return
@@ -510,6 +612,235 @@ export default function EmployeeDashboard() {
             default: return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
         }
     }
+    
+    // New feature handlers
+    const handleStartTimer = () => {
+        if (currentUser) {
+            dispatch(startTimer({ employeeId: currentUser.id }))
+            setWorkTimerRunning(true)
+            toast.success('Work timer started')
+        }
+    }
+    
+    const handleStopTimer = () => {
+        if (currentUser && currentTimer) {
+            dispatch(stopTimer({ 
+                employeeId: currentUser.id, 
+                summary: dailyWorkSummary,
+                tasksCompleted: completedTasks.filter(t => {
+                    const today = new Date().toISOString().split('T')[0]
+                    return t.completedAt && t.completedAt.split('T')[0] === today
+                }).map(t => t.id)
+            }))
+            setWorkTimerRunning(false)
+            setTimerDisplay('00:00:00')
+            toast.success('Work timer stopped')
+        }
+    }
+    
+    const handleSaveDailySummary = () => {
+        if (currentUser && dailyWorkSummary.trim()) {
+            dispatch(updateDailySummary({ employeeId: currentUser.id, summary: dailyWorkSummary }))
+            
+            // Also save to admin-accessible location
+            const today = new Date().toISOString().split('T')[0]
+            const summaryData = {
+                id: `summary_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                employeeId: currentUser.id,
+                employeeName: currentUser.name,
+                date: today,
+                summary: dailyWorkSummary,
+                createdAt: new Date().toISOString()
+            }
+            
+            // Get existing admin summaries
+            const adminSummaries = JSON.parse(localStorage.getItem('admin_workLogs') || '[]')
+            // Remove any existing summary for this employee and date
+            const filtered = adminSummaries.filter(s => 
+                !(s.employeeId === currentUser.id && s.date === today)
+            )
+            // Add new summary
+            filtered.push(summaryData)
+            localStorage.setItem('admin_workLogs', JSON.stringify(filtered))
+            
+            // Reload work logs to show immediately
+            setTimeout(() => {
+                dispatch(loadWorkLogs({ employeeId: currentUser.id }))
+            }, 100)
+            
+            setDailyWorkSummary('')
+            toast.success('Daily summary saved')
+        }
+    }
+    
+    const handleDeleteSummary = (summaryId) => {
+        if (currentUser) {
+            const stored = localStorage.getItem(`workLogs_${currentUser.id}`)
+            if (stored) {
+                const data = JSON.parse(stored)
+                const logToDelete = data.workLogs.find(log => log.id === summaryId)
+                const updatedLogs = data.workLogs.filter(log => log.id !== summaryId)
+                localStorage.setItem(`workLogs_${currentUser.id}`, JSON.stringify({
+                    ...data,
+                    workLogs: updatedLogs
+                }))
+                
+                // Also remove from admin summaries if it exists
+                if (logToDelete) {
+                    const adminSummaries = JSON.parse(localStorage.getItem('admin_workLogs') || '[]')
+                    const filtered = adminSummaries.filter(s => 
+                        !(s.employeeId === currentUser.id && s.date === logToDelete.date)
+                    )
+                    localStorage.setItem('admin_workLogs', JSON.stringify(filtered))
+                }
+                
+                dispatch(loadWorkLogs({ employeeId: currentUser.id }))
+                toast.success('Summary deleted')
+            }
+        }
+    }
+    
+    const handleSendChatMessage = () => {
+        if (!chatMessage.trim() || !activeConversation || !currentUser) return
+        
+        const conversation = (conversations || []).find(c => c.id === activeConversation)
+        if (!conversation) {
+            // Create conversation if it doesn't exist
+            dispatch(createConversation({
+                adminId: 'admin',
+                employeeId: currentUser.id,
+                employeeName: currentUser.name,
+                adminName: 'Admin'
+            }))
+        }
+        
+        dispatch(sendMessage({
+            conversationId: activeConversation,
+            senderId: currentUser.id,
+            senderName: currentUser.name,
+            senderRole: currentUser.role,
+            message: chatMessage
+        }))
+        setChatMessage('')
+        // Reload conversations to sync
+        setTimeout(() => {
+            dispatch(loadConversations())
+        }, 100)
+        toast.success('Message sent')
+    }
+    
+    const handleOpenChat = () => {
+        if (!currentUser) return
+        
+        // Use consistent conversation ID format: conv_admin_employeeId
+        const adminId = 'admin'
+        const conversationId = `conv_${adminId}_${currentUser.id}`
+        
+        let conversation = (conversations || []).find(c => c.id === conversationId)
+        if (!conversation) {
+            dispatch(createConversation({
+                adminId,
+                employeeId: currentUser.id,
+                employeeName: currentUser.name,
+                adminName: 'Admin'
+            }))
+            // Reload conversations to get the new one
+            setTimeout(() => {
+                dispatch(loadConversations())
+            }, 100)
+        }
+        
+        dispatch(setActiveConversation(conversationId))
+        if (currentUser) {
+            dispatch(markAsRead({ conversationId, userId: currentUser.id }))
+        }
+        setShowChatModal(true)
+    }
+    
+    const handleAddGoal = () => {
+        if (!newGoalTitle.trim() || !currentUser) return
+        
+        dispatch(addGoal({
+            userId: currentUser.id,
+            title: newGoalTitle,
+            targetValue: newGoalTarget
+        }))
+        // Reload goals to show immediately
+        setTimeout(() => {
+            dispatch(loadGoals({ userId: currentUser.id }))
+            dispatch(getCurrentWeekGoals({ userId: currentUser.id }))
+        }, 100)
+        setNewGoalTitle('')
+        setNewGoalTarget(1)
+        toast.success('Goal added')
+    }
+    
+    const handleDeleteGoal = (goalId) => {
+        if (currentUser) {
+            dispatch(deleteGoal({ userId: currentUser.id, goalId }))
+            // Reload goals to update display
+            setTimeout(() => {
+                dispatch(loadGoals({ userId: currentUser.id }))
+                dispatch(getCurrentWeekGoals({ userId: currentUser.id }))
+            }, 100)
+            toast.success('Goal deleted')
+        }
+    }
+    
+    const handleUpdateLanguage = (lang) => {
+        if (currentUser) {
+            dispatch(updateLanguage({ userId: currentUser.id, language: lang }))
+            toast.success(`Language changed to ${lang === 'en' ? 'English' : 'Other'}`)
+        }
+    }
+    
+    const handleSaveProfile = () => {
+        if (currentUser) {
+            // Update employee in Redux
+            const updatedEmployee = {
+                ...currentUser,
+                phone: editPhone,
+                avatar: profilePhoto || currentUser.avatar
+            }
+            dispatch(updateEmployee({ id: currentUser.id, updates: updatedEmployee }))
+            dispatch(setCurrentUser(updatedEmployee))
+            
+            // Update localStorage
+            localStorage.setItem('employeeUser', JSON.stringify(updatedEmployee))
+            
+            // Update emergency contact
+            dispatch(updateEmergencyContact({
+                userId: currentUser.id,
+                emergencyContact: editEmergencyContact
+            }))
+            
+            // Update emergency contact first, then recalculate
+            dispatch(updateEmergencyContact({
+                userId: currentUser.id,
+                emergencyContact: editEmergencyContact
+            }))
+            
+            // Recalculate profile completion with updated data
+            setTimeout(() => {
+                const updatedEmployeeForCalc = {
+                    ...updatedEmployee,
+                    emergencyContact: editEmergencyContact
+                }
+                dispatch(calculateProfileCompletion({ employee: updatedEmployeeForCalc }))
+            }, 100)
+            
+            toast.success('Profile updated')
+            setShowProfileModal(false)
+        }
+    }
+    
+    const currentWeekGoals = currentUser && weeklyGoals[currentUser.id] 
+        ? weeklyGoals[currentUser.id][format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd')] || []
+        : []
+    
+    const userAchievementsList = currentUser && userAchievements[currentUser.id]
+        ? achievements.filter(a => userAchievements[currentUser.id].includes(a.id))
+        : []
     
     const performanceData = getPerformanceData()
     const trendData = getTaskTrendData()
@@ -1053,6 +1384,339 @@ export default function EmployeeDashboard() {
                     </div>
                 </div>
                 
+                {/* Profile & Personalization Section */}
+                <div className="mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                                <User className="w-6 h-6" />
+                                Profile & Personalization
+                            </h2>
+                            <button
+                                onClick={() => setShowProfileModal(true)}
+                                className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors border flex items-center gap-2"
+                                style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                            >
+                                <Settings size={16} />
+                                Edit Profile
+                            </button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Profile Completion Meter */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Profile Completion</span>
+                                    <span className="text-lg font-bold text-gray-900 dark:text-white">{profileCompletion}%</span>
+                                </div>
+                                <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                                    <div
+                                        className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                                        style={{ width: `${profileCompletion}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                            
+                            {/* Language Switch */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                                        <Globe size={16} />
+                                        Language
+                                    </span>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleUpdateLanguage('en')}
+                                        className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+                                            language === 'en' 
+                                                ? 'text-white' 
+                                                : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300'
+                                        }`}
+                                        style={language === 'en' ? { backgroundColor: '#3977ED' } : {}}
+                                    >
+                                        English
+                                    </button>
+                                    <button
+                                        onClick={() => handleUpdateLanguage('other')}
+                                        className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+                                            language === 'other' 
+                                                ? 'text-white' 
+                                                : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300'
+                                        }`}
+                                        style={language === 'other' ? { backgroundColor: '#3977ED' } : {}}
+                                    >
+                                        Other
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Emergency Contact */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 block mb-2">Emergency Contact</span>
+                                {emergencyContact ? (
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className="font-medium">{emergencyContact.name}</p>
+                                        <p>{emergencyContact.phone}</p>
+                                        <p className="text-xs">{emergencyContact.relation}</p>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">Not set</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* Productivity Boosters Section */}
+                <div className="mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight mb-4 flex items-center gap-2">
+                            <Zap className="w-6 h-6" />
+                            Productivity Boosters
+                        </h2>
+                        
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Daily Work Timer */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                    <Clock className="w-5 h-5" />
+                                    Daily Work Timer
+                                </h3>
+                                <div className="text-center mb-4">
+                                    <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                                        {timerDisplay}
+                                    </div>
+                                    <div className="flex gap-2 justify-center">
+                                        {!workTimerRunning ? (
+                                            <button
+                                                onClick={handleStartTimer}
+                                                className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors flex items-center gap-2"
+                                                style={{ backgroundColor: '#3977ED' }}
+                                                onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                                onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                            >
+                                                <Play size={16} />
+                                                Start Timer
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={handleStopTimer}
+                                                className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors flex items-center gap-2"
+                                                style={{ backgroundColor: '#dc2626' }}
+                                                onMouseEnter={(e) => e.target.style.backgroundColor = '#b91c1c'}
+                                                onMouseLeave={(e) => e.target.style.backgroundColor = '#dc2626'}
+                                            >
+                                                <Square size={16} />
+                                                Stop Timer
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Daily Work Log / Summary */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                    <FileText className="w-5 h-5" />
+                                    Daily Work Summary
+                                </h3>
+                                <textarea
+                                    value={dailyWorkSummary}
+                                    onChange={(e) => setDailyWorkSummary(e.target.value)}
+                                    placeholder="Write your daily work summary..."
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-none mb-2"
+                                    rows={4}
+                                />
+                                <button
+                                    onClick={handleSaveDailySummary}
+                                    className="w-full px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors mb-3"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                >
+                                    Save Summary
+                                </button>
+                                
+                                {/* Saved Summaries */}
+                                {workLogs && workLogs.length > 0 && (
+                                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+                                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Saved Summaries</h4>
+                                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                                            {workLogs.slice(0, 5).map(log => (
+                                                <div key={log.id} className="p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600 flex items-start justify-between gap-2">
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                                            {format(new Date(log.date), 'MMM d, yyyy')}
+                                                        </p>
+                                                        <p className="text-sm text-gray-900 dark:text-white line-clamp-2">
+                                                            {log.summary || 'No summary'}
+                                                        </p>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleDeleteSummary(log.id)}
+                                                        className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex-shrink-0"
+                                                        title="Delete summary"
+                                                    >
+                                                        <X size={16} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Achievement Badges */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                    <Trophy className="w-5 h-5" />
+                                    Achievement Badges
+                                </h3>
+                                {userAchievementsList.length > 0 ? (
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {userAchievementsList.slice(0, 4).map(achievement => (
+                                            <div key={achievement.id} className="p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 text-center">
+                                                <div className="text-2xl mb-1">{achievement.icon}</div>
+                                                <p className="text-xs font-semibold text-gray-900 dark:text-white">{achievement.title}</p>
+                                                <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">{achievement.points} pts</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No achievements yet</p>
+                                )}
+                            </div>
+                            
+                            {/* Goals for the Week */}
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                    <Target className="w-5 h-5" />
+                                    Goals for the Week
+                                </h3>
+                                <div className="space-y-2 mb-3">
+                                    {currentWeekGoals.length > 0 ? (
+                                        currentWeekGoals.map(goal => (
+                                            <div key={goal.id} className="p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600 flex items-start justify-between gap-2">
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-sm font-medium text-gray-900 dark:text-white">{goal.title}</span>
+                                                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                            {goal.currentValue}/{goal.targetValue}
+                                                        </span>
+                                                    </div>
+                                                    <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                                        <div
+                                                            className="bg-blue-600 h-2 rounded-full transition-all"
+                                                            style={{ width: `${Math.min(100, (goal.currentValue / goal.targetValue) * 100)}%` }}
+                                                        ></div>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleDeleteGoal(goal.id)}
+                                                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex-shrink-0"
+                                                    title="Delete goal"
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-2">No goals set</p>
+                                    )}
+                                </div>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={newGoalTitle}
+                                        onChange={(e) => setNewGoalTitle(e.target.value)}
+                                        placeholder="Goal title..."
+                                        className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    />
+                                    <input
+                                        type="number"
+                                        value={newGoalTarget}
+                                        onChange={(e) => setNewGoalTarget(Number(e.target.value))}
+                                        min="1"
+                                        className="w-20 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    />
+                                    <button
+                                        onClick={handleAddGoal}
+                                        className="px-3 py-2 text-sm font-semibold text-white rounded-lg transition-colors"
+                                        style={{ backgroundColor: '#3977ED' }}
+                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                    >
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* Admin Communication Section */}
+                <div className="mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight mb-4 flex items-center gap-2">
+                            <MessageSquare className="w-6 h-6" />
+                            Admin Communication
+                        </h2>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Company Announcements */}
+                            <button
+                                onClick={() => setShowAnnouncementsModal(true)}
+                                className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border border-gray-200 dark:border-gray-600"
+                            >
+                                <div className="flex items-center justify-between mb-2">
+                                    <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                    {announcementsUnread > 0 && (
+                                        <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                            {announcementsUnread}
+                                        </span>
+                                    )}
+                                </div>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Announcements</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {announcements.length} announcement{announcements.length !== 1 ? 's' : ''}
+                                </p>
+                            </button>
+                            
+                            {/* Policy / Documents Access */}
+                            <button
+                                onClick={() => setShowDocumentsModal(true)}
+                                className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border border-gray-200 dark:border-gray-600"
+                            >
+                                <BookOpen className="w-5 h-5 text-green-600 dark:text-green-400 mb-2" />
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Documents</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {(documents || []).length} document{(documents || []).length !== 1 ? 's' : ''} available
+                                </p>
+                            </button>
+                            
+                            {/* Internal Chat */}
+                            <button
+                                onClick={handleOpenChat}
+                                className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border border-gray-200 dark:border-gray-600"
+                            >
+                                <div className="flex items-center justify-between mb-2">
+                                    <MessageSquare className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                    {activeConversation && unreadCounts[activeConversation] > 0 && (
+                                        <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                            {unreadCounts[activeConversation]}
+                                        </span>
+                                    )}
+                                </div>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Internal Chat</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Chat with Admin</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
                 {/* Quick Actions & Recent Attendance */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Quick Actions */}
@@ -1555,6 +2219,321 @@ export default function EmployeeDashboard() {
                                     Cancel
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Profile Edit Modal */}
+            {showProfileModal && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Profile</h3>
+                                <button
+                                    onClick={() => setShowProfileModal(false)}
+                                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                >
+                                    <X size={24} />
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div className="p-6 space-y-6">
+                            {/* Profile Photo */}
+                            <div>
+                                <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Profile Photo</h4>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                                        {profilePhoto ? (
+                                            <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                                        ) : currentUser?.avatar ? (
+                                            <img src={currentUser.avatar} alt="Profile" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <User size={40} className="text-gray-400" />
+                                        )}
+                                    </div>
+                                    <label className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors cursor-pointer border"
+                                        style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
+                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                    >
+                                        <Camera size={16} className="inline mr-2" />
+                                        Change Photo
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const file = e.target.files[0]
+                                                if (file) {
+                                                    const reader = new FileReader()
+                                                    reader.onloadend = () => {
+                                                        setProfilePhoto(reader.result)
+                                                    }
+                                                    reader.readAsDataURL(file)
+                                                }
+                                            }}
+                                        />
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            {/* Phone Number */}
+                            <div>
+                                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Phone Number</h4>
+                                <input
+                                    type="tel"
+                                    value={editPhone}
+                                    onChange={(e) => setEditPhone(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    placeholder="+1 234-567-8900"
+                                />
+                            </div>
+                            
+                            {/* Emergency Contact */}
+                            <div>
+                                <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Emergency Contact</h4>
+                                <div className="space-y-3">
+                                    <input
+                                        type="text"
+                                        value={editEmergencyContact.name}
+                                        onChange={(e) => setEditEmergencyContact({ ...editEmergencyContact, name: e.target.value })}
+                                        placeholder="Name"
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    />
+                                    <input
+                                        type="tel"
+                                        value={editEmergencyContact.phone}
+                                        onChange={(e) => setEditEmergencyContact({ ...editEmergencyContact, phone: e.target.value })}
+                                        placeholder="Phone Number"
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={editEmergencyContact.relation}
+                                        onChange={(e) => setEditEmergencyContact({ ...editEmergencyContact, relation: e.target.value })}
+                                        placeholder="Relation"
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <button
+                                    onClick={handleSaveProfile}
+                                    className="flex-1 px-4 py-2 text-white rounded-lg transition-colors text-sm font-semibold"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                >
+                                    Save Changes
+                                </button>
+                                <button
+                                    onClick={() => setShowProfileModal(false)}
+                                    className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-semibold"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Chat Modal */}
+            {showChatModal && activeConversation && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full h-[600px] flex flex-col">
+                        <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Chat with Admin</h3>
+                            <button
+                                onClick={() => {
+                                    setShowChatModal(false)
+                                    dispatch(loadConversations()) // Reload on close
+                                }}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                            {activeConversation && messages && messages[activeConversation] && Array.isArray(messages[activeConversation]) && messages[activeConversation].length > 0 ? (
+                                messages[activeConversation].map(msg => (
+                                    <div
+                                        key={msg.id}
+                                        className={`flex ${msg.senderId === currentUser?.id ? 'justify-end' : 'justify-start'}`}
+                                    >
+                                        <div className={`max-w-[70%] p-3 rounded-lg ${
+                                            msg.senderId === currentUser?.id
+                                                ? 'bg-blue-600 text-white'
+                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                                        }`}>
+                                            <p className="text-sm font-medium mb-1">{msg.senderName}</p>
+                                            <p className="text-sm">{msg.message}</p>
+                                            <p className="text-xs opacity-70 mt-1">
+                                                {format(new Date(msg.timestamp), 'h:mm a')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-500 dark:text-gray-400 py-8">No messages yet. Start the conversation!</p>
+                            )}
+                        </div>
+                        
+                        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+                            <input
+                                type="text"
+                                value={chatMessage}
+                                onChange={(e) => setChatMessage(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleSendChatMessage()}
+                                placeholder="Type a message..."
+                                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            />
+                            <button
+                                onClick={handleSendChatMessage}
+                                className="px-4 py-2 text-white rounded-lg transition-colors"
+                                style={{ backgroundColor: '#3977ED' }}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                            >
+                                <Send size={20} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Announcements Modal */}
+            {showAnnouncementsModal && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Company Announcements</h3>
+                            <div className="flex items-center gap-2">
+                                {announcementsUnread > 0 && (
+                                    <button
+                                        onClick={() => {
+                                            if (currentUser) {
+                                                dispatch(markAllAsRead({ userId: currentUser.id }))
+                                            }
+                                        }}
+                                        className="px-3 py-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                                    >
+                                        Mark all as read
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => setShowAnnouncementsModal(false)}
+                                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                >
+                                    <X size={24} />
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div className="p-6 space-y-4">
+                            {(announcements || []).length === 0 ? (
+                                <p className="text-center text-gray-500 dark:text-gray-400 py-8">No announcements</p>
+                            ) : (
+                                (announcements || []).map(announcement => {
+                                    const isRead = currentUser && announcement.readBy.includes(currentUser.id)
+                                    return (
+                                        <div
+                                            key={announcement.id}
+                                            className={`p-4 rounded-lg border ${
+                                                isRead
+                                                    ? 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'
+                                                    : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                                            }`}
+                                            onClick={() => {
+                                                if (currentUser && !isRead) {
+                                                    dispatch(markAnnouncementAsRead({
+                                                        announcementId: announcement.id,
+                                                        userId: currentUser.id
+                                                    }))
+                                                }
+                                            }}
+                                        >
+                                            <div className="flex items-start justify-between mb-2">
+                                                <h4 className="font-bold text-gray-900 dark:text-white">{announcement.title}</h4>
+                                                <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                                                    announcement.priority === 'high'
+                                                        ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                                        : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                                                }`}>
+                                                    {announcement.priority}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{announcement.content}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {announcement.authorName} • {format(new Date(announcement.createdAt), 'MMM d, yyyy h:mm a')}
+                                            </p>
+                                        </div>
+                                    )
+                                })
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Documents Modal */}
+            {showDocumentsModal && (
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Company Documents</h3>
+                            <button
+                                onClick={() => setShowDocumentsModal(false)}
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="p-6 space-y-3">
+                            {(documents || []).length === 0 ? (
+                                <p className="text-center text-gray-500 dark:text-gray-400 py-8">No documents available</p>
+                            ) : (
+                                (documents || []).map(doc => (
+                                    <div
+                                        key={doc.id}
+                                        className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                                    >
+                                        <div className="flex items-start justify-between">
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                                    <h4 className="font-semibold text-gray-900 dark:text-white">{doc.title}</h4>
+                                                </div>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{doc.description}</p>
+                                                <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                                    <span>{doc.category}</span>
+                                                    <span>{doc.fileType.toUpperCase()}</span>
+                                                    <span>{doc.fileSize}</span>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    // In a real app, this would download the file
+                                                    toast.success('Download started')
+                                                }}
+                                                className="px-3 py-2 text-sm font-semibold text-white rounded-lg transition-colors flex items-center gap-2"
+                                                style={{ backgroundColor: '#3977ED' }}
+                                                onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
+                                                onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
+                                            >
+                                                <Download size={16} />
+                                                Download
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>

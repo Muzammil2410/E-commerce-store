@@ -8,6 +8,13 @@ import tasksReducer from './features/tasks/tasksSlice'
 import attendanceReducer from './features/attendance/attendanceSlice'
 import leaveReducer from './features/leave/leaveSlice'
 import employeesReducer from './features/employees/employeesSlice'
+import chatReducer from './features/chat/chatSlice'
+import announcementsReducer from './features/announcements/announcementsSlice'
+import documentsReducer from './features/documents/documentsSlice'
+import profileReducer from './features/profile/profileSlice'
+import workLogReducer from './features/workLog/workLogSlice'
+import achievementsReducer from './features/achievements/achievementsSlice'
+import goalsReducer from './features/goals/goalsSlice'
 
 export const makeStore = () => {
     return configureStore({
@@ -21,6 +28,13 @@ export const makeStore = () => {
             attendance: attendanceReducer,
             leave: leaveReducer,
             employees: employeesReducer,
+            chat: chatReducer,
+            announcements: announcementsReducer,
+            documents: documentsReducer,
+            profile: profileReducer,
+            workLog: workLogReducer,
+            achievements: achievementsReducer,
+            goals: goalsReducer,
         },
     })
 }
