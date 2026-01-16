@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Users, CheckCircle2, Clock, Calendar, TrendingUp, AlertCircle, User, FileText, Activity, MessageSquare, Bell, BookOpen, Send, X, Upload, Plus } from 'lucide-react'
+import { Users, CheckCircle2, Clock, Calendar, TrendingUp, AlertCircle, User, FileText, Activity, MessageSquare, Bell, BookOpen, Send, X, Upload, Plus, Paperclip } from 'lucide-react'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { loadConversations, createConversation, sendMessage, markAsRead, setActiveConversation } from '@/lib/features/chat/chatSlice'
@@ -26,6 +26,7 @@ export default function AdminDashboard() {
     const [showChatModal, setShowChatModal] = useState(false)
     const [selectedEmployee, setSelectedEmployee] = useState(null)
     const [chatMessage, setChatMessage] = useState('')
+    const [chatAttachment, setChatAttachment] = useState(null)
     const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '', priority: 'normal' })
     const [newDocument, setNewDocument] = useState({ title: '', description: '', category: 'Other', fileUrl: '#' })
     const [employeeSummaries, setEmployeeSummaries] = useState([])
@@ -750,8 +751,19 @@ export default function AdminDashboard() {
                                                             ? 'bg-blue-600 text-white'
                                                             : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
                                                     }`}>
-                                                        <p className="text-sm font-medium mb-1">{msg.senderName}</p>
-                                                        <p className="text-sm">{msg.message}</p>
+                                                        {msg.attachment && msg.attachment.type === 'image' && (
+                                                            <div className="mb-2">
+                                                                <img 
+                                                                    src={msg.attachment.url} 
+                                                                    alt={msg.attachment.name || 'Attachment'} 
+                                                                    className="max-w-full rounded-lg"
+                                                                    style={{ maxHeight: '200px' }}
+                                                                />
+                                                            </div>
+                                                        )}
+                                                        {msg.message && (
+                                                            <p className="text-sm">{msg.message}</p>
+                                                        )}
                                                         <p className="text-xs opacity-70 mt-1">
                                                             {format(new Date(msg.timestamp), 'h:mm a')}
                                                         </p>
@@ -764,24 +776,65 @@ export default function AdminDashboard() {
                                     </div>
                                     
                                     <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+                                        <label className="cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                            <Paperclip size={20} className="text-gray-600 dark:text-gray-400" />
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files[0]
+                                                    if (file) {
+                                                        if (file.type.startsWith('image/')) {
+                                                            const reader = new FileReader()
+                                                            reader.onloadend = () => {
+                                                                setChatAttachment({
+                                                                    type: 'image',
+                                                                    url: reader.result,
+                                                                    name: file.name
+                                                                })
+                                                            }
+                                                            reader.readAsDataURL(file)
+                                                        } else {
+                                                            toast.error('Please select an image file')
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                        {chatAttachment && (
+                                            <div className="flex items-center gap-2 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                                <img src={chatAttachment.url} alt="Preview" className="w-8 h-8 rounded object-cover" />
+                                                <button
+                                                    onClick={() => setChatAttachment(null)}
+                                                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            </div>
+                                        )}
                                         <input
                                             type="text"
                                             value={chatMessage}
                                             onChange={(e) => setChatMessage(e.target.value)}
                                             onKeyPress={(e) => {
                                                 if (e.key === 'Enter') {
-                                                    dispatch(sendMessage({
-                                                        conversationId: activeConversation,
-                                                        senderId: 'admin',
-                                                        senderName: currentUser.name,
-                                                        senderRole: 'admin',
-                                                        message: chatMessage
-                                                    }))
-                                                    setChatMessage('')
-                                                    // Reload conversations to sync
-                                                    setTimeout(() => {
-                                                        dispatch(loadConversations())
-                                                    }, 100)
+                                                    if ((chatMessage.trim() || chatAttachment) && activeConversation) {
+                                                        dispatch(sendMessage({
+                                                            conversationId: activeConversation,
+                                                            senderId: 'admin',
+                                                            senderName: currentUser.name,
+                                                            senderRole: 'admin',
+                                                            message: chatMessage || (chatAttachment ? '📎 Image' : ''),
+                                                            attachment: chatAttachment
+                                                        }))
+                                                        setChatMessage('')
+                                                        setChatAttachment(null)
+                                                        // Reload conversations to sync
+                                                        setTimeout(() => {
+                                                            dispatch(loadConversations())
+                                                        }, 100)
+                                                    }
                                                 }
                                             }}
                                             placeholder="Type a message..."
@@ -789,18 +842,22 @@ export default function AdminDashboard() {
                                         />
                                         <button
                                             onClick={() => {
-                                                dispatch(sendMessage({
-                                                    conversationId: activeConversation,
-                                                    senderId: 'admin',
-                                                    senderName: currentUser.name,
-                                                    senderRole: 'admin',
-                                                    message: chatMessage
-                                                }))
-                                                setChatMessage('')
-                                                // Reload conversations to sync
-                                                setTimeout(() => {
-                                                    dispatch(loadConversations())
-                                                }, 100)
+                                                if ((chatMessage.trim() || chatAttachment) && activeConversation) {
+                                                    dispatch(sendMessage({
+                                                        conversationId: activeConversation,
+                                                        senderId: 'admin',
+                                                        senderName: currentUser.name,
+                                                        senderRole: 'admin',
+                                                        message: chatMessage || (chatAttachment ? '📎 Image' : ''),
+                                                        attachment: chatAttachment
+                                                    }))
+                                                    setChatMessage('')
+                                                    setChatAttachment(null)
+                                                    // Reload conversations to sync
+                                                    setTimeout(() => {
+                                                        dispatch(loadConversations())
+                                                    }, 100)
+                                                }
                                             }}
                                             className="px-4 py-2 text-white rounded-lg transition-colors"
                                             style={{ backgroundColor: '#3977ED' }}

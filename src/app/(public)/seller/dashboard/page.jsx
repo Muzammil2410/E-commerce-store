@@ -498,8 +498,8 @@ export default function SellerDashboard() {
                         <FileCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">NTN/Tax ID</p>
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{sellerData.ntnTaxId}</p>
+                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">NTN/Tax ID</p>
+                        <p className="text-sm text-gray-900 dark:text-white mt-1">{sellerData.ntnTaxId}</p>
                       </div>
                     </div>
                   )}

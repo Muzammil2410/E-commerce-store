@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, Clock, CheckCircle2, AlertCircle, TrendingUp, Bell, X, Upload, MessageSquare, FileText, Flag, ChevronLeft, ChevronRight, Zap, Package, MapPin, Phone, User, Camera, PenTool, CheckCircle, Settings, Globe, Trophy, Target, Play, Pause, Square, Award, BookOpen, Send, Download } from 'lucide-react'
+import { Calendar, Clock, CheckCircle2, AlertCircle, TrendingUp, Bell, X, Upload, MessageSquare, FileText, Flag, ChevronLeft, ChevronRight, Zap, Package, MapPin, Phone, User, Camera, PenTool, CheckCircle, Settings, Globe, Trophy, Target, Play, Pause, Square, Award, BookOpen, Send, Download, Paperclip } from 'lucide-react'
 import { format, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, isToday, startOfMonth, endOfMonth } from 'date-fns'
 import toast from 'react-hot-toast'
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -56,6 +56,7 @@ export default function EmployeeDashboard() {
     const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
     const [showDocumentsModal, setShowDocumentsModal] = useState(false)
     const [chatMessage, setChatMessage] = useState('')
+    const [chatAttachment, setChatAttachment] = useState(null)
     const [selectedEmployee, setSelectedEmployee] = useState(null)
     const [workTimerRunning, setWorkTimerRunning] = useState(false)
     const [timerDisplay, setTimerDisplay] = useState('00:00:00')
@@ -701,7 +702,7 @@ export default function EmployeeDashboard() {
     }
     
     const handleSendChatMessage = () => {
-        if (!chatMessage.trim() || !activeConversation || !currentUser) return
+        if ((!chatMessage.trim() && !chatAttachment) || !activeConversation || !currentUser) return
         
         const conversation = (conversations || []).find(c => c.id === activeConversation)
         if (!conversation) {
@@ -719,14 +720,35 @@ export default function EmployeeDashboard() {
             senderId: currentUser.id,
             senderName: currentUser.name,
             senderRole: currentUser.role,
-            message: chatMessage
+            message: chatMessage || (chatAttachment ? '📎 Image' : ''),
+            attachment: chatAttachment
         }))
         setChatMessage('')
+        setChatAttachment(null)
         // Reload conversations to sync
         setTimeout(() => {
             dispatch(loadConversations())
         }, 100)
         toast.success('Message sent')
+    }
+    
+    const handleChatAttachment = (e) => {
+        const file = e.target.files[0]
+        if (file) {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setChatAttachment({
+                        type: 'image',
+                        url: reader.result,
+                        name: file.name
+                    })
+                }
+                reader.readAsDataURL(file)
+            } else {
+                toast.error('Please select an image file')
+            }
+        }
     }
     
     const handleOpenChat = () => {
@@ -2371,8 +2393,19 @@ export default function EmployeeDashboard() {
                                                 ? 'bg-blue-600 text-white'
                                                 : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
                                         }`}>
-                                            <p className="text-sm font-medium mb-1">{msg.senderName}</p>
-                                            <p className="text-sm">{msg.message}</p>
+                                            {msg.attachment && msg.attachment.type === 'image' && (
+                                                <div className="mb-2">
+                                                    <img 
+                                                        src={msg.attachment.url} 
+                                                        alt={msg.attachment.name || 'Attachment'} 
+                                                        className="max-w-full rounded-lg"
+                                                        style={{ maxHeight: '200px' }}
+                                                    />
+                                                </div>
+                                            )}
+                                            {msg.message && (
+                                                <p className="text-sm">{msg.message}</p>
+                                            )}
                                             <p className="text-xs opacity-70 mt-1">
                                                 {format(new Date(msg.timestamp), 'h:mm a')}
                                             </p>
@@ -2385,6 +2418,26 @@ export default function EmployeeDashboard() {
                         </div>
                         
                         <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+                            <label className="cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                <Paperclip size={20} className="text-gray-600 dark:text-gray-400" />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleChatAttachment}
+                                />
+                            </label>
+                            {chatAttachment && (
+                                <div className="flex items-center gap-2 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <img src={chatAttachment.url} alt="Preview" className="w-8 h-8 rounded object-cover" />
+                                    <button
+                                        onClick={() => setChatAttachment(null)}
+                                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </div>
+                            )}
                             <input
                                 type="text"
                                 value={chatMessage}

@@ -171,18 +171,7 @@ export default function SellerLoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 px-4 rounded-lg focus:ring-2 focus:ring-[#3977ED] dark:focus:ring-[#3977ED] focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-white"
-                            style={{ backgroundColor: loading ? '#3977ED' : '#3977ED' }}
-                            onMouseEnter={(e) => {
-                                if (!loading) {
-                                    e.currentTarget.style.backgroundColor = '#2d5fcc'
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (!loading) {
-                                    e.currentTarget.style.backgroundColor = '#3977ED'
-                                }
-                            }}
+                            className="w-full py-3 px-4 rounded-lg focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-white bg-green-600 dark:bg-green-600 hover:bg-green-700 dark:hover:bg-green-700"
                         >
                             {loading ? 'Signing in as Seller...' : 'Sign In as Seller'}
                         </button>

@@ -31,10 +31,40 @@ export default function AdminAttendance() {
     
     const dateRecords = records.filter(record => record.date === selectedDate)
     
-    const filteredRecords = dateRecords.filter(record => {
-        if (filter === 'all') return true
-        return record.status === filter
-    })
+    // Get filtered employees based on status
+    const getFilteredEmployees = () => {
+        if (filter === 'all') {
+            // Show all employees
+            return employees.map(employee => {
+                const record = dateRecords.find(r => r.employeeId === employee.id)
+                return { employee, record }
+            })
+        } else if (filter === 'absent') {
+            // Show only absent employees (those without records for the selected date)
+            return employees
+                .filter(employee => {
+                    const record = dateRecords.find(r => r.employeeId === employee.id)
+                    return !record || record.status === 'absent'
+                })
+                .map(employee => {
+                    const record = dateRecords.find(r => r.employeeId === employee.id)
+                    return { employee, record }
+                })
+        } else {
+            // Show only employees with the selected status (present, late)
+            return employees
+                .filter(employee => {
+                    const record = dateRecords.find(r => r.employeeId === employee.id)
+                    return record && record.status === filter
+                })
+                .map(employee => {
+                    const record = dateRecords.find(r => r.employeeId === employee.id)
+                    return { employee, record }
+                })
+        }
+    }
+    
+    const filteredEmployees = getFilteredEmployees()
     
     const getEmployeeName = (employeeId) => {
         const employee = employees.find(emp => emp.id === employeeId)
@@ -161,60 +191,67 @@ export default function AdminAttendance() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                {employees.map(employee => {
-                                    const record = filteredRecords.find(r => r.employeeId === employee.id)
-                                    const isClockedIn = !!currentSessions[employee.id]
-                                    
-                                    return (
-                                        <tr key={employee.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    <div className="flex-shrink-0 h-10 w-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                                                        <span className="text-blue-600 dark:text-blue-400 font-medium">
-                                                            {employee.name.charAt(0)}
+                                {filteredEmployees.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                                            No attendance records found for this filter.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    filteredEmployees.map(({ employee, record }) => {
+                                        const isClockedIn = !!currentSessions[employee.id]
+                                        
+                                        return (
+                                            <tr key={employee.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center">
+                                                        <div className="flex-shrink-0 h-10 w-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                                            <span className="text-blue-600 dark:text-blue-400 font-medium">
+                                                                {employee.name.charAt(0)}
+                                                            </span>
+                                                        </div>
+                                                        <div className="ml-4">
+                                                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                                                {employee.name}
+                                                            </div>
+                                                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                                {employee.department}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                    {record?.clockIn 
+                                                        ? format(new Date(record.clockIn), 'h:mm a')
+                                                        : isClockedIn
+                                                        ? <span className="text-blue-600 dark:text-blue-400">In Progress</span>
+                                                        : '-'
+                                                    }
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                    {record?.clockOut 
+                                                        ? format(new Date(record.clockOut), 'h:mm a')
+                                                        : '-'
+                                                    }
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                    {record?.hoursWorked > 0 ? `${record.hoursWorked} hrs` : '-'}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    {record ? (
+                                                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(record.status)}`}>
+                                                            {record.status}
                                                         </span>
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
-                                                            {employee.name}
-                                                        </div>
-                                                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                                                            {employee.department}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                {record?.clockIn 
-                                                    ? format(new Date(record.clockIn), 'h:mm a')
-                                                    : isClockedIn
-                                                    ? <span className="text-blue-600 dark:text-blue-400">In Progress</span>
-                                                    : '-'
-                                                }
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                {record?.clockOut 
-                                                    ? format(new Date(record.clockOut), 'h:mm a')
-                                                    : '-'
-                                                }
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                {record?.hoursWorked > 0 ? `${record.hoursWorked} hrs` : '-'}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                {record ? (
-                                                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(record.status)}`}>
-                                                        {record.status}
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-block px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
-                                                        Absent
-                                                    </span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
+                                                    ) : (
+                                                        <span className="inline-block px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                                                            Absent
+                                                        </span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                )}
                             </tbody>
                         </table>
                     </div>

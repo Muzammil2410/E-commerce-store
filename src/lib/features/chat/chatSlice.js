@@ -63,7 +63,7 @@ const chatSlice = createSlice({
         
         // Send a message
         sendMessage: (state, action) => {
-            const { conversationId, senderId, senderName, senderRole, message, timestamp } = action.payload
+            const { conversationId, senderId, senderName, senderRole, message, timestamp, attachment } = action.payload
             
             if (!state.messages[conversationId]) {
                 state.messages[conversationId] = []
@@ -76,6 +76,7 @@ const chatSlice = createSlice({
                 senderName,
                 senderRole, // 'admin' or 'employee'
                 message,
+                attachment: attachment || null,
                 timestamp: timestamp || new Date().toISOString(),
                 read: false
             }
