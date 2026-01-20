@@ -355,6 +355,20 @@ export default function AdminDashboard() {
                                     <Calendar className="w-4 h-4" />
                                     Manage Leaves
                                 </button>
+                                <button
+                                    onClick={() => navigate('/admin/control-panel')}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-white rounded transition-colors"
+                                    style={{ backgroundColor: '#16a34a' }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#15803d'
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#16a34a'
+                                    }}
+                                >
+                                    <TrendingUp className="w-4 h-4" />
+                                    Buyer/Seller Control Panel
+                                </button>
                             </div>
                         </div>
                         
