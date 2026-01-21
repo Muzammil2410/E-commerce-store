@@ -46,7 +46,7 @@ export default function AccountTypeSelection() {
                     <div className="space-y-4">
                         {/* Buyer Button */}
                         <button
-                            onClick={() => navigate('/auth/login')}
+                            onClick={() => navigate('/auth/register')}
                             className="group w-full relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] p-6"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
@@ -64,7 +64,7 @@ export default function AccountTypeSelection() {
 
                         {/* Seller Button */}
                         <button
-                            onClick={() => navigate('/seller')}
+                            onClick={() => navigate('/seller/register')}
                             className="group w-full relative overflow-hidden bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] p-6"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>

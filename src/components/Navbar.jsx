@@ -475,19 +475,19 @@ const Navbar = () => {
 
                     {/* Mobile: Logo on left */}
                     <Link to="/" className="sm:hidden hover:scale-105 transition-transform duration-200 flex-shrink-0">
-                        <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden flex items-center justify-center" style={{ height: '4rem', maxHeight: '4rem' }}>
+                        <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden flex items-center justify-center" style={{ height: '4.5rem', maxHeight: '4.5rem' }}>
                             <Image 
                                 src={isDarkMode ? assets.helloLogo : assets.zizla_logo} 
                                 alt="Zizla Logo" 
                                 width={350} 
                                 height={140} 
-                                className="h-16 w-auto"
+                                className="h-18 w-auto"
                                 style={{
                                     backgroundColor: isDarkMode ? '#111827' : 'transparent',
                                     display: 'block',
                                     objectFit: 'contain',
-                                    maxHeight: '4rem',
-                                    height: '4rem',
+                                    maxHeight: '4.5rem',
+                                    height: '4.5rem',
                                     width: 'auto',
                                     maxWidth: 'none',
                                     ...(isDarkMode ? {} : { filter: 'contrast(1.2) brightness(1.1)' })
@@ -504,7 +504,7 @@ const Navbar = () => {
                                 alt="Zizla Logo" 
                                 width={350} 
                                 height={140} 
-                                className="h-12 md:h-14 lg:h-16 w-auto"
+                                className="h-14 md:h-16 lg:h-20 w-auto"
                                 style={{
                                     backgroundColor: isDarkMode ? '#111827' : 'transparent',
                                     display: 'block',
@@ -735,16 +735,27 @@ const Navbar = () => {
                                 </div>
                             </div>
                         ) : (
-                            <Link 
-                                to="/auth" 
-                                className="relative px-5 md:px-6 py-2.5 md:py-3 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap"
-                                style={{ backgroundColor: '#3977ED' }}
-                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
-                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
-                            >
-                                <User size={18} className="md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
-                                <span>{t('loginRegister')}</span>
-                            </Link>
+                            <div className="flex items-center gap-2 md:gap-3">
+                                <Link 
+                                    to="/auth/login" 
+                                    className="relative px-4 md:px-5 py-2 md:py-2.5 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                                >
+                                    <User size={18} className="md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
+                                    <span>Login</span>
+                                </Link>
+                                <Link 
+                                    to="/auth" 
+                                    className="relative px-4 md:px-5 py-2 md:py-2.5 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap"
+                                    style={{ backgroundColor: '#3977ED' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3977ED'}
+                                >
+                                    <span>Register</span>
+                                </Link>
+                            </div>
                         )}
                     </div>
 
@@ -927,13 +938,20 @@ const Navbar = () => {
 
                     {/* Mobile Auth Menu Dropdown */}
                     {showMobileAuth && !user && (
-                        <div className="sm:hidden fixed right-4 top-16 z-[101] bg-white border border-gray-200 rounded-lg shadow-lg w-40 py-2" ref={mobileMenuRef}>
+                        <div className="sm:hidden fixed right-4 top-16 z-[101] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-40 py-2" ref={mobileMenuRef}>
                             <Link
-                                to="/auth"
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                to="/auth/login"
+                                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                                 onClick={() => setShowMobileAuth(false)}
                             >
-                                {t('loginRegister')}
+                                Login
+                            </Link>
+                            <Link
+                                to="/auth"
+                                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                onClick={() => setShowMobileAuth(false)}
+                            >
+                                Register
                             </Link>
                         </div>
                     )}

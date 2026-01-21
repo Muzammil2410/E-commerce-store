@@ -62,6 +62,7 @@ import AdminTasks from "@/app/(public)/admin/tasks/page";
 import AdminAttendance from "@/app/(public)/admin/attendance/page";
 import AdminLeave from "@/app/(public)/admin/leave/page";
 import AdminControlPanel from "@/app/(public)/admin/control-panel/page";
+import AdminControlPanelLogin from "@/app/(public)/admin/control-panel/login/page";
 
 // Lazy load pages for code splitting and better performance
 const Pricing = lazy(() => import("@/app/(public)/pricing/page"));
@@ -170,6 +171,7 @@ export const router = createBrowserRouter([
   { path: "/admin/tasks", element: <PublicLayout><AdminTasks /></PublicLayout> },
   { path: "/admin/attendance", element: <PublicLayout><AdminAttendance /></PublicLayout> },
   { path: "/admin/leave", element: <PublicLayout><AdminLeave /></PublicLayout> },
+  { path: "/admin/control-panel/login", element: <PublicLayout><AdminControlPanelLogin /></PublicLayout> },
   { path: "/admin/control-panel", element: <PublicLayout><AdminControlPanel /></PublicLayout> },
 
   // Admin and Store sections (render their own layouts)

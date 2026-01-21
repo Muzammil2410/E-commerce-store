@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { 
   Users, 
   ShoppingBag, 
@@ -34,7 +34,11 @@ import {
   Facebook,
   Twitter,
   Linkedin,
-  Instagram
+  Instagram,
+  ArrowUp,
+  User,
+  LogOut,
+  Bell
 } from 'lucide-react'
 import { orderDummyData, assets } from '@/assets/assets'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
@@ -56,6 +60,7 @@ export default function AdminControlPanel() {
   const [sellers, setSellers] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
   const [showDetailModal, setShowDetailModal] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
 
   // Navigation items for e-commerce platform
   const navItems = [
@@ -71,9 +76,11 @@ export default function AdminControlPanel() {
 
   // Load data on mount
   useEffect(() => {
-    const currentUser = JSON.parse(localStorage.getItem('employeeUser') || '{}')
-    if (!currentUser || currentUser.role !== 'admin') {
-      navigate('/employee/login')
+    // Check for control panel admin authentication
+    const controlPanelAdmin = localStorage.getItem('controlPanelAdmin')
+    if (!controlPanelAdmin) {
+      toast.error('Please login to access the control panel')
+      navigate('/admin/control-panel/login')
       return
     }
 
@@ -81,6 +88,20 @@ export default function AdminControlPanel() {
     loadOrders()
     loadSellers()
   }, [navigate])
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showUserMenu && !event.target.closest('.relative')) {
+        setShowUserMenu(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showUserMenu])
 
   const loadUsers = () => {
     // Load buyers from localStorage
@@ -992,10 +1013,10 @@ export default function AdminControlPanel() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
             <div className="space-y-2">
               <button
-                onClick={() => navigate('/admin/dashboard')}
+                onClick={() => setActiveTab('overview')}
                 className="w-full px-4 py-2 text-left bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-900 dark:text-white"
               >
-                Go to Employee Dashboard
+                Go to Overview Dashboard
               </button>
               <button
                 onClick={() => toast.success('Data refreshed')}
@@ -1198,7 +1219,7 @@ export default function AdminControlPanel() {
                 alt="Zizla Logo" 
                 width={350} 
                 height={140} 
-                className="h-12 md:h-14 lg:h-16 w-auto"
+                className="h-16 md:h-20 lg:h-24 w-auto"
                 style={{
                   backgroundColor: isDarkMode ? '#111827' : 'transparent',
                   display: 'block',
@@ -1210,13 +1231,79 @@ export default function AdminControlPanel() {
               />
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+          <div className="flex items-center gap-4 relative">
+            <button 
+              onClick={() => {
+                toast.success('Chat feature coming soon in Control Panel!')
+              }}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              title="Messages & Notifications"
+            >
               <MessageSquare className="w-5 h-5" />
             </button>
-            <button className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+            <button 
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              title="User Menu"
+            >
               <Menu className="w-5 h-5" />
             </button>
+
+            {/* User Menu Dropdown */}
+            {showUserMenu && (
+              <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">Admin User</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">admin@zizla.com</p>
+                </div>
+                <div className="py-2">
+                  <button
+                    onClick={() => {
+                      setActiveTab('settings')
+                      setShowUserMenu(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Profile Settings</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowUserMenu(false)
+                      toast.success('Notifications feature coming soon!')
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <Bell className="w-4 h-4" />
+                    <span>Notifications</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab('settings')
+                      setShowUserMenu(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <Settings className="w-4 h-4" />
+                    <span>System Settings</span>
+                  </button>
+                </div>
+                <div className="border-t border-gray-200 dark:border-gray-700 py-2">
+                  <button
+                    onClick={() => {
+                      setShowUserMenu(false)
+                      localStorage.removeItem('controlPanelAdmin')
+                      toast.success('Logged out successfully!')
+                      setTimeout(() => navigate('/admin/control-panel/login'), 1000)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -1253,8 +1340,8 @@ export default function AdminControlPanel() {
           {/* Breadcrumb */}
           <div className="mb-6">
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-              <button onClick={() => navigate('/admin/dashboard')} className="hover:text-gray-900 dark:hover:text-gray-200">
-                Admin
+              <button onClick={() => setActiveTab('overview')} className="hover:text-gray-900 dark:hover:text-gray-200">
+                Admin Control Panel
               </button>
               <span>/</span>
               <span className="text-gray-900 dark:text-white font-medium">Control Panel</span>
@@ -1274,72 +1361,141 @@ export default function AdminControlPanel() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-black text-white mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* About */}
-            <div>
-              <h3 className="font-semibold text-lg mb-4">About</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">About Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Our Mission</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Join the Team</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a></li>
-              </ul>
+      <footer className="bg-blue-900 dark:bg-blue-900 transition-colors duration-200 mt-12">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+          <div className="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-16 py-8 sm:py-10 border-b border-gray-700 dark:border-gray-700 text-white transition-colors duration-200">
+            {/* Company Information - Left Side */}
+            <div className="w-full lg:w-auto lg:max-w-[410px]">
+              <Link to="/" className="text-4xl font-semibold text-blue-500 dark:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                Zizla<span className="text-blue-500 dark:text-blue-400">.</span>
+              </Link>
+              <p className="mt-4 text-sm text-gray-300 dark:text-gray-300 leading-relaxed">
+                Welcome to Zizla, your ultimate destination for the latest and smartest gadgets. From smartphones and smartwatches to essential accessories, we bring you the best in innovation — all in one place.
+              </p>
+              <div className="flex items-center gap-3 mt-5">
+                <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="group flex items-center justify-center w-10 h-10 bg-gray-800 dark:bg-gray-800 border border-gray-700 dark:border-gray-700 hover:border-transparent transition-all duration-300 rounded-full hover:bg-blue-600">
+                  <Facebook className="w-5 h-5 stroke-white" />
+                </a>
+                <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="group flex items-center justify-center w-10 h-10 bg-gray-800 dark:bg-gray-800 border border-gray-700 dark:border-gray-700 hover:border-transparent transition-all duration-300 rounded-full hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600">
+                  <Instagram className="w-5 h-5 stroke-white" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="group flex items-center justify-center w-10 h-10 bg-gray-800 dark:bg-gray-800 border border-gray-700 dark:border-gray-700 hover:border-transparent transition-all duration-300 rounded-full hover:bg-blue-400">
+                  <Twitter className="w-5 h-5 stroke-white" />
+                </a>
+                <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="group flex items-center justify-center w-10 h-10 bg-gray-800 dark:bg-gray-800 border border-gray-700 dark:border-gray-700 hover:border-transparent transition-all duration-300 rounded-full hover:bg-blue-700">
+                  <Linkedin className="w-5 h-5 stroke-white" />
+                </a>
+              </div>
             </div>
+            
+            {/* Link Sections - Right Side (3 columns with equal spacing) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 lg:gap-16 w-full lg:w-auto lg:flex-1">
+              {/* Featured Products */}
+              <div className="min-w-[150px]">
+                <h3 className="font-semibold text-gray-300 dark:text-gray-300 mb-4 text-sm uppercase">Featured Products</h3>
+                <ul className="space-y-2.5">
+                  {orderDummyData.slice(0, 4).map((product, i) => (
+                    <li key={i}>
+                      <Link to={`/product/${product.id}`} className="text-sm text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white hover:underline transition">
+                        {product.productName}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link to="/shop" className="text-sm text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white hover:underline transition">
+                      View All Products
+                    </Link>
+                  </li>
+                </ul>
+              </div>
 
-            {/* For Users */}
-            <div>
-              <h3 className="font-semibold text-lg mb-4">For Users</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">How It Works</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Manufacturers</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Creators & Product Owners</a></li>
-              </ul>
-            </div>
+              {/* Website */}
+              <div className="min-w-[150px]">
+                <h3 className="font-semibold text-gray-300 dark:text-gray-300 mb-4 text-sm uppercase">Website</h3>
+                <ul className="space-y-2.5">
+                  <li>
+                    <Link to="/" className="text-sm text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white hover:underline transition">
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/privacy-policy" className="text-sm text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white hover:underline transition">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/support" className="text-sm text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white hover:underline transition">
+                      Get Support
+                    </Link>
+                  </li>
+                </ul>
+              </div>
 
-            {/* Legal */}
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Use</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Settings</a></li>
-              </ul>
-            </div>
-
-            {/* Language & Region */}
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Language & Region</h3>
-              <select className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white mb-3 focus:ring-2 focus:ring-blue-500">
-                <option>Germany</option>
-                <option>United States</option>
-                <option>United Kingdom</option>
-              </select>
-              <select className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
-                <option>English</option>
-                <option>German</option>
-                <option>Spanish</option>
-              </select>
+              {/* Contact */}
+              <div className="min-w-[150px]">
+                <h3 className="font-semibold text-gray-300 dark:text-gray-300 mb-4 text-sm uppercase">Contact</h3>
+                <ul className="space-y-2.5">
+                  <li className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 stroke-white" />
+                    <span className="text-sm text-gray-300 dark:text-gray-300">+1-212-456-7890</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 stroke-white" />
+                    <span className="text-sm text-gray-300 dark:text-gray-300">contact@example.com</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 stroke-white" />
+                    <span className="text-sm text-gray-300 dark:text-gray-300">794 Francisco, 94102</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-
-          {/* Social & Copyright */}
-          <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">© 2025 Zizla E-Commerce. All rights reserved.</p>
-            <div className="flex gap-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
+          
+          {/* Payment Methods Strip */}
+          <div className="flex flex-col sm:flex-row items-center justify-between py-4 border-t border-white/20 dark:border-gray-700">
+            <p className="text-sm text-white dark:text-gray-300 mb-4 sm:mb-0 transition-colors duration-200">
+              Copyright 2025 © Zizla All Right Reserved.
+            </p>
+            
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Go to Top Button */}
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-white/10 dark:bg-gray-800/50 hover:bg-white/20 dark:hover:bg-gray-700/50 border border-white/20 dark:border-gray-700 text-white dark:text-gray-300 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                aria-label="Go to top"
+              >
+                <ArrowUp size={18} />
+                <span className="text-sm font-medium">Go to Top</span>
+              </button>
+              {/* VISA */}
+              <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg px-4 py-2 flex items-center justify-center min-w-[60px]">
+                <div className="text-white font-bold text-lg tracking-wider">VISA</div>
+              </div>
+              
+              {/* Stripe */}
+              <div className="bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg px-4 py-2 flex items-center justify-center min-w-[70px]">
+                <div className="text-white font-semibold text-sm">Stripe</div>
+              </div>
+              
+              {/* Mastercard */}
+              <div className="bg-gradient-to-r from-red-500 to-orange-500 rounded-lg px-4 py-2 flex items-center justify-center min-w-[80px]">
+                <div className="flex items-center gap-1">
+                  <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                  <div className="w-4 h-4 bg-yellow-400 rounded-full -ml-2"></div>
+                  <span className="text-white font-bold text-xs ml-2">Mastercard</span>
+                </div>
+              </div>
+              
+              {/* American Express */}
+              <div className="bg-gradient-to-r from-green-600 to-green-800 rounded-lg px-4 py-2 flex items-center justify-center min-w-[90px]">
+                <div className="text-white font-semibold text-xs">American Express</div>
+              </div>
+              
+              {/* Discover */}
+              <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-lg px-4 py-2 flex items-center justify-center min-w-[75px]">
+                <div className="text-white font-bold text-sm">Discover</div>
+              </div>
             </div>
           </div>
         </div>

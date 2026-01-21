@@ -234,6 +234,17 @@ export default function LoginPage() {
                         >
                             {loading ? t('signingIn') : t('signIn')}
                         </button>
+
+                        {/* Seller Login Link */}
+                        <div className="text-center">
+                            <button 
+                                type="button"
+                                onClick={() => navigate('/seller/login')}
+                                className="text-base md:text-lg text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-semibold transition-colors hover:underline"
+                            >
+                                Login as a seller?
+                            </button>
+                        </div>
                     </form>
 
                     {/* Sign Up Link */}
