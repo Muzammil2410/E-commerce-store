@@ -38,7 +38,8 @@ import {
   ArrowUp,
   User,
   LogOut,
-  Bell
+  Bell,
+  Headphones
 } from 'lucide-react'
 import { orderDummyData, assets } from '@/assets/assets'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
@@ -61,6 +62,13 @@ export default function AdminControlPanel() {
   const [selectedItem, setSelectedItem] = useState(null)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [analyticsTimeframe, setAnalyticsTimeframe] = useState(3) // 3, 6, or 12 months
+  const [showDisapproveModal, setShowDisapproveModal] = useState(false)
+  const [selectedSellerForAction, setSelectedSellerForAction] = useState(null)
+  const [disapprovalReason, setDisapprovalReason] = useState('')
+  const [supportMessages, setSupportMessages] = useState([])
+  const [selectedSupport, setSelectedSupport] = useState(null)
+  const [showSupportDetailModal, setShowSupportDetailModal] = useState(false)
 
   // Navigation items for e-commerce platform
   const navItems = [
@@ -71,6 +79,7 @@ export default function AdminControlPanel() {
     { id: 'revenue', label: 'Revenue', icon: DollarSign },
     { id: 'analytics', label: 'Analytics', icon: TrendingUp },
     { id: 'verification', label: 'Verification', icon: ShieldCheck },
+    { id: 'customer-support', label: 'Customer Support', icon: Headphones },
     { id: 'settings', label: 'Settings', icon: Settings },
   ]
 
@@ -87,6 +96,7 @@ export default function AdminControlPanel() {
     loadUsers()
     loadOrders()
     loadSellers()
+    loadSupportMessages()
   }, [navigate])
 
   // Close user menu when clicking outside
@@ -127,6 +137,12 @@ export default function AdminControlPanel() {
     setSellers(allSellers)
   }
 
+  const loadSupportMessages = () => {
+    // Load support messages from localStorage
+    const storedSupport = JSON.parse(localStorage.getItem('supportMessages') || '[]')
+    setSupportMessages(storedSupport)
+  }
+
   const getStatusBadge = (status) => {
     const statusMap = {
       'DELIVERED': { color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300', label: 'Delivered' },
@@ -146,6 +162,48 @@ export default function AdminControlPanel() {
   const handleViewDetails = (item, type) => {
     setSelectedItem({ ...item, type })
     setShowDetailModal(true)
+  }
+
+  const handleApproveSeller = (seller) => {
+    // Update seller status to approved
+    const updatedSellers = sellers.map(s => 
+      s.email === seller.email ? { ...s, verificationStatus: 'approved', approvedAt: new Date().toISOString() } : s
+    )
+    setSellers(updatedSellers)
+    localStorage.setItem('sellers', JSON.stringify(updatedSellers))
+    toast.success(`${seller.businessName || seller.fullName} has been approved!`)
+  }
+
+  const handleDisapproveSeller = () => {
+    if (!disapprovalReason.trim()) {
+      toast.error('Please provide a reason for disapproval')
+      return
+    }
+
+    // Update seller status to disapproved with reason
+    const updatedSellers = sellers.map(s => 
+      s.email === selectedSellerForAction.email 
+        ? { 
+            ...s, 
+            verificationStatus: 'disapproved', 
+            disapprovedAt: new Date().toISOString(),
+            disapprovalReason: disapprovalReason.trim()
+          } 
+        : s
+    )
+    setSellers(updatedSellers)
+    localStorage.setItem('sellers', JSON.stringify(updatedSellers))
+    toast.success(`${selectedSellerForAction.businessName || selectedSellerForAction.fullName} has been disapproved`)
+    
+    // Close modal and reset
+    setShowDisapproveModal(false)
+    setSelectedSellerForAction(null)
+    setDisapprovalReason('')
+  }
+
+  const openDisapproveModal = (seller) => {
+    setSelectedSellerForAction(seller)
+    setShowDisapproveModal(true)
   }
 
   // Render Users Tab (Contact Monitoring style)
@@ -473,11 +531,128 @@ export default function AdminControlPanel() {
     const totalUsers = users.length
     const totalSellers = sellers.length
 
+    // Generate sample data for the chart based on timeframe
+    const generateChartData = () => {
+      const data = []
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const currentMonth = new Date().getMonth()
+      
+      for (let i = analyticsTimeframe - 1; i >= 0; i--) {
+        const monthIndex = (currentMonth - i + 12) % 12
+        const revenue = Math.floor(Math.random() * 50000) + 20000
+        const orderCount = Math.floor(Math.random() * 200) + 50
+        
+        data.push({
+          month: months[monthIndex],
+          revenue: revenue,
+          orders: orderCount
+        })
+      }
+      return data
+    }
+
+    const chartData = generateChartData()
+    const maxRevenue = Math.max(...chartData.map(d => d.revenue))
+
+    // Download handlers
+    const handleDownloadPDF = () => {
+      toast.success(`Downloading ${analyticsTimeframe} months analytics as PDF...`)
+      // In a real implementation, you would generate and download the PDF here
+      console.log(`PDF download requested for ${analyticsTimeframe} months`)
+    }
+
+    const handleDownloadCSV = () => {
+      toast.success(`Downloading ${analyticsTimeframe} months analytics as CSV...`)
+      // Generate CSV data
+      const csvContent = [
+        ['Month', 'Revenue', 'Orders'],
+        ...chartData.map(d => [d.month, d.revenue, d.orders])
+      ].map(row => row.join(',')).join('\n')
+      
+      // Create download link
+      const blob = new Blob([csvContent], { type: 'text/csv' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `analytics-${analyticsTimeframe}-months.csv`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    }
+
     return (
       <div className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Overview</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Platform performance metrics</p>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Platform performance metrics and insights</p>
+          </div>
+          
+          {/* Download Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* PDF Download */}
+            <div className="relative group">
+              <button
+                onClick={handleDownloadPDF}
+                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium text-sm"
+              >
+                <Download className="w-4 h-4" />
+                Download PDF
+              </button>
+              <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 min-w-[140px]">
+                <button
+                  onClick={() => { setAnalyticsTimeframe(3); handleDownloadPDF(); }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg transition-colors"
+                >
+                  Last 3 Months
+                </button>
+                <button
+                  onClick={() => { setAnalyticsTimeframe(6); handleDownloadPDF(); }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Last 6 Months
+                </button>
+                <button
+                  onClick={() => { setAnalyticsTimeframe(12); handleDownloadPDF(); }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg transition-colors"
+                >
+                  Last 12 Months
+                </button>
+              </div>
+            </div>
+
+            {/* CSV Download */}
+            <div className="relative group">
+              <button
+                onClick={handleDownloadCSV}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium text-sm"
+              >
+                <Download className="w-4 h-4" />
+                Download CSV
+              </button>
+              <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 min-w-[140px]">
+                <button
+                  onClick={() => { setAnalyticsTimeframe(3); handleDownloadCSV(); }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg transition-colors"
+                >
+                  Last 3 Months
+                </button>
+                <button
+                  onClick={() => { setAnalyticsTimeframe(6); handleDownloadCSV(); }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Last 6 Months
+                </button>
+                <button
+                  onClick={() => { setAnalyticsTimeframe(12); handleDownloadCSV(); }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg transition-colors"
+                >
+                  Last 12 Months
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -488,7 +663,7 @@ export default function AdminControlPanel() {
               <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(totalRevenue)}</p>
-            <p className="text-xs text-green-600 dark:text-green-400 mt-2">↑ 12% from last month</p>
+            <p className="text-xs text-green-600 dark:text-green-400 mt-2">↑ 12% from last period</p>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
@@ -516,6 +691,93 @@ export default function AdminControlPanel() {
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalSellers}</p>
             <p className="text-xs text-orange-600 dark:text-orange-400 mt-2">Registered sellers</p>
+          </div>
+        </div>
+
+        {/* Timeframe Selector */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setAnalyticsTimeframe(3)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              analyticsTimeframe === 3
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            }`}
+          >
+            3 Months
+          </button>
+          <button
+            onClick={() => setAnalyticsTimeframe(6)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              analyticsTimeframe === 6
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            }`}
+          >
+            6 Months
+          </button>
+          <button
+            onClick={() => setAnalyticsTimeframe(12)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              analyticsTimeframe === 12
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            }`}
+          >
+            12 Months
+          </button>
+        </div>
+
+        {/* Chart */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Revenue & Orders Trend</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Last {analyticsTimeframe} months performance</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-600 rounded"></div>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Revenue</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-600 rounded"></div>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Orders</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Bar Chart */}
+          <div className="relative h-80">
+            <div className="absolute inset-0 flex items-end justify-between gap-2 px-4">
+              {chartData.map((data, index) => (
+                <div key={index} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                  {/* Revenue Bar */}
+                  <div className="relative w-full flex flex-col items-center group">
+                    <div
+                      className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg hover:from-blue-700 hover:to-blue-500 transition-all cursor-pointer"
+                      style={{ height: `${(data.revenue / maxRevenue) * 100}%` }}
+                    >
+                      {/* Tooltip */}
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                        <div className="font-semibold">{data.month}</div>
+                        <div>Revenue: {formatCurrency(data.revenue)}</div>
+                        <div>Orders: {data.orders}</div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Month Label */}
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-2">{data.month}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Y-axis labels */}
+          <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <span className="text-xs text-gray-500 dark:text-gray-400">0</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">{formatCurrency(maxRevenue / 2)}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">{formatCurrency(maxRevenue)}</span>
           </div>
         </div>
 
@@ -874,8 +1136,9 @@ export default function AdminControlPanel() {
 
   // Render Verification Tab
   const renderVerificationTab = () => {
-    const verifiedSellers = sellers.filter(s => s.documents && Object.values(s.documents).some(doc => doc))
-    const unverifiedSellers = sellers.filter(s => !s.documents || !Object.values(s.documents).some(doc => doc))
+    const approvedSellers = sellers.filter(s => s.verificationStatus === 'approved')
+    const pendingSellers = sellers.filter(s => !s.verificationStatus || s.verificationStatus === 'pending')
+    const disapprovedSellers = sellers.filter(s => s.verificationStatus === 'disapproved')
 
     return (
       <div className="space-y-6">
@@ -885,7 +1148,7 @@ export default function AdminControlPanel() {
         </div>
 
         {/* Verification Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm text-gray-600 dark:text-gray-400">Total Sellers</p>
@@ -896,42 +1159,96 @@ export default function AdminControlPanel() {
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-gray-600 dark:text-gray-400">Verified</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Approved</p>
               <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">{verifiedSellers.length}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{approvedSellers.length}</p>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm text-gray-600 dark:text-gray-400">Pending</p>
-              <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+              <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">{unverifiedSellers.length}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{pendingSellers.length}</p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Disapproved</p>
+              <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+            </div>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{disapprovedSellers.length}</p>
           </div>
         </div>
 
         {/* Pending Verification */}
-        {unverifiedSellers.length > 0 && (
+        {pendingSellers.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Pending Verification</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {unverifiedSellers.map((seller, index) => (
+              {pendingSellers.map((seller, index) => (
                 <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
-                      <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                      <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <p className="font-medium text-gray-900 dark:text-white">{seller.businessName || seller.fullName}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">{seller.email}</p>
                     </div>
                   </div>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => handleViewDetails(seller, 'seller')}
+                      className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                    >
+                      Review Documents
+                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleApproveSeller(seller)}
+                        className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => openDisapproveModal(seller)}
+                        className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                      >
+                        Disapprove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Approved Sellers */}
+        {approvedSellers.length > 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Approved Sellers</h3>
+            <div className="space-y-2">
+              {approvedSellers.map((seller, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {seller.businessName || seller.fullName}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {seller.email} • Approved on {seller.approvedAt ? new Date(seller.approvedAt).toLocaleDateString() : 'N/A'}
+                      </p>
+                    </div>
+                  </div>
                   <button
                     onClick={() => handleViewDetails(seller, 'seller')}
-                    className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium"
                   >
-                    Review Documents
+                    View Details
                   </button>
                 </div>
               ))}
@@ -939,31 +1256,50 @@ export default function AdminControlPanel() {
           </div>
         )}
 
-        {/* Verified Sellers */}
-        {verifiedSellers.length > 0 && (
+        {/* Disapproved Sellers */}
+        {disapprovedSellers.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Verified Sellers</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Disapproved Sellers</h3>
             <div className="space-y-2">
-              {verifiedSellers.map((seller, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {seller.businessName || seller.fullName}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{seller.email}</p>
+              {disapprovedSellers.map((seller, index) => (
+                <div key={index} className="border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 rounded-lg p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {seller.businessName || seller.fullName}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {seller.email} • Disapproved on {seller.disapprovedAt ? new Date(seller.disapprovedAt).toLocaleDateString() : 'N/A'}
+                        </p>
+                      </div>
                     </div>
+                    <button
+                      onClick={() => handleViewDetails(seller, 'seller')}
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium"
+                    >
+                      View Details
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleViewDetails(seller, 'seller')}
-                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium"
-                  >
-                    View
-                  </button>
+                  {seller.disapprovalReason && (
+                    <div className="mt-2 pl-8">
+                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Reason for Disapproval:</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 p-2 rounded border border-red-200 dark:border-red-800">
+                        {seller.disapprovalReason}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {sellers.length === 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-12 text-center">
+            <Store className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400">No sellers registered yet</p>
           </div>
         )}
       </div>
@@ -1033,6 +1369,156 @@ export default function AdminControlPanel() {
             </div>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  // Render Customer Support Tab
+  const renderCustomerSupportTab = () => {
+    const pendingSupport = supportMessages.filter(m => m.status === 'pending' || !m.status)
+    const resolvedSupport = supportMessages.filter(m => m.status === 'resolved')
+
+    const handleResolveSupport = (messageId) => {
+      const updated = supportMessages.map(m => 
+        m.id === messageId ? { ...m, status: 'resolved', resolvedAt: new Date().toISOString() } : m
+      )
+      setSupportMessages(updated)
+      localStorage.setItem('supportMessages', JSON.stringify(updated))
+      toast.success('Support request marked as resolved')
+    }
+
+    const handleViewSupport = (message) => {
+      setSelectedSupport(message)
+      setShowSupportDetailModal(true)
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Customer Support</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage customer support requests</p>
+          </div>
+          <button
+            onClick={() => loadSupportMessages()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+          >
+            Refresh
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Total Messages</p>
+              <Headphones className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            </div>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{supportMessages.length}</p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Pending</p>
+              <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+            </div>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{pendingSupport.length}</p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Resolved</p>
+              <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+            </div>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{resolvedSupport.length}</p>
+          </div>
+        </div>
+
+        {/* Pending Support Messages */}
+        {pendingSupport.length > 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Pending Support Requests</h3>
+            <div className="space-y-3">
+              {pendingSupport.map((message) => (
+                <div key={message.id} className="border border-gray-200 dark:border-gray-700 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center flex-shrink-0">
+                        <Headphones className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {message.userName || message.email || 'Anonymous'}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {message.email} • {new Date(message.createdAt || Date.now()).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleViewSupport(message)}
+                        className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                      >
+                        View
+                      </button>
+                      <button
+                        onClick={() => handleResolveSupport(message.id)}
+                        className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                      >
+                        Resolve
+                      </button>
+                    </div>
+                  </div>
+                  {message.query && (
+                    <div className="ml-13 mt-2">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+                        {message.query}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Resolved Support Messages */}
+        {resolvedSupport.length > 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Resolved Support Requests</h3>
+            <div className="space-y-2">
+              {resolvedSupport.map((message) => (
+                <div key={message.id} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {message.userName || message.email || 'Anonymous'}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Resolved on {message.resolvedAt ? new Date(message.resolvedAt).toLocaleDateString() : 'N/A'}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleViewSupport(message)}
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium"
+                  >
+                    View Details
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {supportMessages.length === 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-12 text-center">
+            <Headphones className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400">No support messages yet</p>
+          </div>
+        )}
       </div>
     )
   }
@@ -1205,15 +1691,15 @@ export default function AdminControlPanel() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Top Header */}
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between pl-0 pr-6 py-4">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden text-gray-600 dark:text-gray-300"
+              className="lg:hidden text-gray-600 dark:text-gray-300 ml-2"
             >
               {isSidebarOpen ? <CloseIcon className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
-            <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden flex items-center justify-center">
+            <div className="bg-transparent dark:bg-gray-800 rounded transition-colors duration-200 overflow-hidden flex items-center justify-start">
               <Image 
                 src={isDarkMode ? assets.helloLogo : assets.zizla_logo} 
                 alt="Zizla Logo" 
@@ -1221,7 +1707,7 @@ export default function AdminControlPanel() {
                 height={140} 
                 className="h-16 md:h-20 lg:h-24 w-auto"
                 style={{
-                  backgroundColor: isDarkMode ? '#111827' : 'transparent',
+                  backgroundColor: isDarkMode ? '#1f2937' : 'transparent',
                   display: 'block',
                   objectFit: 'contain',
                   width: 'auto',
@@ -1231,15 +1717,35 @@ export default function AdminControlPanel() {
               />
             </div>
           </div>
-          <div className="flex items-center gap-4 relative">
+          <div className="flex items-center gap-6 relative">
             <button 
               onClick={() => {
                 toast.success('Chat feature coming soon in Control Panel!')
               }}
               className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              title="Messages & Notifications"
+              title="Messages"
             >
               <MessageSquare className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => {
+                toast.success('Notifications feature coming soon!')
+              }}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors relative"
+              title="Notifications"
+            >
+              <Bell className="w-5 h-5" />
+              {/* Notification badge */}
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <button 
+              onClick={() => {
+                setActiveTab('settings')
+              }}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              title="Profile Settings"
+            >
+              <User className="w-5 h-5" />
             </button>
             <button 
               onClick={() => setShowUserMenu(!showUserMenu)}
@@ -1257,26 +1763,6 @@ export default function AdminControlPanel() {
                   <p className="text-xs text-gray-500 dark:text-gray-400">admin@zizla.com</p>
                 </div>
                 <div className="py-2">
-                  <button
-                    onClick={() => {
-                      setActiveTab('settings')
-                      setShowUserMenu(false)
-                    }}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <User className="w-4 h-4" />
-                    <span>Profile Settings</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowUserMenu(false)
-                      toast.success('Notifications feature coming soon!')
-                    }}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <Bell className="w-4 h-4" />
-                    <span>Notifications</span>
-                  </button>
                   <button
                     onClick={() => {
                       setActiveTab('settings')
@@ -1356,6 +1842,7 @@ export default function AdminControlPanel() {
           {activeTab === 'revenue' && renderRevenueTab()}
           {activeTab === 'analytics' && renderAnalyticsTab()}
           {activeTab === 'verification' && renderVerificationTab()}
+          {activeTab === 'customer-support' && renderCustomerSupportTab()}
           {activeTab === 'settings' && renderSettingsTab()}
         </main>
       </div>
@@ -1503,6 +1990,209 @@ export default function AdminControlPanel() {
 
       {/* Detail Modal */}
       {renderDetailModal()}
+
+      {/* Support Detail Modal */}
+      {showSupportDetailModal && selectedSupport && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998]"
+            onClick={() => {
+              setShowSupportDetailModal(false)
+              setSelectedSupport(null)
+            }}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-[9999] p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                    <Headphones className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">Support Request</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {selectedSupport.userName || selectedSupport.email || 'Anonymous'}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowSupportDetailModal(false)
+                    setSelectedSupport(null)
+                  }}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                >
+                  <CloseIcon className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
+                    <p className="text-base font-medium text-gray-900 dark:text-white">{selectedSupport.email || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                      selectedSupport.status === 'resolved' 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                        : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                    }`}>
+                      {selectedSupport.status === 'resolved' ? 'Resolved' : 'Pending'}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Submitted</p>
+                    <p className="text-base font-medium text-gray-900 dark:text-white">
+                      {new Date(selectedSupport.createdAt || Date.now()).toLocaleString()}
+                    </p>
+                  </div>
+                  {selectedSupport.resolvedAt && (
+                    <div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Resolved</p>
+                      <p className="text-base font-medium text-gray-900 dark:text-white">
+                        {new Date(selectedSupport.resolvedAt).toLocaleString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Query/Message */}
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Message</p>
+                  <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                    <p className="text-sm text-gray-900 dark:text-white whitespace-pre-wrap">
+                      {selectedSupport.query || 'No message provided'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Attached Images */}
+                {selectedSupport.images && selectedSupport.images.length > 0 && (
+                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Attached Images</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {selectedSupport.images.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image.preview || image}
+                          alt={`Attachment ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {selectedSupport.status !== 'resolved' && (
+                <div className="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 flex justify-end gap-3 rounded-b-lg border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => {
+                      const handleResolve = () => {
+                        const updated = supportMessages.map(m => 
+                          m.id === selectedSupport.id ? { ...m, status: 'resolved', resolvedAt: new Date().toISOString() } : m
+                        )
+                        setSupportMessages(updated)
+                        localStorage.setItem('supportMessages', JSON.stringify(updated))
+                        setShowSupportDetailModal(false)
+                        setSelectedSupport(null)
+                        toast.success('Support request marked as resolved')
+                      }
+                      handleResolve()
+                    }}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  >
+                    Mark as Resolved
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Disapprove Modal */}
+      {showDisapproveModal && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998]"
+            onClick={() => {
+              setShowDisapproveModal(false)
+              setSelectedSellerForAction(null)
+              setDisapprovalReason('')
+            }}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-[9999] p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg w-full">
+              <div className="bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800 p-6 flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                  <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    Disapprove Seller
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {selectedSellerForAction?.businessName || selectedSellerForAction?.fullName}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Reason for Disapproval <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    value={disapprovalReason}
+                    onChange={(e) => setDisapprovalReason(e.target.value)}
+                    placeholder="Please provide a detailed reason for disapproving this seller..."
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
+                    rows="5"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    This reason will be visible to the seller and stored in their records.
+                  </p>
+                </div>
+
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                  <div className="flex gap-2">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">Important Notice</p>
+                      <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-1">
+                        Disapproving this seller will prevent them from selling on the platform. Make sure to provide a clear and valid reason.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 flex justify-end gap-3 rounded-b-lg">
+                <button
+                  onClick={() => {
+                    setShowDisapproveModal(false)
+                    setSelectedSellerForAction(null)
+                    setDisapprovalReason('')
+                  }}
+                  className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDisapproveSeller}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                >
+                  Confirm Disapproval
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
