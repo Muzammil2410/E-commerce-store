@@ -430,7 +430,7 @@ const Navbar = () => {
             },
             {
                 title: 'Camera Lenses',
-                items: ['Wide Angle', 'Telephotu', 'Macro', 'Prime Lenses'],
+                items: ['Wide Angle', 'Telephoto', 'Macro', 'Prime Lenses'],
                 viewMore: true
             },
             {
