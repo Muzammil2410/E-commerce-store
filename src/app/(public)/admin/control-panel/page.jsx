@@ -46,6 +46,12 @@ import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import Image from '@/components/Image'
 import toast from 'react-hot-toast'
+import AdvancedAnalytics from '@/components/admin/AdvancedAnalytics/AdvancedAnalytics'
+import SellerManagement from '@/components/admin/SellerManagement/SellerManagement'
+import OrdersOperations from '@/components/admin/OrdersOperations/OrdersOperations'
+import CustomerCRM from '@/components/admin/CustomerCRM/CustomerCRM'
+import MarketingGrowth from '@/components/admin/MarketingGrowth/MarketingGrowth'
+import AutomationSecurity from '@/components/admin/AutomationSecurity/AutomationSecurity'
 
 export default function AdminControlPanel() {
   const navigate = useNavigate()
@@ -74,13 +80,19 @@ export default function AdminControlPanel() {
   const navItems = [
     { id: 'overview', label: 'Overview', icon: BarChart3 },
     { id: 'buyers', label: 'Buyers', icon: Users },
+    { id: 'customer-crm', label: 'Customer / CRM', icon: Users },
     { id: 'sellers', label: 'Sellers', icon: Store },
+    { id: 'seller-management', label: 'Seller Management', icon: Users },
     { id: 'orders', label: 'Orders', icon: ShoppingBag },
+    { id: 'orders-operations', label: 'Orders & Operations', icon: ShoppingBag },
     { id: 'revenue', label: 'Revenue', icon: DollarSign },
     { id: 'analytics', label: 'Analytics', icon: TrendingUp },
+    { id: 'advanced-analytics', label: 'Advanced Analytics', icon: BarChart3 },
+    { id: 'marketing-growth', label: 'Marketing & Growth', icon: TrendingUp },
     { id: 'verification', label: 'Verification', icon: ShieldCheck },
     { id: 'customer-support', label: 'Customer Support', icon: Headphones },
     { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'automation-security', label: 'Automation & Security', icon: ShieldCheck },
   ]
 
   // Load data on mount
@@ -1837,13 +1849,19 @@ export default function AdminControlPanel() {
           {/* Tab Content */}
           {activeTab === 'overview' && renderAnalyticsTab()}
           {activeTab === 'buyers' && renderUsersTab()}
+          {activeTab === 'customer-crm' && <CustomerCRM formatCurrency={formatCurrency} />}
           {activeTab === 'sellers' && renderSellersTab()}
+          {activeTab === 'seller-management' && <SellerManagement formatCurrency={formatCurrency} />}
           {activeTab === 'orders' && renderOrdersTab()}
+          {activeTab === 'orders-operations' && <OrdersOperations formatCurrency={formatCurrency} />}
           {activeTab === 'revenue' && renderRevenueTab()}
           {activeTab === 'analytics' && renderAnalyticsTab()}
+          {activeTab === 'advanced-analytics' && <AdvancedAnalytics formatCurrency={formatCurrency} />}
+          {activeTab === 'marketing-growth' && <MarketingGrowth formatCurrency={formatCurrency} />}
           {activeTab === 'verification' && renderVerificationTab()}
           {activeTab === 'customer-support' && renderCustomerSupportTab()}
           {activeTab === 'settings' && renderSettingsTab()}
+          {activeTab === 'automation-security' && <AutomationSecurity formatCurrency={formatCurrency} />}
         </main>
       </div>
 
