@@ -59,7 +59,7 @@ export default function AdminControlPanel() {
   const { isDarkMode } = useTheme()
   
   const [activeTab, setActiveTab] = useState('overview')
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false) // Start closed on mobile
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [users, setUsers] = useState([])
@@ -124,6 +124,30 @@ export default function AdminControlPanel() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [showUserMenu])
+
+  // Auto-open sidebar on desktop, close on mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsSidebarOpen(true)
+      } else {
+        setIsSidebarOpen(false)
+      }
+    }
+
+    // Set initial state
+    handleResize()
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Close sidebar when clicking overlay on mobile
+  const handleOverlayClick = () => {
+    if (window.innerWidth < 1024) {
+      setIsSidebarOpen(false)
+    }
+  }
 
   const loadUsers = () => {
     // Load buyers from localStorage
@@ -1701,15 +1725,24 @@ export default function AdminControlPanel() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div
+          onClick={handleOverlayClick}
+          className="fixed inset-0 bg-black/50 dark:bg-black/70 z-30 lg:hidden transition-opacity duration-300"
+        />
+      )}
+
       {/* Top Header */}
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-        <div className="flex items-center justify-between pl-0 pr-6 py-4">
-          <div className="flex items-center gap-1">
+        <div className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden text-gray-600 dark:text-gray-300 ml-2"
+              className="lg:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              aria-label="Toggle sidebar"
             >
-              {isSidebarOpen ? <CloseIcon className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isSidebarOpen ? <CloseIcon className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
             <div className="bg-transparent dark:bg-gray-800 rounded transition-colors duration-200 overflow-hidden flex items-center justify-start">
               <Image 
@@ -1717,7 +1750,7 @@ export default function AdminControlPanel() {
                 alt="Zizla Logo" 
                 width={350} 
                 height={140} 
-                className="h-16 md:h-20 lg:h-24 w-auto"
+                className="h-12 sm:h-14 md:h-16 lg:h-20 xl:h-24 w-auto max-w-[200px] sm:max-w-[250px] md:max-w-none"
                 style={{
                   backgroundColor: isDarkMode ? '#1f2937' : 'transparent',
                   display: 'block',
@@ -1729,50 +1762,54 @@ export default function AdminControlPanel() {
               />
             </div>
           </div>
-          <div className="flex items-center gap-6 relative">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 relative">
             <button 
               onClick={() => {
                 toast.success('Chat feature coming soon in Control Panel!')
               }}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               title="Messages"
+              aria-label="Messages"
             >
-              <MessageSquare className="w-5 h-5" />
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button 
               onClick={() => {
                 toast.success('Notifications feature coming soon!')
               }}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors relative"
+              className="p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors relative"
               title="Notifications"
+              aria-label="Notifications"
             >
-              <Bell className="w-5 h-5" />
+              <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
               {/* Notification badge */}
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full"></span>
             </button>
             <button 
               onClick={() => {
                 setActiveTab('settings')
               }}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="hidden sm:flex p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               title="Profile Settings"
+              aria-label="Profile Settings"
             >
-              <User className="w-5 h-5" />
+              <User className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button 
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors relative"
               title="User Menu"
+              aria-label="User Menu"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
             {/* User Menu Dropdown */}
             {showUserMenu && (
-              <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+              <div className="absolute top-full right-0 mt-2 w-48 sm:w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                 <div className="p-3 border-b border-gray-200 dark:border-gray-700">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">Admin User</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">admin@zizla.com</p>
+                  <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">Admin User</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">admin@zizla.com</p>
                 </div>
                 <div className="py-2">
                   <button
@@ -1780,9 +1817,9 @@ export default function AdminControlPanel() {
                       setActiveTab('settings')
                       setShowUserMenu(false)
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
-                    <Settings className="w-4 h-4" />
+                    <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     <span>System Settings</span>
                   </button>
                 </div>
@@ -1794,9 +1831,9 @@ export default function AdminControlPanel() {
                       toast.success('Logged out successfully!')
                       setTimeout(() => navigate('/admin/control-panel/login'), 1000)
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                    className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 text-xs sm:text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     <span>Logout</span>
                   </button>
                 </div>
@@ -1806,10 +1843,10 @@ export default function AdminControlPanel() {
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex relative">
         {/* Sidebar */}
-        <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:sticky top-[73px] left-0 h-[calc(100vh-73px)] w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 z-40 overflow-y-auto`}>
-          <nav className="p-4 space-y-1">
+        <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:sticky top-[60px] sm:top-[68px] lg:top-[73px] left-0 h-[calc(100vh-60px)] sm:h-[calc(100vh-68px)] lg:h-[calc(100vh-73px)] w-64 sm:w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 z-40 overflow-y-auto shadow-lg lg:shadow-none`}>
+          <nav className="p-3 sm:p-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon
               return (
@@ -1817,16 +1854,18 @@ export default function AdminControlPanel() {
                   key={item.id}
                   onClick={() => {
                     setActiveTab(item.id)
-                    setIsSidebarOpen(false)
+                    if (window.innerWidth < 1024) {
+                      setIsSidebarOpen(false)
+                    }
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                  className={`w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-colors text-left ${
                     activeTab === item.id
-                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium text-sm">{item.label}</span>
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                  <span className="font-medium text-xs sm:text-sm truncate">{item.label}</span>
                 </button>
               )
             })}
@@ -1834,15 +1873,15 @@ export default function AdminControlPanel() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 lg:p-8">
+        <main className="flex-1 w-full min-w-0 p-3 sm:p-4 md:p-6 lg:p-8">
           {/* Breadcrumb */}
-          <div className="mb-6">
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-              <button onClick={() => setActiveTab('overview')} className="hover:text-gray-900 dark:hover:text-gray-200">
+          <div className="mb-4 sm:mb-6">
+            <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+              <button onClick={() => setActiveTab('overview')} className="hover:text-gray-900 dark:hover:text-gray-200 truncate">
                 Admin Control Panel
               </button>
               <span>/</span>
-              <span className="text-gray-900 dark:text-white font-medium">Control Panel</span>
+              <span className="text-gray-900 dark:text-white font-medium truncate">Control Panel</span>
             </div>
           </div>
 
