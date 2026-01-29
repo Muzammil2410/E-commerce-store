@@ -10,6 +10,7 @@ import {
   Eye,
   ToggleLeft,
   ToggleRight,
+  X,
 } from 'lucide-react'
 import { invoiceSettingsData, invoiceStatusData } from './mockData'
 import toast from 'react-hot-toast'
@@ -39,7 +40,7 @@ const InvoiceSettings = ({ formatCurrency }) => {
     const statusMap = {
       generated: {
         label: 'Generated',
-        color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+        color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
         icon: CheckCircle2,
       },
       pending: {
@@ -80,12 +81,12 @@ const InvoiceSettings = ({ formatCurrency }) => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-green-200 dark:border-green-800/30 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-blue-200 dark:border-blue-800/30 p-6">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm text-gray-600 dark:text-gray-400">Generated</p>
-            <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <CheckCircle2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {generatedCount}
           </p>
         </div>
@@ -130,7 +131,7 @@ const InvoiceSettings = ({ formatCurrency }) => {
               className="relative"
             >
               {settings.autoGenerate ? (
-                <ToggleRight className="w-12 h-12 text-green-600 dark:text-green-400" />
+                <ToggleRight className="w-12 h-12 text-blue-600 dark:text-blue-400" />
               ) : (
                 <ToggleLeft className="w-12 h-12 text-gray-400" />
               )}
@@ -246,53 +247,76 @@ const InvoiceSettings = ({ formatCurrency }) => {
                 {showPreview ? 'Hide' : 'Show'} Preview
               </button>
             </div>
-            {showPreview && (
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-700">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-600 pb-4">
-                    <div>
-                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">
-                        {settings.companyInfo.name}
-                      </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {settings.companyInfo.address}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        INVOICE
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{previewInvoiceNumber}</p>
-                    </div>
+          </div>
+
+          {/* Preview Modal */}
+          {showPreview && (
+            <>
+              <div 
+                className="fixed inset-0 bg-gray-900/30 dark:bg-gray-900/40 backdrop-blur-sm z-[9998]"
+                onClick={() => setShowPreview(false)}
+              />
+              <div className="fixed inset-0 flex items-center justify-center z-[9999] p-4">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6 flex justify-between items-center">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      Invoice Template Preview
+                    </h3>
+                    <button
+                      onClick={() => setShowPreview(false)}
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-500 dark:text-gray-400 mb-1">Bill To:</p>
-                      <p className="text-gray-900 dark:text-white">Customer Name</p>
-                      <p className="text-gray-600 dark:text-gray-400">Customer Address</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-gray-500 dark:text-gray-400 mb-1">Date:</p>
-                      <p className="text-gray-900 dark:text-white">
-                        {new Date().toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="border-t border-b border-gray-200 dark:border-gray-600 py-2">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Items will appear here</p>
-                  </div>
-                  <div className="flex justify-end">
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total:</p>
-                      <p className="text-lg font-bold text-gray-900 dark:text-white">
-                        {formatCurrency(0)}
-                      </p>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-600 pb-4">
+                        <div>
+                          <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                            {settings.companyInfo.name}
+                          </h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {settings.companyInfo.address}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            INVOICE
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{previewInvoiceNumber}</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-gray-500 dark:text-gray-400 mb-1">Bill To:</p>
+                          <p className="text-gray-900 dark:text-white">Customer Name</p>
+                          <p className="text-gray-600 dark:text-gray-400">Customer Address</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-gray-500 dark:text-gray-400 mb-1">Date:</p>
+                          <p className="text-gray-900 dark:text-white">
+                            {new Date().toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="border-t border-b border-gray-200 dark:border-gray-600 py-2">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Items will appear here</p>
+                      </div>
+                      <div className="flex justify-end">
+                        <div className="text-right">
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total:</p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">
+                            {formatCurrency(0)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </>
+          )}
 
           {/* Save Button */}
           <button
@@ -369,7 +393,7 @@ const InvoiceSettings = ({ formatCurrency }) => {
                       {invoice.status === 'generated' && invoice.downloadUrl && (
                         <button
                           onClick={() => toast.success('Invoice downloaded')}
-                          className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300"
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                         >
                           <Download className="w-4 h-4" />
                         </button>

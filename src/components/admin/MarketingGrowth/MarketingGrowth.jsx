@@ -16,11 +16,11 @@ const MarketingGrowth = ({ formatCurrency, isLoading = false }) => {
   const [activeSection, setActiveSection] = useState('overview')
 
   const sections = [
-    { id: 'overview', label: 'Overview', icon: TrendingUp, color: 'from-orange-500 to-red-600' },
-    { id: 'coupons', label: 'Coupons', icon: Ticket, color: 'from-yellow-500 to-amber-600' },
-    { id: 'flash-sales', label: 'Flash Sales', icon: Zap, color: 'from-cyan-500 to-blue-600' },
-    { id: 'notifications', label: 'Notifications', icon: Bell, color: 'from-purple-500 to-indigo-600' },
-    { id: 'referrals', label: 'Referrals', icon: Users, color: 'from-green-500 to-emerald-600' },
+    { id: 'overview', label: 'Overview', icon: TrendingUp, color: 'from-orange-200 to-red-300' },
+    { id: 'coupons', label: 'Coupons', icon: Ticket, color: 'from-yellow-200 to-amber-300' },
+    { id: 'flash-sales', label: 'Flash Sales', icon: Zap, color: 'from-cyan-200 to-blue-300' },
+    { id: 'notifications', label: 'Notifications', icon: Bell, color: 'from-purple-200 to-indigo-300' },
+    { id: 'referrals', label: 'Referrals', icon: Users, color: 'from-green-200 to-emerald-300' },
   ]
 
   if (isLoading) {
@@ -37,13 +37,13 @@ const MarketingGrowth = ({ formatCurrency, isLoading = false }) => {
   return (
     <div className="space-y-8">
       {/* Enhanced Header with Gradient */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-orange-900/20 dark:to-amber-900/20 rounded-2xl p-8 border border-orange-100 dark:border-orange-800/30 shadow-lg">
+      <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-orange-900/10 dark:to-amber-900/10 rounded-2xl p-8 border border-orange-100 dark:border-orange-800/20 shadow-lg">
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-3 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl shadow-lg">
+            <div className="p-3 bg-gradient-to-br from-orange-200 to-red-300 rounded-xl shadow-md">
               <TrendingUp className="w-6 h-6 text-white" />
             </div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 dark:from-orange-200 dark:to-red-200 bg-clip-text text-transparent">
               Marketing & Growth
             </h2>
           </div>
@@ -51,7 +51,7 @@ const MarketingGrowth = ({ formatCurrency, isLoading = false }) => {
             Campaign management, promotions, and growth tools
           </p>
         </div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-400/20 to-amber-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-300/10 to-amber-300/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Enhanced Navigation Tabs */}
@@ -66,14 +66,14 @@ const MarketingGrowth = ({ formatCurrency, isLoading = false }) => {
                 onClick={() => setActiveSection(section.id)}
                 className={`group relative flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${
                   isActive
-                    ? `bg-gradient-to-r ${section.color} text-white shadow-lg shadow-orange-500/30 scale-105`
+                    ? `bg-gradient-to-r ${section.color} text-white shadow-md shadow-gray-300/20 dark:shadow-gray-700/20 scale-105`
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 <Icon className={`w-4 h-4 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
                 <span>{section.label}</span>
                 {isActive && (
-                  <div className="absolute inset-0 rounded-lg bg-white/20 blur-sm"></div>
+                  <div className="absolute inset-0 rounded-lg bg-white/10 blur-sm"></div>
                 )}
               </button>
             )
