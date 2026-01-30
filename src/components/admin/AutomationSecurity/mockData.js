@@ -255,7 +255,7 @@ export const auditLogsData = [
 export const invoiceSettingsData = {
   autoGenerate: true,
   invoicePrefix: 'INV',
-  invoiceNumberFormat: 'INV-{YYYY}-{MM}-{####}',
+  invoiceNumberFormat: '',
   nextInvoiceNumber: 1245,
   template: 'default',
   includeTax: true,

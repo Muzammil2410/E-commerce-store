@@ -8,8 +8,6 @@ import {
   Download,
   RefreshCw,
   Eye,
-  ToggleLeft,
-  ToggleRight,
   X,
 } from 'lucide-react'
 import { invoiceSettingsData, invoiceStatusData } from './mockData'
@@ -71,8 +69,9 @@ const InvoiceSettings = ({ formatCurrency }) => {
   const pendingCount = invoiceStatusData.filter((i) => i.status === 'pending').length
   const failedCount = invoiceStatusData.filter((i) => i.status === 'failed').length
 
-  // Generate preview invoice number
-  const previewInvoiceNumber = settings.invoiceNumberFormat
+  // Generate preview invoice number (use placeholder format when empty)
+  const formatForPreview = settings.invoiceNumberFormat || 'INV-{YYYY}-{MM}-{####}'
+  const previewInvoiceNumber = formatForPreview
     .replace('{YYYY}', new Date().getFullYear().toString())
     .replace('{MM}', String(new Date().getMonth() + 1).padStart(2, '0'))
     .replace('{####}', String(settings.nextInvoiceNumber).padStart(4, '0'))
@@ -119,22 +118,21 @@ const InvoiceSettings = ({ formatCurrency }) => {
 
         <div className="space-y-6">
           {/* Auto Generate Toggle */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-            <div>
+          <div className="flex items-center justify-between gap-6 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+            <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-900 dark:text-white">Auto-Generate Invoices</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                 Automatically generate invoices when orders are completed
               </p>
             </div>
             <button
+              type="button"
+              role="switch"
+              aria-checked={settings.autoGenerate}
               onClick={handleToggleAutoGenerate}
-              className="relative"
+              className="flex-shrink-0 px-5 py-2.5 rounded-lg bg-gray-900 dark:bg-black text-white font-medium text-sm transition-colors hover:bg-gray-800 dark:hover:bg-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
             >
-              {settings.autoGenerate ? (
-                <ToggleRight className="w-12 h-12 text-blue-600 dark:text-blue-400" />
-              ) : (
-                <ToggleLeft className="w-12 h-12 text-gray-400" />
-              )}
+              {settings.autoGenerate ? 'On' : 'Off'}
             </button>
           </div>
 
@@ -148,11 +146,8 @@ const InvoiceSettings = ({ formatCurrency }) => {
               value={settings.invoiceNumberFormat}
               onChange={(e) => setSettings({ ...settings, invoiceNumberFormat: e.target.value })}
               placeholder="INV-{YYYY}-{MM}-{####}"
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500"
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Use {'{YYYY}'} for year, {'{MM}'} for month, {'{####}'} for sequential number
-            </p>
             <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800/30 rounded-lg">
               <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Preview:</p>
               <p className="text-sm font-mono font-semibold text-blue-600 dark:text-blue-400">
