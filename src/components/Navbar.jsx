@@ -418,7 +418,7 @@ const Navbar = () => {
             },
             {
                 title: 'Senior Care',
-                items: ['Mobility Aids', 'Health Monitors', 'Personal Care', 'Comfort Products'],
+                items: ['Mobility Aid', 'Health Monitors', 'Personal Care', 'Comfort Products'],
                 viewMore: true
             }
         ],
