@@ -9,10 +9,10 @@ const PictureBoxes = () => {
     const { t } = useLanguageCurrency()
     
     return (
-        <div className='px-4 sm:px-6 mt-16 sm:mt-20 lg:mt-30 mb-2 sm:mb-3 lg:mb-4 max-w-6xl mx-auto'>
-            <div className='flex flex-col md:flex-row gap-4 sm:gap-6 justify-between'>
+        <div className='px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 mt-6 sm:mt-8 lg:mt-10 mb-1 sm:mb-2 lg:mb-2 max-w-[1920px] mx-auto'>
+            <div className='flex flex-col md:flex-row gap-3 sm:gap-4 justify-between'>
                 <div className="text-box banner-layer x50 md-x50 lg-x50 y50 md-y50 lg-y50 res-text flex-1">
-                    <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 h-48 sm:h-56 lg:h-64 flex items-center justify-between relative overflow-hidden shadow-sm dark:shadow-gray-900/50 transition-colors duration-200'>
+                    <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl sm:rounded-3xl p-3 sm:p-4 lg:p-5 h-44 sm:h-52 lg:h-60 flex items-center justify-between relative overflow-hidden shadow-sm dark:shadow-gray-900/50 transition-colors duration-200'>
                         <div className='text-left z-10 flex-1'>
                             <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('newArrivals')}</h3>
                             <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('discoverLatestTrends')}</p>
@@ -33,7 +33,7 @@ const PictureBoxes = () => {
                 </div>
                 
                 <div className="text-box banner-layer x50 md-x50 lg-x50 y50 md-y50 lg-y50 res-text flex-1">
-                    <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 h-48 sm:h-56 lg:h-64 flex items-center justify-between relative overflow-hidden shadow-sm dark:shadow-gray-900/50 transition-colors duration-200'>
+                    <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl sm:rounded-3xl p-3 sm:p-4 lg:p-5 h-44 sm:h-52 lg:h-60 flex items-center justify-between relative overflow-hidden shadow-sm dark:shadow-gray-900/50 transition-colors duration-200'>
                         <div className='text-left z-10 flex-1'>
                             <h3 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-200'>{t('specialOffers')}</h3>
                             <p className='text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-200'>{t('limitedTimeDeals')}</p>

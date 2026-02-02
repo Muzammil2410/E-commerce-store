@@ -84,8 +84,8 @@ const ShopByCategory = () => {
     }
 
     return (
-        <div className='px-4 sm:px-6 my-16 sm:my-20 max-w-7xl mx-auto'>
-            <div className='text-center mb-12 sm:mb-16'>
+        <div className='px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 my-6 sm:my-8 max-w-[1920px] mx-auto'>
+            <div className='text-center mb-6 sm:mb-8'>
                 <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-200'>{t('shopByCategory')}</h2>
                 <p className='text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4 transition-colors duration-200'>{t('discoverWideRange')}</p>
             </div>
@@ -167,7 +167,7 @@ const ShopByCategory = () => {
             </div>
             
             {/* View All Categories Button */}
-            <div className='text-center mt-8 sm:mt-12'>
+            <div className='text-center mt-4 sm:mt-6'>
                 <button 
                     className='text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md'
                     style={{ backgroundColor: '#3977ED' }}

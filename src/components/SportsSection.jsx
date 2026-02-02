@@ -19,14 +19,14 @@ const SportsSection = () => {
         product.category === "Earbuds" ||
         product.category === "Mouse" ||
         product.category === "Camera"
-    ).slice(0, 4) // Show only first 4 gadgets
+    ).slice(0, 8) // Show 8 gadgets (2 rows)
 
     const description = t('showingGadgetsProducts').replace('{count}', gadgetsProducts.length)
 
     return (
-        <div className='px-4 sm:px-6 mt-4 sm:mt-6 lg:mt-8 mb-2 sm:mb-3 lg:mb-4 max-w-6xl mx-auto'>
+        <div className='px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 mt-2 sm:mt-3 lg:mt-4 mb-1 sm:mb-2 lg:mb-2 max-w-[1920px] mx-auto'>
             <Title title={t('gadgets')} description={description} href='/shop?category=Gadgets' />
-            <div className='mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6'>
+            <div className='mt-4 sm:mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4'>
                 {gadgetsProducts.map((product, index) => (
                     <ProductCard key={product.id} product={product} hideDiscount={true} />
                 ))}

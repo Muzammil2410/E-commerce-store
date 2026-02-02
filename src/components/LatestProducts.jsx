@@ -13,9 +13,9 @@ const LatestProducts = () => {
     const description = t('showingProducts').replace('{count}', showingCount).replace('{total}', products.length)
 
     return (
-        <div className='px-4 sm:px-6 my-4 sm:my-6 lg:my-8 max-w-6xl mx-auto'>
+        <div className='px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 my-2 sm:my-3 lg:my-4 max-w-[1920px] mx-auto'>
             <Title title={t('latestProducts')} description={description} href='/shop' />
-            <div className='mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6'>
+            <div className='mt-4 sm:mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4'>
                 {products.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, displayQuantity).map((product, index) => (
                     <ProductCard key={index} product={product} hideDiscount={true} />
                 ))}

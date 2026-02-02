@@ -25,8 +25,8 @@ const Hero = () => {
     }, [heroImages.length])
 
     return (
-        <div className='px-3 sm:px-4 md:px-6 w-full overflow-hidden'>
-            <div className='flex flex-col xl:flex-row gap-4 sm:gap-6 xl:gap-8 max-w-7xl mx-auto my-4 sm:my-6 md:my-10'>
+        <div className='px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 w-full overflow-hidden'>
+            <div className='flex flex-col xl:flex-row gap-3 sm:gap-4 xl:gap-5 max-w-[1920px] mx-auto my-2 sm:my-3 md:my-4'>
                 <div className='relative flex-1 flex flex-col rounded-xl sm:rounded-2xl xl:rounded-3xl min-h-[280px] sm:min-h-[350px] md:min-h-[400px] xl:min-h-[500px] group shadow-sm overflow-hidden'>
                     <Image 
                         className='w-full h-full object-cover object-right sm:object-center absolute inset-0 transition-opacity duration-500' 

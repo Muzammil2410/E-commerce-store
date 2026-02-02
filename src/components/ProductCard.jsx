@@ -21,12 +21,12 @@ const ProductCard = memo(({ product, hideDiscount = false }) => {
     return (
         <article className='group w-full max-w-none mx-auto transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 relative'>
             <Link to={`/product/${product.id}`} aria-label={`View details for ${translateProductName(product.name || product.title)}`}>
-                <div className='bg-[#F5F5F5] dark:bg-gray-800 h-36 sm:h-44 md:h-52 lg:h-56 rounded-lg flex items-center justify-center overflow-hidden shadow-sm dark:shadow-gray-900/50 group-hover:shadow-lg transition-all duration-300 relative'>
+                <div className='bg-[#F5F5F5] dark:bg-gray-800 h-40 sm:h-48 md:h-56 lg:h-64 xl:h-72 rounded-lg flex items-center justify-center overflow-hidden shadow-sm dark:shadow-gray-900/50 group-hover:shadow-lg transition-all duration-300 relative'>
                     {imageSrc && !imageError ? (
                         <Image 
                             width={500} 
                             height={500} 
-                            className='max-h-28 sm:max-h-36 md:max-h-44 lg:max-h-48 w-auto h-auto group-hover:scale-125 transition-all duration-500 ease-out object-contain' 
+                            className='max-h-32 sm:max-h-40 md:max-h-48 lg:max-h-56 xl:max-h-64 w-auto h-auto group-hover:scale-125 transition-all duration-500 ease-out object-contain' 
                             src={imageSrc} 
                             alt={`${translateProductName(product.name || product.title || 'Product')} product image`}
                             loading="lazy"

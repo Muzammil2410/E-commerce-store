@@ -17,13 +17,13 @@ const Testimonials = () => {
     const allReviews = dummyRatingsData
 
     return (
-        <div className='px-4 sm:px-6 mt-4 sm:mt-6 lg:mt-8 mb-16 sm:mb-20 lg:mb-30 max-w-6xl mx-auto'>
-            <div className='text-center mb-12'>
+        <div className='px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 mt-2 sm:mt-3 lg:mt-4 mb-6 sm:mb-8 lg:mb-10 max-w-[1920px] mx-auto'>
+            <div className='text-center mb-6'>
                 <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-200'>{t('whatOurCustomersSay')}</h2>
                 <p className='text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-200'>{t('dontJustTakeOurWord')}</p>
             </div>
             
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'>
                 {testimonials.map((testimonial, index) => (
                     <div key={index} className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm dark:shadow-gray-900/50 hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow duration-300 h-80 flex flex-col'>
                         {/* Star Rating */}
@@ -61,7 +61,7 @@ const Testimonials = () => {
             </div>
             
             {/* View All Reviews Button */}
-            <div className='text-center mt-12'>
+            <div className='text-center mt-6'>
                 <button 
                     onClick={() => setShowAllReviews(true)}
                     className='text-white px-8 py-3 rounded-full font-medium hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md'
