@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Calendar, Clock, CheckCircle2, AlertCircle, TrendingUp, Bell, X, Upload, MessageSquare, FileText, Flag, ChevronLeft, ChevronRight, Zap, Package, MapPin, Phone, User, Camera, PenTool, CheckCircle, Settings, Globe, Trophy, Target, Play, Pause, Square, Award, BookOpen, Send, Download, Paperclip } from 'lucide-react'
@@ -67,6 +67,7 @@ export default function EmployeeDashboard() {
     const [editPhone, setEditPhone] = useState('')
     const [editEmergencyContact, setEditEmergencyContact] = useState({ name: '', phone: '', relation: '' })
     
+    // Initialize user only once on mount
     useEffect(() => {
         // Check if user is logged in
         const userData = localStorage.getItem('employeeUser')
@@ -88,96 +89,19 @@ export default function EmployeeDashboard() {
             } catch (error) {
                 navigate('/employee/login')
             }
-        } else {
-            // Ensure we're on the right page based on role
-            if (currentUser.role === 'admin') {
-                navigate('/admin/dashboard')
-            }
         }
-    }, [navigate, currentUser, dispatch])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []) // Only run on mount
     
+    // Handle role-based navigation separately
     useEffect(() => {
-        if (!currentUser) return
-        
-        const today = new Date().toISOString().split('T')[0]
-        const todayRecord = records.find(
-            record => record.employeeId === currentUser.id && record.date === today
-        )
-        
-        setTodayAttendance(todayRecord)
-        setIsClockedIn(!!currentSessions[currentUser.id])
-        
-        // Load assigned deliveries
-        loadDeliveries()
-        
-        // Generate notifications
-        generateNotifications()
-        
-        // Load new features data
-        dispatch(loadConversations())
-        dispatch(loadAnnouncements())
-        dispatch(loadDocuments())
-        dispatch(loadProfile({ userId: currentUser.id }))
-        dispatch(loadWorkLogs({ employeeId: currentUser.id }))
-        dispatch(loadAchievements())
-        dispatch(loadGoals({ userId: currentUser.id }))
-        dispatch(getCurrentWeekGoals({ userId: currentUser.id }))
-        
-        // Initialize profile edit states
-        setEditPhone(currentUser.phone || '')
-        if (emergencyContact) {
-            setEditEmergencyContact(emergencyContact)
+        if (currentUser && currentUser.role === 'admin') {
+            navigate('/admin/dashboard')
         }
-    }, [currentUser, records, currentSessions, tasks, requests, dispatch, emergencyContact])
+    }, [currentUser, navigate])
     
-    // Recalculate profile completion when emergency contact changes
-    useEffect(() => {
-        if (currentUser) {
-            const employeeForCalc = {
-                ...currentUser,
-                emergencyContact: emergencyContact
-            }
-            dispatch(calculateProfileCompletion({ employee: employeeForCalc }))
-        }
-    }, [currentUser, emergencyContact, dispatch])
-    
-    // Reload conversations periodically when chat modal is open
-    useEffect(() => {
-        if (showChatModal && activeConversation) {
-            const interval = setInterval(() => {
-                dispatch(loadConversations())
-            }, 2000) // Reload every 2 seconds
-            
-            return () => clearInterval(interval)
-        }
-    }, [showChatModal, activeConversation, dispatch])
-    
-    // Timer effect
-    useEffect(() => {
-        if (currentTimer && currentTimer.startTime) {
-            setWorkTimerRunning(true)
-            const interval = setInterval(() => {
-                if (currentTimer && currentTimer.startTime) {
-                    const start = new Date(currentTimer.startTime)
-                    const now = new Date()
-                    const diff = now - start
-                    const hours = Math.floor(diff / 3600000)
-                    const minutes = Math.floor((diff % 3600000) / 60000)
-                    const seconds = Math.floor((diff % 60000) / 1000)
-                    setTimerDisplay(
-                        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-                    )
-                }
-            }, 1000)
-            
-            return () => clearInterval(interval)
-        } else {
-            setWorkTimerRunning(false)
-            setTimerDisplay('00:00:00')
-        }
-    }, [currentTimer])
-    
-    const loadDeliveries = () => {
+    // Define loadDeliveries before useEffect that uses it
+    const loadDeliveries = useCallback(() => {
         if (!currentUser) return
         
         // Load deliveries from localStorage or create sample data
@@ -225,7 +149,155 @@ export default function EmployeeDashboard() {
             setDeliveries(sampleDeliveries)
             localStorage.setItem(`deliveries_${currentUser.id}`, JSON.stringify(sampleDeliveries))
         }
-    }
+    }, [currentUser])
+    
+    // Define generateNotifications before useEffect that uses it
+    const generateNotifications = useCallback(() => {
+        if (!currentUser) return
+        
+        const newNotifications = []
+        
+        // New tasks assigned
+        const recentTasks = tasks.filter(task => 
+            task.assignedTo === currentUser.id && 
+            new Date(task.createdAt || new Date()) > subDays(new Date(), 1)
+        )
+        recentTasks.forEach(task => {
+            newNotifications.push({
+                id: `task-${task.id}`,
+                type: 'task',
+                title: 'New Task Assigned',
+                message: `You have been assigned: ${task.title}`,
+                time: new Date(),
+                read: false,
+                icon: '🔔'
+            })
+        })
+        
+        // Leave request updates
+        const leaveUpdates = requests.filter(req => 
+            req.employeeId === currentUser.id && 
+            req.status !== 'pending' &&
+            new Date(req.updatedAt || new Date()) > subDays(new Date(), 1)
+        )
+        leaveUpdates.forEach(req => {
+            newNotifications.push({
+                id: `leave-${req.id}`,
+                type: 'leave',
+                title: `Leave Request ${req.status === 'approved' ? 'Approved' : 'Rejected'}`,
+                message: `Your leave request for ${format(new Date(req.startDate), 'MMM d')} has been ${req.status}`,
+                time: new Date(),
+                read: false,
+                icon: req.status === 'approved' ? '✅' : '❌'
+            })
+        })
+        
+        // Deadline reminders
+        const upcomingDeadlines = tasks.filter(task => 
+            task.assignedTo === currentUser.id &&
+            task.status !== 'completed' &&
+            new Date(task.deadline) <= new Date(Date.now() + 24 * 60 * 60 * 1000) &&
+            new Date(task.deadline) > new Date()
+        )
+        upcomingDeadlines.forEach(task => {
+            newNotifications.push({
+                id: `deadline-${task.id}`,
+                type: 'deadline',
+                title: 'Deadline Reminder',
+                message: `${task.title} is due ${format(new Date(task.deadline), 'MMM d, h:mm a')}`,
+                time: new Date(),
+                read: false,
+                icon: '⏰'
+            })
+        })
+        
+        setNotifications(newNotifications)
+    }, [currentUser, tasks, requests])
+    
+    useEffect(() => {
+        if (!currentUser) return
+        
+        const today = new Date().toISOString().split('T')[0]
+        const todayRecord = records.find(
+            record => record.employeeId === currentUser.id && record.date === today
+        )
+        
+        setTodayAttendance(todayRecord)
+        setIsClockedIn(!!currentSessions[currentUser.id])
+        
+        // Load assigned deliveries
+        if (currentUser?.id) {
+            loadDeliveries()
+            generateNotifications()
+        }
+        
+        // Load new features data
+        dispatch(loadConversations())
+        dispatch(loadAnnouncements())
+        dispatch(loadDocuments())
+        dispatch(loadProfile({ userId: currentUser.id }))
+        dispatch(loadWorkLogs({ employeeId: currentUser.id }))
+        dispatch(loadAchievements())
+        dispatch(loadGoals({ userId: currentUser.id }))
+        dispatch(getCurrentWeekGoals({ userId: currentUser.id }))
+        
+        // Initialize profile edit states only if they're empty
+        if (!editPhone && currentUser.phone) {
+            setEditPhone(currentUser.phone)
+        }
+        if (!editEmergencyContact.name && !editEmergencyContact.phone && emergencyContact) {
+            setEditEmergencyContact(emergencyContact)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentUser?.id, loadDeliveries, generateNotifications]) // Use stable callbacks
+    
+    // Recalculate profile completion when emergency contact or currentUser changes
+    useEffect(() => {
+        if (currentUser?.id) {
+            const employeeForCalc = {
+                ...currentUser,
+                emergencyContact: emergencyContact
+            }
+            dispatch(calculateProfileCompletion({ employee: employeeForCalc }))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentUser?.id, emergencyContact?.name, emergencyContact?.phone, dispatch]) // Only depend on specific fields
+    
+    // Reload conversations periodically when chat modal is open
+    useEffect(() => {
+        if (showChatModal && activeConversation) {
+            const interval = setInterval(() => {
+                dispatch(loadConversations())
+            }, 2000) // Reload every 2 seconds
+            
+            return () => clearInterval(interval)
+        }
+    }, [showChatModal, activeConversation, dispatch])
+    
+    // Timer effect
+    useEffect(() => {
+        if (currentTimer && currentTimer.startTime) {
+            setWorkTimerRunning(true)
+            const interval = setInterval(() => {
+                if (currentTimer && currentTimer.startTime) {
+                    const start = new Date(currentTimer.startTime)
+                    const now = new Date()
+                    const diff = now - start
+                    const hours = Math.floor(diff / 3600000)
+                    const minutes = Math.floor((diff % 3600000) / 60000)
+                    const seconds = Math.floor((diff % 60000) / 1000)
+                    setTimerDisplay(
+                        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+                    )
+                }
+            }, 1000)
+            
+            return () => clearInterval(interval)
+        } else {
+            setWorkTimerRunning(false)
+            setTimerDisplay('00:00:00')
+        }
+    }, [currentTimer])
     
     const handleDeliveryStatusUpdate = (deliveryId, newStatus) => {
         const updatedDeliveries = deliveries.map(del => 
@@ -377,66 +449,6 @@ export default function EmployeeDashboard() {
             canvas.removeEventListener('touchend', stopDraw)
         }
     }, [showProofModal])
-    
-    const generateNotifications = () => {
-        const newNotifications = []
-        
-        // New tasks assigned
-        const recentTasks = tasks.filter(task => 
-            task.assignedTo === currentUser.id && 
-            new Date(task.createdAt || new Date()) > subDays(new Date(), 1)
-        )
-        recentTasks.forEach(task => {
-            newNotifications.push({
-                id: `task-${task.id}`,
-                type: 'task',
-                title: 'New Task Assigned',
-                message: `You have been assigned: ${task.title}`,
-                time: new Date(),
-                read: false,
-                icon: '🔔'
-            })
-        })
-        
-        // Leave request updates
-        const leaveUpdates = requests.filter(req => 
-            req.employeeId === currentUser.id && 
-            req.status !== 'pending' &&
-            new Date(req.updatedAt || new Date()) > subDays(new Date(), 1)
-        )
-        leaveUpdates.forEach(req => {
-            newNotifications.push({
-                id: `leave-${req.id}`,
-                type: 'leave',
-                title: `Leave Request ${req.status === 'approved' ? 'Approved' : 'Rejected'}`,
-                message: `Your leave request for ${format(new Date(req.startDate), 'MMM d')} has been ${req.status}`,
-                time: new Date(),
-                read: false,
-                icon: req.status === 'approved' ? '✅' : '❌'
-            })
-        })
-        
-        // Deadline reminders
-        const upcomingDeadlines = tasks.filter(task => 
-            task.assignedTo === currentUser.id &&
-            task.status !== 'completed' &&
-            new Date(task.deadline) <= new Date(Date.now() + 24 * 60 * 60 * 1000) &&
-            new Date(task.deadline) > new Date()
-        )
-        upcomingDeadlines.forEach(task => {
-            newNotifications.push({
-                id: `deadline-${task.id}`,
-                type: 'deadline',
-                title: 'Deadline Reminder',
-                message: `${task.title} is due ${format(new Date(task.deadline), 'MMM d, h:mm a')}`,
-                time: new Date(),
-                read: false,
-                icon: '⏰'
-            })
-        })
-        
-        setNotifications(newNotifications)
-    }
     
     if (!currentUser) {
         return (
@@ -817,30 +829,45 @@ export default function EmployeeDashboard() {
     }
     
     const handleSaveProfile = () => {
-        if (currentUser) {
-            // Update employee in Redux
+        if (!currentUser) {
+            toast.error('User not found')
+            return
+        }
+
+        try {
+            // Validate phone number if provided
+            if (editPhone && editPhone.trim() !== '') {
+                // Basic phone validation (can be enhanced)
+                const phoneRegex = /^[\d\s\-\+\(\)]+$/
+                if (!phoneRegex.test(editPhone.trim())) {
+                    toast.error('Please enter a valid phone number')
+                    return
+                }
+            }
+
+            // Prepare updated employee data
             const updatedEmployee = {
                 ...currentUser,
-                phone: editPhone,
+                phone: editPhone.trim() || currentUser.phone || '',
                 avatar: profilePhoto || currentUser.avatar
             }
+
+            // Update employee in Redux (this will also update currentUser)
             dispatch(updateEmployee({ id: currentUser.id, updates: updatedEmployee }))
+            
+            // Ensure currentUser is updated
             dispatch(setCurrentUser(updatedEmployee))
             
             // Update localStorage
             localStorage.setItem('employeeUser', JSON.stringify(updatedEmployee))
             
-            // Update emergency contact
-            dispatch(updateEmergencyContact({
-                userId: currentUser.id,
-                emergencyContact: editEmergencyContact
-            }))
-            
-            // Update emergency contact first, then recalculate
-            dispatch(updateEmergencyContact({
-                userId: currentUser.id,
-                emergencyContact: editEmergencyContact
-            }))
+            // Update emergency contact (only once)
+            if (editEmergencyContact && (editEmergencyContact.name || editEmergencyContact.phone || editEmergencyContact.relation)) {
+                dispatch(updateEmergencyContact({
+                    userId: currentUser.id,
+                    emergencyContact: editEmergencyContact
+                }))
+            }
             
             // Recalculate profile completion with updated data
             setTimeout(() => {
@@ -851,8 +878,11 @@ export default function EmployeeDashboard() {
                 dispatch(calculateProfileCompletion({ employee: updatedEmployeeForCalc }))
             }, 100)
             
-            toast.success('Profile updated')
+            toast.success('Profile updated successfully')
             setShowProfileModal(false)
+        } catch (error) {
+            console.error('Error saving profile:', error)
+            toast.error('Failed to save profile. Please try again.')
         }
     }
     
@@ -1415,7 +1445,19 @@ export default function EmployeeDashboard() {
                                 Profile & Personalization
                             </h2>
                             <button
-                                onClick={() => setShowProfileModal(true)}
+                                onClick={() => {
+                                    // Initialize edit fields when opening modal
+                                    if (currentUser) {
+                                        setEditPhone(currentUser.phone || '')
+                                        if (emergencyContact) {
+                                            setEditEmergencyContact(emergencyContact)
+                                        } else {
+                                            setEditEmergencyContact({ name: '', phone: '', relation: '' })
+                                        }
+                                        setProfilePhoto(null) // Reset photo selection
+                                    }
+                                    setShowProfileModal(true)
+                                }}
                                 className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors border flex items-center gap-2"
                                 style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
                                 onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}

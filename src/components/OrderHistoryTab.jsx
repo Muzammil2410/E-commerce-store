@@ -10,9 +10,10 @@ export default function OrderHistoryTab({ orders }) {
   const [dateRange, setDateRange] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
 
-  const deliveredOrders = orders.filter(order => order.status === 'DELIVERED')
+  // Show all orders, not just DELIVERED ones
+  const allOrders = orders || []
 
-  const filteredOrders = deliveredOrders.filter(order => {
+  const filteredOrders = allOrders.filter(order => {
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter
     if (!matchesStatus) return false
 
@@ -55,6 +56,8 @@ export default function OrderHistoryTab({ orders }) {
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm transition-colors"
           >
             <option value="all">{t('allStatus')}</option>
+            <option value="CONFIRMED">{t('confirmed') || 'Confirmed'}</option>
+            <option value="PENDING">{t('pending') || 'Pending'}</option>
             <option value="DELIVERED">{t('delivered')}</option>
             <option value="CANCELLED">{t('cancelOrder')}</option>
           </select>
@@ -119,6 +122,10 @@ export default function OrderHistoryTab({ orders }) {
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                       order.status === 'DELIVERED' 
                         ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                        : order.status === 'CONFIRMED'
+                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300'
+                        : order.status === 'PENDING'
+                        ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'
                         : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
                     } transition-colors duration-300`}>
                       {order.status}
@@ -140,12 +147,12 @@ export default function OrderHistoryTab({ orders }) {
           <ShoppingBag className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4 transition-colors duration-300" />
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">{t('noOrdersFound')}</h3>
           <p className="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">
-            {deliveredOrders.length === 0 
+            {allOrders.length === 0 
               ? t('noOrdersPlacedYet')
               : t('tryAdjustingFilters')
             }
           </p>
-          {deliveredOrders.length === 0 && (
+          {allOrders.length === 0 && (
             <Link
               to="/shop"
               className="text-white px-6 py-3 rounded-lg transition-colors inline-block"
