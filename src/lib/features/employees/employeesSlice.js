@@ -65,6 +65,13 @@ const employeesSlice = createSlice({
                     ...updates
                 }
             }
+            // Also update currentUser if it matches the id
+            if (state.currentUser && state.currentUser.id === id) {
+                state.currentUser = {
+                    ...state.currentUser,
+                    ...updates
+                }
+            }
         },
         deleteEmployee: (state, action) => {
             state.employees = state.employees.filter(emp => emp.id !== action.payload)

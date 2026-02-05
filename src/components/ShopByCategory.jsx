@@ -5,11 +5,13 @@ import { assets } from '@/assets/assets'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useContext } from 'react'
 import { LanguageCurrencyContext } from '@/contexts/LanguageCurrencyContext'
+import { useNavigate } from 'react-router-dom'
 
 const ShopByCategory = () => {
     const [currentSlide, setCurrentSlide] = useState(0)
     const context = useContext(LanguageCurrencyContext)
     const t = context?.t || ((key) => key)
+    const navigate = useNavigate()
     
     const categories = [
         {
@@ -119,8 +121,12 @@ const ShopByCategory = () => {
                                     {categories
                                         .slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide)
                                         .map((category, index) => (
-                                        <div key={index} className='cursor-pointer'>
-                                            <div className='relative w-32 h-32 sm:w-48 sm:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 mx-auto mb-3 sm:mb-4 lg:mb-6 rounded-full overflow-hidden bg-white border-2 sm:border-4 border-gray-100 shadow-lg'>
+                                        <div 
+                                            key={index} 
+                                            className='cursor-pointer'
+                                            onClick={() => navigate(category.href)}
+                                        >
+                                            <div className='relative w-32 h-32 sm:w-48 sm:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 mx-auto mb-3 sm:mb-4 lg:mb-6 rounded-full overflow-hidden bg-white border-2 sm:border-4 border-gray-100 shadow-lg hover:scale-105 transition-transform duration-300'>
                                                 {category.image ? (
                                                     <Image 
                                                         src={category.image} 
@@ -169,6 +175,7 @@ const ShopByCategory = () => {
             {/* View All Categories Button */}
             <div className='text-center mt-4 sm:mt-6'>
                 <button 
+                    onClick={() => navigate('/shop?showFilters=true')}
                     className='text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md'
                     style={{ backgroundColor: '#3977ED' }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}

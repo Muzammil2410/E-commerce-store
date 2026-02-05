@@ -44,7 +44,7 @@ const Hero = () => {
                                 <ChevronRightIcon className='group-hover:ml-2 transition-all flex-shrink-0' size={14} />
                             </div>
                             <h2 className='hidden sm:block text-xl sm:text-2xl md:text-3xl xl:text-4xl leading-tight sm:leading-[1.2] mb-3 sm:mb-4 font-bold text-gray-900 dark:text-gray-100 drop-shadow-lg dark:drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] transition-colors duration-300'>
-                                <span className="text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 transition-colors duration-200">Ziz</span>{t('zizlaYoullLove')}
+                                <span className="text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 transition-colors duration-200">Ziz</span>la you'll love. Prices<br />you'll trust.
                             </h2>
                             <div className='hidden sm:block text-gray-800 dark:text-gray-100 text-sm sm:text-base font-semibold mb-3 sm:mb-4 drop-shadow-lg dark:drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] transition-colors duration-300'>
                                 <p className='text-gray-700 dark:text-gray-200 text-xs sm:text-sm transition-colors duration-300'>{t('startsFrom')}</p>

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
-import { User, MapPin, ShoppingBag, Heart, LogOut, Edit, Plus, Trash2, Eye, Truck, Package, RotateCcw, Bell, Camera } from 'lucide-react'
+import { User, MapPin, ShoppingBag, Heart, LogOut, Edit, Plus, Trash2, Eye, EyeOff, Truck, Package, RotateCcw, Bell, Camera, Lock } from 'lucide-react'
 import Image from '@/components/Image'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -46,6 +46,15 @@ export default function ProfilePage() {
         zip: '',
         country: ''
     })
+    const [passwordForm, setPasswordForm] = useState({
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    })
+    const [showOldPassword, setShowOldPassword] = useState(false)
+    const [showNewPassword, setShowNewPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [changingPassword, setChangingPassword] = useState(false)
     
     const wishlistItems = useSelector(state => state.wishlist.items)
     const wishlistArray = Object.values(wishlistItems)
@@ -61,7 +70,24 @@ export default function ProfilePage() {
 
         const parsedUser = JSON.parse(userData)
         setUser(parsedUser)
-        setOrders(orderDummyData)
+        
+        // Load orders from localStorage, merge with dummy data if needed
+        const savedOrders = localStorage.getItem('userOrders')
+        if (savedOrders) {
+            try {
+                const parsedOrders = JSON.parse(savedOrders)
+                // Merge with dummy data, prioritizing saved orders
+                const mergedOrders = [...parsedOrders, ...orderDummyData.filter(dummyOrder => 
+                    !parsedOrders.some(savedOrder => savedOrder.id === dummyOrder.id)
+                )]
+                setOrders(mergedOrders)
+            } catch (error) {
+                console.error('Error loading orders:', error)
+                setOrders(orderDummyData)
+            }
+        } else {
+            setOrders(orderDummyData)
+        }
         
         // Load profile picture from user data
         if (parsedUser.profilePicture) {
@@ -83,12 +109,25 @@ export default function ProfilePage() {
         }
     }, [navigate])
 
+    // Save orders to localStorage whenever they change
+    useEffect(() => {
+        if (orders.length > 0) {
+            // Only save user orders (those starting with 'order_') to avoid saving dummy data
+            const userOrders = orders.filter(order => 
+                order.id && (order.id.startsWith('order_') || order.id.startsWith('cmemm'))
+            )
+            if (userOrders.length > 0) {
+                localStorage.setItem('userOrders', JSON.stringify(userOrders))
+            }
+        }
+    }, [orders])
+
     // Read tab from URL query parameter
     useEffect(() => {
         const tab = searchParams.get('tab')
         if (tab) {
             // Validate that the tab exists in our tabs array
-            const validTabs = ['profile', 'active-orders', 'tracking', 'orders', 'returns', 'addresses', 'wishlist']
+            const validTabs = ['profile', 'change-password', 'active-orders', 'tracking', 'orders', 'returns', 'addresses', 'wishlist']
             if (validTabs.includes(tab)) {
                 setActiveTab(tab)
             }
@@ -357,9 +396,47 @@ export default function ProfilePage() {
         }
     }
 
+    // Handle password change
+    const handlePasswordChange = async (e) => {
+        e.preventDefault()
+        setChangingPassword(true)
+
+        // Validation
+        if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+            toast.error(t('passwordsDoNotMatch') || 'New passwords do not match')
+            setChangingPassword(false)
+            return
+        }
+
+        if (passwordForm.newPassword.length < 6) {
+            toast.error(t('passwordMinLength') || 'New password must be at least 6 characters')
+            setChangingPassword(false)
+            return
+        }
+
+        if (passwordForm.oldPassword === passwordForm.newPassword) {
+            toast.error(t('passwordMustBeDifferent') || 'New password must be different from old password')
+            setChangingPassword(false)
+            return
+        }
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500))
+
+        // Simulate successful password change
+        toast.success(t('passwordChangedSuccessfully') || 'Password changed successfully!')
+        setPasswordForm({
+            oldPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+        })
+        setChangingPassword(false)
+    }
+
     // Memoize tabs to recalculate when language changes
     const tabs = useMemo(() => [
         { id: 'profile', label: t('profileTab'), icon: User },
+        { id: 'change-password', label: t('changePassword') || 'Change Password', icon: Lock },
         { id: 'active-orders', label: t('activeOrdersTab'), icon: Package },
         { id: 'tracking', label: t('deliveryTrackingTab'), icon: Truck },
         { id: 'orders', label: t('orderHistoryTab'), icon: ShoppingBag },
@@ -451,6 +528,110 @@ export default function ProfilePage() {
 
                     {/* Main Content */}
                     <div ref={contentRef} className="lg:col-span-3">
+                        {/* Change Password Tab */}
+                        {activeTab === 'change-password' && (
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
+                                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 transition-colors duration-300">
+                                    {t('changePassword') || 'Change Password'}
+                                </h2>
+                                <p className="text-sm text-gray-600 dark:text-gray-300 mb-6 transition-colors duration-300">
+                                    {t('changePasswordDescription') || 'Enter your old password and choose a new password.'}
+                                </p>
+
+                                <form onSubmit={handlePasswordChange} className="space-y-6 max-w-md">
+                                    {/* Old Password Field */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                                            {t('oldPassword') || 'Old Password'}
+                                        </label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
+                                            <input
+                                                type={showOldPassword ? 'text' : 'password'}
+                                                value={passwordForm.oldPassword}
+                                                onChange={(e) => setPasswordForm({...passwordForm, oldPassword: e.target.value})}
+                                                className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all placeholder-gray-400 dark:placeholder-gray-500"
+                                                placeholder={t('enterOldPassword') || 'Enter your old password'}
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowOldPassword(!showOldPassword)}
+                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                                            >
+                                                {showOldPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* New Password Field */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                                            {t('newPassword') || 'New Password'}
+                                        </label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
+                                            <input
+                                                type={showNewPassword ? 'text' : 'password'}
+                                                value={passwordForm.newPassword}
+                                                onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
+                                                className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all placeholder-gray-400 dark:placeholder-gray-500"
+                                                placeholder={t('enterNewPassword') || 'Enter your new password'}
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowNewPassword(!showNewPassword)}
+                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                                            >
+                                                {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                            </button>
+                                        </div>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-300">
+                                            {t('passwordMinLengthHint') || 'Password must be at least 6 characters'}
+                                        </p>
+                                    </div>
+
+                                    {/* Confirm New Password Field */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                                            {t('confirmNewPassword') || 'Confirm New Password'}
+                                        </label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
+                                            <input
+                                                type={showConfirmPassword ? 'text' : 'password'}
+                                                value={passwordForm.confirmPassword}
+                                                onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
+                                                className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all placeholder-gray-400 dark:placeholder-gray-500"
+                                                placeholder={t('confirmNewPasswordPlaceholder') || 'Confirm your new password'}
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                                            >
+                                                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Submit Button */}
+                                    <button
+                                        type="submit"
+                                        disabled={changingPassword}
+                                        className="text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        style={{ backgroundColor: '#3977ED' }}
+                                        onMouseEnter={(e) => !changingPassword && (e.currentTarget.style.backgroundColor = '#2d5fcc')}
+                                        onMouseLeave={(e) => !changingPassword && (e.currentTarget.style.backgroundColor = '#3977ED')}
+                                    >
+                                        {changingPassword ? (t('changingPassword') || 'Changing Password...') : (t('changePassword') || 'Change Password')}
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
                             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">

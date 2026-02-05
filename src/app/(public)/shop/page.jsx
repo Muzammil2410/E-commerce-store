@@ -1,5 +1,5 @@
 'use client'
-import React, { Suspense, useState, useEffect } from "react"
+import React, { Suspense, useState, useEffect, useMemo } from "react"
 import ProductCard from "@/components/ProductCard"
 import { MoveLeftIcon, Filter, SlidersHorizontal, X } from "lucide-react"
 import { useNavigate, useSearchParams } from "react-router-dom"
@@ -9,41 +9,54 @@ function ShopContent() {
     const [searchParams] = useSearchParams()
     const search = searchParams.get('search')
     const category = searchParams.get('category')
+    const showFiltersParam = searchParams.get('showFilters')
     const navigate = useNavigate()
-    const [showFilters, setShowFilters] = useState(false)
+    const [showFilters, setShowFilters] = useState(showFiltersParam === 'true')
     const [sortBy, setSortBy] = useState('name')
     const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 })
     const [selectedCategories, setSelectedCategories] = useState([])
 
     const products = useSelector(state => state.product.list)
 
-    // Get unique categories
-    const categories = ['All', ...new Set(products.map(product => product.category))]
+    // Get unique categories - memoized for performance
+    const categories = useMemo(() => {
+        if (!products || products.length === 0) return ['All']
+        const uniqueCategories = new Set(products.map(product => product.category).filter(Boolean))
+        return ['All', ...Array.from(uniqueCategories).sort()]
+    }, [products])
 
-    // Filter and sort products
-    const filteredProducts = products.filter(product => {
-        const matchesSearch = !search || product.name.toLowerCase().includes(search.toLowerCase())
-        const matchesCategory = !category || category === 'All' || product.category === category
-        const matchesPrice = product.price >= priceRange.min && product.price <= priceRange.max
-        const matchesSelectedCategories = selectedCategories.length === 0 || selectedCategories.includes(product.category)
+    // Filter and sort products - memoized for performance
+    const filteredProducts = useMemo(() => {
+        if (!products || products.length === 0) return []
         
-        return matchesSearch && matchesCategory && matchesPrice && matchesSelectedCategories
-    }).sort((a, b) => {
-        switch (sortBy) {
-            case 'price-low':
-                return a.price - b.price
-            case 'price-high':
-                return b.price - a.price
-            case 'name':
-                return a.name.localeCompare(b.name)
-            case 'rating':
-                const aRating = a.rating.reduce((acc, curr) => acc + curr.rating, 0) / a.rating.length
-                const bRating = b.rating.reduce((acc, curr) => acc + curr.rating, 0) / b.rating.length
-                return bRating - aRating
-            default:
-                return 0
-        }
-    })
+        return products.filter(product => {
+            const matchesSearch = !search || product.name.toLowerCase().includes(search.toLowerCase())
+            const matchesCategory = !category || category === 'All' || product.category === category
+            const matchesPrice = product.price >= priceRange.min && product.price <= priceRange.max
+            const matchesSelectedCategories = selectedCategories.length === 0 || selectedCategories.includes(product.category)
+            
+            return matchesSearch && matchesCategory && matchesPrice && matchesSelectedCategories
+        }).sort((a, b) => {
+            switch (sortBy) {
+                case 'price-low':
+                    return a.price - b.price
+                case 'price-high':
+                    return b.price - a.price
+                case 'name':
+                    return a.name.localeCompare(b.name)
+                case 'rating':
+                    const aRating = a.rating && a.rating.length > 0 
+                        ? a.rating.reduce((acc, curr) => acc + curr.rating, 0) / a.rating.length 
+                        : 0
+                    const bRating = b.rating && b.rating.length > 0 
+                        ? b.rating.reduce((acc, curr) => acc + curr.rating, 0) / b.rating.length 
+                        : 0
+                    return bRating - aRating
+                default:
+                    return 0
+            }
+        })
+    }, [products, search, category, priceRange, selectedCategories, sortBy])
 
     const handleCategoryToggle = (cat) => {
         if (cat === 'All') {
@@ -65,6 +78,20 @@ function ShopContent() {
             setSelectedCategories([])
         }
     }, [category])
+
+    // Open filters when showFilters param is true
+    useEffect(() => {
+        if (showFiltersParam === 'true') {
+            setShowFilters(true)
+            // Remove the query parameter after opening filters
+            const newSearchParams = new URLSearchParams(searchParams)
+            newSearchParams.delete('showFilters')
+            const newUrl = newSearchParams.toString() 
+                ? `/shop?${newSearchParams.toString()}`
+                : '/shop'
+            navigate(newUrl, { replace: true })
+        }
+    }, [showFiltersParam, searchParams, navigate])
 
     const clearFilters = () => {
         setSortBy('name')
