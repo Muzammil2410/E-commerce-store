@@ -2,40 +2,103 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-    <meta name="description" content="Shop smarter with our online store. Browse thousands of products across multiple categories." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Zizla - Shop smarter with our online e-commerce store. Browse thousands of products across multiple categories including electronics, fashion, gadgets, and more. Fast delivery, secure payments, and exceptional customer service." />
     <meta name="theme-color" content="#3b82f6" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Zizla - Shop Smarter Online Store" />
+    <meta property="og:description" content="Shop smarter with Zizla. Browse thousands of products across multiple categories. Fast delivery, secure payments, and exceptional customer service." />
+    <meta property="og:image" content="/favicon-512x512.png" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Zizla - Shop Smarter Online Store" />
+    <meta name="twitter:description" content="Shop smarter with Zizla. Browse thousands of products across multiple categories. Fast delivery, secure payments, and exceptional customer service." />
+    <meta name="twitter:image" content="/favicon-512x512.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://zizla.com/" />
+    
+    <!-- Theme Script with Error Handling -->
     <script>
       // Apply dark mode before React loads to prevent flash
       (function() {
-        const saved = localStorage.getItem('theme') || localStorage.getItem('darkMode');
-        if (saved === 'dark' || saved === 'true') {
-          document.documentElement.classList.add('dark');
-          document.documentElement.setAttribute('data-theme', 'dark');
-        } else {
+        try {
+          const saved = localStorage.getItem('theme') || localStorage.getItem('darkMode');
+          if (saved === 'dark' || saved === 'true') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {
+          // localStorage not available (private browsing, restricted environment)
+          // Default to light mode
           document.documentElement.classList.remove('dark');
           document.documentElement.setAttribute('data-theme', 'light');
         }
       })();
     </script>
+    
+    <!-- Favicon Setup -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="2048x2048" href="/favicon-2048x2048.png" />
-    <link rel="icon" type="image/png" sizes="1024x1024" href="/favicon-1024x1024.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png" />
-    <link rel="icon" type="image/png" sizes="256x256" href="/favicon-256x256.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/favicon-512x512.png" color="#3b82f6" />
     <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Font Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Font Preload -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap" as="style" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
-    <title>Shop smarter</title>
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Zizla",
+      "description": "Shop smarter with Zizla - Your trusted online e-commerce store",
+      "url": "https://zizla.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://zizla.com/shop?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <title>Zizla - Shop Smarter Online Store | E-Commerce Platform</title>
+    
+    <!-- No-JavaScript Fallback -->
+    <noscript>
+      <style>
+        body { 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          min-height: 100vh; 
+          margin: 0; 
+          padding: 20px; 
+          font-family: system-ui, -apple-system, sans-serif; 
+          text-align: center; 
+        }
+      </style>
+    </noscript>
   </head>
   <body>
+    <noscript>
+      <div>
+        <h1>JavaScript Required</h1>
+        <p>This website requires JavaScript to function properly. Please enable JavaScript in your browser settings and refresh the page.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -92,7 +92,7 @@ export default function EmployeeDashboard() {
             // Ensure we're on the right page based on role
             if (currentUser.role === 'admin') {
                 navigate('/admin/dashboard')
-            }
+        }
         }
     }, [navigate, currentUser, dispatch])
     
@@ -875,11 +875,11 @@ export default function EmployeeDashboard() {
                 <div className="mb-6 flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">
-                            Welcome back, {currentUser.name}!
-                        </h1>
+                        Welcome back, {currentUser.name}!
+                    </h1>
                         <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 font-medium">
-                            {format(new Date(), 'EEEE, MMMM d, yyyy')}
-                        </p>
+                        {format(new Date(), 'EEEE, MMMM d, yyyy')}
+                    </p>
                     </div>
                     <div className="relative">
                         <button
@@ -1228,8 +1228,8 @@ export default function EmployeeDashboard() {
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                                                        {task.title}
-                                                    </h3>
+                                                    {task.title}
+                                                </h3>
                                                     {task.priority && (
                                                         <span className={`text-xs font-semibold px-2 py-0.5 rounded ${getPriorityColor(task.priority)}`}>
                                                             <Flag size={10} className="inline mr-1" />
@@ -1737,38 +1737,38 @@ export default function EmployeeDashboard() {
                             </button>
                         </div>
                     </div>
-                </div>
-                
-                {/* Quick Actions & Recent Attendance */}
+                    </div>
+                    
+                    {/* Quick Actions & Recent Attendance */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Quick Actions */}
+                        {/* Quick Actions */}
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
-                            Quick Actions
-                        </h2>
+                                Quick Actions
+                            </h2>
                         <div className="space-y-3">
-                            <button
-                                onClick={() => navigate('/employee/attendance')}
+                                <button
+                                    onClick={() => navigate('/employee/attendance')}
                                 className="w-full flex items-center justify-start gap-3 px-4 py-3.5 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border"
                                 style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
                                 onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
                                 onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
-                            >
+                                >
                                 <Clock className="w-5 h-5 flex-shrink-0" />
                                 <span>Mark Attendance</span>
-                            </button>
-                            <button
-                                onClick={() => navigate('/employee/leave')}
+                                </button>
+                                <button
+                                    onClick={() => navigate('/employee/leave')}
                                 className="w-full flex items-center justify-start gap-3 px-4 py-3.5 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border"
                                 style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
                                 onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
                                 onMouseLeave={(e) => e.target.style.backgroundColor = '#3977ED'}
-                            >
+                                >
                                 <Calendar className="w-5 h-5 flex-shrink-0" />
                                 <span>Request Leave</span>
-                            </button>
-                            <button
-                                onClick={() => navigate('/employee/tasks')}
+                                </button>
+                                <button
+                                    onClick={() => navigate('/employee/tasks')}
                                 className="w-full flex items-center justify-start gap-3 px-4 py-3.5 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg font-semibold text-base border"
                                 style={{ backgroundColor: '#3977ED', borderColor: '#3977ED' }}
                                 onMouseEnter={(e) => e.target.style.backgroundColor = '#2d5fc7'}
@@ -1786,58 +1786,58 @@ export default function EmployeeDashboard() {
                             >
                                 <Package className="w-5 h-5 flex-shrink-0" />
                                 <span>View Deliveries</span>
-                            </button>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    
-                    {/* Recent Attendance */}
+                        
+                        {/* Recent Attendance */}
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-100 dark:border-gray-700">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
-                            Recent Attendance
-                        </h2>
-                        {recentAttendance.length === 0 ? (
+                                Recent Attendance
+                            </h2>
+                            {recentAttendance.length === 0 ? (
                             <p className="text-sm font-medium text-gray-600 dark:text-gray-400">No attendance records</p>
-                        ) : (
-                            <div className="space-y-3">
-                                {recentAttendance.map(record => (
-                                    <div
-                                        key={record.id}
-                                        className="flex items-center justify-between text-sm"
-                                    >
-                                        <div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {recentAttendance.map(record => (
+                                        <div
+                                            key={record.id}
+                                            className="flex items-center justify-between text-sm"
+                                        >
+                                            <div>
                                             <p className="text-gray-900 dark:text-white font-semibold text-base">
-                                                {format(new Date(record.date), 'MMM d, yyyy')}
-                                            </p>
-                                            {record.clockIn && (
+                                                    {format(new Date(record.date), 'MMM d, yyyy')}
+                                                </p>
+                                                {record.clockIn && (
                                                 <p className="text-gray-600 dark:text-gray-400 font-medium text-sm mt-0.5">
-                                                    {format(new Date(record.clockIn), 'h:mm a')} -{' '}
-                                                    {record.clockOut 
-                                                        ? format(new Date(record.clockOut), 'h:mm a')
-                                                        : 'In Progress'}
+                                                        {format(new Date(record.clockIn), 'h:mm a')} -{' '}
+                                                        {record.clockOut 
+                                                            ? format(new Date(record.clockOut), 'h:mm a')
+                                                            : 'In Progress'}
                                                     {record.clockIn && new Date(record.clockIn).getHours() >= 9 && (
                                                         <span className="ml-2 text-yellow-600 dark:text-yellow-400 text-xs">⚠ Late</span>
                                                     )}
-                                                </p>
-                                            )}
-                                        </div>
+                                                    </p>
+                                                )}
+                                            </div>
                                         <span className={`px-2.5 py-1 rounded text-xs font-semibold ${
-                                            record.status === 'present'
+                                                record.status === 'present'
                                                 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                                : record.status === 'late'
+                                                    : record.status === 'late'
                                                 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                                                 : record.status === 'absent'
                                                 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                                                 : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
-                                        }`}>
-                                            {record.status}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                                            }`}>
+                                                {record.status}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
             
             {/* Task Detail Modal */}
             {showTaskModal && selectedTask && (
@@ -1852,7 +1852,7 @@ export default function EmployeeDashboard() {
                                 >
                                     <X size={24} />
                                 </button>
-                            </div>
+            </div>
                             <div className="flex items-center gap-3">
                                 {selectedTask.priority && (
                                     <span className={`text-xs font-semibold px-2.5 py-1 rounded ${getPriorityColor(selectedTask.priority)}`}>
@@ -1863,7 +1863,7 @@ export default function EmployeeDashboard() {
                                 <span className="text-xs font-semibold px-2.5 py-1 rounded bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                                     {selectedTask.status}
                                 </span>
-                            </div>
+        </div>
                         </div>
                         
                         <div className="p-6 space-y-6">

@@ -64,6 +64,13 @@ export default defineConfig({
   server: {
     headers: {
       'Cache-Control': 'public, max-age=31536000',
+      // Content Security Policy - Note: Adjust directives based on your app's needs
+      // This is a basic CSP that should be customized for production
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https:; frame-ancestors 'self';",
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'SAMEORIGIN',
+      'X-XSS-Protection': '1; mode=block',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
     },
     fs: {
       strict: false,

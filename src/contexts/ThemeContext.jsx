@@ -7,14 +7,20 @@ export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     // Initialize from localStorage or default to light mode
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme')
-      if (saved === 'dark' || saved === 'light') {
-        return saved === 'dark'
-      }
-      // Fallback to old localStorage key for backward compatibility
-      const oldSaved = localStorage.getItem('darkMode')
-      if (oldSaved === 'true' || oldSaved === 'false') {
-        return oldSaved === 'true'
+      try {
+        const saved = localStorage.getItem('theme')
+        if (saved === 'dark' || saved === 'light') {
+          return saved === 'dark'
+        }
+        // Fallback to old localStorage key for backward compatibility
+        const oldSaved = localStorage.getItem('darkMode')
+        if (oldSaved === 'true' || oldSaved === 'false') {
+          return oldSaved === 'true'
+        }
+      } catch (e) {
+        // localStorage not available (private browsing, restricted environment)
+        // Default to light mode
+        return false
       }
     }
     return false // Default to light mode
@@ -34,9 +40,14 @@ export function ThemeProvider({ children }) {
     
     // Save to localStorage
     if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light')
-      // Also save old key for backward compatibility
-      localStorage.setItem('darkMode', isDarkMode.toString())
+      try {
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light')
+        // Also save old key for backward compatibility
+        localStorage.setItem('darkMode', isDarkMode.toString())
+      } catch (e) {
+        // localStorage not available (private browsing, restricted environment)
+        // Silently fail - theme will reset on page reload
+      }
     }
   }, [isDarkMode])
 
@@ -45,7 +56,13 @@ export function ThemeProvider({ children }) {
     const root = document.documentElement
     
     // Get initial state
-    const saved = localStorage.getItem('theme') || localStorage.getItem('darkMode')
+    let saved = null
+    try {
+      saved = localStorage.getItem('theme') || localStorage.getItem('darkMode')
+    } catch (e) {
+      // localStorage not available (private browsing, restricted environment)
+      saved = null
+    }
     const initialDarkMode = saved === 'dark' || saved === 'true'
     
     // Apply immediately before React renders
@@ -74,8 +91,13 @@ export function ThemeProvider({ children }) {
       
       // Save immediately
       if (typeof window !== 'undefined') {
-        localStorage.setItem('theme', newValue ? 'dark' : 'light')
-        localStorage.setItem('darkMode', newValue.toString())
+        try {
+          localStorage.setItem('theme', newValue ? 'dark' : 'light')
+          localStorage.setItem('darkMode', newValue.toString())
+        } catch (e) {
+          // localStorage not available (private browsing, restricted environment)
+          // Silently fail - theme will reset on page reload
+        }
       }
       
       return newValue

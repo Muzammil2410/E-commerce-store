@@ -48,8 +48,13 @@ export default function PublicLayout({ children }) {
     if (isAuthPage || isSellerPage || isEmployeePage || isAdminPage) {
         return (
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+                <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Skip to main content
+                </a>
                 <ScrollToTop />
-                {children}
+                <main id="main-content">
+                    {children}
+                </main>
             </div>
         )
     }
@@ -58,8 +63,13 @@ export default function PublicLayout({ children }) {
     if (isUserLoggedIn && !isAuthPage && !isHomePage && !isProfilePage) {
         return (
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+                <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Skip to main content
+                </a>
                 <ScrollToTop />
-                {children}
+                <main id="main-content">
+                    {children}
+                </main>
             </div>
         )
     }
@@ -68,11 +78,16 @@ export default function PublicLayout({ children }) {
     if (isSellerChoicePage) {
         return (
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+                <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Skip to main content
+                </a>
                 <ScrollToTop />
                 <Banner />
                 <Navbar />
                 <CategoriesMarquee />
-                {children}
+                <main id="main-content">
+                    {children}
+                </main>
             </div>
         )
     }
@@ -80,11 +95,16 @@ export default function PublicLayout({ children }) {
     // For non-logged in users and home page, show full layout
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+            <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Skip to main content
+            </a>
             <ScrollToTop />
             <Banner />
             <Navbar />
             <CategoriesMarquee />
-            {children}
+            <main id="main-content">
+                {children}
+            </main>
             <Footer />
         </div>
     );
