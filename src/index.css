@@ -1,9 +1,22 @@
 @import "tailwindcss";
 
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+
 @theme {
-  --breakpoint-xs: 475px;
-  --font-family-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-family-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --breakpoint-xs: 475px;
+    --font-family-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-family-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Enable dark mode with class strategy */
@@ -14,6 +27,7 @@
         0% {
             transform: translateX(0%);
         }
+
         100% {
             transform: translateX(-50%);
         }
@@ -24,7 +38,7 @@
     .font-heading {
         font-family: var(--font-family-heading);
     }
-    
+
     .font-body {
         font-family: var(--font-family-body);
     }
@@ -79,7 +93,12 @@
         min-height: 100vh;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
         font-family: var(--font-family-heading);
         font-weight: 600;
         line-height: 1.2;
@@ -123,31 +142,37 @@
     /* Reduce font size for product names globally */
     /* Product cards use h3 for product names - target article.group specifically */
     article.group h3 {
-        font-size: 0.875rem !important; /* text-sm - reduced from default h3 size */
+        font-size: 0.875rem !important;
+        /* text-sm - reduced from default h3 size */
     }
 
     @media (min-width: 640px) {
         article.group h3 {
-            font-size: 1rem !important; /* text-base on larger screens */
+            font-size: 1rem !important;
+            /* text-base on larger screens */
         }
     }
 
     /* Product detail pages use h1 with text-2xl/text-3xl classes for product names */
     h1.text-2xl {
-        font-size: 1.25rem !important; /* text-xl - reduced from text-2xl (1.5rem) */
+        font-size: 1.25rem !important;
+        /* text-xl - reduced from text-2xl (1.5rem) */
     }
-    
+
     h1.text-3xl {
-        font-size: 1.5rem !important; /* text-2xl - reduced from text-3xl (1.875rem) */
+        font-size: 1.5rem !important;
+        /* text-2xl - reduced from text-3xl (1.875rem) */
     }
 
     @media (min-width: 640px) {
         h1.text-2xl {
-            font-size: 1.5rem !important; /* text-2xl on larger screens - reduced from 1.875rem */
+            font-size: 1.5rem !important;
+            /* text-2xl on larger screens - reduced from 1.875rem */
         }
-        
+
         h1.text-3xl {
-            font-size: 1.875rem !important; /* text-3xl on larger screens - reduced from 2.25rem */
+            font-size: 1.875rem !important;
+            /* text-3xl on larger screens - reduced from 2.25rem */
         }
     }
 }
