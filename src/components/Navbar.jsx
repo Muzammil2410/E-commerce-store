@@ -139,12 +139,12 @@ const Navbar = () => {
     // Close dropdown when clicking outside
     useEffect(() => {
         if (!isDropdownOpen) return; // Don't set up listeners if dropdown is closed
-        
+
         const handleClickOutside = (event) => {
             // Check if click is outside both the dropdown button and the dropdown container
             const isOutsideButton = dropdownRef.current && !dropdownRef.current.contains(event.target);
             const isOutsideContainer = dropdownContainerRef.current && !dropdownContainerRef.current.contains(event.target);
-            
+
             // Only close if click is outside both the button and the container
             if (isOutsideButton && isOutsideContainer) {
                 setIsDropdownOpen(false);
@@ -476,11 +476,11 @@ const Navbar = () => {
                     {/* Mobile: Logo on left */}
                     <Link to="/" className="sm:hidden hover:scale-105 transition-transform duration-200 flex-shrink-0">
                         <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden flex items-center justify-center" style={{ height: '4.5rem', maxHeight: '4.5rem' }}>
-                            <Image 
-                                src={isDarkMode ? assets.helloLogo : assets.zizla_logo} 
-                                alt="Zizla Logo" 
-                                width={350} 
-                                height={140} 
+                            <Image
+                                src={isDarkMode ? assets.helloLogo : assets.zizla_logo}
+                                alt="Zizla Logo"
+                                width={350}
+                                height={140}
                                 className="h-18 w-auto"
                                 style={{
                                     backgroundColor: isDarkMode ? '#111827' : 'transparent',
@@ -499,11 +499,11 @@ const Navbar = () => {
                     {/* Desktop: Logo */}
                     <Link to="/" className="hidden sm:block hover:scale-105 transition-transform duration-200 flex-shrink-0">
                         <div className="bg-transparent dark:bg-gray-900 px-2 py-1 rounded transition-colors duration-200 overflow-hidden flex items-center justify-center">
-                            <Image 
-                                src={isDarkMode ? assets.helloLogo : assets.zizla_logo} 
-                                alt="Zizla Logo" 
-                                width={350} 
-                                height={140} 
+                            <Image
+                                src={isDarkMode ? assets.helloLogo : assets.zizla_logo}
+                                alt="Zizla Logo"
+                                width={350}
+                                height={140}
                                 className="h-14 md:h-16 lg:h-20 w-auto"
                                 style={{
                                     backgroundColor: isDarkMode ? '#111827' : 'transparent',
@@ -535,32 +535,31 @@ const Navbar = () => {
                                     aria-label={`Select category, currently: ${selectedCategory}`}
                                     aria-expanded={isDropdownOpen}
                                     aria-haspopup="listbox"
-                                    className={`flex items-center gap-1.5 h-full px-3 sm:px-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white active:text-gray-900 dark:active:text-white transition-all duration-200 border-r border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-l-full touch-manipulation ${
-                                        selectedCategory.length > 15 
-                                            ? 'min-w-[80px] sm:min-w-[100px]' 
+                                    className={`flex items-center gap-1.5 h-full px-3 sm:px-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white active:text-gray-900 dark:active:text-white transition-all duration-200 border-r border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-l-full touch-manipulation ${selectedCategory.length > 15
+                                            ? 'min-w-[80px] sm:min-w-[100px]'
                                             : ''
-                                    }`}
+                                        }`}
                                 >
                                     <span className="text-xs sm:text-sm font-medium truncate">
-                                        {selectedCategory.length > 15 
-                                            ? selectedCategory.substring(0, 15) + '...' 
+                                        {selectedCategory.length > 15
+                                            ? selectedCategory.substring(0, 15) + '...'
                                             : selectedCategory
                                         }
                                     </span>
                                     <ChevronDown size={14} className={`sm:w-4 sm:h-4 transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                                 </button>
                             </div>
-                            
+
                             {/* Search Input */}
                             <div className="flex items-center gap-2 px-2 sm:px-3 md:px-4 flex-1 min-w-[120px] sm:min-w-[150px] relative">
                                 <Search size={16} className="sm:w-[18px] sm:h-[18px] text-gray-500 dark:text-gray-400 flex-shrink-0 transition-colors duration-300 pointer-events-none" />
-                                <input 
+                                <input
                                     id="search-input"
-                                    className="flex-1 w-full min-w-[100px] sm:min-w-[150px] bg-transparent outline-none placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:placeholder-gray-400 dark:focus:placeholder-gray-500 transition-colors duration-200 rounded text-xs sm:text-sm md:text-base touch-manipulation py-2" 
-                                    type="search" 
-                                    placeholder={t('search')} 
-                                    value={search} 
-                                    onChange={(e) => setSearch(e.target.value)} 
+                                    className="flex-1 w-full min-w-[100px] sm:min-w-[150px] bg-transparent outline-none placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:placeholder-gray-400 dark:focus:placeholder-gray-500 transition-colors duration-200 rounded text-xs sm:text-sm md:text-base touch-manipulation py-2"
+                                    type="search"
+                                    placeholder={t('search')}
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         e.currentTarget.focus();
@@ -580,7 +579,7 @@ const Navbar = () => {
                                             handleSearch(e);
                                         }
                                     }}
-                                    style={{ 
+                                    style={{
                                         minWidth: '100px',
                                         width: '100%',
                                         display: 'block',
@@ -588,7 +587,7 @@ const Navbar = () => {
                                         opacity: 1,
                                         flex: '1 1 auto'
                                     }}
-                                    aria-label="Search products" 
+                                    aria-label="Search products"
                                     autoComplete="off"
                                 />
                             </div>
@@ -736,8 +735,8 @@ const Navbar = () => {
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 md:gap-3">
-                                <Link 
-                                    to="/auth/login" 
+                                <Link
+                                    to="/auth/login"
                                     className="relative px-4 md:px-5 py-2 md:py-2.5 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap"
                                     style={{ backgroundColor: '#3977ED' }}
                                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
@@ -746,8 +745,8 @@ const Navbar = () => {
                                     <User size={18} className="md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
                                     <span>Login</span>
                                 </Link>
-                                <Link 
-                                    to="/auth" 
+                                <Link
+                                    to="/auth"
                                     className="relative px-4 md:px-5 py-2 md:py-2.5 hover:scale-105 active:scale-95 transition-all duration-300 text-white rounded-full font-semibold shadow-sm hover:shadow-md group overflow-hidden text-sm md:text-base flex items-center gap-2 whitespace-nowrap"
                                     style={{ backgroundColor: '#3977ED' }}
                                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
@@ -773,21 +772,21 @@ const Navbar = () => {
                             }}
                             aria-label={`Select category, currently: ${selectedCategory}`}
                             aria-expanded={isDropdownOpen}
-                            className="flex items-center gap-1 px-2.5 py-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 active:text-blue-800 dark:active:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation min-h-[44px]"
+                            className="flex items-center gap-0.5 px-1.5 py-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 active:text-blue-800 dark:active:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-manipulation min-h-[44px]"
                             type="button"
                         >
                             <span className="text-xs font-medium truncate max-w-[60px]">{selectedCategory.length > 8 ? selectedCategory.substring(0, 8) + '...' : selectedCategory}</span>
-                            <ChevronDown size={16} className={`transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown size={14} className={`transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         {/* Mobile Language/Currency Button */}
                         <button
                             onClick={() => setShowLanguageModal(true)}
-                            className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors p-2 touch-manipulation min-h-[44px]"
+                            className="flex items-center gap-0.5 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors p-1.5 touch-manipulation min-h-[44px]"
                             aria-label="Select language and currency"
                         >
-                            <span className="text-sm font-medium">{language.substring(0, 2).toUpperCase()}</span>
-                            <ChevronDown size={16} />
+                            <span className="text-xs font-medium">{language.substring(0, 2).toUpperCase()}</span>
+                            <ChevronDown size={14} />
                         </button>
 
                         {/* Mobile Dark Mode Toggle */}
@@ -810,9 +809,9 @@ const Navbar = () => {
                                 {isDarkMode ? 'Light mode' : 'Dark mode'}
                             </span>
                         </button>
-                        
+
                         {/* Mobile Search Button */}
-                        <button 
+                        <button
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -828,7 +827,7 @@ const Navbar = () => {
                         >
                             <Search size={20} aria-hidden="true" />
                         </button>
-                        
+
                         {/* Mobile Menu Button */}
                         {user ? (
                             <Link to="/profile" className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-800 dark:hover:text-blue-400 transition-colors touch-manipulation">
@@ -847,8 +846,8 @@ const Navbar = () => {
 
                     {/* Mobile Backdrop */}
                     {(showMobileSearch || showMobileAuth) && (
-                        <div 
-                            className="sm:hidden fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998] transition-opacity duration-300" 
+                        <div
+                            className="sm:hidden fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998] transition-opacity duration-300"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -866,8 +865,8 @@ const Navbar = () => {
 
                     {/* Mobile Search Dropdown */}
                     {showMobileSearch && (
-                        <div 
-                            className="sm:hidden fixed left-4 right-4 top-20 z-[9999] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl dark:shadow-gray-900/50 p-4 transition-all duration-300 animate-in fade-in slide-in-from-top-2" 
+                        <div
+                            className="sm:hidden fixed left-4 right-4 top-20 z-[9999] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl dark:shadow-gray-900/50 p-4 transition-all duration-300 animate-in fade-in slide-in-from-top-2"
                             ref={mobileMenuRef}
                             onClick={(e) => e.stopPropagation()}
                             onTouchStart={(e) => e.stopPropagation()}
@@ -890,7 +889,7 @@ const Navbar = () => {
                             }} className="flex items-center gap-2 mb-2">
                                 <div className="flex-1 relative">
                                     <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                                    <input 
+                                    <input
                                         className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg outline-none text-sm placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white pl-10 pr-3 py-2.5 transition-colors duration-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         type="search"
                                         placeholder={t('search')}
@@ -903,8 +902,8 @@ const Navbar = () => {
                                         required
                                     />
                                 </div>
-                                <button 
-                                    type="submit" 
+                                <button
+                                    type="submit"
                                     aria-label="Submit search"
                                     className="px-4 py-2.5 text-white text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors touch-manipulation"
                                     style={{ backgroundColor: '#3977ED' }}
@@ -962,7 +961,7 @@ const Navbar = () => {
             {isDropdownOpen && (
                 <>
                     {/* Backdrop - Always visible when dropdown is open */}
-                    <div 
+                    <div
                         className="fixed inset-0 bg-black/30 dark:bg-black/50 sm:bg-black/20 sm:dark:bg-black/40 z-[9997] sm:z-[9998]"
                         onClick={(e) => {
                             // Only close if clicking directly on backdrop, not if event came from dropdown
@@ -977,7 +976,7 @@ const Navbar = () => {
                             }
                         }}
                     />
-                    <div 
+                    <div
                         ref={dropdownContainerRef}
                         data-dropdown-container
                         className="fixed sm:absolute top-[70px] sm:top-[calc(100%+0.5rem)] left-1/2 sm:left-auto sm:right-auto -translate-x-1/2 sm:translate-x-0 mt-0 sm:mt-0 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-xl shadow-2xl dark:shadow-gray-900/50 transition-all duration-300 flex flex-col sm:flex-row z-[9999] w-[calc(100vw-2rem)] sm:w-auto sm:min-w-[min(800px,95vw)] max-w-[calc(100vw-2rem)] sm:max-w-[95vw] max-h-[calc(100vh-90px)] sm:max-h-[80vh] overflow-hidden"
@@ -1056,13 +1055,12 @@ const Navbar = () => {
                                                     setIsDropdownOpen(false);
                                                 }
                                             }}
-                                            className={`text-left w-full px-4 py-3.5 sm:py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between group touch-manipulation min-h-[48px] sm:min-h-[44px] border border-transparent ${
-                                                category === selectedCategory
+                                            className={`text-left w-full px-4 py-3.5 sm:py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between group touch-manipulation min-h-[48px] sm:min-h-[44px] border border-transparent ${category === selectedCategory
                                                     ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold border-blue-300 dark:border-blue-600'
                                                     : hoveredCategory === category
-                                                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600'
-                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 active:bg-gray-100 dark:active:bg-gray-700 border-gray-200 dark:border-gray-600'
-                                            }`}
+                                                        ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600'
+                                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 active:bg-gray-100 dark:active:bg-gray-700 border-gray-200 dark:border-gray-600'
+                                                }`}
                                         >
                                             <span className="text-base sm:text-sm font-semibold">{category}</span>
                                             {categorySubmenus[category] && (
@@ -1143,13 +1141,13 @@ const Navbar = () => {
             {showLanguageModal && (
                 <>
                     {/* Backdrop */}
-                    <div 
+                    <div
                         className="fixed inset-0 bg-black/50 z-[9998]"
                         onClick={() => setShowLanguageModal(false)}
                     />
-                    
+
                     {/* Modal */}
-                    <div 
+                    <div
                         ref={languageModalRef}
                         className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
                         onClick={(e) => e.stopPropagation()}
@@ -1164,7 +1162,7 @@ const Navbar = () => {
                             >
                                 <X size={24} />
                             </button>
-                            
+
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 pr-8 transition-colors duration-200">{t('setLanguageCurrency')}</h2>
                             <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm transition-colors duration-200">
                                 {t('selectPreferred')}
@@ -1183,9 +1181,9 @@ const Navbar = () => {
                                         className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-left flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                                     >
                                         <span className="text-gray-900 dark:text-white transition-colors duration-200">{selectedLanguage}</span>
-                                        <ChevronDown 
-                                            size={20} 
-                                            className={`text-gray-500 dark:text-gray-400 transition-all duration-200 ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} 
+                                        <ChevronDown
+                                            size={20}
+                                            className={`text-gray-500 dark:text-gray-400 transition-all duration-200 ${isLanguageDropdownOpen ? 'rotate-180' : ''}`}
                                         />
                                     </button>
                                     {isLanguageDropdownOpen && (
@@ -1198,9 +1196,8 @@ const Navbar = () => {
                                                         setSelectedLanguage(lang)
                                                         setIsLanguageDropdownOpen(false)
                                                     }}
-                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                                                        selectedLanguage === lang ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
-                                                    }`}
+                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${selectedLanguage === lang ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
+                                                        }`}
                                                 >
                                                     {lang}
                                                 </button>
@@ -1223,9 +1220,9 @@ const Navbar = () => {
                                         className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-left flex items-center justify-between hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                                     >
                                         <span className="text-gray-900 dark:text-white transition-colors duration-200">{selectedCurrency}</span>
-                                        <ChevronDown 
-                                            size={20} 
-                                            className={`text-gray-500 dark:text-gray-400 transition-all duration-200 ${isCurrencyDropdownOpen ? 'rotate-180' : ''}`} 
+                                        <ChevronDown
+                                            size={20}
+                                            className={`text-gray-500 dark:text-gray-400 transition-all duration-200 ${isCurrencyDropdownOpen ? 'rotate-180' : ''}`}
                                         />
                                     </button>
                                     {isCurrencyDropdownOpen && (
@@ -1238,9 +1235,8 @@ const Navbar = () => {
                                                         setSelectedCurrency(curr)
                                                         setIsCurrencyDropdownOpen(false)
                                                     }}
-                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                                                        selectedCurrency === curr ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
-                                                    }`}
+                                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${selectedCurrency === curr ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300'
+                                                        }`}
                                                 >
                                                     {curr}
                                                 </button>
@@ -1269,13 +1265,13 @@ const Navbar = () => {
             {showNotificationModal && (
                 <>
                     {/* Backdrop */}
-                    <div 
+                    <div
                         className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[9998] transition-colors duration-200"
                         onClick={() => setShowNotificationModal(false)}
                     />
-                    
+
                     {/* Modal */}
-                    <div 
+                    <div
                         ref={notificationModalRef}
                         className="fixed inset-0 flex items-center justify-center z-[9999] p-4"
                         onClick={(e) => e.stopPropagation()}
@@ -1290,13 +1286,13 @@ const Navbar = () => {
                             >
                                 <X size={24} />
                             </button>
-                            
+
                             {/* Header */}
                             <div className="flex items-center gap-3 mb-6">
                                 <Bell size={24} className="text-blue-600 dark:text-blue-400" />
                                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-200">Notifications</h2>
                             </div>
-                            
+
                             {/* Empty State */}
                             <div className="flex flex-col items-center justify-center py-12 px-4">
                                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 transition-colors duration-200">

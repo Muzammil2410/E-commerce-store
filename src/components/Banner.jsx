@@ -15,7 +15,7 @@ export default function Banner() {
     return isOpen && (
         <div className="w-full px-3 sm:px-6 py-2 sm:py-2.5 font-medium text-xs sm:text-sm text-white bg-gradient-to-r from-violet-500 via-[#9938CA] to-[#E0724A]">
             <div className='flex items-center justify-between max-w-7xl mx-auto gap-2'>
-                <p className="truncate flex-1 text-center sm:text-left">Get 20% OFF on Your First Order!</p>
+                <p className="whitespace-normal sm:truncate flex-1 text-center sm:text-left text-[10px] sm:text-sm leading-tight sm:leading-normal">Get 20% OFF on Your First Order!</p>
                 <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                     <button onClick={handleClaim} type="button" className="font-normal text-gray-800 bg-white px-3 sm:px-6 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm whitespace-nowrap hidden sm:block">Claim Offer</button>
                     <button onClick={() => setIsOpen(false)} type="button" className="font-normal text-white hover:text-gray-200 p-1 rounded-full transition-colors flex-shrink-0" aria-label="Close banner">

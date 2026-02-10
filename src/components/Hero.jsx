@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 const Hero = () => {
     const { t, formatCurrency, getCurrencySymbol } = useLanguageCurrency()
-    
+
     // Slider state
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const heroImages = [assets.slide_1, assets.slider_2]
@@ -16,7 +16,7 @@ const Hero = () => {
     // Auto-slide effect
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentImageIndex((prevIndex) => 
+            setCurrentImageIndex((prevIndex) =>
                 prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
             )
         }, 4000) // Change image every 4 seconds
@@ -28,9 +28,9 @@ const Hero = () => {
         <div className='px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 w-full overflow-hidden'>
             <div className='flex flex-col xl:flex-row gap-3 sm:gap-4 xl:gap-5 max-w-[1920px] mx-auto my-2 sm:my-3 md:my-4'>
                 <div className='relative flex-1 flex flex-col rounded-xl sm:rounded-2xl xl:rounded-3xl min-h-[280px] sm:min-h-[350px] md:min-h-[400px] xl:min-h-[500px] group shadow-sm overflow-hidden'>
-                    <Image 
-                        className='w-full h-full object-cover object-right sm:object-center absolute inset-0 transition-opacity duration-500' 
-                        src={heroImages[currentImageIndex]} 
+                    <Image
+                        className='w-full h-full object-cover object-center sm:object-center absolute inset-0 transition-opacity duration-500'
+                        src={heroImages[currentImageIndex]}
                         alt="Hero Banner"
                         width={0}
                         height={0}
@@ -39,7 +39,7 @@ const Hero = () => {
                     <div className='relative z-10 p-4 sm:p-8 xl:p-16 flex flex-col justify-center h-full'>
                         <div className='relative z-20 max-w-full sm:max-w-md lg:max-w-lg'>
                             <div className='hidden sm:inline-flex items-center gap-2 sm:gap-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 pr-3 sm:pr-4 p-1.5 sm:p-1 rounded-full text-xs sm:text-sm hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-gray-600 hover:text-blue-800 dark:hover:text-blue-400 transition-all duration-200 mb-3 sm:mb-4 shadow-sm dark:shadow-gray-900/50'>
-                                <span className='px-2.5 sm:px-3 py-1 rounded-full text-white text-xs font-semibold whitespace-nowrap transition-colors duration-300' style={{ backgroundColor: '#3977ED' }}>{t('news')}</span> 
+                                <span className='px-2.5 sm:px-3 py-1 rounded-full text-white text-xs font-semibold whitespace-nowrap transition-colors duration-300' style={{ backgroundColor: '#3977ED' }}>{t('news')}</span>
                                 <span className='hidden sm:inline'>{t('freeShipping')}</span>
                                 <ChevronRightIcon className='group-hover:ml-2 transition-all flex-shrink-0' size={14} />
                             </div>
@@ -50,7 +50,7 @@ const Hero = () => {
                                 <p className='text-gray-700 dark:text-gray-200 text-xs sm:text-sm transition-colors duration-300'>{t('startsFrom')}</p>
                                 <p className='text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-300 transition-colors duration-300'>{formatCurrency(4.90)}</p>
                             </div>
-                            <button 
+                            <button
                                 className='hidden sm:block text-white text-xs sm:text-sm font-semibold py-2.5 px-6 sm:py-3 sm:px-8 xl:py-5 xl:px-12 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 w-fit shadow-xl dark:shadow-gray-900/50 hover:shadow-2xl touch-manipulation'
                                 style={{ backgroundColor: '#3977ED' }}
                                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fcc'}
@@ -63,11 +63,10 @@ const Hero = () => {
                         {heroImages.map((_, index) => (
                             <button
                                 key={index}
-                                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                    index === currentImageIndex 
-                                        ? 'w-6' 
+                                className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentImageIndex
+                                        ? 'w-6'
                                         : 'bg-white/70 dark:bg-gray-600/70 hover:bg-white dark:hover:bg-gray-500'
-                                }`}
+                                    }`}
                                 style={index === currentImageIndex ? { backgroundColor: '#3977ED' } : {}}
                                 onClick={() => setCurrentImageIndex(index)}
                             />
