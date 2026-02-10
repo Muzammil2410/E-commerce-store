@@ -12,7 +12,7 @@ const ShopByCategory = () => {
     const context = useContext(LanguageCurrencyContext)
     const t = context?.t || ((key) => key)
     const navigate = useNavigate()
-    
+
     const categories = [
         {
             name: t('categoryTechnology'),
@@ -21,7 +21,7 @@ const ShopByCategory = () => {
             href: "/shop?category=technology"
         },
         {
-            name: t('categoryAppliances'), 
+            name: t('categoryAppliances'),
             image: assets.appliances_image,
             description: t('categoryHomeKitchen'),
             href: "/shop?category=appliances"
@@ -91,18 +91,18 @@ const ShopByCategory = () => {
                 <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-200'>{t('shopByCategory')}</h2>
                 <p className='text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4 transition-colors duration-200'>{t('discoverWideRange')}</p>
             </div>
-            
+
             {/* Slider Container */}
             <div className='relative'>
                 {/* Navigation Arrows */}
-                <button 
+                <button
                     onClick={prevSlide}
                     className='absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-10 bg-white border border-gray-200 rounded-full p-2 sm:p-3 shadow-lg hover:bg-blue-50 hover:border-blue-200 hover:scale-110 transition-all duration-300 group'
                 >
                     <ChevronLeft className='w-4 h-4 sm:w-6 sm:h-6 text-gray-600 group-hover:text-blue-600' />
                 </button>
-                
-                <button 
+
+                <button
                     onClick={nextSlide}
                     className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-10 bg-white border border-gray-200 rounded-full p-2 sm:p-3 shadow-lg hover:bg-blue-50 hover:border-blue-200 hover:scale-110 transition-all duration-300 group'
                 >
@@ -111,44 +111,44 @@ const ShopByCategory = () => {
 
                 {/* Slider Content */}
                 <div className='overflow-hidden'>
-                    <div 
+                    <div
                         className='flex transition-transform duration-500 ease-in-out'
                         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                     >
                         {Array.from({ length: totalSlides }).map((_, slideIndex) => (
                             <div key={slideIndex} className='w-full flex-shrink-0'>
-                                <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 px-2 sm:px-4 lg:px-8'>
+                                <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 px-1 sm:px-4 lg:px-8'>
                                     {categories
                                         .slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide)
                                         .map((category, index) => (
-                                        <div 
-                                            key={index} 
-                                            className='cursor-pointer'
-                                            onClick={() => navigate(category.href)}
-                                        >
-                                            <div className='relative w-32 h-32 sm:w-48 sm:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 mx-auto mb-3 sm:mb-4 lg:mb-6 rounded-full overflow-hidden bg-white border-2 sm:border-4 border-gray-100 shadow-lg hover:scale-105 transition-transform duration-300'>
-                                                {category.image ? (
-                                                    <Image 
-                                                        src={category.image} 
-                                                        alt={category.name}
-                                                        fill
-                                                        className='object-cover'
-                                                    />
-                                                ) : (
-                                                    <div className='w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center'>
-                                                        <span className='text-gray-500 text-sm'>No Image</span>
-                                                    </div>
-                                                )}
-                                                <div className='absolute inset-0 bg-black/10'></div>
+                                            <div
+                                                key={index}
+                                                className='cursor-pointer'
+                                                onClick={() => navigate(category.href)}
+                                            >
+                                                <div className='relative w-24 h-24 sm:w-48 sm:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 mx-auto mb-3 sm:mb-4 lg:mb-6 rounded-full overflow-hidden bg-white border-2 sm:border-4 border-gray-100 shadow-lg hover:scale-105 transition-transform duration-300'>
+                                                    {category.image ? (
+                                                        <Image
+                                                            src={category.image}
+                                                            alt={category.name}
+                                                            fill
+                                                            className='object-cover'
+                                                        />
+                                                    ) : (
+                                                        <div className='w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center'>
+                                                            <span className='text-gray-500 text-sm'>No Image</span>
+                                                        </div>
+                                                    )}
+                                                    <div className='absolute inset-0 bg-black/10'></div>
+                                                </div>
+
+                                                <div className='text-center'>
+                                                    <h3 className='text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white'>
+                                                        {category.name}
+                                                    </h3>
+                                                </div>
                                             </div>
-                                            
-                                            <div className='text-center'>
-                                                <h3 className='text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white'>
-                                                    {category.name}
-                                                </h3>
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))}
                                 </div>
                             </div>
                         ))}
@@ -161,20 +161,19 @@ const ShopByCategory = () => {
                         <button
                             key={index}
                             onClick={() => setCurrentSlide(index)}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                                index === currentSlide 
-                                    ? 'scale-125' 
+                            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
+                                    ? 'scale-125'
                                     : 'bg-gray-300 hover:bg-gray-400'
-                            }`}
+                                }`}
                             style={index === currentSlide ? { backgroundColor: '#3977ED' } : {}}
                         />
                     ))}
                 </div>
             </div>
-            
+
             {/* View All Categories Button */}
             <div className='text-center mt-4 sm:mt-6'>
-                <button 
+                <button
                     onClick={() => navigate('/shop?showFilters=true')}
                     className='text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:scale-105 hover:shadow-lg transition-all duration-300 shadow-md'
                     style={{ backgroundColor: '#3977ED' }}

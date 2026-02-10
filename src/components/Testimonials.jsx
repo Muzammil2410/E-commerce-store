@@ -22,30 +22,30 @@ const Testimonials = () => {
                 <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-200'>{t('whatOurCustomersSay')}</h2>
                 <p className='text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-200'>{t('dontJustTakeOurWord')}</p>
             </div>
-            
+
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'>
                 {testimonials.map((testimonial, index) => (
-                    <div key={index} className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm dark:shadow-gray-900/50 hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow duration-300 h-80 flex flex-col'>
+                    <div key={index} className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 sm:p-6 shadow-sm dark:shadow-gray-900/50 hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow duration-300 min-h-[280px] sm:h-80 flex flex-col'>
                         {/* Star Rating */}
                         <div className='flex items-center mb-4'>
                             {Array.from({ length: 5 }, (_, i) => (
                                 <Star
                                     key={i}
-                                    className={`size-4 fill-current ${testimonial.rating > i ? "text-yellow-400 dark:text-yellow-500" : "text-gray-300 dark:text-gray-600"}`}
+                                    className={`size-3 sm:size-4 fill-current ${testimonial.rating > i ? "text-yellow-400 dark:text-yellow-500" : "text-gray-300 dark:text-gray-600"}`}
                                 />
                             ))}
                             <span className='ml-2 text-sm text-gray-600 dark:text-gray-400 transition-colors duration-200'>({testimonial.rating})</span>
                         </div>
-                        
+
                         {/* Review Text */}
                         <p className='text-gray-700 dark:text-gray-300 mb-6 leading-relaxed flex-1 overflow-hidden transition-colors duration-200'>
                             "{testimonial.review}"
                         </p>
-                        
+
                         {/* Customer Info */}
                         <div className='flex items-center gap-3 mt-auto'>
-                            <Image 
-                                src={testimonial.user.image} 
+                            <Image
+                                src={testimonial.user.image}
                                 alt={testimonial.user.name}
                                 width={48}
                                 height={48}
@@ -59,10 +59,10 @@ const Testimonials = () => {
                     </div>
                 ))}
             </div>
-            
+
             {/* View All Reviews Button */}
             <div className='text-center mt-6'>
-                <button 
+                <button
                     onClick={() => setShowAllReviews(true)}
                     className='text-white px-8 py-3 rounded-full font-medium hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md'
                     style={{ backgroundColor: '#3977ED' }}
@@ -76,12 +76,12 @@ const Testimonials = () => {
             {/* All Reviews Modal */}
             {showAllReviews && (
                 <>
-                    <div 
+                    <div
                         className='fixed inset-0 bg-black/50 dark:bg-black/70 z-50 transition-colors duration-300'
                         onClick={() => setShowAllReviews(false)}
                     />
                     <div className='fixed inset-0 flex items-center justify-center z-50 p-4 overflow-y-auto'>
-                        <div 
+                        <div
                             className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/50 max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative transition-colors duration-300'
                             onClick={(e) => e.stopPropagation()}
                         >
@@ -106,8 +106,8 @@ const Testimonials = () => {
                             {/* All Reviews Grid */}
                             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                                 {allReviews.map((review, index) => (
-                                    <div 
-                                        key={review.id || index} 
+                                    <div
+                                        key={review.id || index}
                                         className='bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl p-5 shadow-sm dark:shadow-gray-900/50 hover:shadow-md dark:hover:shadow-gray-900/70 transition-shadow duration-300 flex flex-col'
                                     >
                                         {/* Star Rating */}
@@ -122,16 +122,16 @@ const Testimonials = () => {
                                                 ({review.rating})
                                             </span>
                                         </div>
-                                        
+
                                         {/* Review Text */}
                                         <p className='text-gray-700 dark:text-gray-300 mb-4 leading-relaxed flex-1 transition-colors duration-200'>
                                             "{review.review}"
                                         </p>
-                                        
+
                                         {/* Customer Info */}
                                         <div className='flex items-center gap-3 mt-auto pt-4 border-t border-gray-200 dark:border-gray-600'>
-                                            <Image 
-                                                src={review.user.image} 
+                                            <Image
+                                                src={review.user.image}
                                                 alt={review.user.name}
                                                 width={40}
                                                 height={40}
