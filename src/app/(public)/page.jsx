@@ -1,5 +1,6 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { assets } from "@/assets/assets";
 import BestSelling from "@/components/BestSelling";
 import Hero from "@/components/Hero";
 import Testimonials from "@/components/Testimonials";
@@ -8,8 +9,10 @@ import LatestProducts from "@/components/LatestProducts";
 import PictureBoxes from "@/components/PictureBoxes";
 import SportsSection from "@/components/SportsSection";
 import ShopByCategory from "@/components/ShopByCategory";
+import AIAssistantModal from "@/components/AIAssistantModal";
 
 export default function Home() {
+    const [showChat, setShowChat] = useState(false);
     // Scroll to top on page load/refresh
     useEffect(() => {
         // Immediately scroll to top
@@ -43,11 +46,22 @@ export default function Home() {
 
             {/* AI Assistant Icon */}
             <div
-                className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 cursor-pointer z-50"
+                className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 cursor-pointer z-50 overflow-hidden"
                 title="AI Assistant"
+                onClick={() => setShowChat(!showChat)}
             >
-                <span className="text-xl sm:text-2xl">✨</span>
+                <img
+                    src={assets.ChatIcon}
+                    alt="AI Assistant"
+                    className="w-full h-full object-cover rounded-full"
+                />
             </div>
+
+            {/* AI Assistant Modal */}
+            <AIAssistantModal
+                isOpen={showChat}
+                onClose={() => setShowChat(false)}
+            />
         </div>
     );
 }
