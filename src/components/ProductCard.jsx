@@ -21,13 +21,13 @@ const ProductCard = memo(({ product, hideDiscount = false }) => {
     return (
         <article className='group w-full max-w-none mx-auto transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 relative'>
             <Link to={`/product/${product.id}`} aria-label={`View details for ${translateProductName(product.name || product.title)}`}>
-                <div className='bg-[#F5F5F5] dark:bg-gray-800 h-40 sm:h-48 md:h-56 lg:h-64 xl:h-72 rounded-lg flex items-center justify-center overflow-hidden shadow-sm dark:shadow-gray-900/50 group-hover:shadow-lg transition-all duration-300 relative'>
+                <div className='bg-[#F5F5F5] dark:bg-gray-800 h-36 sm:h-44 md:h-52 lg:h-60 xl:h-64 rounded-lg flex items-center justify-center overflow-hidden shadow-sm dark:shadow-gray-900/50 group-hover:shadow-lg transition-all duration-300 relative'>
                     {imageSrc && !imageError ? (
-                        <Image 
-                            width={500} 
-                            height={500} 
-                            className='max-h-32 sm:max-h-40 md:max-h-48 lg:max-h-56 xl:max-h-64 w-auto h-auto group-hover:scale-125 transition-all duration-500 ease-out object-contain' 
-                            src={imageSrc} 
+                        <Image
+                            width={500}
+                            height={500}
+                            className='max-h-28 sm:max-h-36 md:max-h-44 lg:max-h-52 xl:max-h-56 w-auto h-auto group-hover:scale-125 transition-all duration-500 ease-out object-contain'
+                            src={imageSrc}
                             alt={`${translateProductName(product.name || product.title || 'Product')} product image`}
                             loading="lazy"
                             onError={() => setImageError(true)}
@@ -43,16 +43,16 @@ const ProductCard = memo(({ product, hideDiscount = false }) => {
                         </div>
                     )}
                 </div>
-                    <div className='flex justify-between gap-2 sm:gap-3 text-xs sm:text-sm text-slate-800 dark:text-gray-100 pt-2'>
+                <div className='flex justify-between gap-2 sm:gap-3 text-xs sm:text-sm text-slate-800 dark:text-gray-100 pt-2'>
                     <div className='flex-1 min-w-0 overflow-visible'>
                         <h3 className='group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 font-medium truncate'>{translateProductName(product.name || product.title)}</h3>
                         <div className='flex group-hover:scale-110 transition-transform duration-300 mt-1 pl-0.5 overflow-visible' role="img" aria-label={`Rating: ${rating} out of 5 stars`}>
                             {Array(5).fill('').map((_, index) => (
-                                <StarIcon 
-                                    key={index} 
-                                    size={12} 
-                                    className='text-transparent group-hover:scale-110 transition-transform duration-300 flex-shrink-0' 
-                                    style={{transitionDelay: `${index * 50}ms`}} 
+                                <StarIcon
+                                    key={index}
+                                    size={12}
+                                    className='text-transparent group-hover:scale-110 transition-transform duration-300 flex-shrink-0'
+                                    style={{ transitionDelay: `${index * 50}ms` }}
                                     fill={rating >= index + 1 ? "#FCD34D" : "#D1D5DB"}
                                     aria-hidden="true"
                                 />
@@ -106,7 +106,7 @@ const ProductCard = memo(({ product, hideDiscount = false }) => {
                     </div>
                 </div>
             </Link>
-            
+
             {/* Wishlist Button */}
             <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <WishlistButton product={product} size={16} />

@@ -16,10 +16,10 @@ function DiscountsContent() {
     const [selectedCategories, setSelectedCategories] = useState([])
 
     const products = useSelector(state => state.product.list)
-    
+
     // Also check localStorage for seller products with discounts
     const [allProducts, setAllProducts] = useState(products)
-    
+
     useEffect(() => {
         try {
             const savedProducts = JSON.parse(localStorage.getItem('products') || '[]')
@@ -47,11 +47,11 @@ function DiscountsContent() {
             const productPrice = product.salePrice || product.price || 0
             const matchesPrice = productPrice >= priceRange.min && productPrice <= priceRange.max
             const matchesSelectedCategories = selectedCategories.length === 0 || selectedCategories.includes(product.category)
-            
+
             // Exclude "Baby Dress" product
             const productName = (product.name || product.title || '').toLowerCase()
             const isBabyDress = productName.includes('baby') && productName.includes('dress')
-            
+
             return matchesSearch && matchesCategory && matchesPrice && matchesSelectedCategories && !isBabyDress
         })
         .sort((a, b) => {
@@ -70,14 +70,14 @@ function DiscountsContent() {
                     return 0
             }
         })
-        .slice(0, 9) // Limit to 9 products
+        .slice(0, 10) // Limit to 10 products (2 rows of 5)
 
     const handleCategoryToggle = (cat) => {
         if (cat === 'All') {
             setSelectedCategories([])
         } else {
-            setSelectedCategories(prev => 
-                prev.includes(cat) 
+            setSelectedCategories(prev =>
+                prev.includes(cat)
                     ? prev.filter(c => c !== cat)
                     : [...prev, cat]
             )
@@ -120,7 +120,7 @@ function DiscountsContent() {
                             <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-200">({filteredProducts.length} items)</span>
                         </h1>
                     </div>
-                    
+
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto">
                         {/* Sort Dropdown */}
                         <select
@@ -176,8 +176,8 @@ function DiscountsContent() {
                                             <input
                                                 type="checkbox"
                                                 checked={
-                                                    cat === 'All' 
-                                                        ? selectedCategories.length === 0 
+                                                    cat === 'All'
+                                                        ? selectedCategories.length === 0
                                                         : selectedCategories.includes(cat)
                                                 }
                                                 onChange={() => handleCategoryToggle(cat)}
@@ -220,7 +220,7 @@ function DiscountsContent() {
                     {/* Products Grid */}
                     <div className="flex-1 order-1 lg:order-2">
                         {filteredProducts.length > 0 ? (
-                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 mx-auto mb-20 sm:mb-24 md:mb-32">
+                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 mx-auto mb-20 sm:mb-24 md:mb-32">
                                 {filteredProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))}
@@ -255,10 +255,10 @@ function DiscountsContent() {
 
 
 export default function Discounts() {
-  return (
-    <Suspense fallback={<div>Loading discounted products...</div>}>
-      <DiscountsContent />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<div>Loading discounted products...</div>}>
+            <DiscountsContent />
+        </Suspense>
+    );
 }
 

@@ -28,13 +28,13 @@ function ShopContent() {
     // Filter and sort products - memoized for performance
     const filteredProducts = useMemo(() => {
         if (!products || products.length === 0) return []
-        
+
         return products.filter(product => {
             const matchesSearch = !search || product.name.toLowerCase().includes(search.toLowerCase())
             const matchesCategory = !category || category === 'All' || product.category === category
             const matchesPrice = product.price >= priceRange.min && product.price <= priceRange.max
             const matchesSelectedCategories = selectedCategories.length === 0 || selectedCategories.includes(product.category)
-            
+
             return matchesSearch && matchesCategory && matchesPrice && matchesSelectedCategories
         }).sort((a, b) => {
             switch (sortBy) {
@@ -45,11 +45,11 @@ function ShopContent() {
                 case 'name':
                     return a.name.localeCompare(b.name)
                 case 'rating':
-                    const aRating = a.rating && a.rating.length > 0 
-                        ? a.rating.reduce((acc, curr) => acc + curr.rating, 0) / a.rating.length 
+                    const aRating = a.rating && a.rating.length > 0
+                        ? a.rating.reduce((acc, curr) => acc + curr.rating, 0) / a.rating.length
                         : 0
-                    const bRating = b.rating && b.rating.length > 0 
-                        ? b.rating.reduce((acc, curr) => acc + curr.rating, 0) / b.rating.length 
+                    const bRating = b.rating && b.rating.length > 0
+                        ? b.rating.reduce((acc, curr) => acc + curr.rating, 0) / b.rating.length
                         : 0
                     return bRating - aRating
                 default:
@@ -62,8 +62,8 @@ function ShopContent() {
         if (cat === 'All') {
             setSelectedCategories([])
         } else {
-            setSelectedCategories(prev => 
-                prev.includes(cat) 
+            setSelectedCategories(prev =>
+                prev.includes(cat)
                     ? prev.filter(c => c !== cat)
                     : [...prev, cat]
             )
@@ -86,7 +86,7 @@ function ShopContent() {
             // Remove the query parameter after opening filters
             const newSearchParams = new URLSearchParams(searchParams)
             newSearchParams.delete('showFilters')
-            const newUrl = newSearchParams.toString() 
+            const newUrl = newSearchParams.toString()
                 ? `/shop?${newSearchParams.toString()}`
                 : '/shop'
             navigate(newUrl, { replace: true })
@@ -108,12 +108,12 @@ function ShopContent() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between my-3 sm:my-4 md:my-5 lg:my-6 gap-3 sm:gap-4 px-1 sm:px-0">
                     <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-500 dark:text-gray-400 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 transition-colors duration-200">
                         <span className="truncate">
-                            {search ? `Search Results for "${search}"` : 'All'} 
+                            {search ? `Search Results for "${search}"` : 'All'}
                             <span className="text-slate-700 dark:text-gray-200 font-medium transition-colors duration-200"> Products</span>
                         </span>
                         <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-200">({filteredProducts.length} items)</span>
                     </h1>
-                    
+
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto">
                         {/* Sort Dropdown */}
                         <select
@@ -169,8 +169,8 @@ function ShopContent() {
                                             <input
                                                 type="checkbox"
                                                 checked={
-                                                    cat === 'All' 
-                                                        ? selectedCategories.length === 0 
+                                                    cat === 'All'
+                                                        ? selectedCategories.length === 0
                                                         : selectedCategories.includes(cat)
                                                 }
                                                 onChange={() => handleCategoryToggle(cat)}
@@ -213,7 +213,7 @@ function ShopContent() {
                     {/* Products Grid */}
                     <div className="flex-1 order-1 lg:order-2">
                         {filteredProducts.length > 0 ? (
-                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 mx-auto mb-20 sm:mb-24 md:mb-32">
+                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 mx-auto mb-20 sm:mb-24 md:mb-32">
                                 {filteredProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} hideDiscount={true} />
                                 ))}
@@ -227,7 +227,7 @@ function ShopContent() {
                                     {category ? `No products found in "${category}" category` : 'No products found'}
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-4 transition-colors duration-200">
-                                    {category 
+                                    {category
                                         ? `We don't have any products in the "${category}" category yet. Try browsing other categories.`
                                         : 'Try adjusting your search or filter criteria.'
                                     }
@@ -257,9 +257,9 @@ function ShopContent() {
 
 
 export default function Shop() {
-  return (
-    <Suspense fallback={<div>Loading shop...</div>}>
-      <ShopContent />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<div>Loading shop...</div>}>
+            <ShopContent />
+        </Suspense>
+    );
 }

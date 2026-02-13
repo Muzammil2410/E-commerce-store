@@ -36,7 +36,7 @@ const Hero = () => {
                         height={0}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
-                    <div className='relative z-10 p-4 sm:p-8 xl:p-16 flex flex-col justify-center h-full'>
+                    <div className='relative z-10 py-4 sm:py-8 xl:py-16 pl-2 sm:pl-4 xl:pl-8 pr-4 sm:pr-8 xl:pr-16 flex flex-col justify-center h-full'>
                         <div className='relative z-20 max-w-full sm:max-w-md lg:max-w-lg'>
                             <div className='hidden sm:inline-flex items-center gap-2 sm:gap-3 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 pr-3 sm:pr-4 p-1.5 sm:p-1 rounded-full text-xs sm:text-sm hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-gray-600 hover:text-blue-800 dark:hover:text-blue-400 transition-all duration-200 mb-3 sm:mb-4 shadow-sm dark:shadow-gray-900/50'>
                                 <span className='px-2.5 sm:px-3 py-1 rounded-full text-white text-xs font-semibold whitespace-nowrap transition-colors duration-300' style={{ backgroundColor: '#3977ED' }}>{t('news')}</span>
@@ -64,8 +64,8 @@ const Hero = () => {
                             <button
                                 key={index}
                                 className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentImageIndex
-                                        ? 'w-6'
-                                        : 'bg-white/70 dark:bg-gray-600/70 hover:bg-white dark:hover:bg-gray-500'
+                                    ? 'w-6'
+                                    : 'bg-white/70 dark:bg-gray-600/70 hover:bg-white dark:hover:bg-gray-500'
                                     }`}
                                 style={index === currentImageIndex ? { backgroundColor: '#3977ED' } : {}}
                                 onClick={() => setCurrentImageIndex(index)}
