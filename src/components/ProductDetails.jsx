@@ -21,7 +21,7 @@ const ProductDetails = ({ product }) => {
     const navigate = useNavigate()
     const location = useLocation()
     const [user, setUser] = useState(null)
-    const [mainImage, setMainImage] = useState(product.images[0]);
+    const [mainImage, setMainImage] = useState(product.images?.[0]);
     const [showZoom, setShowZoom] = useState(false);
     const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
     const imageRef = useRef(null);
@@ -78,15 +78,17 @@ const ProductDetails = ({ product }) => {
 
     const handleCloseZoom = () => setShowZoom(false);
 
-    const averageRating = product.rating.reduce((acc, item) => acc + item.rating, 0) / product.rating.length;
-    
+    const averageRating = product.rating?.length
+        ? product.rating.reduce((acc, item) => acc + item.rating, 0) / product.rating.length
+        : 0;
+
     return (
         <div className="flex flex-col gap-4 lg:gap-5">
             <div className="flex flex-col lg:flex-row gap-3 lg:gap-3">
                 {/* Left Side - Images */}
                 <div className="flex flex-col sm:flex-row lg:flex-col gap-3 lg:gap-2 lg:w-1/2">
                     <div className="flex flex-row sm:flex-col gap-2 order-2 sm:order-1">
-                        {product.images.map((image, index) => (
+                        {(product.images || []).map((image, index) => (
                             <button
                                 key={index}
                                 type="button"
@@ -166,7 +168,7 @@ const ProductDetails = ({ product }) => {
                     {Array(5).fill('').map((_, index) => (
                         <StarIcon key={index} size={14} className='text-transparent mt-0.5' fill={averageRating >= index + 1 ? "#FCD34D" : "#D1D5DB"} />
                     ))}
-                    <p className="text-sm ml-3 text-slate-500 dark:text-gray-400 transition-colors duration-200">{t('reviewsCount').replace('{count}', product.rating.length)}</p>
+                    <p className="text-sm ml-3 text-slate-500 dark:text-gray-400 transition-colors duration-200">{t('reviewsCount').replace('{count}', product.rating?.length ?? 0)}</p>
                 </div>
                 <div className="flex items-start my-6 gap-3 text-2xl font-semibold text-slate-800 dark:text-gray-100 transition-colors duration-200">
                     <button

@@ -172,10 +172,7 @@ export default function SellerRegister() {
       
       // Clear the saved step since registration is complete
       localStorage.removeItem('sellerRegistrationStep')
-      
-      // Console log the data
-      console.log('Seller Registration Data:', formData)
-      
+
       // Show success toast
       toast.success('Registration completed! Please login with your credentials...')
       

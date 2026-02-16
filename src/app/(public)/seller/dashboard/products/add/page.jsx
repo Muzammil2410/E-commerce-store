@@ -103,19 +103,24 @@ export default function AddProduct() {
     const fileList = input.files
     if (!fileList || fileList.length === 0) return
 
-    // Convert to array in a robust way for some mobile browsers
     const files = Array.prototype.slice.call(fileList)
+    const existing = formData.images.length
+    const toAdd = Math.min(files.length, 8 - existing)
+    if (toAdd <= 0) return
 
-    const newImages = files.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-      id: Date.now() + Math.random()
-    }))
+    const readAsDataUrl = (file) =>
+      new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve({ file, preview: reader.result, id: Date.now() + Math.random() })
+        reader.readAsDataURL(file)
+      })
 
-    setFormData(prev => ({
-      ...prev,
-      images: [...prev.images, ...newImages].slice(0, 8) // Max 8 images
-    }))
+    Promise.all(files.slice(0, toAdd).map(readAsDataUrl)).then((newImages) => {
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...newImages].slice(0, 8)
+      }))
+    })
   }
 
   const removeImage = (index) => {

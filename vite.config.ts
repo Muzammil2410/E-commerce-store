@@ -65,11 +65,13 @@ export default defineConfig({
     hmr: {
       host: 'localhost',
       port: 5173,
+      protocol: 'ws',
+      clientPort: 5173,
     },
     headers: {
       'Cache-Control': 'no-store',
-      // Relaxed CSP for Development
-      'Content-Security-Policy': "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: ws: wss:;",
+      // Relaxed CSP for Development (include img-src blob: for image previews)
+      'Content-Security-Policy': "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: ws: wss:; img-src 'self' data: https: http: blob:;",
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'SAMEORIGIN',
       'X-XSS-Protection': '1; mode=block',

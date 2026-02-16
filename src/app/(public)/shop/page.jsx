@@ -33,7 +33,8 @@ function ShopContent() {
         if (!products || products.length === 0) return []
 
         return products.filter(product => {
-            const matchesSearch = !search || product.name.toLowerCase().includes(search.toLowerCase())
+            const name = product.name || product.title || ''
+            const matchesSearch = !search || name.toLowerCase().includes(search.toLowerCase())
             const matchesCategory = !category || category === 'All' || product.category === category
             const matchesPrice = product.price >= priceRange.min && product.price <= priceRange.max
             const matchesSelectedCategories = selectedCategories.length === 0 || selectedCategories.includes(product.category)
@@ -46,7 +47,7 @@ function ShopContent() {
                 case 'price-high':
                     return b.price - a.price
                 case 'name':
-                    return a.name.localeCompare(b.name)
+                    return (a.name || a.title || '').localeCompare(b.name || b.title || '')
                 case 'rating':
                     const aRating = a.rating && a.rating.length > 0
                         ? a.rating.reduce((acc, curr) => acc + curr.rating, 0) / a.rating.length
@@ -223,7 +224,7 @@ function ShopContent() {
                         {filteredProducts.length > 0 ? (
                             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 mx-auto mb-20 sm:mb-24 md:mb-32">
                                 {filteredProducts.map((product) => (
-                                    <ProductCard key={product.id} product={product} hideDiscount={true} />
+                                    <ProductCard key={product.id || product._id} product={product} hideDiscount={true} />
                                 ))}
                             </div>
                         ) : (

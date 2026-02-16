@@ -174,7 +174,7 @@ export default function SellerProducts() {
                 <div className="aspect-square bg-gray-100 dark:bg-gray-700 relative transition-colors duration-300">
                   {product.images && product.images.length > 0 ? (
                     <Image
-                      src={product.images[0].preview}
+                      src={typeof product.images[0] === 'string' ? product.images[0] : product.images[0]?.preview}
                       alt={product.title}
                       fill
                       className="object-cover"

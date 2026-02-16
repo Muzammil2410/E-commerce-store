@@ -14,7 +14,7 @@ export default function Product() {
     const t = context?.t || ((key) => key);
 
     const fetchProduct = async () => {
-        const product = products.find((product) => product.id === productId);
+        const product = products.find((p) => (p.id || p._id) === productId);
         setProduct(product);
     }
 
