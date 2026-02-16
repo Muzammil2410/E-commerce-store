@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
     "@tanstack/react-query": "^5.90.2",
+    "axios": "^1.13.5",
     "date-fns": "^4.1.0",
     "libphonenumber-js": "^1.12.24",
     "lucide-react": "^0.544.0",

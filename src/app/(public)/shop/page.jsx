@@ -3,7 +3,8 @@ import React, { Suspense, useState, useEffect, useMemo } from "react"
 import ProductCard from "@/components/ProductCard"
 import { MoveLeftIcon, Filter, SlidersHorizontal, X } from "lucide-react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchProducts } from "@/lib/features/product/productSlice"
 
 function ShopContent() {
     const [searchParams] = useSearchParams()
@@ -15,6 +16,8 @@ function ShopContent() {
     const [sortBy, setSortBy] = useState('name')
     const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 })
     const [selectedCategories, setSelectedCategories] = useState([])
+
+    const dispatch = useDispatch()
 
     const products = useSelector(state => state.product.list)
 
@@ -100,6 +103,11 @@ function ShopContent() {
         // Clear URL parameters
         navigate('/shop')
     }
+
+    // Fetch products on mount
+    useEffect(() => {
+        dispatch(fetchProducts())
+    }, [dispatch])
 
     return (
         <div className="min-h-[70vh] mx-0 sm:mx-2 md:mx-3 lg:mx-4 xl:mx-6">

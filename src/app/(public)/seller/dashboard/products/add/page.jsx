@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { 
-  Upload, 
-  X, 
-  GripVertical, 
-  Save, 
-  Send, 
+import {
+  Upload,
+  X,
+  GripVertical,
+  Save,
+  Send,
   ArrowLeft,
   Image as ImageIcon,
   Package,
@@ -21,6 +21,8 @@ import {
 import Image from '@/components/Image'
 import FeeBreakdown from '@/components/FeeBreakdown'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { addProduct, resetStatus } from '@/lib/features/product/productSlice'
 
 const categories = ['Clothing', 'Electronics', 'Books', 'Cosmetics', 'Accessories']
 
@@ -33,13 +35,13 @@ export default function AddProduct() {
     sku: '',
     category: '',
     brand: '',
-    
+
     // Pricing & Inventory
     price: '',
     salePrice: '',
     stockQuantity: '',
     skuBarcode: '',
-    
+
     // Shipping Details
     weight: '',
     dimensions: {
@@ -47,23 +49,26 @@ export default function AddProduct() {
       width: '',
       height: ''
     },
-    
+
     // Media
     images: [],
     videoUrl: '',
-    
+
     // Description
     description: '',
     shortDescription: '',
-    
+
     // Meta/SEO
     metaTitle: '',
     metaDescription: '',
     keywords: ''
   })
-  
+
+  const dispatch = useDispatch()
+  const { loading, success, error } = useSelector((state) => state.product)
+
   const [errors, setErrors] = useState({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  // const [isSubmitting, setIsSubmitting] = useState(false) // Removed in favor of Redux loading state
   const [draggedIndex, setDraggedIndex] = useState(null)
   const [sellerDeliveryOption, setSellerDeliveryOption] = useState('self-delivery')
   const [deepSearchEnabled, setDeepSearchEnabled] = useState(false)
@@ -86,7 +91,7 @@ export default function AddProduct() {
       }
       return { ...prev, [field]: value }
     })
-    
+
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
@@ -149,7 +154,7 @@ export default function AddProduct() {
 
   const validateForm = () => {
     const newErrors = {}
-    
+
     if (!formData.title.trim()) newErrors.title = 'Product title is required'
     if (!formData.category) newErrors.category = 'Category is required'
     if (!formData.price || formData.price <= 0) newErrors.price = 'Valid price is required'
@@ -158,7 +163,7 @@ export default function AddProduct() {
     if (formData.images.length === 0) newErrors.images = 'At least one image is required'
     if (!formData.shortDescription || !formData.shortDescription.trim()) newErrors.shortDescription = 'Short description is required'
     if (!formData.description || !formData.description.trim()) newErrors.description = 'Product description is required'
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -166,10 +171,10 @@ export default function AddProduct() {
   const handleSaveDraft = () => {
     // Set flag to prevent clearing draft data
     sessionStorage.setItem('savingDraft', 'true')
-    
+
     // Get existing products
     const existingProducts = JSON.parse(localStorage.getItem('products') || '[]')
-    
+
     // Create draft product object
     const draftProduct = {
       id: `draft_${Date.now()}`,
@@ -177,16 +182,16 @@ export default function AddProduct() {
       status: 'draft',
       createdAt: new Date().toISOString()
     }
-    
+
     // Add to products array
     const updatedProducts = [...existingProducts, draftProduct]
     localStorage.setItem('products', JSON.stringify(updatedProducts))
-    
+
     // Also save as draftProduct for editing
     localStorage.setItem('draftProduct', JSON.stringify(formData))
-    
+
     toast.success(t('productSavedSuccessfully'))
-    
+
     // Clear the flag and redirect to products page after 1 second
     setTimeout(() => {
       sessionStorage.removeItem('savingDraft')
@@ -199,41 +204,48 @@ export default function AddProduct() {
       toast.error(t('pleaseFixErrorsBeforePublishing') || 'Please fix the errors before publishing')
       return
     }
-    
-    setIsSubmitting(true)
-    
-    try {
-      // Get existing products or create new array
-      const existingProducts = JSON.parse(localStorage.getItem('products') || '[]')
-      
-      // Create product object
-      const newProduct = {
-        id: `prod_${Date.now()}`,
-        ...formData,
-        publishedAt: new Date().toISOString(),
-        status: 'published'
+
+    // Create FormData
+    const submissionData = new FormData()
+
+    // Append basic fields
+    Object.keys(formData).forEach(key => {
+      if (key === 'images' || key === 'dimensions') return
+      submissionData.append(key, formData[key])
+    })
+
+    // Append dimensions as JSON string
+    submissionData.append('dimensions', JSON.stringify(formData.dimensions))
+
+    // Append images
+    formData.images.forEach(image => {
+      if (image.file) {
+        submissionData.append('images', image.file)
       }
-      
-      // Add to products array
-      const updatedProducts = [...existingProducts, newProduct]
-      localStorage.setItem('products', JSON.stringify(updatedProducts))
-      
+    })
+
+    dispatch(addProduct(submissionData))
+  }
+
+  // Handle Redux state changes
+  useEffect(() => {
+    if (success) {
+      toast.success(t('productPublishedSuccessfully'))
+      dispatch(resetStatus())
+
       // Clear draft
       localStorage.removeItem('draftProduct')
-      
-      toast.success(t('productPublishedSuccessfully'))
-      
-      // Redirect to products page
+
       setTimeout(() => {
         window.history.back()
       }, 1000)
-      
-    } catch (error) {
-      toast.error(t('failedToPublishProduct'))
-    } finally {
-      setIsSubmitting(false)
     }
-  }
+
+    if (error) {
+      toast.error(typeof error === 'string' ? error : t('failedToPublishProduct'))
+      dispatch(resetStatus())
+    }
+  }, [success, error, dispatch, t, navigate])
 
   const handleCancel = () => {
     // Clear any draft data when canceling
@@ -331,7 +343,7 @@ export default function AddProduct() {
                 <ImageIcon className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400 transition-colors duration-300" />
                 Media
               </h2>
-              
+
               <div className="space-y-4 sm:space-y-6">
                 {/* Search Bar */}
                 <div className="mb-4">
@@ -343,16 +355,14 @@ export default function AddProduct() {
                       <button
                         type="button"
                         onClick={() => setDeepSearchEnabled(!deepSearchEnabled)}
-                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-1 ${
-                          deepSearchEnabled ? 'bg-blue-600 dark:bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'
-                        }`}
+                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-1 ${deepSearchEnabled ? 'bg-blue-600 dark:bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'
+                          }`}
                         role="switch"
                         aria-checked={deepSearchEnabled}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            deepSearchEnabled ? 'translate-x-5' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${deepSearchEnabled ? 'translate-x-5' : 'translate-x-1'
+                            }`}
                         />
                       </button>
                     </div>
@@ -426,7 +436,7 @@ export default function AddProduct() {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Product Images * (Max 8)</label>
-                  
+
                   {/* Upload Area */}
                   <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 hover:border-blue-400 dark:hover:border-blue-500 transition-colors bg-gray-50 dark:bg-gray-700">
                     <label className="cursor-pointer">
@@ -445,9 +455,9 @@ export default function AddProduct() {
                       />
                     </label>
                   </div>
-                  
+
                   {errors.images && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.images}</p>}
-                  
+
                   {/* Image Previews */}
                   {formData.images.length > 0 && (
                     <div className="mt-4">
@@ -513,7 +523,7 @@ export default function AddProduct() {
                 <Package className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
                 {t('basicDetails')}
               </h2>
-              
+
               <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('productTitleRequired')}</label>
@@ -521,9 +531,8 @@ export default function AddProduct() {
                     type="text"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
-                      errors.title ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${errors.title ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      }`}
                     placeholder={t('enterProductTitle')}
                   />
                   {errors.title && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.title}</p>}
@@ -546,9 +555,8 @@ export default function AddProduct() {
                     <select
                       value={formData.category}
                       onChange={(e) => handleInputChange('category', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
-                        errors.category ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${errors.category ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                        }`}
                     >
                       <option value="">{t('selectCategory')}</option>
                       {categories.map(category => (
@@ -578,7 +586,7 @@ export default function AddProduct() {
                 <DollarSign className="w-5 h-5 mr-2 text-green-600 dark:text-green-400 transition-colors duration-300" />
                 {t('pricingInventory')}
               </h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{t('priceRequired')}</label>
@@ -588,9 +596,8 @@ export default function AddProduct() {
                     min="0"
                     value={formData.price}
                     onChange={(e) => handleInputChange('price', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
-                      errors.price ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${errors.price ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      }`}
                     placeholder="0.00"
                   />
                   {errors.price && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.price}</p>}
@@ -616,9 +623,8 @@ export default function AddProduct() {
                     min="0"
                     value={formData.stockQuantity}
                     onChange={(e) => handleInputChange('stockQuantity', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
-                      errors.stockQuantity ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${errors.stockQuantity ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      }`}
                     placeholder="0"
                   />
                   {errors.stockQuantity && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.stockQuantity}</p>}
@@ -638,8 +644,8 @@ export default function AddProduct() {
 
               {/* Fee Breakdown */}
               <div className="mt-6">
-                <FeeBreakdown 
-                  sellingPrice={formData.price} 
+                <FeeBreakdown
+                  sellingPrice={formData.price}
                   deliveryOption={sellerDeliveryOption}
                 />
               </div>
@@ -651,7 +657,7 @@ export default function AddProduct() {
                 <Truck className="w-5 h-5 mr-2 text-orange-600 dark:text-orange-400 transition-colors duration-300" />
                 Shipping Details
               </h2>
-              
+
               <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Weight (kg) *</label>
@@ -661,9 +667,8 @@ export default function AddProduct() {
                     min="0"
                     value={formData.weight}
                     onChange={(e) => handleInputChange('weight', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
-                      errors.weight ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${errors.weight ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      }`}
                     placeholder="0.0"
                   />
                   {errors.weight && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.weight}</p>}
@@ -719,7 +724,7 @@ export default function AddProduct() {
                 <FileText className="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400 transition-colors duration-300" />
                 Description
               </h2>
-              
+
               <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Short Description <span className="text-red-500 dark:text-red-400">*</span></label>
@@ -727,9 +732,8 @@ export default function AddProduct() {
                     type="text"
                     value={formData.shortDescription}
                     onChange={(e) => handleInputChange('shortDescription', e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${
-                      errors.shortDescription ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors ${errors.shortDescription ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      }`}
                     placeholder="Brief one-liner for product cards"
                   />
                   {errors.shortDescription && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.shortDescription}</p>}
@@ -741,9 +745,8 @@ export default function AddProduct() {
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     rows={8}
-                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none ${
-                      errors.description ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none ${errors.description ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      }`}
                     placeholder="Detailed product description..."
                   />
                   {errors.description && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.description}</p>}
@@ -757,7 +760,7 @@ export default function AddProduct() {
                 <Search className="w-5 h-5 mr-2 text-teal-600 dark:text-teal-400 transition-colors duration-300" />
                 Meta / SEO (Optional)
               </h2>
-              
+
               <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">Meta Title</label>
@@ -813,21 +816,21 @@ export default function AddProduct() {
                 </button>
                 <button
                   onClick={handlePublish}
-                  disabled={isSubmitting}
+                  disabled={loading}
                   className="flex items-center justify-center space-x-2 px-6 py-3 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: isSubmitting ? '#3977ED' : '#3977ED' }}
+                  style={{ backgroundColor: loading ? '#3977ED' : '#3977ED' }}
                   onMouseEnter={(e) => {
-                    if (!isSubmitting) {
+                    if (!loading) {
                       e.currentTarget.style.backgroundColor = '#2d5fcc'
                     }
                   }}
                   onMouseLeave={(e) => {
-                    if (!isSubmitting) {
+                    if (!loading) {
                       e.currentTarget.style.backgroundColor = '#3977ED'
                     }
                   }}
                 >
-                  {isSubmitting ? (
+                  {loading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       <span>{t('publishing') || 'Publishing...'}</span>
@@ -848,7 +851,7 @@ export default function AddProduct() {
             <div className="sticky top-8">
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 sm:p-6 transition-colors duration-300">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Product Preview</h3>
-                
+
                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden transition-colors duration-300">
                   {/* Product Image */}
                   <div className="aspect-square bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition-colors duration-300">
@@ -867,17 +870,17 @@ export default function AddProduct() {
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Product Info */}
                   <div className="p-4">
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
                       {formData.title || 'Product Title'}
                     </h4>
-                    
+
                     <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 transition-colors duration-300">
                       {formData.shortDescription || 'Short description will appear here'}
                     </p>
-                    
+
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-2">
                         {formData.salePrice && formData.salePrice > 0 ? (
@@ -899,7 +902,7 @@ export default function AddProduct() {
                         {formData.category || 'Category'}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-blue-600 dark:text-blue-400 font-medium transition-colors duration-300">Stock: {formData.stockQuantity || '0'}</span>
                       <span className="text-orange-600 dark:text-orange-400 font-medium transition-colors duration-300">Weight: {formData.weight || '0'}kg</span>

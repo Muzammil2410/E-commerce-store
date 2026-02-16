@@ -4,21 +4,23 @@ import { useNavigate } from 'react-router-dom'
 import { Plus, Edit, Trash2, Eye, Package, Search, Filter, ArrowLeft } from 'lucide-react'
 import Image from '@/components/Image'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchProducts } from '@/lib/features/product/productSlice'
 
 export default function SellerProducts() {
   const navigate = useNavigate()
   const { t } = useLanguageCurrency()
-  const [products, setProducts] = useState([])
+  const dispatch = useDispatch()
+  const { list: products, loading } = useSelector(state => state.product)
+
+  // const [products, setProducts] = useState([]) // Replaced by Redux
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
-  const [loading, setLoading] = useState(true)
+  // const [loading, setLoading] = useState(true) // Replaced by Redux
 
   useEffect(() => {
-    // Load products from localStorage
-    const savedProducts = JSON.parse(localStorage.getItem('products') || '[]')
-    setProducts(savedProducts)
-    setLoading(false)
-  }, [])
+    dispatch(fetchProducts())
+  }, [dispatch])
 
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -29,9 +31,8 @@ export default function SellerProducts() {
 
   const handleDeleteProduct = (productId) => {
     if (confirm(t('areYouSureDelete'))) {
-      const updatedProducts = products.filter(p => p.id !== productId)
-      setProducts(updatedProducts)
-      localStorage.setItem('products', JSON.stringify(updatedProducts))
+      // TODO: Implement delete API
+      alert("Delete functionality coming soon with backend integration.")
     }
   }
 
@@ -41,7 +42,7 @@ export default function SellerProducts() {
       draft: { color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300', text: t('draft') },
       pending: { color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300', text: t('pending') }
     }
-    
+
     const productStatus = status || 'draft' // Default to draft if no status
     const config = statusConfig[productStatus] || statusConfig.draft
     return (
@@ -112,20 +113,20 @@ export default function SellerProducts() {
                 <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">{t('manageYourProductInventory')}</p>
               </div>
             </div>
-        <button
-          onClick={() => navigate('/seller/dashboard/products/add', { replace: false })}
-          className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors"
-          style={{ backgroundColor: '#3977ED' }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#2d5fcc'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#3977ED'
-          }}
-        >
-          <Plus size={20} />
-          <span>{t('addProduct')}</span>
-        </button>
+            <button
+              onClick={() => navigate('/seller/dashboard/products/add', { replace: false })}
+              className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors"
+              style={{ backgroundColor: '#3977ED' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#2d5fcc'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#3977ED'
+              }}
+            >
+              <Plus size={20} />
+              <span>{t('addProduct')}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -183,7 +184,7 @@ export default function SellerProducts() {
                       <Package size={48} />
                     </div>
                   )}
-                  
+
                   {/* Status Badge */}
                   <div className="absolute top-3 left-3">
                     {getStatusBadge(product.status)}
@@ -195,7 +196,7 @@ export default function SellerProducts() {
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 transition-colors duration-300">
                     {product.title}
                   </h3>
-                  
+
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-2">
                       {product.salePrice && product.salePrice > 0 ? (
@@ -271,7 +272,7 @@ export default function SellerProducts() {
               {searchTerm || filterStatus !== 'all' ? t('noProductsFound') : t('noProductsYet') || 'No products yet'}
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-6 transition-colors duration-300">
-              {searchTerm || filterStatus !== 'all' 
+              {searchTerm || filterStatus !== 'all'
                 ? t('tryAdjustingSearch') || 'Try adjusting your search or filter criteria'
                 : t('getStartedByAdding') || 'Get started by adding your first product'
               }
@@ -307,7 +308,7 @@ export default function SellerProducts() {
                 <Package className="w-8 h-8 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
               </div>
             </div>
-            
+
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 transition-colors duration-300">
               <div className="flex items-center justify-between">
                 <div>
@@ -321,7 +322,7 @@ export default function SellerProducts() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 transition-colors duration-300">
               <div className="flex items-center justify-between">
                 <div>
@@ -335,7 +336,7 @@ export default function SellerProducts() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/50 p-4 transition-colors duration-300">
               <div className="flex items-center justify-between">
                 <div>
