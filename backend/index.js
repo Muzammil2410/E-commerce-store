@@ -14,8 +14,15 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Product API (no auth middleware)
+// Product API (no auth middleware) - MUST be registered before catch-all
 app.use('/api/products', productRoutes);
+
+// Debug: Log registered routes
+console.log('✅ Product routes mounted at /api/products');
+console.log('Available routes:');
+console.log('  POST   /api/products');
+console.log('  GET    /api/products');
+console.log('  GET    /api/products/:id');
 
 // Basic Route
 app.get('/', (req, res) => {

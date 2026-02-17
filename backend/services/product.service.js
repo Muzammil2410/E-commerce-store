@@ -94,8 +94,45 @@ async function getAllProducts() {
   return products;
 }
 
+/**
+ * Get single product by ID from database
+ * Returns product with real-time Cloudinary image URLs
+ * @param {string} productId - MongoDB _id
+ * @returns {Promise<Object|null>} product or null if not found
+ */
+async function getProductById(productId) {
+  console.log('Fetched product detail from DB - Product ID:', productId);
+  
+  // Validate MongoDB ObjectId format
+  if (!productId || !productId.match(/^[0-9a-fA-F]{24}$/)) {
+    console.error('Invalid product ID format:', productId);
+    return null;
+  }
+
+  try {
+    const product = await Product.findById(productId).lean();
+    
+    if (product) {
+      console.log('Fetched product detail from DB:', {
+        id: product._id,
+        title: product.title,
+        imagesCount: product.images?.length || 0,
+        imageUrls: product.images?.slice(0, 2) || [] // Log first 2 image URLs
+      });
+      return product;
+    } else {
+      console.log('Product not found in database for ID:', productId);
+      return null;
+    }
+  } catch (error) {
+    console.error('Database error while fetching product:', error.message);
+    throw error;
+  }
+}
+
 module.exports = {
   createProduct,
   getAllProducts,
+  getProductById,
   uploadToCloudinary,
 };

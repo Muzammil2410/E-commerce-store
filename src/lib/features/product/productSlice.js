@@ -6,16 +6,38 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const API_URL = `${API_BASE}/api/products`;
 
 // Normalize product from API: _id -> id, title -> name, full URLs for images
+// Handles real-time Cloudinary URLs from database
 function normalizeProduct(p) {
     if (!p) return p;
     const base = { ...p };
+    
+    // Convert MongoDB _id to id for frontend
     if (base._id) base.id = base._id.toString();
+    
+    // Convert title to name (frontend expects name)
     if (base.title) base.name = base.title;
+    
+    // Handle images - Cloudinary URLs are already full URLs, keep as-is
     if (Array.isArray(base.images) && base.images.length) {
-        base.images = base.images.map(src =>
-            src.startsWith('http') ? src : `${API_BASE}${src.startsWith('/') ? '' : '/'}${src}`
-        );
+        base.images = base.images.map(src => {
+            // If already a full Cloudinary URL (starts with http/https), use as-is
+            if (src.startsWith('http://') || src.startsWith('https://')) {
+                return src;
+            }
+            // Otherwise, prepend API base URL (for local uploads if any)
+            return `${API_BASE}${src.startsWith('/') ? '' : '/'}${src}`;
+        });
     }
+    
+    // Ensure optional fields exist for frontend compatibility
+    // Frontend expects rating array (can be empty)
+    if (!base.rating) base.rating = [];
+    
+    // Frontend expects mrp (use price if salePrice exists, otherwise use price)
+    if (!base.mrp && base.price) {
+        base.mrp = base.salePrice ? base.price : base.price;
+    }
+    
     return base;
 }
 
@@ -50,10 +72,55 @@ export const addProduct = createAsyncThunk(
     }
 );
 
+export const fetchProductById = createAsyncThunk(
+    'product/fetchProductById',
+    async (productId, { rejectWithValue }) => {
+        try {
+            if (!productId) {
+                throw new Error('Product ID is required');
+            }
+            console.log('Fetching product by ID:', productId);
+            console.log('API URL:', `${API_URL}/${productId}`);
+            
+            const response = await axios.get(`${API_URL}/${productId}`);
+            
+            if (!response.data) {
+                throw new Error('No product data received');
+            }
+            
+            const normalized = normalizeProduct(response.data);
+            console.log('Product fetched successfully:', productId, '- Title:', normalized?.title || normalized?.name);
+            return normalized;
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            console.error('Error response:', error.response?.data);
+            console.error('Error status:', error.response?.status);
+            
+            // Handle 404 specifically
+            if (error.response?.status === 404) {
+                return rejectWithValue({ message: 'Product not found', status: 404 });
+            }
+            
+            // Handle network errors
+            if (!error.response) {
+                return rejectWithValue({ message: 'Network error: Could not connect to server', status: 0 });
+            }
+            
+            const msg = error.response?.data?.message || error.response?.data?.error || error.message || 'Failed to fetch product';
+            return rejectWithValue({ 
+                message: msg, 
+                status: error.response?.status || 500,
+                ...(typeof error.response?.data === 'object' ? error.response.data : {})
+            });
+        }
+    }
+);
+
 const productSlice = createSlice({
     name: 'product',
     initialState: {
         list: [],
+        currentProduct: null, // Single product detail
         loading: false,
         error: null,
         success: false,
@@ -98,6 +165,21 @@ const productSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || 'Failed to add product';
                 state.success = false;
+            })
+            // Fetch Product By ID
+            .addCase(fetchProductById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.currentProduct = null;
+            })
+            .addCase(fetchProductById.fulfilled, (state, action) => {
+                state.loading = false;
+                state.currentProduct = action.payload;
+            })
+            .addCase(fetchProductById.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || 'Failed to fetch product';
+                state.currentProduct = null;
             });
     }
 });
