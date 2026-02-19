@@ -1,0 +1,1 @@
+import{j as r}from"./index-DYXxwEwQ.js";import"./vendor-react-C-vLCHr5.js";import"./vendor-redux-BO4apGfR.js";import"./vendor-ui-B90iy1hF.js";import"./vendor-utils-C_-n9PHV.js";function o(){return r.jsx("div",{className:"mx-auto max-w-[700px] my-28"})}export{o as default};
