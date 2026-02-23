@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="description" content="Shop smarter with our online store. Browse thousands of products across multiple categories." />
+    <meta name="theme-color" content="#3b82f6" />
+    <script>
+      // Apply dark mode before React loads to prevent flash
+      (function() {
+        const saved = localStorage.getItem('theme') || localStorage.getItem('darkMode');
+        if (saved === 'dark' || saved === 'true') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="2048x2048" href="/favicon-2048x2048.png" />
+    <link rel="icon" type="image/png" sizes="1024x1024" href="/favicon-1024x1024.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png" />
+    <link rel="icon" type="image/png" sizes="256x256" href="/favicon-256x256.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+    <title>Shop smarter</title>
+    <script type="module" crossorigin src="/assets/index-DYXxwEwQ.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-react-C-vLCHr5.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-redux-BO4apGfR.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-ui-B90iy1hF.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-utils-C_-n9PHV.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CmWisUAp.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
