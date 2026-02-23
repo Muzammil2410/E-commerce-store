@@ -55,6 +55,20 @@ export const fetchProducts = createAsyncThunk(
     }
 );
 
+/** Fetch only products belonging to the logged-in seller (requires auth token). */
+export const fetchSellerProducts = createAsyncThunk(
+    'product/fetchSellerProducts',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`${API_URL}/seller`);
+            const list = Array.isArray(response.data) ? response.data.map(normalizeProduct) : [];
+            return list;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || { message: 'Failed to fetch seller products' });
+        }
+    }
+);
+
 export const addProduct = createAsyncThunk(
     'product/addProduct',
     async (productData, { rejectWithValue }) => {
@@ -149,6 +163,19 @@ const productSlice = createSlice({
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || 'Failed to fetch products';
+            })
+            // Fetch Seller Products
+            .addCase(fetchSellerProducts.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSellerProducts.fulfilled, (state, action) => {
+                state.loading = false;
+                state.list = action.payload;
+            })
+            .addCase(fetchSellerProducts.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || 'Failed to fetch seller products';
             })
             // Add Product
             .addCase(addProduct.pending, (state) => {

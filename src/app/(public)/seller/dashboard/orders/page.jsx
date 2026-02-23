@@ -1,47 +1,42 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
+import { useSelector, useDispatch } from 'react-redux'
+import {
   ArrowLeft,
   Search,
   Filter,
-  Eye,
   Package,
   Calendar,
   MapPin,
-  CreditCard,
   Truck,
   MessageCircle,
   Star,
   AlertCircle
 } from 'lucide-react'
-import { orderDummyData } from '@/assets/assets'
 import SellerReviewModal from '@/components/SellerReviewModal'
 import ChatModal from '@/components/ChatModal'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
+import { fetchSellerOrders } from '@/lib/features/orders/ordersSlice'
+import { getAuthToken } from '@/lib/api/auth'
 
 export default function SellerOrders() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { t, formatCurrency, translateProductName } = useLanguageCurrency()
-  const [orders, setOrders] = useState([])
-  const [loading, setLoading] = useState(true)
+  const { orders: ordersFromRedux = [], loading } = useSelector((state) => state.orders)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [reviewModal, setReviewModal] = useState(null)
   const [chatModal, setChatModal] = useState(null)
 
   useEffect(() => {
-    // Load orders from localStorage or dummy data
-    const savedOrders = localStorage.getItem('sellerOrders');
-    if (savedOrders) {
-      setOrders(JSON.parse(savedOrders));
-    } else {
-      // Use dummy data for demo
-      setOrders(orderDummyData);
-      localStorage.setItem('sellerOrders', JSON.stringify(orderDummyData));
+    if (!getAuthToken()) {
+      navigate('/seller/login')
+      return
     }
-    setLoading(false)
-  }, [])
+    dispatch(fetchSellerOrders())
+  }, [dispatch, navigate])
 
   // Check if order is delayed (more than expected delivery date)
   const isOrderDelayed = (order) => {
@@ -63,7 +58,7 @@ export default function SellerOrders() {
     return reviews.find(r => r.orderId === orderId && r.buyerId === buyerId);
   };
 
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = ordersFromRedux.filter(order => {
     const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          order.user.name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter

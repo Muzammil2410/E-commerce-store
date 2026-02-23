@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
   {
+    sellerId: { type: String, required: false }, // User id of seller who created the product (set from auth on create)
     title: { type: String, required: true },
     sku: { type: String },
     category: { type: String, required: true },

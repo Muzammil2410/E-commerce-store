@@ -38,14 +38,40 @@ export default function SellerLoginPage() {
                 role: 'seller',
             })
             setAuthToken(token)
-            const sellerProfile = localStorage.getItem('sellerProfile')
+            const existingProfileRaw = localStorage.getItem('sellerProfile')
             let businessName = ''
-            if (sellerProfile) {
+            let profileToSave = null
+            if (existingProfileRaw) {
                 try {
-                    const parsed = JSON.parse(sellerProfile)
+                    const parsed = JSON.parse(existingProfileRaw)
                     businessName = parsed.businessName || ''
-                } catch (_) {}
+                    // Keep existing business info; ensure name/email match logged-in user
+                    profileToSave = {
+                        ...parsed,
+                        fullName: user.name || parsed.fullName,
+                        email: user.email || parsed.email,
+                        businessName: businessName || user.name,
+                    }
+                } catch (_) {
+                    profileToSave = null
+                }
             }
+            if (!profileToSave) {
+                // No sellerProfile (e.g. new device or cleared storage). Set minimal profile so dashboard does not redirect to register.
+                businessName = user.name || ''
+                profileToSave = {
+                    fullName: user.name || '',
+                    email: user.email || '',
+                    phone: '',
+                    businessName: businessName || user.name || '',
+                    businessType: 'Individual',
+                    businessAddress: '',
+                    warehouseAddress: '',
+                    selectedCategories: [],
+                    documents: {},
+                }
+            }
+            localStorage.setItem('sellerProfile', JSON.stringify(profileToSave))
             localStorage.setItem('sellerSession', JSON.stringify({
                 id: user._id || user.id,
                 name: user.name,

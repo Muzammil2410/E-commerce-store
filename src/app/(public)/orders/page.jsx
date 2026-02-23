@@ -1,17 +1,37 @@
 'use client'
 import PageTitle from "@/components/PageTitle"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import OrderItem from "@/components/OrderItem";
-import { orderDummyData } from "@/assets/assets";
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext';
+import { fetchMyOrders } from '@/lib/features/orders/ordersSlice';
+import { getAuthToken } from '@/lib/api/auth';
 
 export default function Orders() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { formatCurrency } = useLanguageCurrency();
-    const [orders, setOrders] = useState([]);
+    const { orders = [], loading, error } = useSelector((state) => state.orders);
 
     useEffect(() => {
-        setOrders(orderDummyData)
-    }, []);
+        if (!getAuthToken()) {
+            navigate('/auth/login');
+            return;
+        }
+        dispatch(fetchMyOrders());
+    }, [dispatch, navigate]);
+
+    if (loading && orders.length === 0) {
+        return (
+            <div className="min-h-[70vh] mx-3 sm:mx-4 md:mx-6 flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+                <div className="text-center">
+                    <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <p className="text-gray-600 dark:text-gray-300">Loading orders...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-[70vh] mx-3 sm:mx-4 md:mx-6 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">

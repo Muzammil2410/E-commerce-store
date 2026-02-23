@@ -71,7 +71,7 @@ export default defineConfig({
     headers: {
       'Cache-Control': 'no-store',
       // Relaxed CSP for Development (include img-src blob: for image previews)
-      'Content-Security-Policy': "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: ws: wss:; img-src 'self' data: https: http: blob:;",
+      'Content-Security-Policy': "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: ws: wss:; connect-src 'self' https: http: http://localhost:* http://127.0.0.1:* ws: wss:; img-src 'self' data: https: http: blob:;",
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'SAMEORIGIN',
       'X-XSS-Protection': '1; mode=block',

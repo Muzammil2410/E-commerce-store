@@ -1,11 +1,12 @@
 /**
- * Product routes - NO auth middleware
- * POST /api/products - seller add product (images → Cloudinary)
+ * Product routes
+ * POST /api/products - seller add product (auth required; sellerId from token)
  * GET /api/products - buyer fetch products
  */
 const express = require('express');
 const multer = require('multer');
 const productService = require('../services/product.service');
+const { verifyToken, roleBasedAccess } = require('../../auth/middleware/auth.middleware');
 
 const router = express.Router();
 
@@ -22,11 +23,12 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file
 });
 
-// POST /api/products - create product, upload images to Cloudinary
-router.post('/', upload.array('images', 8), async (req, res) => {
+// POST /api/products - create product (seller only; sellerId from DB/auth, not frontend)
+router.post('/', verifyToken, roleBasedAccess(['seller']), upload.array('images', 8), async (req, res) => {
   try {
-    console.log('Received product creation request, files:', req.files?.length ?? 0);
-    const saved = await productService.createProduct(req.body, req.files || []);
+    const sellerId = req.user?.id ? String(req.user.id) : undefined;
+    console.log('Received product creation request, files:', req.files?.length ?? 0, 'sellerId:', sellerId);
+    const saved = await productService.createProduct({ ...req.body, sellerId }, req.files || []);
     res.status(201).json(saved);
   } catch (error) {
     console.error('Error creating product:', error);
@@ -42,6 +44,21 @@ router.get('/', async (req, res) => {
   } catch (error) {
     console.error('Error fetching products:', error);
     res.status(500).json({ message: 'Error fetching products', error: error.message });
+  }
+});
+
+// GET /api/products/seller - fetch only products belonging to the logged-in seller (auth required)
+router.get('/seller', verifyToken, roleBasedAccess(['seller']), async (req, res) => {
+  try {
+    const sellerId = req.user?.id ? String(req.user.id) : null;
+    if (!sellerId) {
+      return res.status(401).json({ message: 'Seller not identified' });
+    }
+    const products = await productService.getProductsBySeller(sellerId);
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error fetching seller products:', error);
+    res.status(500).json({ message: 'Error fetching seller products', error: error.message });
   }
 });
 
@@ -98,6 +115,7 @@ router.get('/:id', async (req, res) => {
 console.log('Product routes registered:');
 console.log('  POST /api/products');
 console.log('  GET /api/products');
+console.log('  GET /api/products/seller');
 console.log('  GET /api/products/:id');
 
 module.exports = router;

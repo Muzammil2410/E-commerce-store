@@ -15,12 +15,14 @@ import profileReducer from './features/profile/profileSlice'
 import workLogReducer from './features/workLog/workLogSlice'
 import achievementsReducer from './features/achievements/achievementsSlice'
 import goalsReducer from './features/goals/goalsSlice'
+import ordersReducer from './features/orders/ordersSlice'
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             cart: cartReducer,
             product: productReducer,
+            orders: ordersReducer,
             address: addressReducer,
             rating: ratingReducer,
             wishlist: wishlistReducer,

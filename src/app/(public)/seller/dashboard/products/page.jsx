@@ -5,7 +5,7 @@ import { Plus, Edit, Trash2, Eye, Package, Search, Filter, ArrowLeft } from 'luc
 import Image from '@/components/Image'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchProducts } from '@/lib/features/product/productSlice'
+import { fetchSellerProducts } from '@/lib/features/product/productSlice'
 
 export default function SellerProducts() {
   const navigate = useNavigate()
@@ -18,8 +18,9 @@ export default function SellerProducts() {
   const [filterStatus, setFilterStatus] = useState('all')
   // const [loading, setLoading] = useState(true) // Replaced by Redux
 
+  // Fetch only this seller's products (backend filters by sellerId from token)
   useEffect(() => {
-    dispatch(fetchProducts())
+    dispatch(fetchSellerProducts())
   }, [dispatch])
 
   const filteredProducts = products.filter(product => {

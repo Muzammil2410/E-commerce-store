@@ -1,8 +1,10 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { clearCart } from "@/lib/features/cart/cartSlice"
+import { fetchSellerOrders } from '@/lib/features/orders/ordersSlice'
+import { fetchSellerProducts } from '@/lib/features/product/productSlice'
 import { Package, Users, TrendingUp, DollarSign, Plus, Eye, LogOut, BarChart3, ChevronDown, X, UserPlus, Edit, Save, XCircle, Upload, FileText, Tag, Building2, Mail, Phone, MapPin, Warehouse, FileCheck, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
 import toast from 'react-hot-toast'
@@ -13,7 +15,8 @@ export default function SellerDashboard() {
   const dispatch = useDispatch()
   const { t, language, updateLanguage } = useLanguageCurrency()
   const [sellerData, setSellerData] = useState(null)
-  const [products, setProducts] = useState([])
+  const orders = useSelector((state) => state.orders?.orders ?? [])
+  const products = useSelector((state) => state.product?.list ?? [])
   const [showLanguageModal, setShowLanguageModal] = useState(false)
   const [selectedLanguage, setSelectedLanguage] = useState(language)
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
@@ -73,27 +76,45 @@ export default function SellerDashboard() {
   }
 
   useEffect(() => {
-    const data = localStorage.getItem('sellerProfile')
+    let data = localStorage.getItem('sellerProfile')
+    // If no profile but seller is logged in (sellerSession), create minimal profile so we don't redirect to register
+    if (!data) {
+      const sessionRaw = localStorage.getItem('sellerSession')
+      if (sessionRaw) {
+        try {
+          const session = JSON.parse(sessionRaw)
+          const minimalProfile = {
+            fullName: session.name || '',
+            email: session.email || '',
+            phone: '',
+            businessName: session.businessName || session.name || '',
+            businessType: 'Individual',
+            businessAddress: '',
+            warehouseAddress: '',
+            selectedCategories: [],
+            documents: {},
+          }
+          localStorage.setItem('sellerProfile', JSON.stringify(minimalProfile))
+          data = JSON.stringify(minimalProfile)
+        } catch (_) {}
+      }
+    }
     if (data) {
       const parsedData = JSON.parse(data)
       setSellerData(parsedData)
       setEditFormData(parsedData)
-      
-      // Load existing products and remove any dummy products
-      const existingProducts = JSON.parse(localStorage.getItem('products') || '[]')
-      const filteredProducts = existingProducts.filter(product => product.id !== 'prod_demo_001')
-      
-      // Update localStorage if dummy product was removed
-      if (filteredProducts.length !== existingProducts.length) {
-        localStorage.setItem('products', JSON.stringify(filteredProducts))
-      }
-      
-      setProducts(filteredProducts)
     } else {
-      // Redirect to registration if no data found
+      // No profile and no session: redirect to registration
       navigate('/seller/register')
     }
   }, [navigate])
+
+  // Fetch seller orders and products from API when dashboard is ready (uses sellerId from token)
+  useEffect(() => {
+    if (!sellerData) return
+    dispatch(fetchSellerOrders())
+    dispatch(fetchSellerProducts())
+  }, [sellerData, dispatch])
 
   const handleEditBusinessInfo = () => {
     setIsEditingBusinessInfo(true)
@@ -191,13 +212,16 @@ export default function SellerDashboard() {
     )
   }
 
-  // Calculate stats - start with zero values
-  const totalOrders = 0 // No orders initially
-  const totalRevenue = 0 // No revenue initially
-  const totalProductsSold = 0 // No products sold initially
-  const platformFees = 0 // No fees initially
-  const deliveryFees = 0 // No delivery fees initially
-  const netProfit = 0 // No profit initially
+  // Dynamic stats from API (orders and products by sellerId)
+  const totalOrders = orders.length
+  const totalRevenue = orders.reduce((sum, o) => sum + (Number(o.total) || 0), 0)
+  const totalProductsSold = orders.reduce((sum, o) => {
+    const items = o.orderItems || []
+    return sum + items.reduce((s, i) => s + (Number(i.quantity) || 0), 0)
+  }, 0)
+  const platformFees = 0
+  const deliveryFees = 0
+  const netProfit = totalRevenue - platformFees - deliveryFees
 
   const stats = [
     { title: t('totalProducts'), value: products.length.toString(), icon: Package, color: 'bg-blue-500' },

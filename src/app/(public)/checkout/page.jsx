@@ -6,6 +6,8 @@ import { CreditCard, MapPin, User, Mail, Lock, ArrowLeft, CheckCircle } from 'lu
 import Image from '@/components/Image'
 import toast from 'react-hot-toast'
 import { clearCart } from '@/lib/features/cart/cartSlice'
+import { createOrder } from '@/lib/features/orders/ordersSlice'
+import { getAuthToken } from '@/lib/api/auth'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
@@ -239,80 +241,47 @@ export default function CheckoutPage() {
             return
         }
 
+        if (!getAuthToken()) {
+            toast.error('Please log in to place an order')
+            navigate('/auth/login')
+            return
+        }
+
         setLoading(true)
-        await new Promise(resolve => setTimeout(resolve, 1500))
-        
-        // Get user data
-        const userData = localStorage.getItem('user')
-        const user = userData ? JSON.parse(userData) : null
-        
-        // Calculate final total
         const calculatedTaxAmount = totalPrice * taxRate
         const calculatedFinalTotal = totalPrice + calculatedTaxAmount
-        
-        // Generate order ID
-        const orderId = 'order_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now()
-        const now = new Date().toISOString()
-        const deliveryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days from now
-        
-        // Create order items from cart
-        const orderItems = cartArray.map(item => ({
-            orderId: orderId,
-            productId: item.id,
-            quantity: item.quantity || 1,
-            price: item.price,
-            product: {
-                id: item.id,
-                name: item.name,
-                images: item.images || [],
-                category: item.category || '',
-                price: item.price
-            }
-        }))
-        
-        // Create order object
-        const newOrder = {
-            id: orderId,
-            total: calculatedFinalTotal,
-            status: 'CONFIRMED', // Start with CONFIRMED status
-            userId: user?.id || 'user_' + Math.random().toString(36).substr(2, 9),
-            storeId: null,
-            addressId: null,
-            isPaid: true,
-            paymentMethod: cardInfo.cardNumber ? 'CARD' : 'COD',
-            createdAt: now,
-            updatedAt: now,
-            expectedDeliveryDate: deliveryDate,
-            isCouponUsed: false,
-            coupon: null,
-            orderItems: orderItems,
-            address: {
-                name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
-                email: shippingInfo.email,
-                phone: shippingInfo.phone,
-                street: shippingInfo.address,
-                city: shippingInfo.city,
-                state: shippingInfo.state,
-                zip: shippingInfo.zipCode,
-                country: shippingInfo.country
+
+        const orderPayload = {
+            items: cartArray.map((item) => ({
+                productId: item.id,
+                sellerId: item.sellerId || null,
+                price: item.price,
+                quantity: item.quantity || 1,
+            })),
+            shippingAddress: {
+                name: `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim(),
+                email: shippingInfo.email || '',
+                phone: shippingInfo.phone || '',
+                street: shippingInfo.address || '',
+                city: shippingInfo.city || '',
+                state: shippingInfo.state || '',
+                zip: shippingInfo.zipCode || '',
+                country: shippingInfo.country || 'USA',
             },
-            user: user || {
-                id: 'user_' + Math.random().toString(36).substr(2, 9),
-                name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
-                email: shippingInfo.email
-            }
+            totalAmount: calculatedFinalTotal,
         }
-        
-        // Save order to localStorage
-        const existingOrders = localStorage.getItem('userOrders')
-        const orders = existingOrders ? JSON.parse(existingOrders) : []
-        orders.unshift(newOrder) // Add new order at the beginning
-        localStorage.setItem('userOrders', JSON.stringify(orders))
-        
-        toast.success('Order placed successfully!')
-        if (!buyNowProduct) dispatch(clearCart())
-        setOrderPlaced(true)
+
+        const result = await dispatch(createOrder(orderPayload))
         setLoading(false)
+
+        if (createOrder.fulfilled.match(result)) {
+            toast.success('Order placed successfully!')
+            if (!buyNowProduct) dispatch(clearCart())
+            setOrderPlaced(true)
+        } else {
+            const msg = result.payload?.message || 'Failed to place order'
+            toast.error(msg)
+        }
     }
 
     if (orderPlaced) {

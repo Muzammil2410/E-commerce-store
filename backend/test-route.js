@@ -2,7 +2,7 @@
  * Quick test script to verify route registration
  * Run: node test-route.js
  */
-const productRoutes = require('./routes/product.routes');
+const productRoutes = require('./products/routes/product.routes');
 
 console.log('✅ Route file loaded successfully');
 console.log('Route module type:', typeof productRoutes);
