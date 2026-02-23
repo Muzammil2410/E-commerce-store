@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft, Store } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { login as apiLogin, setAuthToken } from '@/lib/api/auth'
 
 export default function SellerLoginPage() {
     const navigate = useNavigate()
@@ -22,40 +23,43 @@ export default function SellerLoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
-
-        // Check seller credentials from localStorage
-        const sellerProfile = localStorage.getItem('sellerProfile')
-        
-        if (sellerProfile) {
-            try {
-                const sellerData = JSON.parse(sellerProfile)
-                
-                if (formData.email === sellerData.email && formData.password === sellerData.password) {
-                    toast.success('Seller login successful!')
-                    // Store seller session
-                    localStorage.setItem('sellerSession', JSON.stringify({
-                        id: 'seller_1',
-                        name: sellerData.fullName,
-                        email: sellerData.email,
-                        businessName: sellerData.businessName
-                    }))
-                    navigate('/seller/dashboard')
-                } else {
-                    toast.error('Invalid seller credentials. Please check your email and password.')
-                }
-            } catch (error) {
-                console.error('Error parsing seller profile:', error)
-                toast.error('Error loading seller profile. Please try registering again.')
-            }
-        } else {
-            toast.error('No seller account found. Please register as a seller first.')
+        const email = formData.email?.trim()
+        const password = formData.password
+        if (!email || !password) {
+            toast.error('Email and password are required')
+            return
         }
 
-        setLoading(false)
+        setLoading(true)
+        try {
+            const { user, token } = await apiLogin({
+                email,
+                password,
+                role: 'seller',
+            })
+            setAuthToken(token)
+            const sellerProfile = localStorage.getItem('sellerProfile')
+            let businessName = ''
+            if (sellerProfile) {
+                try {
+                    const parsed = JSON.parse(sellerProfile)
+                    businessName = parsed.businessName || ''
+                } catch (_) {}
+            }
+            localStorage.setItem('sellerSession', JSON.stringify({
+                id: user._id || user.id,
+                name: user.name,
+                email: user.email,
+                businessName: businessName || user.name,
+            }))
+            toast.success('Seller login successful!')
+            navigate('/seller/dashboard')
+        } catch (err) {
+            const message = err.response?.data?.message || err.message || 'Invalid seller credentials. Please register first.'
+            toast.error(message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (

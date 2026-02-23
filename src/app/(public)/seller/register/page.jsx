@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { ChevronLeft, ChevronRight, Upload, Check, User, Building2, FileText, Tag, Eye, X } from 'lucide-react'
 import Image from '@/components/Image'
 import PhoneNumberInput from '@/components/PhoneNumberInput'
+import { register as apiRegister } from '@/lib/api/auth'
 
 const steps = [
   { id: 1, title: 'Basic Info', icon: User },
@@ -167,22 +168,23 @@ export default function SellerRegister() {
     setIsSubmitting(true)
     
     try {
-      // Save to localStorage
+      // Register seller in backend (auth). No auto-login: redirect to login page.
+      await apiRegister({
+        name: formData.fullName.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        role: 'seller',
+      })
+      // Keep seller profile in localStorage for business info (dashboard may use it)
       localStorage.setItem('sellerProfile', JSON.stringify(formData))
-      
-      // Clear the saved step since registration is complete
       localStorage.removeItem('sellerRegistrationStep')
-
-      // Show success toast
       toast.success('Registration completed! Please login with your credentials...')
-      
-      // Redirect to seller login after 2 seconds
       setTimeout(() => {
         navigate('/seller/login')
       }, 2000)
-      
-    } catch (error) {
-      toast.error('Registration failed. Please try again.')
+    } catch (err) {
+      const message = err.response?.data?.message || err.message || 'Registration failed. Email may already be in use.'
+      toast.error(message)
     } finally {
       setIsSubmitting(false)
     }

@@ -67,6 +67,35 @@ export default function EmployeeDashboard() {
     const [editPhone, setEditPhone] = useState('')
     const [editEmergencyContact, setEditEmergencyContact] = useState({ name: '', phone: '', relation: '' })
     
+    // Load deliveries from localStorage for current employee
+    const loadDeliveries = useCallback(() => {
+        const userId = currentUser?.id
+        if (!userId) return
+        try {
+            const stored = localStorage.getItem(`deliveries_${userId}`)
+            setDeliveries(stored ? JSON.parse(stored) : [])
+        } catch {
+            setDeliveries([])
+        }
+    }, [currentUser?.id])
+    
+    // Build notifications from tasks and announcements (optional; can be expanded)
+    const generateNotifications = useCallback(() => {
+        const items = []
+        const today = new Date().toISOString()
+        tasks.forEach(t => {
+            if (t.dueDate && t.status !== 'completed') {
+                items.push({ id: `task-${t.id}`, type: 'task', title: t.title || 'Task', message: `Due: ${t.dueDate}`, read: false, createdAt: today })
+            }
+        })
+        if (announcements.length) {
+            announcements.slice(0, 3).forEach((a, i) => {
+                items.push({ id: `ann-${i}`, type: 'announcement', title: a.title || 'Announcement', message: a.content?.slice(0, 50) || '', read: false, createdAt: a.createdAt || today })
+            })
+        }
+        setNotifications(prev => (items.length ? items : prev))
+    }, [tasks, announcements])
+    
     // Initialize user only once on mount
     useEffect(() => {
         // Check if user is logged in
@@ -93,7 +122,8 @@ export default function EmployeeDashboard() {
             // Ensure we're on the right page based on role
             if (currentUser.role === 'admin') {
                 navigate('/admin/dashboard')
-        }
+                return
+            }
         }
     }, [navigate, currentUser, dispatch])
     
@@ -131,8 +161,9 @@ export default function EmployeeDashboard() {
         if (!editEmergencyContact.name && !editEmergencyContact.phone && emergencyContact) {
             setEditEmergencyContact(emergencyContact)
         }
+        // Only re-run when user id changes; avoid listing loadDeliveries/generateNotifications to prevent infinite loop (they change when tasks/announcements from Redux update)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentUser?.id, loadDeliveries, generateNotifications]) // Use stable callbacks
+    }, [currentUser?.id])
     
     // Recalculate profile completion when emergency contact or currentUser changes
     useEffect(() => {

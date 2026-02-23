@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { setCurrentUser } from '@/lib/features/employees/employeesSlice'
+import { login as apiLogin, setAuthToken } from '@/lib/api/auth'
 
 export default function EmployeeLogin() {
     const navigate = useNavigate()
@@ -53,40 +54,42 @@ export default function EmployeeLogin() {
     
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        
-        // Check credentials
-        let authenticatedUser = null
-        
-        if (formData.email === demoCredentials.employee.email && 
-            formData.password === demoCredentials.employee.password) {
-            authenticatedUser = demoCredentials.employee.user
-        } else if (formData.email === demoCredentials.admin.email && 
-                   formData.password === demoCredentials.admin.password) {
-            authenticatedUser = demoCredentials.admin.user
+        const email = formData.email?.trim()
+        const password = formData.password
+        if (!email || !password) {
+            toast.error('Email and password are required')
+            return
         }
-        
-        if (authenticatedUser) {
-            // Store user session
+
+        setLoading(true)
+        try {
+            const { user, token } = await apiLogin({
+                email,
+                password,
+            })
+            setAuthToken(token)
+            const authenticatedUser = {
+                id: user._id || user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                department: user.department || (user.role === 'admin' ? 'Management' : 'Engineering'),
+                position: user.position || (user.role === 'admin' ? 'Administrator' : 'Employee'),
+            }
             localStorage.setItem('employeeUser', JSON.stringify(authenticatedUser))
             dispatch(setCurrentUser(authenticatedUser))
-            
             toast.success('Login successful!')
-            
-            // Redirect based on role
             if (authenticatedUser.role === 'admin') {
                 navigate('/admin/dashboard')
             } else {
                 navigate('/employee/dashboard')
             }
-        } else {
-            toast.error('Invalid credentials. Use employee@company.com / employee123 or admin@company.com / admin123')
+        } catch (err) {
+            const message = err.response?.data?.message || err.message || 'Invalid credentials'
+            toast.error(message)
+        } finally {
+            setLoading(false)
         }
-        
-        setLoading(false)
     }
     
     const fillDemoCredentials = (role) => {
@@ -206,6 +209,19 @@ export default function EmployeeLogin() {
                     >
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
+
+                    <div className="mt-6 text-center">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
+                            Don't have an account?{' '}
+                            <button
+                                type="button"
+                                onClick={() => navigate('/employee/register')}
+                                className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                            >
+                                Register as Employee
+                            </button>
+                        </p>
+                    </div>
                 </form>
             </div>
         </div>

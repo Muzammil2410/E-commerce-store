@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
+import { login as apiLogin, setAuthToken } from '@/lib/api/auth'
 
 // Social Login Icons
 const GoogleIcon = () => (
@@ -46,27 +47,36 @@ export default function LoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
-
-        // Check demo credentials for regular users
-        if (formData.email === demoCredentials.email && formData.password === demoCredentials.password) {
-            toast.success('Login successful!')
-            // Store user session (in real app, this would be handled by auth provider)
-            localStorage.setItem('user', JSON.stringify({
-                id: 'user_1',
-                name: 'Demo User',
-                email: 'demo@zizla.com',
-                image: '/api/placeholder/40/40'
-            }))
-            navigate('/profile')
-        } else {
-            toast.error('Invalid credentials. Use demo@zizla.com / demo123')
+        const email = formData.email?.trim()
+        const password = formData.password
+        if (!email || !password) {
+            toast.error('Email and password are required')
+            return
         }
 
-        setLoading(false)
+        setLoading(true)
+        try {
+            const { user, token } = await apiLogin({
+                email,
+                password,
+                role: 'buyer',
+            })
+            setAuthToken(token)
+            localStorage.setItem('user', JSON.stringify({
+                id: user._id || user.id,
+                name: user.name,
+                email: user.email,
+                image: '/api/placeholder/40/40',
+            }))
+            toast.success('Login successful!')
+            // Role-based redirect: buyer → home page
+            navigate('/')
+        } catch (err) {
+            const message = err.response?.data?.message || err.message || 'Invalid credentials'
+            toast.error(message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const fillDemoCredentials = () => {

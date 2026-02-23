@@ -51,6 +51,7 @@ import SellerDeliverySchedule from "@/app/(public)/seller/dashboard/delivery/sch
 import SellerEmployees from "@/app/(public)/seller/dashboard/employees/page";
 // Import Employee and Admin pages for task/attendance system
 import EmployeeLogin from "@/app/(public)/employee/login/page";
+import EmployeeRegister from "@/app/(public)/employee/register/page";
 import EmployeeDashboard from "@/app/(public)/employee/dashboard/page";
 import EmployeeTasks from "@/app/(public)/employee/tasks/page";
 import EmployeeTaskDetail from "@/app/(public)/employee/tasks/[id]/page";
@@ -159,6 +160,7 @@ export const router = createBrowserRouter([
 
   // Employee Portal Routes
   { path: "/employee/login", element: <PublicLayout><EmployeeLogin /></PublicLayout> },
+  { path: "/employee/register", element: <PublicLayout><EmployeeRegister /></PublicLayout> },
   { path: "/employee/dashboard", element: <PublicLayout><EmployeeDashboard /></PublicLayout> },
   { path: "/employee/tasks", element: <PublicLayout><EmployeeTasks /></PublicLayout> },
   { path: "/employee/tasks/:id", element: <PublicLayout><EmployeeTaskDetail /></PublicLayout> },

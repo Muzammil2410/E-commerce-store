@@ -6,6 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const productRoutes = require('./routes/product.routes');
+const authRoutes = require('./auth/routes/auth.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,10 +15,16 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Auth API - register, login (seller/buyer/employee + hardcoded admin)
+app.use('/api/auth', authRoutes);
+
 // Product API (no auth middleware) - MUST be registered before catch-all
 app.use('/api/products', productRoutes);
 
 // Debug: Log registered routes
+console.log('✅ Auth routes mounted at /api/auth');
+console.log('  POST   /api/auth/register');
+console.log('  POST   /api/auth/login');
 console.log('✅ Product routes mounted at /api/products');
 console.log('Available routes:');
 console.log('  POST   /api/products');

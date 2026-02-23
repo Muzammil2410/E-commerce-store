@@ -5,6 +5,7 @@ import AppProviders from './providers/AppProviders'
 // @ts-ignore - ErrorBoundary is a JSX component
 import ErrorBoundary from './components/ErrorBoundary'
 import { router } from './routes'
+import './lib/api/auth' // Register axios auth token interceptor
 import './index.css'
 
 const rootElement = document.getElementById('root')

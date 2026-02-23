@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useLanguageCurrency } from '@/contexts/LanguageCurrencyContext'
+import { register as apiRegister } from '@/lib/api/auth'
 
 export default function RegisterPage() {
     const navigate = useNavigate()
@@ -27,37 +28,54 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
-
-        // Validation
-        if (formData.password !== formData.confirmPassword) {
-            toast.error('Passwords do not match')
-            setLoading(false)
+        // Client-side validation: do not send if any mandatory field is missing
+        const name = formData.name?.trim()
+        const email = formData.email?.trim()
+        const password = formData.password
+        const confirmPassword = formData.confirmPassword
+        if (!name) {
+            toast.error('Full name is required')
             return
         }
-
-        if (formData.password.length < 6) {
+        if (!email) {
+            toast.error('Email is required')
+            return
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            toast.error('Please enter a valid email address')
+            return
+        }
+        if (!password) {
+            toast.error('Password is required')
+            return
+        }
+        if (password.length < 6) {
             toast.error('Password must be at least 6 characters')
-            setLoading(false)
+            return
+        }
+        if (password !== confirmPassword) {
+            toast.error('Passwords do not match')
             return
         }
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
-
-        // Simulate successful registration
-        toast.success('Account created successfully!')
-        
-        // Store user session
-        localStorage.setItem('user', JSON.stringify({
-            id: 'user_' + Date.now(),
-            name: formData.name,
-            email: formData.email,
-            image: '/api/placeholder/40/40'
-        }))
-        
-        navigate('/auth/login')
-        setLoading(false)
+        setLoading(true)
+        try {
+            await apiRegister({
+                name,
+                email,
+                password,
+                role: 'buyer',
+            })
+            toast.success('Account created successfully! Please sign in.')
+            setFormData({ name: '', email: '', password: '', confirmPassword: '' })
+            // No auto-login: redirect to login page
+            navigate('/auth/login')
+        } catch (err) {
+            const message = err.response?.data?.message || err.message || 'Registration failed'
+            toast.error(message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
