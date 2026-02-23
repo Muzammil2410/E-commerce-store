@@ -20,11 +20,11 @@ const ADMIN_CREDENTIALS = [
 
 /**
  * Register a new user (seller, buyer, or employee)
- * @param {Object} data - { name, email, password, role }
+ * @param {Object} data - { name, email, password, role, businessName? }
  * @returns {Object} - { user, token }
  */
 async function registerUser(data) {
-  const { name, email, password, role } = data;
+  const { name, email, password, role, businessName } = data;
 
   if (!name || !email || !password || !role) {
     throw new Error('Name, email, password and role are required');
@@ -35,18 +35,30 @@ async function registerUser(data) {
     throw new Error('Invalid role for registration');
   }
 
+  // Business name is required for sellers
+  if (role === 'seller' && (!businessName || !businessName.trim())) {
+    throw new Error('Business name is required for sellers');
+  }
+
   const existing = await User.findOne({ email: email.toLowerCase() });
   if (existing) {
     throw new Error('User with this email already exists');
   }
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-  const user = await User.create({
+  const userData = {
     name: name.trim(),
     email: email.toLowerCase().trim(),
     password: hashedPassword,
     role,
-  });
+  };
+
+  // Add businessName for sellers
+  if (role === 'seller' && businessName) {
+    userData.businessName = businessName.trim();
+  }
+
+  const user = await User.create(userData);
 
   const token = generateJWT(user);
   const userObj = user.toObject();

@@ -8,6 +8,7 @@ const cors = require('cors');
 const productRoutes = require('./products/routes/product.routes');
 const authRoutes = require('./auth/routes/auth.routes');
 const orderRoutes = require('./orders/routes/order.routes');
+const sellerRoutes = require('./sellers/routes/seller.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,9 @@ app.use('/api/orders', orderRoutes);
 // Product API (no auth middleware) - MUST be registered before catch-all
 app.use('/api/products', productRoutes);
 
+// Seller API - public read-only endpoints
+app.use('/api/sellers', sellerRoutes);
+
 // Debug: Log registered routes
 console.log('✅ Auth routes mounted at /api/auth');
 console.log('  POST   /api/auth/register');
@@ -38,6 +42,9 @@ console.log('Available routes:');
 console.log('  POST   /api/products');
 console.log('  GET    /api/products');
 console.log('  GET    /api/products/:id');
+console.log('✅ Seller routes mounted at /api/sellers');
+console.log('  GET    /api/sellers/:sellerId');
+console.log('  GET    /api/sellers/:sellerId/products');
 
 // Basic Route
 app.get('/', (req, res) => {

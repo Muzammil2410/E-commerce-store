@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { useState } from "react"
 import { useContext } from "react"
 import { LanguageCurrencyContext } from "@/contexts/LanguageCurrencyContext"
+import SellerCard from "@/components/SellerCard"
 
 const ProductDescription = ({ product }) => {
     const context = useContext(LanguageCurrencyContext)
@@ -30,7 +31,34 @@ const ProductDescription = ({ product }) => {
 
             {/* Description */}
             {selectedTab === 'productDescriptionTab' && (
-                <p className="max-w-xl dark:text-gray-300 transition-colors duration-200">{product.description}</p>
+                <div>
+                    {/* Short Description */}
+                    {product.shortDescription && (
+                        <div className="mb-6">
+                            <h3 className="text-lg font-semibold text-slate-800 dark:text-gray-200 mb-2 transition-colors duration-200">
+                                Short Description
+                            </h3>
+                            <p className="max-w-xl dark:text-gray-300 transition-colors duration-200">
+                                {product.shortDescription}
+                            </p>
+                        </div>
+                    )}
+                    
+                    {/* Product Description */}
+                    {product.description && (
+                        <div className="mb-6">
+                            <h3 className="text-lg font-semibold text-slate-800 dark:text-gray-200 mb-2 transition-colors duration-200">
+                                Product Description
+                            </h3>
+                            <p className="max-w-xl dark:text-gray-300 transition-colors duration-200">
+                                {product.description}
+                            </p>
+                        </div>
+                    )}
+                    
+                    {/* Seller Card - Show if product has sellerId */}
+                    {product.sellerId && <SellerCard sellerId={product.sellerId} />}
+                </div>
             )}
 
             {/* Reviews */}

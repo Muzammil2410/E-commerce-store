@@ -17,6 +17,7 @@ import AccountTypeSelection from "@/app/(public)/auth/page";
 // Import Seller and Product directly to fix React context issue with lazy loading
 import Seller from "@/app/(public)/seller/page";
 import Product from "@/app/(public)/product/[productId]/page";
+import SellerStorefront from "@/app/(public)/seller/[sellerId]/page";
 // Import Checkout, Cart, and Bargain directly to fix React context issue with lazy loading
 import Checkout from "@/app/(public)/checkout/page";
 import Cart from "@/app/(public)/cart/page";
@@ -153,6 +154,7 @@ export const router = createBrowserRouter([
   { path: "/seller/dashboard/delivery", element: <PublicLayout><SellerDelivery /></PublicLayout> },
   { path: "/seller/dashboard/delivery/schedule", element: <PublicLayout><SellerDeliverySchedule /></PublicLayout> },
   { path: "/seller/dashboard/employees", element: <PublicLayout><SellerEmployees /></PublicLayout> },
+  { path: "/seller/:sellerId", element: <PublicLayout><SellerStorefront /></PublicLayout> },
   { path: "/profile", element: <PublicLayout><Profile /></PublicLayout> },
   { path: "/wishlist", element: <PublicLayout><Wishlist /></PublicLayout> },
   { path: "/orders", element: <PublicLayout><Orders /></PublicLayout> },

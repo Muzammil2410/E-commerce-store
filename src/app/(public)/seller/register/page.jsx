@@ -174,6 +174,7 @@ export default function SellerRegister() {
         email: formData.email.trim(),
         password: formData.password,
         role: 'seller',
+        businessName: formData.businessName.trim(),
       })
       // Keep seller profile in localStorage for business info (dashboard may use it)
       localStorage.setItem('sellerProfile', JSON.stringify(formData))

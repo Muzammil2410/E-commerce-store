@@ -182,33 +182,42 @@ const ProductDetails = ({ product }) => {
                     >
                         💬 Bargain
                     </button>
-                    {/* Show salePrice if exists, otherwise show price */}
-                    {product.salePrice && product.salePrice > 0 ? (
-                        <>
-                            <p>{formatCurrency(product.salePrice)}</p>
-                            <p className="text-xl text-slate-500 dark:text-gray-400 line-through transition-colors duration-200">{formatCurrency(product.price)}</p>
-                        </>
-                    ) : (
-                        <p>{formatCurrency(product.price || 0)}</p>
-                    )}
-                    {/* Show mrp if exists and different from price */}
-                    {product.mrp && product.mrp > (product.salePrice || product.price) && (
-                        <p className="text-xl text-slate-500 dark:text-gray-400 line-through transition-colors duration-200">{formatCurrency(product.mrp)}</p>
-                    )}
+                    {/* Price display logic: show salePrice if exists, otherwise show price. Show only one original price (the higher one) */}
+                    {(() => {
+                        const currentPrice = product.salePrice && product.salePrice > 0 ? product.salePrice : (product.price || 0);
+                        const originalPrice = product.mrp && product.mrp > product.price ? product.mrp : (product.price || 0);
+                        const hasDiscount = product.salePrice && product.salePrice > 0 && product.salePrice < originalPrice;
+                        
+                        return (
+                            <>
+                                <p>{formatCurrency(currentPrice)}</p>
+                                {/* Show original price only if there's a discount and it's different from current price */}
+                                {hasDiscount && originalPrice > currentPrice && (
+                                    <p className="text-xl text-slate-500 dark:text-gray-400 line-through transition-colors duration-200">
+                                        {formatCurrency(originalPrice)}
+                                    </p>
+                                )}
+                            </>
+                        );
+                    })()}
                 </div>
                 {/* Show discount percentage only if there's a discount */}
-                {(product.salePrice && product.salePrice < product.price) || (product.mrp && product.mrp > (product.salePrice || product.price)) ? (
-                    <div className="flex items-center gap-2 text-slate-500 dark:text-gray-400 transition-colors duration-200">
-                        <TagIcon size={14} className="dark:text-gray-400" />
-                        <p>{t('savePercentage').replace('{percentage}', 
-                            product.salePrice 
-                                ? ((product.price - product.salePrice) / product.price * 100).toFixed(0)
-                                : product.mrp 
-                                    ? ((product.mrp - (product.salePrice || product.price)) / product.mrp * 100).toFixed(0)
-                                    : '0'
-                        )}</p>
-                    </div>
-                ) : null}
+                {(() => {
+                    const currentPrice = product.salePrice && product.salePrice > 0 ? product.salePrice : (product.price || 0);
+                    const originalPrice = product.mrp && product.mrp > product.price ? product.mrp : (product.price || 0);
+                    const hasDiscount = product.salePrice && product.salePrice > 0 && product.salePrice < originalPrice;
+                    
+                    if (hasDiscount && originalPrice > currentPrice) {
+                        const discountPercentage = ((originalPrice - currentPrice) / originalPrice * 100).toFixed(0);
+                        return (
+                            <div className="flex items-center gap-2 text-slate-500 dark:text-gray-400 transition-colors duration-200">
+                                <TagIcon size={14} className="dark:text-gray-400" />
+                                <p>{t('savePercentage').replace('{percentage}', discountPercentage)}</p>
+                            </div>
+                        );
+                    }
+                    return null;
+                })()}
                 <div className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-5 mt-8 sm:mt-10">
                     {
                         cart[productId] && (
