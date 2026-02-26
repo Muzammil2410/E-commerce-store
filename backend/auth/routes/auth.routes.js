@@ -8,12 +8,13 @@ const router = express.Router();
 
 /**
  * POST /api/auth/register
- * Body: { name, email, password, role } where role is seller | buyer | employee
+ * Body: { name, email, password, role, businessName? } where role is seller | buyer | employee
+ * businessName is required for sellers
  */
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
-    const result = await authService.registerUser({ name, email, password, role });
+    const { name, email, password, role, businessName } = req.body;
+    const result = await authService.registerUser({ name, email, password, role, businessName });
     console.log('[Auth] Register success:', { email: result.user.email, role: result.user.role });
     res.status(201).json({
       message: 'Registration successful',
